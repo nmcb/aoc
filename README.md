@@ -2,7 +2,7 @@
 
 ---
 
-![gource](https://github.com/nmcb/oac/blob/main/images/gource.png?raw=true)
+![gource](images/gource.png?raw=true)
 
 ---
 
