@@ -1,0 +1,65 @@
+package aoc2016
+
+import nmcb.*
+import scala.collection.*
+import scala.collection.immutable.Map
+
+object Day11 extends AoC:
+
+  case class Floor(microchips: Int, generators: Int):
+    def empty: Boolean = microchips == 0 && generators == 0
+    def valid: Boolean = (microchips >= 0 && generators >= 0) && (generators == 0 || microchips <= generators)
+
+    def +(that: Floor): Floor = Floor(microchips + that.microchips, generators + that.generators)
+    def -(that: Floor): Floor = Floor(microchips - that.microchips, generators - that.generators)
+
+  /** hardcoded for 4 floors */
+  case class Area(elevator: Int, floors: Vector[Floor]):
+    def finished: Boolean = elevator == 3 && floors.take(3).forall(_.empty)
+    def valid: Boolean    = floors.forall(_.valid)
+
+    def candidates: Vector[Area] =
+      for
+        adjustment  <- Area.elevatorAdjustments
+        destination <- Area.adjacentFloors(elevator)
+      yield
+        Area(
+          elevator = destination,
+          floors   = floors
+                       .updated(elevator, floors(elevator) - adjustment)
+                       .updated(destination, floors(destination) + adjustment)
+        )
+
+  object Area:
+    val elevatorAdjustments = Vector(Floor(2, 0), Floor(1, 0), Floor(1, 1), Floor(0, 1), Floor(0, 2))
+    val adjacentFloors      = Map(0 -> Vector(1), 1 -> Vector(0, 2), 2 -> Vector(1, 3), 3 -> Vector(2))
+
+
+  lazy val init: Area =
+    val microchip = "microchip".r
+    val generator = "generator".r
+    Area(0, lines.map(line => Floor(microchip.findAllIn(line).size, generator.findAllIn(line).size)))
+
+
+  /** breadth first search */
+  def solve(start: Area): Int =
+    val todo  = mutable.Queue(start)
+    val cache = mutable.Map(start -> 0)
+
+    while todo.nonEmpty do
+      val current = todo.dequeue
+      val cost    = cache(current) + 1
+      current.candidates.filter(_.valid).foreach: next =>
+        if !cache.contains(next) || cost < cache(next) then
+          cache(next) = cost
+          todo.enqueue(next)
+
+    cache(cache.keys.filter(_.finished).head)
+
+
+  val expanded: Area =
+    val floor0 = init.floors(0) + Floor(generators = 2, microchips = 2)
+    init.copy(floors = init.floors.updated(0, floor0))
+
+  lazy val answer1: Int = solve(start = init)
+  lazy val answer2: Int = solve(start = expanded)

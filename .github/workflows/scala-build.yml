@@ -15,6 +15,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v6
+    - name: unlock secrets
+      uses: sliteteam/github-action-git-crypt-unlock@1.2.0
+      env:
+        GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
     - name: setup-java
       uses: actions/setup-java@v5
       with:
