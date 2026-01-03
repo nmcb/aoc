@@ -1,41 +1,15 @@
 package aoc2024
 
 import nmcb.*
+import nmcb.pos.*
 import nmcb.predef.*
 
 object Day16 extends AoC:
 
-  enum Dir:
-    case N, E, S, W
-
-    def cw: Dir =
-      this match
-        case N => E
-        case E => S
-        case S => W
-        case W => N
-
-    def ccw: Dir =
-      this match
-        case N => W
-        case W => S
-        case S => E
-        case E => N
-
-  import Dir.*
-
-  case class Pos(x: Int, y: Int):
-    def move(d: Dir): Pos =
-      d match
-        case N => copy(y = y - 1)
-        case E => copy(x = x + 1)
-        case S => copy(y = y + 1)
-        case W => copy(x = x - 1)
-
   case class Tracer(cost: Long, pos: Pos, dir: Dir, path: Set[Pos]):
     def options: List[Tracer] =
       List(
-        Tracer(cost + 1, pos.move(dir), dir, path + pos.move(dir)),
+        Tracer(cost + 1, pos.step(dir), dir, path + pos.step(dir)),
         Tracer(cost + 1000, pos, dir.cw, path),
         Tracer(cost + 1000, pos, dir.ccw, path)
       )
