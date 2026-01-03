@@ -1,21 +1,11 @@
 package aoc2023
 
 import nmcb.*
+import nmcb.pos.*
 
 import scala.annotation.tailrec
 
 object Day16 extends AoC:
-
-  enum Dir(val step: Pos):
-    case N extends Dir(Pos( 0,-1))
-    case E extends Dir(Pos( 1, 0))
-    case S extends Dir(Pos( 0, 1))
-    case W extends Dir(Pos(-1, 0))
-
-  import Dir.*
-
-  case class Pos(x: Int, y: Int):
-    def +(that: Pos): Pos = Pos(x + that.x, y + that.y)
 
   case class Grid(grid: Vector[Vector[Char]]):
     private val sizeX: Int = grid.map(_.size).max
@@ -27,30 +17,30 @@ object Day16 extends AoC:
     private def advance(p: Pos, d: Dir): List[(Pos,Dir)] =
       val result: List[(Pos,Dir)] =
         (tile(p), d) match
-          case ('.', N)  => List(p + N.step -> N)
-          case ('.', E)  => List(p + E.step -> E)
-          case ('.', S)  => List(p + S.step -> S)
-          case ('.', W)  => List(p + W.step -> W)
+          case ('.', N)  => List(p.step(N) -> N)
+          case ('.', E)  => List(p.step(E) -> E)
+          case ('.', S)  => List(p.step(S) -> S)
+          case ('.', W)  => List(p.step(W) -> W)
 
-          case ('|', N)  => List(p + N.step -> N)
-          case ('|', E)  => List(p + N.step -> N, p + S.step -> S)
-          case ('|', S)  => List(p + S.step -> S)
-          case ('|', W)  => List(p + N.step -> N, p + S.step -> S)
+          case ('|', N)  => List(p.step(N) -> N)
+          case ('|', E)  => List(p.step(N) -> N, p.step(S) -> S)
+          case ('|', S)  => List(p.step(S) -> S)
+          case ('|', W)  => List(p.step(N) -> N, p.step(S) -> S)
 
-          case ('-', N)  => List(p + W.step -> W, p + E.step -> E)
-          case ('-', E)  => List(p + E.step -> E)
-          case ('-', S)  => List(p + W.step -> W, p + E.step -> E)
-          case ('-', W)  => List(p + W.step -> W)
+          case ('-', N)  => List(p.step(W) -> W, p.step(E) -> E)
+          case ('-', E)  => List(p.step(E) -> E)
+          case ('-', S)  => List(p.step(W) -> W, p.step(E) -> E)
+          case ('-', W)  => List(p.step(W) -> W)
 
-          case ('/', N)  => List(p + E.step -> E)
-          case ('/', E)  => List(p + N.step -> N)
-          case ('/', S)  => List(p + W.step -> W)
-          case ('/', W)  => List(p + S.step -> S)
+          case ('/', N)  => List(p.step(E) -> E)
+          case ('/', E)  => List(p.step(N) -> N)
+          case ('/', S)  => List(p.step(W) -> W)
+          case ('/', W)  => List(p.step(S) -> S)
 
-          case ('\\', N) => List(p + W.step -> W)
-          case ('\\', E) => List(p + S.step -> S)
-          case ('\\', S) => List(p + E.step -> E)
-          case ('\\', W) => List(p + N.step -> N)
+          case ('\\', N) => List(p.step(W) -> W)
+          case ('\\', E) => List(p.step(S) -> S)
+          case ('\\', S) => List(p.step(E) -> E)
+          case ('\\', W) => List(p.step(N) -> N)
 
           case _ => sys.error(s"advancing: p=$p, d=$d")
 

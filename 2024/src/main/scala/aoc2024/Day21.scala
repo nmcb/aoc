@@ -2,7 +2,6 @@ package aoc2024
 
 import nmcb.*
 import nmcb.pos.*
-import nmcb.Dir.*
 import nmcb.predef.*
 
 import scala.collection.immutable.Map

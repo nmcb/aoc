@@ -1,6 +1,7 @@
 package aoc2022
 
 import nmcb.*
+import nmcb.pos.*
 import scala.annotation.tailrec
 
 object Day23 extends AoC:
@@ -19,14 +20,6 @@ object Day23 extends AoC:
       .zipWithIndex
       .foldLeft(Set.empty):
         case (a,(s,y)) => a ++ Pos.fromString(y,s)
-
-  enum Dir:
-    case N extends Dir
-    case S extends Dir
-    case W extends Dir
-    case E extends Dir
-
-  import Dir.*
 
   case class Mat(elves: Set[Pos], dirs: Seq[Dir] = Seq(N, S, W, E)):
 

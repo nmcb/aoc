@@ -1,5 +1,7 @@
 package examples
 
+import scala.annotation.tailrec
+
 object Magnus extends App:
 
   trait Order[A]:
@@ -7,6 +9,7 @@ object Magnus extends App:
 
   def sort[A : Order](list: List[A]): List[A] =
 
+    @tailrec
     def loop(list: List[A], n: Int): List[A] =
       println(s"list=$list, n=$n")
       if n == list.length - 1 then
@@ -24,11 +27,9 @@ object Magnus extends App:
     loop(list, 0)
 
   given Order[Int] =
-    new Order[Int]:
-      override def gt(l: Int, r: Int): Boolean =
-        l > r
+    (l: Int, r: Int) => l > r
 
-  val data1: List[Int] =
+  private val data1: List[Int] =
     List(1, 9, 2, 8, 3, 7, 4, 6, 5, 1)
 
   println(s"data1=$data1")
@@ -37,15 +38,13 @@ object Magnus extends App:
 
   case class Person(name: String, age: Int)
 
-  object Person:
+  private object Person:
 
     given Order[Person] =
-      new Order[Person]:
-        override def gt(l: Person, r: Person): Boolean =
-          l.age > r.age
+      (l: Person, r: Person) => l.age > r.age
 
 
-  val data3: List[Person] =
+  private val data3: List[Person] =
     List(Person("Marco", 53), Person("Magnus", 19))
 
   println(s"data3=$data3")

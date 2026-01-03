@@ -1,6 +1,7 @@
 package aoc2022
 
 import nmcb.*
+import nmcb.pos.*
 import scala.io.*
 
 object Day22 extends AoC:
@@ -21,14 +22,6 @@ object Day22 extends AoC:
     Array.fill(map.length + 2, map.head.length + 2)(' ')
 
   map.zipWithIndex.foreach((r,y) => r.zipWithIndex.foreach((t,x) => tiles(y + 1)(x + 1) = t))
-
-  enum Dir:
-    case N extends Dir
-    case E extends Dir
-    case S extends Dir
-    case W extends Dir
-
-  import Dir.*
 
   case class Pos(x: Int, y: Int, dir: Dir, path: String):
 
