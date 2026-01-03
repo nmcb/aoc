@@ -1,47 +1,10 @@
 package aoc2017
 
 import nmcb.*
+import nmcb.pos.*
 import nmcb.predef.*
 
 object Day22 extends AoC:
-
-  enum Dir:
-    case N
-    case S
-    case E
-    case W
-
-    def turnLeft: Dir =
-      this match
-        case N => W
-        case W => S
-        case S => E
-        case E => N
-
-    def turnRight: Dir =
-      this match
-        case N => E
-        case E => S
-        case S => W
-        case W => N
-
-    def reverse: Dir =
-      this match
-        case N => S
-        case S => N
-        case E => W
-        case W => E
-
-  import Dir.*
-
-  case class Pos(x: Int, y: Int):
-
-    def step(dir: Dir): Pos =
-      dir match
-        case N => copy(y = y - 1)
-        case S => copy(y = y + 1)
-        case E => copy(x = x + 1)
-        case W => copy(x = x - 1)
 
   enum Status:
     case Clean, Infected, Weakened, Flagged
@@ -53,7 +16,7 @@ object Day22 extends AoC:
     def wake1: Carrier =
       nodes(current) match
         case Clean =>
-          val turn = dir.turnLeft
+          val turn = dir.ccw
           copy(
             nodes    = nodes + (current -> Infected),
             current  = current.step(turn),
@@ -61,7 +24,7 @@ object Day22 extends AoC:
             infected = infected + 1
           )
         case Infected =>
-          val turn = dir.turnRight
+          val turn = dir.cw
           copy(
             nodes   = nodes + (current -> Clean),
             current = current.step(turn),
@@ -73,7 +36,7 @@ object Day22 extends AoC:
     def wake2: Carrier =
       nodes(current) match
         case Clean =>
-          val turn = dir.turnLeft
+          val turn = dir.ccw
           copy(
             nodes   = nodes + (current -> Weakened),
             current = current.step(turn),
@@ -86,14 +49,14 @@ object Day22 extends AoC:
             infected = infected + 1
           )
         case Infected =>
-          val turn = dir.turnRight
+          val turn = dir.cw
           copy(
             nodes   = nodes + (current -> Flagged),
             current = current.step(turn),
             dir     = turn
           )
         case Flagged =>
-          val turn = dir.reverse
+          val turn = dir.opposite
           copy(
             nodes   = nodes + (current -> Clean),
             current = current.step(turn),

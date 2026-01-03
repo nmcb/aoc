@@ -7,8 +7,6 @@ import scala.annotation.*
 
 object Day06 extends AoC:
 
-  import nmcb.Dir.*
-
   private val grid: Grid[Char] = Grid.fromLines(lines)
 
   extension (g: Grid[Char])

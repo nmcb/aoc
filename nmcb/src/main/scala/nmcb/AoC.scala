@@ -23,9 +23,7 @@ abstract class AoC:
       val (chunk, rest) = xs.span(_ != "")
       if chunk.isEmpty then acc.reverse
       else recurse(rest.drop(1), chunk +: acc)
-
     recurse(lines)
-
 
   def main(args: Array[String]): Unit =
     val start1: Long = System.currentTimeMillis

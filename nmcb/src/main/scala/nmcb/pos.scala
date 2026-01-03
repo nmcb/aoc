@@ -1,10 +1,35 @@
 package nmcb
 
-import Dir.*
-
 object pos:
 
+  enum Dir:
+    case N, E, S, W
+
+    def cw: Dir =
+      this match
+        case N => E
+        case S => W
+        case E => S
+        case W => N
+
+    def ccw: Dir =
+      this match
+        case N => W
+        case S => E
+        case E => N
+        case W => S
+
+    def opposite: Dir =
+      this match
+        case N => S
+        case S => N
+        case E => W
+        case W => E        
+
+  export Dir.*
+
   case class Pos(x: Int, y: Int):
+
     infix inline def +(p: Pos): Pos = copy(x = x + p.x, y = y + p.y)
     infix inline def -(p: Pos): Pos = copy(x = x - p.x, y = y - p.y)
     infix inline def *(i: Int): Pos = copy(x = x * i  , y = y * i  )
@@ -38,6 +63,9 @@ object pos:
 
   object Pos:
 
+    def of(x: Int, y: Int): Pos =
+      Pos(x, y)
+
     def zero: Pos =
       Pos(0, 0)
 
@@ -48,4 +76,3 @@ object pos:
       def toPos: Pos =
         assert(it.size == 2)
         Pos(it(0).toString.toInt, it(1).toString.toInt)
-        

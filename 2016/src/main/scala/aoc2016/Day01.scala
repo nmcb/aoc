@@ -1,6 +1,7 @@
 package aoc2016
 
 import nmcb.*
+import nmcb.pos.*
 import scala.annotation.tailrec
 import scala.util.Try
 
@@ -12,14 +13,6 @@ object Day01 extends AoC:
     def fromString(s: String): Cmd =
       Try(Cmd(s.trim.head, s.trim.tail.toInt))
         .getOrElse(sys.error(s"unable to parse: $s"))
-
-  enum Dir:
-    case N
-    case E
-    case S
-    case W
-
-  import Dir.*
 
   case class Ikke(x: Int, y: Int, dir: Dir):
 

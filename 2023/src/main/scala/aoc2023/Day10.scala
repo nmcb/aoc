@@ -1,33 +1,12 @@
 package aoc2023
 
 import nmcb.*
+import nmcb.pos.*
 
 import scala.annotation.tailrec
 
 object Day10 extends AoC:
-
-  enum Dir:
-    case N
-    case S
-    case E
-    case W
-
-    def innerR: Dir =
-      this match
-        case N => E
-        case E => S
-        case S => W
-        case W => N
-
-    def opposite: Dir =
-      this match
-        case N => S
-        case E => W
-        case S => N
-        case W => E
-
-  import Dir.*
-
+  
   enum Tile(val directions: Set[Dir]):
     case Vertical   extends Tile(Set(N,S))
     case Horizontal extends Tile(Set(E,W))
@@ -141,7 +120,7 @@ object Day10 extends AoC:
         case _ => acc
 
     val (p, d) = path.head
-    loop(path.tail, d, scan(p, d.innerR))
+    loop(path.tail, d, scan(p, d.cw))
 
 
   lazy val answer1: Int = path.length / 2

@@ -1,38 +1,12 @@
 package aoc2019
 
 import nmcb.*
+import nmcb.pos.*
 import scala.annotation.tailrec
 
 object Day11 extends AoC:
 
   import cpu.*
-
-  enum Dir:
-    case N, E, S, W
-
-    def cw: Dir =
-      this match
-        case N => E
-        case E => S
-        case S => W
-        case W => N
-
-    def ccw: Dir =
-      this match
-        case N => W
-        case W => S
-        case S => E
-        case E => N
-
-  import Dir.*
-
-  case class Pos(x: Int, y: Int):
-    infix def move(dir: Dir): Pos =
-      dir match
-        case N => copy(y = y - 1)
-        case E => copy(x = x + 1)
-        case S => copy(y = y + 1)
-        case W => copy(x = x - 1)
 
   type Panels = Map[Pos,Long]
 
@@ -49,7 +23,7 @@ object Day11 extends AoC:
           val rotate = if turn == 1 then dir.cw else dir.ccw
           Robot(
             cpu    = next,
-            pos    = pos move rotate,
+            pos    = pos step rotate,
             dir    = rotate,
             panels = panels.updated(pos, color)
           ).paint
