@@ -1,14 +1,11 @@
 package aoc2021
 
 import nmcb.*
+import nmcb.pos.*
+
 import scala.annotation.tailrec
 
 object Day25 extends AoC:
-
-  case class Pos(x: Int, y: Int):
-    
-    def +(that: Pos): Pos =
-      Pos(x + that.x, y + that.y)
 
   case class Floor(tiles: Map[Pos,Char], sizeX: Int, sizeY: Int):
 

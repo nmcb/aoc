@@ -1,12 +1,9 @@
 package aoc2021
 
 import nmcb.*
+import nmcb.pos.*
 
 object Day20 extends AoC:
-
-  case class Pos(x: Int, y: Int):
-    infix def +(that: Pos): Pos =
-      Pos(x + that.x, y + that.y)
 
   case class Image(pixels: Vector[Vector[Boolean]], canvas: Boolean)
 
@@ -15,7 +12,7 @@ object Day20 extends AoC:
       dy <- -1 to 1
       dx <- -1 to 1
     yield
-      Pos(dx, dy)
+      Pos.of(dx, dy)
 
   def within(grid: Vector[Vector[Boolean]], pos: Pos): Boolean =
     0 <= pos.x && 0 <= pos.y && pos.y < grid.size && pos.x < grid(pos.y).size
@@ -33,7 +30,7 @@ object Day20 extends AoC:
     val enhanced =
       for ((row, y) <- framed.zipWithIndex) yield
         for ((_, x) <- row.zipWithIndex) yield
-          val pos  = Pos(x, y)
+          val pos  = Pos.of(x, y)
           val area = offsets.map(_ + pos)
           val bin  = area.map(cell => if within(framed, cell) then peek(framed, cell) else canvas)
           algorithm(int(bin.toVector))

@@ -1,13 +1,15 @@
 package aoc2021
 
 import nmcb.*
+
 import scala.annotation.tailrec
+import scala.util.matching.Regex
 
 object Day22 extends AoC:
 
   case class CuboidStep(on: Boolean, xr: Range, yr: Range, zr: Range)
 
-  val StepLit =
+  val StepLit: Regex =
     """(on|off) x=([-+]?\d+)..([-+]?\d+),y=([-+]?\d+)..([-+]?\d+),z=([-+]?\d+)..([-+]?\d+)""".r
 
   val cuboidSteps: Vector[CuboidStep] =
@@ -20,7 +22,6 @@ object Day22 extends AoC:
           val zr = min(z0.toInt, z1.toInt) to max(z0.toInt, z1.toInt)
           val on = set == "on" 
           CuboidStep(on, xr, yr, zr)
-      .toVector
 
   case class Pos(x: Int, y: Int, z: Int):
 
