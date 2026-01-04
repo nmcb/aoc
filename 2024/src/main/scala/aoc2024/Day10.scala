@@ -23,7 +23,7 @@ object Day10 extends AoC:
     def trailsFrom(head: Pos): TrailHead =
 
       def step(trail: Vector[Pos]): TrailHead =
-        trail.last.adjoint
+        trail.last.adjoint4
           .filter(n => g.within(n) && g.peek(n) == g.peek(trail.last) + 1)
           .map(p => trail :+ p)
 

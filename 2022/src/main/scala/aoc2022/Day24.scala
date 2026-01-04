@@ -131,8 +131,8 @@ object Day24 extends AoC:
 
     def paths: Paths =
       found.flatMap: p =>
-          val ms   = p.adjoint.filter(free(nextField))
-          val test = free(nextField)(p) && p.adjoint.exists(free(streams.futureField)) && bounds.isField(p)
+          val ms   = p.adjoint4.filter(free(nextField))
+          val test = free(nextField)(p) && p.adjoint4.exists(free(streams.futureField)) && bounds.isField(p)
           if test || p == bounds.end + Pos.of(0,1) || p == Pos.of(0,-1) then
             ms + p
           else

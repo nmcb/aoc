@@ -18,7 +18,7 @@ object Day13 extends AoC:
       binary.count(_ == '1') % 2 == 0
 
     def candidates: Set[Pos] =
-      p.adjoint.filter(c => c.x >= 0 && c.y >= 0)
+      p.adjoint4.filter(c => c.x >= 0 && c.y >= 0)
 
 
   /** breadth first search */

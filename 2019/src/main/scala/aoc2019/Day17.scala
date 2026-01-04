@@ -23,7 +23,7 @@ object Day17 extends AoC:
         Pos(x, y)
 
     points.foldLeft(0): (total,next) =>
-      if Pos.offsets.map(next + _).forall(points.contains) then
+      if Pos.offset4.map(next + _).forall(points.contains) then
         total + (next.x * next.y)
       else total
 

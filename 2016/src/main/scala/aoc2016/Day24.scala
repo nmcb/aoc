@@ -24,7 +24,7 @@ object Day24 extends AoC:
       val current = todo.dequeue
       if current == end then return steps(current)
       val update  = steps(current) + 1
-      current.adjoint.intersect(grid).foreach: next =>
+      current.adjoint4.intersect(grid).foreach: next =>
         if !steps.contains(next) || update < steps(next) then
           steps(next) = update
           todo.enqueue(next)

@@ -69,7 +69,7 @@ object Day20 extends AoC:
     val todo = collection.mutable.Queue(start)
     while todo.nonEmpty do
       val point = todo.dequeue
-      Pos.offsets
+      Pos.offset4
         .map(point + _)
         .filter(next => maze(next) == '.')
         .filter(next => cost(point) + 1 < cost.getOrElse(next, Int.MaxValue))

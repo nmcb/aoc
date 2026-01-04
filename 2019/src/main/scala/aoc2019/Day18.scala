@@ -20,7 +20,7 @@ object Day18 extends AoC:
 
     while todo.nonEmpty do
       val pos = todo.dequeue
-      pos.adjoint
+      pos.adjoint4
         .filter(next => !tunnels(next).isWall)
         .filter(next => !cost.contains(next) || cost(pos) + 1 < cost(next))
         .foreach: next =>

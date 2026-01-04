@@ -62,7 +62,7 @@ object Day14 extends AoC:
             found
           case p :: rest =>
             if inside.contains(p) then
-              cluster(rest ++ p.adjoint, inside - p, found + p)
+              cluster(rest ++ p.adjoint4, inside - p, found + p)
             else
               cluster(rest, inside - p, found)
 
