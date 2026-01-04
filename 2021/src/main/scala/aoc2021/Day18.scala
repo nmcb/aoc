@@ -1,6 +1,8 @@
 package aoc2021
 
 import nmcb.*
+import nmcb.parsing.*
+
 import scala.annotation.tailrec
 
 object Day18 extends AoC:
@@ -91,11 +93,11 @@ object Day18 extends AoC:
   import Num.*
 
   def parse(s: String): Num =
-    import P.*
     def vp: P[Num] = digits.map(Lit.apply)
     def pp: P[Num] = for { _ <- char('[') ; l <- np ; _ <- char(',') ; r <- np ; _ <- char(']') } yield Pair(l, r)
     def np: P[Num] = vp | pp
-    run(np)(s)  
+
+    np.run(s)
 
   val numbers: Vector[Num] = lines.map(parse)
 
