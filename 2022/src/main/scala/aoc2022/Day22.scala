@@ -2,6 +2,7 @@ package aoc2022
 
 import nmcb.*
 import nmcb.pos.*
+
 import scala.io.*
 
 object Day22 extends AoC:
@@ -23,16 +24,16 @@ object Day22 extends AoC:
 
   map.zipWithIndex.foreach((r,y) => r.zipWithIndex.foreach((t,x) => tiles(y + 1)(x + 1) = t))
 
-  case class Pos(x: Int, y: Int, dir: Dir, path: String):
+  case class Location(x: Int, y: Int, dir: Dir, path: String):
 
-    def right: Pos =
+    def right: Location =
       dir match
         case N => copy(dir = E)
         case E => copy(dir = S)
         case S => copy(dir = W)
         case W => copy(dir = N)
 
-    def left: Pos =
+    def left: Location =
       dir match
         case N => copy(dir = W)
         case E => copy(dir = N)
@@ -44,49 +45,45 @@ object Day22 extends AoC:
     def wall(y: Int, x: Int): Boolean = has(y, x, '#')
     def mapped(c: Char): Boolean = c == '.' || c == '#'
 
-    def step1(dy: Int, dx: Int, steps: Int)(wrap: => Pos): Pos =
+    def step1(dy: Int, dx: Int, steps: Int)(wrap: => Location): Location =
       if      tile(y + dy, x + dx) then copy(x = x + dx, y = y + dy).move1(steps - 1)
       else if wall(y + dy, x + dx) then this
       else wrap
 
-    def move1(steps: Int): Pos =
+    def move1(steps: Int): Location =
       if (steps == 0)
         this
       else
         dir match
           case N =>
-            step1(-1,0, steps) {
+            step1(-1,0, steps):
               val ny = tiles.transpose.apply(x).lastIndexWhere(mapped)
               if wall(ny, x) then this else copy(y = ny).move1(steps - 1)
-            }
           case S =>
-            step1(1,0, steps) {
+            step1(1,0, steps):
               val ny = tiles.transpose.apply(x).indexWhere(mapped)
               if wall(ny, x) then this else copy(y = ny).move1(steps - 1)
-            }
           case E =>
-            step1(0,1, steps) {
+            step1(0,1, steps):
               val nx = tiles(y).indexWhere(mapped)
               if wall(y, nx) then this else copy(x = nx).move1(steps - 1)
-              }
           case W =>
-            step1(0, -1, steps) {
+            step1(0, -1, steps):
               val nx = tiles(y).lastIndexWhere(mapped)
               if wall(y, nx) then this else copy(x = nx).move1(steps - 1)
-            }
 
-    def step2(dy: Int, dx: Int, steps: Int)(wrap: => Pos): Pos =
+    def step2(dy: Int, dx: Int, steps: Int)(wrap: => Location): Location =
       if      tile(y + dy, x + dx) then copy(x = x + dx, y = y + dy).move2(steps - 1)
       else if wall(y + dy, x + dx) then this
       else wrap
 
-    def move2(steps: Int): Pos =
+    def move2(steps: Int): Location =
       if steps == 0 then
         this
       else
         dir match
           case N =>
-            step2(-1, 0, steps) {
+            step2(-1, 0, steps):
               if x <= 50 then
                 val nx = 51
                 val ny = x + 50
@@ -99,9 +96,8 @@ object Day22 extends AoC:
                 val nx = x - 100
                 val ny = 200
                 if wall(ny, nx) then this else copy(y = ny, x = nx, dir = N).move2(steps - 1)
-            }
           case S =>
-            step2(1, 0, steps) {
+            step2(1, 0, steps):
               if x <= 50 then
                 val nx = x + 100
                 val ny = 1
@@ -114,9 +110,8 @@ object Day22 extends AoC:
                 val nx = 100
                 val ny = x - 50
                 if wall(ny, nx) then this else copy(y = ny, x = nx, dir = W).move2(steps - 1)
-            }
           case E =>
-            step2(0, 1, steps) {
+            step2(0, 1, steps):
               if y <= 50 then
                 val nx = 100
                 val ny = (y - 151).abs
@@ -133,9 +128,8 @@ object Day22 extends AoC:
                 val nx = y - 100
                 val ny = 150
                 if wall(ny, nx) then this else copy(y = ny, x = nx, dir = N).move2(steps - 1)
-            }
           case W =>
-            step2(0, -1, steps) {
+            step2(0, -1, steps):
               if y <= 50 then
                 val nx = 1
                 val ny = (y - 151).abs
@@ -152,18 +146,18 @@ object Day22 extends AoC:
                 val nx = y - 100
                 val ny = 1
                 if wall(ny, nx) then this else copy(y = ny, x = nx, dir = S).move2(steps - 1)
-            }
+
     def hasNext: Boolean =
       path.nonEmpty
 
-    private def next(f: Int => Pos): Pos =
+    private def next(f: Int => Location): Location =
       path match
         case s if s.startsWith("R") => right.copy(path = s.drop(1))
         case s if s.startsWith("L") => left.copy(path = s.drop(1))
         case s => f(s.takeWhile(_.isDigit).toInt).copy(path = s.dropWhile(_.isDigit))
 
-    def next1: Pos = next(move1)
-    def next2: Pos = next(move2)
+    def next1: Location = next(move1)
+    def next2: Location = next(move2)
 
     def value: Long =
       val adder =
@@ -174,16 +168,16 @@ object Day22 extends AoC:
           case N => 3
       y * 1000L + 4L * x + adder
 
-  object Pos:
-    def start: Pos = Pos(tiles(1).indexOf('.'), 1, E, path)
+  object Location:
+    def start: Location = Location(tiles(1).indexOf('.'), 1, E, path)
 
   
   lazy val answer1: Long =
-    var pos = Pos.start
-    while (pos.hasNext) pos = pos.next1
-    pos.value
+    var location = Location.start
+    while (location.hasNext) location = location.next1
+    location.value
 
   lazy val answer2: Long =
-    var pos = Pos.start
-    while (pos.hasNext) pos = pos.next2
-    pos.value
+    var location = Location.start
+    while (location.hasNext) location = location.next2
+    location.value

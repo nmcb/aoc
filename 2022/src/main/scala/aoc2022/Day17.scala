@@ -1,6 +1,7 @@
 package aoc2022
 
 import nmcb.*
+import nmcb.pos.*
 import nmcb.predef.*
 
 import scala.annotation.*
@@ -12,13 +13,7 @@ object Day17 extends AoC:
 
   val moves: Vector[Move] = input.toVector
 
-  case class Pos(x: Int, y: Int):
-    def -(that: Pos): Pos = Pos(x - that.x, y - that.y)
-    def translate(dx: Int, dy: Int): Pos = Pos(x + dx, y + dy)
-
-  object Pos:
-    val origin: Pos = Pos(0,0)
-
+  val origin: Pos = Pos.of(0,0)
 
   type Move = Char
   val L = '<'
@@ -26,19 +21,16 @@ object Day17 extends AoC:
   val D = 'v'
 
   object Move:
-
-    val pattern: LazyList[Move] =
-      moves.to(LazyList) #::: pattern
-
+    val pattern: LazyList[Move] = moves.to(LazyList) #::: pattern
 
   sealed abstract class Rock(val relative: List[Pos]):
     def withOrigin(o: Pos): List[Pos] = relative.map(p => Pos(p.x + o.x, p.y + o.y))
 
-  case object Min   extends Rock(List(Pos(0,0),Pos(1,0),Pos(2,0),Pos(3,0)))
-  case object Plus  extends Rock(List(Pos(1,0),Pos(0,1),Pos(1,1),Pos(2,1),Pos(1,2)))
-  case object El    extends Rock(List(Pos(0,0),Pos(1,0),Pos(2,0),Pos(2,1),Pos(2,2)))
-  case object Stack extends Rock(List(Pos(0,0),Pos(0,1),Pos(0,2),Pos(0,3)))
-  case object Box   extends Rock(List(Pos(0,0),Pos(1,0),Pos(0,1),Pos(1,1)))
+  case object Min   extends Rock(List(Pos.of(0,0), Pos.of(1,0), Pos.of(2,0), Pos.of(3,0)))
+  case object Plus  extends Rock(List(Pos.of(1,0), Pos.of(0,1), Pos.of(1,1), Pos.of(2,1), Pos.of(1,2)))
+  case object El    extends Rock(List(Pos.of(0,0), Pos.of(1,0), Pos.of(2,0), Pos.of(2,1), Pos.of(2,2)))
+  case object Stack extends Rock(List(Pos.of(0,0), Pos.of(0,1), Pos.of(0,2), Pos.of(0,3)))
+  case object Box   extends Rock(List(Pos.of(0,0), Pos.of(1,0), Pos.of(0,1), Pos.of(1,1)))
 
   object Rock:
     val sequence: LazyList[Rock] = LazyList(Min, Plus, El, Stack, Box) #::: sequence
@@ -47,14 +39,14 @@ object Day17 extends AoC:
   case class Chamber(rocks: LazyList[Rock], pattern: LazyList[Move], stopped: Set[Pos], height: Int):
     import Chamber.*
 
-    def isWall(p: Pos): Boolean     = p.x < Pos.origin.x | p.x >= Pos.origin.x + width
-    def isFloor(p: Pos): Boolean    = p.y < Pos.origin.y
+    def isWall(p: Pos): Boolean     = p.x < origin.x | p.x >= origin.x + width
+    def isFloor(p: Pos): Boolean    = p.y < origin.y
     def isOccupied(p: Pos): Boolean = isWall(p) | isFloor(p) | stopped.contains(p)
 
     def next: Chamber =
 
       def appear: Pos =
-        Pos.origin.translate(dx = 2, dy = height + 3)
+        origin.translate(dx = 2, dy = height + 3)
 
       @tailrec
       def drop(pos: Pos, moves: LazyList[Move], trace: List[Move] = List.empty): (List[Move], Pos) =

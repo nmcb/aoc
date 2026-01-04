@@ -34,6 +34,8 @@ object pos:
     infix inline def -(p: Pos): Pos = copy(x = x - p.x, y = y - p.y)
     infix inline def *(i: Int): Pos = copy(x = x * i  , y = y * i  )
 
+    def translate(dx: Int, dy: Int): Pos = Pos(x + dx, y + dy)
+
     infix inline def step(dir: Dir): Pos =
       dir match
         case N => copy(y = y - 1)
