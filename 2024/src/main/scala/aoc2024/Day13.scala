@@ -6,9 +6,9 @@ import scala.math.Integral.Implicits.*
 
 object Day13 extends AoC:
 
-  case class Pos(x: Long, y: Long)
+  case class Position(x: Long, y: Long)
 
-  case class Machine(a: Pos, b: Pos, p: Pos):
+  case class Machine(a: Position, b: Position, p: Position):
 
     def cost(m: Long, n: Long): Long =
       m * 3 + n
@@ -23,11 +23,11 @@ object Day13 extends AoC:
 
   val machines: Vector[Machine] =
     val as = lines.collect:
-      case s"Button A: X+$x, Y+$y" => Pos(x.toLong, y.toLong)
+      case s"Button A: X+$x, Y+$y" => Position(x.toLong, y.toLong)
     val bs = lines.collect:
-      case s"Button B: X+$x, Y+$y" => Pos(x.toLong, y.toLong)
+      case s"Button B: X+$x, Y+$y" => Position(x.toLong, y.toLong)
     val ps = lines.collect:
-      case s"Prize: X=$x, Y=$y"    => Pos(x.toLong, y.toLong)
+      case s"Prize: X=$x, Y=$y"    => Position(x.toLong, y.toLong)
     as.zip(bs).zip(ps).map:
       case ((a,b),p) => Machine(a, b, p)
 
