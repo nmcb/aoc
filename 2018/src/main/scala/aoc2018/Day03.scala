@@ -1,10 +1,9 @@
 package aoc2018
 
 import nmcb.*
+import nmcb.pos.*
 
 object Day03 extends AoC:
-
-  case class Pos(x: Int, y: Int)
 
   type Claims   = Vector[Vector[Pos]]
   type Overlaps = Map[Pos,Int]
@@ -16,7 +15,7 @@ object Day03 extends AoC:
         val x1 = w.toInt + x0
         val y0 = y.toInt
         val y1 = h.toInt + y0
-        (for x <- x0 until x1 ; y <- y0 until y1 yield Pos(x,y)).toVector
+        (for x <- x0 until x1 ; y <- y0 until y1 yield Pos.of(x,y)).toVector
 
     val overlaps = claims.flatten.groupMapReduce(identity)(_ => 1)(_ + _)
     (claims, overlaps)

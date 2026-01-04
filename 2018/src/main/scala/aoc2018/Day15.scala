@@ -1,17 +1,12 @@
 package aoc2018
 
 import nmcb.*
+import nmcb.pos.*
+
 import scala.annotation.tailrec
 import scala.util.Try
 
 object Day15 extends AoC:
-
-  case class Pos(x: Int, y: Int):
-    infix def +(that: Pos): Pos = copy(x = x + that.x, y = y + that.y)
-    def neighbours: Set[Pos]    = Pos.adjacent.map(_ + this).toSet
-
-  object Pos:
-    val adjacent = Vector(Pos(1, 0), Pos(-1, 0), Pos(0, 1), Pos(0, -1))
 
   type Grid = Vector[Vector[Char]]
 
@@ -41,7 +36,7 @@ object Day15 extends AoC:
   def getInRange(targets: Set[Fighter])(using Grid, List[Fighter]): Set[Pos] =
     for
       target <- targets
-      offset <- Pos.adjacent
+      offset <- Pos.offset4
       pos     = target.pos + offset
       if isFree(pos)
     yield
@@ -65,7 +60,7 @@ object Day15 extends AoC:
           val next =
             for
               (pos, dist) <- todo
-              neighbour   <- pos.neighbours.filter(isFree).iterator
+              neighbour   <- pos.adjoint4.filter(isFree).iterator
               if !visited.contains(neighbour)
             yield
               neighbour -> (dist + 1)
@@ -83,7 +78,7 @@ object Day15 extends AoC:
     nearest.min
 
   def stepBy(chosen: Pos, fighter: Fighter)(using Grid, List[Fighter]): Pos =
-    val neighbours = fighter.pos.neighbours
+    val neighbours = fighter.pos.adjoint4
     val dists      = distances(chosen, neighbours)
     val min        = dists.values.min
     dists.filter(_.distance == min).keys.min
@@ -117,7 +112,7 @@ object Day15 extends AoC:
                 moved       = fighter.copy(pos = step)
 
 
-            val neighbours = moved.pos.neighbours
+            val neighbours = moved.pos.adjoint4
             val attackable = targetsOf(moved).filter(u => neighbours.contains(u.pos))
 
             if attackable.nonEmpty then

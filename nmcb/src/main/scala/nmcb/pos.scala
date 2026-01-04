@@ -38,6 +38,10 @@ object pos:
 
     def translate(dx: Int, dy: Int): Pos = Pos(x + dx, y + dy)
 
+    infix def min(that: Pos): Pos = Pos(x min that.x, y min that.y)
+    infix def max(that: Pos): Pos = Pos(x max that.x, y max that.y)
+
+
     def distance(o: Pos): Double =
       val dx = o.x - x
       val dy = o.y - y

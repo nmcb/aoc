@@ -1,21 +1,13 @@
 package aoc2018
 
 import nmcb.*
+import nmcb.pos.*
 import nmcb.predef.*
 
 import scala.collection.*
 import scala.collection.immutable.{Map, Set}
 
 object Day18 extends AoC:
-
-  case class Pos(x: Int, y: Int):
-
-    infix def+(that: Pos): Pos =
-      copy(x = x + that.x, y = y + that.y)
-
-    def adjacent: Set[Pos] =
-      Set(Pos(-1,-1),Pos(-1,0),Pos(-1,1),Pos(0,-1),Pos(0,1),Pos(1,-1),Pos(1,0),Pos(1,1))
-        .map(_ + this)
 
   type Area = Map[Pos,Char]
 
@@ -44,7 +36,7 @@ object Day18 extends AoC:
       p.x >= 0 && p.x < sizeX && p.y >= 0 && p.y < sizeY
 
     def surroundedBy(p: Pos, c: Char): Int =
-      p.adjacent.filter(within).count(p => area(p) == c)
+      p.adjoint8.filter(within).count(p => area(p) == c)
 
     def tick: Landscape =
 

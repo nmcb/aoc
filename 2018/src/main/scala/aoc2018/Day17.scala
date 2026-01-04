@@ -1,13 +1,14 @@
 package aoc2018
 
 import nmcb.*
+import nmcb.pos.*
 
 object Day17 extends AoC:
 
-  case class Pos(x: Int, y: Int):
-    def e: Pos = copy(x = x - 1)
-    def w: Pos = copy(x = x + 1)
-    def s: Pos = copy(y = y + 1)
+  extension (p: Pos)
+    def e: Pos = p.copy(x = p.x - 1)
+    def w: Pos = p.copy(x = p.x + 1)
+    def s: Pos = p.copy(y = p.y + 1)
 
   case class Area(clay: Set[Pos], minY: Int, maxY: Int, spring: Pos)
 

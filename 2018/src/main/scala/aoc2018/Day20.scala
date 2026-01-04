@@ -5,8 +5,8 @@ import scala.annotation.tailrec
 
 object Day20 extends AoC:
 
-  case class Pos(x: Int, y: Int):
-    def move(direction: Char): Pos =
+  case class Location(x: Int, y: Int):
+    def move(direction: Char): Location =
       direction match
         case 'N' => copy(y = y - 1)
         case 'E' => copy(x = x - 1)
@@ -15,17 +15,17 @@ object Day20 extends AoC:
 
   def solve(directions: String): Vector[Int] =
 
-    type MaxDoorsTo = (Pos,Int)
-    type Visited = Set[Pos]
+    type MaxDoorsTo = (Location,Int)
+    type Visited = Set[Location]
 
     @tailrec
-    def go(todo: String, maxDoorsTo: Map[Pos,Int], visited: Visited, branches: Vector[Visited]): Vector[Int] =
+    def go(todo: String, maxDoorsTo: Map[Location,Int], visited: Visited, branches: Vector[Visited]): Vector[Int] =
       todo.head match
         case '^' =>
           go(
             todo       = todo.tail,
-            maxDoorsTo = Map(Pos(0,0) -> 0),
-            visited    = Set(Pos(0,0)),
+            maxDoorsTo = Map(Location(0,0) -> 0),
+            visited    = Set(Location(0,0)),
             branches   = Vector.empty
           )
         case '$' =>
@@ -55,7 +55,7 @@ object Day20 extends AoC:
           )
         case direction =>
           val (nextMaxDoorsTo, nextVisited) =
-            visited.foldLeft((maxDoorsTo, Set.empty[Pos])):
+            visited.foldLeft((maxDoorsTo, Set.empty[Location])):
               case ((maxDoorsTo, visited), currentRoom) =>
                 val nextRoom = currentRoom.move(direction)
                 if maxDoorsTo.contains(nextRoom) && maxDoorsTo(nextRoom) <= maxDoorsTo(currentRoom) + 1 then
