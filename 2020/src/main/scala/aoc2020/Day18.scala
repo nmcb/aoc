@@ -1,6 +1,7 @@
 package aoc2020
 
 import nmcb.*
+import nmcb.parsing.*
 
 object Day18 extends AoC:
 
@@ -18,7 +19,6 @@ object Day18 extends AoC:
         case Val(v) => v
 
   import Expr.*
-  import P.*
 
   def braced(expr: => P[Expr]): P[Expr] =
     for
@@ -48,9 +48,8 @@ object Day18 extends AoC:
     for v <- digit.oneOrMore yield Val(v.mkString.toLong)
   
   def parse1(line: String): Expr = 
-    P.run(expr1)(line)
+    expr1.run(line)
 
-  
   // expr2   := lhs@term2 -> { '*' rhs@term2 }                       => Mul(lhs,rhs)
   // term2   := lhs@( '(' expr2 ')' | value ) -> { '+' rhs@expr2 }   => Add(lhs,rhs)
   // value   := digit -> { digit }                                   => Val(value)
@@ -62,7 +61,7 @@ object Day18 extends AoC:
     (braced(expr2)| value).chainLeftAssoc(infix("+")(lhs => rhs => Add(lhs,rhs)))
   
   def parse2(line: String): Expr =
-    run(expr2)(line)
+    expr2.run(line)
 
 
   lazy val answer1: Long = puzzle.map(parse1).map(_.eval).sum
