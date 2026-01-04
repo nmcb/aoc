@@ -72,15 +72,15 @@ object Day22 extends AoC:
 
   // Geometry
 
-  case class Pos(x: Int, y: Int, z: Int):
-    def -(that: Pos): Pos = Pos(x - that.x, y - that.y, z - that.z)
-    def +(that: Pos): Pos = Pos(x + that.x, y + that.y, z + that.z)
-    infix def min(that: Pos): Pos = Pos(x min that.x, y min that.y, z min that.z)
-    infix def max(that: Pos): Pos = Pos(x max that.x, y max that.y, z max that.z)
-    def >=(that: Pos): Boolean = x >= that.x && y >= that.y && z >= that.z
-    def <=(that: Pos): Boolean = x <= that.x && y <= that.y && z <= that.z
+  case class Positon(x: Int, y: Int, z: Int):
+    def -(that: Positon): Positon = Positon(x - that.x, y - that.y, z - that.z)
+    def +(that: Positon): Positon = Positon(x + that.x, y + that.y, z + that.z)
+    infix def min(that: Positon): Positon = Positon(x min that.x, y min that.y, z min that.z)
+    infix def max(that: Positon): Positon = Positon(x max that.x, y max that.y, z max that.z)
+    def >=(that: Positon): Boolean = x >= that.x && y >= that.y && z >= that.z
+    def <=(that: Positon): Boolean = x <= that.x && y <= that.y && z <= that.z
 
-  case class Box(min: Pos, max: Pos):
+  case class Box(min: Positon, max: Positon):
 
     def intersect(that: Box): Option[Box] =
       val maxmin = min max that.min
@@ -98,14 +98,14 @@ object Day22 extends AoC:
     def fromString(s: String): Box =
       s match
         case s"$x1,$y1,$z1~$x2,$y2,$z2" =>
-          val p1 = Pos(x1.toInt, y1.toInt, z1.toInt)
-          val p2 = Pos(x2.toInt, y2.toInt, z2.toInt)
+          val p1 = Positon(x1.toInt, y1.toInt, z1.toInt)
+          val p2 = Positon(x2.toInt, y2.toInt, z2.toInt)
           Box(p1, p2)
 
   extension (box: Box)
 
     def drop(height: Int): Box =
-      val offset = Pos(0, 0, height)
+      val offset = Positon(0, 0, height)
       Box(box.min - offset, box.max - offset)
 
     def drop1: Box =

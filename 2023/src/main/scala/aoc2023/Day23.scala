@@ -10,7 +10,7 @@ object Day23 extends AoC:
   def part1(input: String): Int =
     val (start, end, maze) = parseMaze(input)
     val queue = mutable.Queue((start, S, 0))
-    val visited = mutable.Map.empty[Pos, Int]
+    val visited = mutable.Map.empty[Position, Int]
     while queue.nonEmpty do
       val (pos, dir, dist) = queue.dequeue()
       visited.get(pos) match
@@ -49,9 +49,9 @@ object Day23 extends AoC:
           .foreach((d, n) => queue.enqueue((n, pathNext, dist + d)))
     longest
 
-  def parseNodes(start: Pos, end: Pos, layout: Maze): Map[Pos, Node] =
+  def parseNodes(start: Position, end: Position, layout: Maze): Map[Position, Node] =
     val queue = mutable.Queue((start, 0, S, None: Option[Node]))
-    val nodes = mutable.Map.empty[Pos, Node]
+    val nodes = mutable.Map.empty[Position, Node]
 
     while queue.nonEmpty do
       val (pos, dist, dir, fromNode) = queue.dequeue()
@@ -73,13 +73,13 @@ object Day23 extends AoC:
 
     nodes.toMap
 
-  def parseMaze(input: String): (Pos, Pos, Maze) =
+  def parseMaze(input: String): (Position, Position, Maze) =
     val width = input.linesIterator.next.length
     val height = input.linesIterator.length
     val grid = input.linesIterator.zipWithIndex
       .flatMap: (l, y) =>
         l.zipWithIndex
-          .map((c, x) => Pos(x, y) -> c)
+          .map((c, x) => Position(x, y) -> c)
           .filter((_, c) => c != '#')
           .map((p, c) => p -> c)
       .toMap
@@ -88,24 +88,24 @@ object Day23 extends AoC:
     val end = sortedPath.last
     (start, end, Maze(grid, width, height))
 
-  case class Maze(grid: Map[Pos, Char], width: Int, height: Int)
+  case class Maze(grid: Map[Position, Char], width: Int, height: Int)
 
-  case class Node(pos: Pos):
+  case class Node(pos: Position):
     val edges = mutable.Map.empty[Int, Node]
 
-  case class Pos(x: Int, y: Int):
-    def +(other: Pos): Pos = Pos(x + other.x, y + other.y)
-    def -(other: Pos): Pos = Pos(x - other.x, y - other.y)
-    def *(other: Pos): Pos = Pos(x * other.x, y * other.y)
-    def *(scalar: Int): Pos = Pos(x * scalar, y * scalar)
-    def manhattan(other: Pos): Int = (x - other.x).abs + (y - other.y).abs
-    def unary_- : Pos = Pos(-x, -y)
+  case class Position(x: Int, y: Int):
+    def +(other: Position): Position = Position(x + other.x, y + other.y)
+    def -(other: Position): Position = Position(x - other.x, y - other.y)
+    def *(other: Position): Position = Position(x * other.x, y * other.y)
+    def *(scalar: Int): Position = Position(x * scalar, y * scalar)
+    def manhattan(other: Position): Int = (x - other.x).abs + (y - other.y).abs
+    def unary_- : Position = Position(-x, -y)
 
-  type Dir = Pos
-  val E: Dir = Pos(1, 0)
-  val S: Dir = Pos(0, 1)
-  val W: Dir = Pos(-1, 0)
-  val N: Dir = Pos(0, -1)
+  type Dir = Position
+  val E: Dir = Position(1, 0)
+  val S: Dir = Position(0, 1)
+  val W: Dir = Position(-1, 0)
+  val N: Dir = Position(0, -1)
   val Dir: Seq[Dir] = Seq(E, S, W, N)
 
 

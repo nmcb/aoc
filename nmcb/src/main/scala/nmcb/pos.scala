@@ -41,6 +41,13 @@ object pos:
     infix def min(that: Pos): Pos = Pos(x min that.x, y min that.y)
     infix def max(that: Pos): Pos = Pos(x max that.x, y max that.y)
 
+    infix def >(b: Pos): Boolean  = x > b.x && y > b.y
+    infix def <(b: Pos): Boolean  = x < b.x && y < b.y
+    infix def >=(b: Pos): Boolean = x >= b.x && y >= b.y
+    infix def <=(b: Pos): Boolean = x <= b.x && y <= b.y
+
+    def ×(that: Pos): Long = x.toLong * that.y.toLong - that.x.toLong * y.toLong
+
 
     def distance(o: Pos): Double =
       val dx = o.x - x
@@ -53,10 +60,10 @@ object pos:
       val d = 90 - math.atan2(-dy, dx) * 180 / math.Pi
       if d >= 0 then d else d + 360
 
-    def adjoint4: Set[Pos] =
+    lazy val adjoint4: Set[Pos] =
       Pos.offset4.map(_ + this)
 
-    def adjoint8: Set[Pos] =
+    lazy val adjoint8: Set[Pos] =
       Pos.offset8.map(_ + this)
 
     infix inline def step(dir: Dir): Pos =
