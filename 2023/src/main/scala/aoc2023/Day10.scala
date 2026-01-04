@@ -6,7 +6,7 @@ import nmcb.pos.*
 import scala.annotation.tailrec
 
 object Day10 extends AoC:
-  
+
   enum Tile(val directions: Set[Dir]):
     case Vertical   extends Tile(Set(N,S))
     case Horizontal extends Tile(Set(E,W))
@@ -33,26 +33,26 @@ object Day10 extends AoC:
         case '.' => Ground
         case 'S' => Start
 
-  case class Pos(x: Int, y: Int):
+  extension (p: Pos)
+
     def move(d: Dir): Option[Pos] =
       d match
-        case N if y > 0    => Some(Pos(x, y - 1))
-        case E if x < maxX => Some(Pos(x + 1, y))
-        case S if y < maxY => Some(Pos(x, y + 1))
-        case W if x > 0    => Some(Pos(x - 1, y))
+        case N if p.y > 0    => Some(p.copy(y = p.y - 1))
+        case E if p.x < maxX => Some(p.copy(x = p.x + 1))
+        case S if p.y < maxY => Some(p.copy(y = p.y + 1))
+        case W if p.x > 0    => Some(p.copy(x = p.x - 1))
         case _             => None
 
-  object Pos:
-    given Ordering[Pos] = Ordering.by(p => (p.x, p.y))
+  given Ordering[Pos] = Ordering.by(p => (p.x, p.y))
 
   lazy val tiles: Map[Pos,Tile] =
     lines
       .zipWithIndex
-      .foldLeft(Map.empty[Pos,Tile]){ case (a,(l,y)) =>
-        l.zipWithIndex.foldLeft(a){ case (a,(c,x)) =>
-          a + (Pos(x,y) -> Tile.fromChar(c))
-        }
-      }
+      .foldLeft(Map.empty[Pos,Tile]):
+        case (a,(l,y)) =>
+          l.zipWithIndex.foldLeft(a):
+            case (a,(c,x)) =>
+              a + (Pos(x,y) -> Tile.fromChar(c))
 
   lazy val maxX: Int = tiles.keys.map(_.x).max
   lazy val maxY: Int = tiles.keys.map(_.y).max

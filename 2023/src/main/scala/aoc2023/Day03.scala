@@ -1,14 +1,11 @@
 package aoc2023
 
 import nmcb.*
+import nmcb.pos.*
 
 import scala.annotation.*
 
 object Day03 extends AoC:
-
-  case class Pos(x: Int, y: Int):
-    def +(p: Pos): Pos =
-      Pos(x + p.x, y + p.y)
 
   case class Page(chars: Vector[Vector[Char]]):
 

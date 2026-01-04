@@ -23,33 +23,33 @@ object Day22 extends AoC:
           val on = set == "on" 
           CuboidStep(on, xr, yr, zr)
 
-  case class Pos(x: Int, y: Int, z: Int):
+  case class Position(x: Int, y: Int, z: Int):
 
-    def +(that: Pos): Pos =
-      Pos(x + that.x, y + that.y, z + that.z)
+    def +(that: Position): Position =
+      Position(x + that.x, y + that.y, z + that.z)
 
-    def <=(that: Pos): Boolean =
+    def <=(that: Position): Boolean =
       x <= that.x && y <= that.y && z <= that.z
 
-    def min(that: Pos): Pos =
-      Pos(x.min(that.x), y.min(that.y), z.min(that.z))
+    def min(that: Position): Position =
+      Position(x.min(that.x), y.min(that.y), z.min(that.z))
 
-    def max(that: Pos): Pos =
-      Pos(x.max(that.x), y.max(that.y), z.max(that.z))
+    def max(that: Position): Position =
+      Position(x.max(that.x), y.max(that.y), z.max(that.z))
 
 
-  case class Cuboid(all: Map[Pos,Boolean]):
+  case class Cuboid(all: Map[Position,Boolean]):
 
-    def getOrElse(p: Pos, b: Boolean): Boolean =
+    def getOrElse(p: Position, b: Boolean): Boolean =
       all.getOrElse(p, b)
 
-    def update(pos: Pos, bool: Boolean): Cuboid =
+    def update(pos: Position, bool: Boolean): Cuboid =
       map((p,b) => if (pos == p) bool else b)
 
     def update(g: Cuboid): Cuboid =
       map((p,b) => g.getOrElse(p, b))
 
-    def map(f: (Pos,Boolean) => Boolean): Cuboid =
+    def map(f: (Position,Boolean) => Boolean): Cuboid =
       Cuboid(all.map((p, a) => p -> f(p,a)))
 
   object Cuboid:
@@ -63,7 +63,7 @@ object Day22 extends AoC:
           y <- yr
           z <- zr
         yield
-          Pos(x, y, z)
+          Position(x, y, z)
       Cuboid(all.groupMapReduce(identity)(_ => b)(_ && _))
 
     def cuboid(s: CuboidStep): Cuboid =
@@ -78,7 +78,7 @@ object Day22 extends AoC:
     def reboot(steps: Vector[CuboidStep], grid: Cuboid = init): Cuboid =
       steps.filter(inside).foldLeft(grid)((g,s) => g.update(cuboid(s)))
 
-  case class Cube(min: Pos, max: Pos): 
+  case class Cube(min: Position, max: Position):
 
     def size: Long =
       val xs = max.x - min.x + 1L
@@ -127,8 +127,8 @@ object Day22 extends AoC:
     lines
       .map:
         case StepLit(on, x0, x1, y0, y1, z0, z1) =>
-          val min = Pos(x0.toInt, y0.toInt, z0.toInt)
-          val max = Pos(x1.toInt, y1.toInt, z1.toInt)
+          val min = Position(x0.toInt, y0.toInt, z0.toInt)
+          val max = Position(x1.toInt, y1.toInt, z1.toInt)
           val set = on == "on"
           CubeStep(set, Cube(min, max))
 

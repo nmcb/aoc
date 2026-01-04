@@ -1,18 +1,18 @@
 package aoc2023
 
 import nmcb.*
+import nmcb.pos.*
+
 object Day11 extends AoC:
 
   lazy val image: Image = Image(lines.map(_.toVector))
-
-  case class Pos(x: Int, y: Int)
 
   case class Image(galaxies: Vector[Vector[Char]]):
 
     lazy val positions: Vector[Pos] =
       galaxies.zipWithIndex.flatMap((l,y) =>
         l.zipWithIndex.flatMap((c,x) =>
-          Option.when(c == '#')(Pos(x, y))))
+          Option.when(c == '#')(Pos.of(x, y))))
 
     def empty(gs: Vector[Vector[Char]]): Set[Int] =
       gs.zipWithIndex.flatMap((line,i) => if line.forall(_ == '.') then Some(i) else None).toSet

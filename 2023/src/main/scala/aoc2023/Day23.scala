@@ -49,7 +49,7 @@ object Day23 extends AoC:
           .foreach((d, n) => queue.enqueue((n, pathNext, dist + d)))
     longest
 
-  def parseNodes(start: Pos, end: Pos, layout: Maze) =
+  def parseNodes(start: Pos, end: Pos, layout: Maze): Map[Pos, Node] =
     val queue = mutable.Queue((start, 0, S, None: Option[Node]))
     val nodes = mutable.Map.empty[Pos, Node]
 
@@ -73,7 +73,7 @@ object Day23 extends AoC:
 
     nodes.toMap
 
-  def parseMaze(input: String) =
+  def parseMaze(input: String): (Pos, Pos, Maze) =
     val width = input.linesIterator.next.length
     val height = input.linesIterator.length
     val grid = input.linesIterator.zipWithIndex
