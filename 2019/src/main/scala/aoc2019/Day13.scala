@@ -20,30 +20,30 @@ object Day13 extends AoC:
 
   import Tile.*
 
-  case class Pos(x: Long, y: Long)
+  case class Location(x: Long, y: Long)
 
   extension (outputs: LazyList[Value])
-    def render: Map[Pos,Tile] =
-      outputs.grouped(3).foldLeft(Map.empty[Pos,Tile]):
-        case (result, LazyList(x,y,id)) => result + (Pos(x,y) -> Tile.fromId(id))
+    def render: Map[Location,Tile] =
+      outputs.grouped(3).foldLeft(Map.empty[Location,Tile]):
+        case (result, LazyList(x,y,id)) => result + (Location(x,y) -> Tile.fromId(id))
         case output                     => sys.error(s"invalid output: $output")
 
   val program: Mem = Mem.parse(input)
 
-  type Pixel = (Pos, Tile)
+  type Pixel = (Location, Tile)
 
   extension (pixel: Pixel)
-    def pos: Pos   = pixel._1
-    def tile: Tile = pixel._2
+    def location: Location   = pixel._1
+    def tile: Tile           = pixel._2
 
-  case class GameState(paddle: Option[Pos], ball: Option[Pos], score: Option[Value], display: Map[Pos,Tile]):
+  case class GameState(paddle: Option[Location], ball: Option[Location], score: Option[Value], display: Map[Location,Tile]):
 
-    def updated(pos: Pos, value: Value): GameState =
-      (pos,value) match
-        case (Pos(-1, 0), score) => copy(score   = Some(score))
-        case (pos, 3)            => copy(paddle  = Some(pos), display = display.updated(pos, Paddle))
-        case (pos, 4)            => copy(ball    = Some(pos), display = display.updated(pos, Ball))
-        case (pos, tile)         => copy(display = display.updated(pos, Tile.fromId(tile)))
+    def updated(loc: Location, value: Value): GameState =
+      (loc,value) match
+        case (Location(-1, 0), score) => copy(score   = Some(score))
+        case (loc, 3)                 => copy(paddle  = Some(loc), display = display.updated(loc, Paddle))
+        case (loc, 4)                 => copy(ball    = Some(loc), display = display.updated(loc, Ball))
+        case (loc, tile)              => copy(display = display.updated(loc, Tile.fromId(tile)))
 
     def echo(): Unit =
       val Home   = "\u001b[H"
@@ -68,12 +68,12 @@ object Day13 extends AoC:
       val buffer = collection.mutable.ListBuffer(Home + Clear)
       buffer += s"$White$Bold  Score: ${score.getOrElse(666)}  Blocks: ${display.values.count(_ == Block)} $Reset\n"
 
-      val maxX = display.maxBy(_.pos.x).pos.x.toInt
-      val maxY = display.maxBy(_.pos.y).pos.y.toInt
+      val maxX = display.maxBy(_.location.x).location.x.toInt
+      val maxY = display.maxBy(_.location.y).location.y.toInt
 
       for y <- 0 to maxY do
         for x <- 0 to maxX do
-          buffer += sprites(display(Pos(x,y)))
+          buffer += sprites(display(Location(x,y)))
         buffer += "\n"
       buffer += Reset
 
@@ -90,7 +90,7 @@ object Day13 extends AoC:
       else
         val outputs = executions.flatMap(_.outputOption)
         val frame   = outputs.grouped(3).foldLeft(game):
-          case (result, LazyList(x,y,value)) => result.updated(Pos(x,y), value)
+          case (result, LazyList(x,y,value)) => result.updated(Location(x,y), value)
           case (_, _)                        => sys.error("incomplete output")
 
         val ballX   = frame.ball.get.x

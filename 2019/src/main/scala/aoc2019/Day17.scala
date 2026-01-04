@@ -1,6 +1,7 @@
 package aoc2019
 
 import nmcb.*
+import nmcb.pos.*
 
 object Day17 extends AoC:
 
@@ -8,13 +9,9 @@ object Day17 extends AoC:
 
   val program: Mem = Mem.parse(input)
 
-  case class Pos(x: Int, y: Int):
-    def left: Pos = Pos(y, -x)
-    def right: Pos = Pos(-y, x)
-
-    def +(that: Pos): Pos = copy(x = x + that.x, y = y + that.y)
-
-  val neighbours = Seq(Pos(0,-1), Pos(0,1), Pos(-1,0), Pos(1,0))
+  extension (p: Pos)
+    def left: Pos  = Pos.of(p.y, -p.x)
+    def right: Pos = Pos.of(-p.y, p.x)
 
   def solve1(memory: Mem): Int =
     val output = CPU(memory).outputs.map(_.toChar).mkString.split("\n")
@@ -26,7 +23,7 @@ object Day17 extends AoC:
         Pos(x, y)
 
     points.foldLeft(0): (total,next) =>
-      if neighbours.map(next + _).forall(points.contains) then
+      if Pos.offsets.map(next + _).forall(points.contains) then
         total + (next.x * next.y)
       else total
 

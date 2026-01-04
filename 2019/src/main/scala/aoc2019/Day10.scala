@@ -1,27 +1,14 @@
 package aoc2019
 
 import nmcb.*
+import nmcb.pos.*
+
 import scala.annotation.tailrec
 
 object Day10 extends AoC:
 
-  case class Pos(x: Int, y: Int):
-
-    def distance(o: Pos): Double =
-      val dx = o.x - x
-      val dy = o.y - y
-      math.sqrt(math.pow(dx.toDouble, 2) + math.pow(dy.toDouble, 2))
-
-    def angle(o: Pos): Double =
-      val dx = (o.x - x).toDouble
-      val dy = (o.y - y).toDouble
-      val d = 90 - math.atan2(-dy, dx) * 180 / math.Pi
-      if d >= 0 then d else d + 360
-
-
-    def part2: Int =
-      x * 100 + y
-
+  extension (p: Pos)
+    def part2: Int = p.x * 100 + p.y
 
   val astroids: List[Pos] =
     val sizeX = lines(0).length

@@ -1,15 +1,14 @@
 package aoc2019
 
 import nmcb.*
+import nmcb.pos.*
+
 import scala.collection.*
 import scala.collection.immutable.Map
 
 object Day15 extends AoC:
 
   import cpu.*
-
-  case class Pos(x: Int, y: Int):
-    def +(that: Pos): Pos = copy(x = x + that.x, y = y + that.y)
 
   val neighbours: Vector[(Pos,Int)] =
     Vector(Pos(0, -1) -> 1, Pos(0, 1) -> 2, Pos(-1, 0) -> 3, Pos(1, 0) -> 4)

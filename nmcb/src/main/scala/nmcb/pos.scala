@@ -36,6 +36,18 @@ object pos:
 
     def translate(dx: Int, dy: Int): Pos = Pos(x + dx, y + dy)
 
+    def distance(o: Pos): Double =
+      val dx = o.x - x
+      val dy = o.y - y
+      math.sqrt(math.pow(dx.toDouble, 2) + math.pow(dy.toDouble, 2))
+
+    def angle(o: Pos): Double =
+      val dx = (o.x - x).toDouble
+      val dy = (o.y - y).toDouble
+      val d = 90 - math.atan2(-dy, dx) * 180 / math.Pi
+      if d >= 0 then d else d + 360
+
+
     infix inline def step(dir: Dir): Pos =
       dir match
         case N => copy(y = y - 1)
@@ -64,6 +76,10 @@ object pos:
       math.abs(x - p.x) + math.abs(y - p.y)
 
   object Pos:
+    
+    val origin: Pos = of(0, 0)
+
+    val offsets: Vector[Pos] = Vector(of(0,-1), of(0,1), of(-1,0), of(1,0))
 
     def of(x: Int, y: Int): Pos =
       Pos(x, y)
