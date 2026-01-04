@@ -1,6 +1,7 @@
 package aoc2022
 
 import nmcb.*
+import nmcb.pos.*
 
 import scala.annotation.*
 import scala.io.*
@@ -12,14 +13,12 @@ object Day14 extends AoC:
     case A extends E('.')
     case R extends E('#')
 
-  case class Pos(x: Int, y: Int)
-
-  object Pos:
-    given Ordering[Pos] with
-      def compare(a: Pos, b: Pos): Int =
-        Ordering[(Int,Int)].compare((a.x, a.y), (b.x, b.y))
+  given Ordering[Pos] with
+    def compare(a: Pos, b: Pos): Int =
+      Ordering[(Int,Int)].compare((a.x, a.y), (b.x, b.y))
 
   def parse(s: String): Vector[Pos] =
+    @tailrec
     def loop(ps: Vector[String], a: Vector[Pos] = Vector.empty): Vector[Pos] =
       ps match
         case Vector()      => a
@@ -59,10 +58,11 @@ object Day14 extends AoC:
     def get(p: Pos): Option[E] =
       view.lift(p.y).flatMap(_.lift(p.x - minX))
 
-    def set(p: Pos): Cave =
+    private def set(p: Pos): Cave =
       Cave(view.updated(p.y, view(p.y).updated(p.x - minX, S)), minX)
 
-    def land(cur: Pos): (Pos,Boolean) =
+    @tailrec
+    private def land(cur: Pos): (Pos,Boolean) =
       def find(p: Pos): Option[Pos] =
         val below: Vector[Pos] = Vector(Pos(p.x, p.y + 1), Pos(p.x - 1, p.y + 1), Pos(p.x + 1, p.y + 1))
         below.find(p => get(p).isEmpty || get(p).contains(A))
@@ -91,7 +91,7 @@ object Day14 extends AoC:
     def asString: String =
       "\n" + view.map(_.map(_.c).mkString("")).mkString("\n")
 
-  object Cave:
+  private object Cave:
     import E.*
     def from1(rs: Vector[Pos]): Cave =
       val minX: Int = rs.map(_.x).min
@@ -112,7 +112,8 @@ object Day14 extends AoC:
           :+ Vector.fill(1000)(A) :+ Vector.fill(1000)(R)
       Cave(view, 0)
 
-    val drip: Pos = Pos(500,0)
+    private val drip: Pos =
+      Pos(500,0)
 
 
   lazy val answer1: Int = Cave.from1(rocks).solve1
