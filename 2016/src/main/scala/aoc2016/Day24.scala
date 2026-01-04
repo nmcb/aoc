@@ -8,7 +8,8 @@ object Day24 extends AoC:
   type Grid      = Set[Pos]
   type Nodes     = Map[Int,Pos]
   type Distances = Map[Int,Map[Int,Int]]
-
+  type Routes    = Vector[Vector[Int]]
+  
   val(grid: Grid, nodes: Nodes) =
     val grid  = for y <- lines.indices ; x <- lines.head.indices if lines(y)(x) != '#'  yield Pos(x, y)
     val nodes = for y <- lines.indices ; x <- lines.head.indices if lines(y)(x).isDigit yield lines(y)(x).asDigit -> Pos(x, y)
@@ -36,9 +37,6 @@ object Day24 extends AoC:
         distance(grid, start, end)
 
   /** brute force traveling salesman */
-
-  type Routes = Vector[Vector[Int]]
-
   def shortestPath(distances: Distances, routes: Routes): Int =
     routes
       .map: route =>
