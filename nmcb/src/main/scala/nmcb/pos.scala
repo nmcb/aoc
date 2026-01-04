@@ -118,6 +118,8 @@ object pos:
     inline def of(x: Int, y: Int): Pos =
       Pos(x, y)
 
+    given Ordering[Pos] = Ordering.by(p => (p.x, p.y))
+
     extension (tuple: (Int, Int))
       def toPos: Pos = Pos(tuple._1, tuple._2)
 
