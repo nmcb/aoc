@@ -1,12 +1,9 @@
 package aoc2016
 
 import nmcb.*
-
-import scala.collection.immutable
+import nmcb.pos.*
 
 object Day22 extends AoC:
-
-  case class Pos(x: Int, y: Int)
 
   case class Node(used: Int, avail: Int):
     def isEmpty: Boolean            = used == 0

@@ -23,7 +23,7 @@ class Test2016 extends AnyFunSuite:
     assertResult("c6697b55")(Day05.answer1)
     assertResult("8c35d1ab")(Day05.answer2)
 
-  test("Day06"):
+  test("Day 6: Signals and Noise"):
     assertResult("afwlyyyq")(Day06.answer1)
     assertResult("bhkzekao")(Day06.answer2)
 
