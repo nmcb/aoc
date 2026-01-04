@@ -1,18 +1,15 @@
 package aoc2021
 
 import nmcb.*
+import nmcb.pos.*
 
 import scala.annotation.tailrec
 
 object Day15 extends AoC:
 
-  case class Pos(x: Int, y: Int):
-    infix def +(that: Pos): Pos =
-      copy(x = x + that.x, y = y + that.y)
-
   type Grid = Map[Pos, Int]
 
-  val directions = Vector(Pos(1, 0), Pos(-1, 0), Pos(0, -1), Pos(0, 1))
+  val directions = Vector(Pos.of(1, 0), Pos.of(-1, 0), Pos.of(0, -1), Pos.of(0, 1))
 
   extension (grid: Grid)
     def neighbours(pos: Pos): Vector[Pos] =

@@ -1,16 +1,9 @@
 package aoc2016
 
 import nmcb.*
+import nmcb.pos.*
 
 object Day24 extends AoC:
-
-  case class Pos(x: Int, y: Int):
-
-    infix def +(that: Pos): Pos =
-      copy(x = x + that.x, y = y + that.y)
-
-    def neighbours: Set[Pos] =
-      Set(Pos(-1, 0), Pos(1, 0), Pos(0, -1), Pos(0, 1)).map(_ + this)
 
   type Grid      = Set[Pos]
   type Nodes     = Map[Int,Pos]
@@ -31,7 +24,7 @@ object Day24 extends AoC:
       val current = todo.dequeue
       if current == end then return steps(current)
       val update  = steps(current) + 1
-      current.neighbours.intersect(grid).foreach: next =>
+      current.adjoint4.intersect(grid).foreach: next =>
         if !steps.contains(next) || update < steps(next) then
           steps(next) = update
           todo.enqueue(next)
@@ -63,6 +56,7 @@ object Day24 extends AoC:
     val graph  = distances(grid, nodes)
     val routes = (1 to nodes.keys.max).toVector.permutations.map(0 +: _ :+ 0).toVector
     shortestPath(graph, routes)
+
 
   lazy val answer1: Int = solve1(grid, nodes)
   lazy val answer2: Int = solve2(grid, nodes)

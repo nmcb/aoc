@@ -1,19 +1,12 @@
 package aoc2023
 
 import nmcb.*
+import nmcb.pos.*
 
 import scala.annotation.tailrec
 
 /** @see Credits for part 2 - https://github.com/merlinorg */
 object Day21 extends AoC:
-
-  case class Pos(x: Int, y: Int):
-    def +(b: Pos): Pos =
-      Pos(x + b.x, y + b.y)
-
-    def neighbours: Set[Pos] =
-      Set(Pos(1, 0), Pos(-1, 0), Pos(0, 1), Pos(0, -1)).map(_ + this)
-
 
   case class Garden(grid: Vector[Vector[Char]]):
     val sizeX: Int = grid.head.size
@@ -47,7 +40,7 @@ object Day21 extends AoC:
     def solve1(steps: Int): Int =
       @tailrec
       def loop(count: Int, found: Set[Pos] = Set(startPos)): Set[Pos] =
-        if count == 0 then found else loop(count - 1, found.flatMap(_.neighbours.filter(plot)))
+        if count == 0 then found else loop(count - 1, found.flatMap(_.adjoint4.filter(plot)))
       loop(steps).size
 
 
@@ -67,13 +60,13 @@ object Day21 extends AoC:
         copy(steps + 1,
           for
             plot <- plots
-            step <- plot.neighbours
+            step <- plot.adjoint4
             if infinite(step) != '#'
           yield step)
 
     case class Collect(steps: Long, gridPlotsScan: Vector[Long] = Vector.empty):
-      val stepsToGrids = steps / gridSize
-      val gridsToSteps = steps % gridSize
+      val stepsToGrids: Long = steps / gridSize
+      val gridsToSteps: Long = steps % gridSize
 
       infix def add(grid: Grid): Collect =
         if grid.steps % gridSize == gridsToSteps then
@@ -81,7 +74,7 @@ object Day21 extends AoC:
         else
           this
 
-      /** given three distinct subsequent `y` points on a quadratic polynomial, solve `y`` for given `x` */
+      /** given three distinct subsequent `y` points on a quadratic polynomial, solve `y` for given `x` */
       def quadratic(y0: Long, y1: Long, y2: Long)(x: Long): Long =
         y0 + (y1 - y0) * x + (x * (x - 1) / 2) * (y2 - 2 * y1 + y0)
 

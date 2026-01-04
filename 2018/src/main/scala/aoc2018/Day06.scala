@@ -1,14 +1,13 @@
 package aoc2018
 
 import nmcb.*
+import nmcb.pos.*
+
 import scala.collection.+:
 import scala.collection.immutable.Vector
 import scala.math.*
 
 object Day06 extends AoC:
-
-  case class Pos(x: Int, y: Int):
-    infix def manhattan(p: Pos): Int = abs(x - p.x) + abs(y - p.y)
 
   case class Grid(coordinates: Vector[Pos]):
 
@@ -21,11 +20,11 @@ object Day06 extends AoC:
     val positions: Vector[Pos] =
       (for x <- minX to maxX ; y <- minY to maxY yield Pos(x,y)).toVector
 
-    type UnitDistance = (Pos,Int)
+    type UnitDistance = (Pos, Long)
 
     extension (unitDistance: UnitDistance)
       def coordinate: Pos = unitDistance._1
-      def distance: Int   = unitDistance._2
+      def distance: Long  = unitDistance._2
 
     val closest: Vector[(Pos,Pos)] =
       positions.flatMap: p =>
@@ -41,11 +40,11 @@ object Day06 extends AoC:
     def infinite(coordinate: Pos): Boolean =
       closest.exists((p,c) => c == coordinate && (p.x == minX || p.x == maxX || p.y == minY || p.y == maxY))
 
-    def largestAreaSize: Int =
+    def largestAreaSize: Long =
       val (_, size) = areas.filterNot((p,_) => infinite(p)).maxBy((_,s) => s)
       size
 
-    def manhattanSum(position: Pos): Int =
+    def manhattanSum(position: Pos): Long =
       coordinates.map(position.manhattan).sum
 
     def withinManhattanSumLimit(limit: Int): Vector[Pos] =
@@ -55,5 +54,5 @@ object Day06 extends AoC:
   val coordinates: Vector[Pos] = lines.map:
     case s"$x, $y" => Pos(x.toInt, y.toInt)
 
-  lazy val answer1: Int = Grid(coordinates).largestAreaSize
-  lazy val answer2: Int = Grid(coordinates).withinManhattanSumLimit(10000).size
+  lazy val answer1: Long = Grid(coordinates).largestAreaSize
+  lazy val answer2: Int  = Grid(coordinates).withinManhattanSumLimit(10000).size

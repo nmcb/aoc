@@ -8,7 +8,7 @@ import predef.*
 case class Grid[+A](matrix: Vector[Vector[A]]):
   val sizeY: Int = matrix.size
   val sizeX: Int = matrix.head.size
-  val minPos: Pos = Pos.zero
+  val minPos: Pos = Pos.origin
   val maxPos: Pos = (sizeX - 1, sizeY - 1).toPos
 
   assert(matrix.forall(row => row.size == sizeX))

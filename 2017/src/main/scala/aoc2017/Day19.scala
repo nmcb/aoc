@@ -1,7 +1,9 @@
 package aoc2017
 
 import nmcb.*
-import scala.annotation.*
+import nmcb.pos.*
+
+import scala.annotation.tailrec
 
 object Day19 extends AoC:
 
@@ -17,19 +19,6 @@ object Day19 extends AoC:
     def charAt(p: Pos): Char =
       grid.lift(p.y).flatMap(_.lift(p.x)).getOrElse(' ')
 
-  case class Pos(x: Int, y: Int):
-
-    infix def +(that: Pos): Pos =
-      Pos(x + that.x, y + that.y)
-
-    @targetName("-")
-    def unary_- : Pos =
-      Pos(-x, -y)
-
-  object Pos:
-    def offsets: Set[Pos] =
-      Set(Pos(-1, 0), Pos(1, 0), Pos(0, -1), Pos(0, 1))
-
   case class Tracer(grid: Grid, pos: Pos, dir: Pos):
 
     def char: Char =
@@ -41,7 +30,7 @@ object Day19 extends AoC:
     def next: Tracer =
       grid.charAt(pos + dir) match
         case '+' =>
-          val turns = Pos.offsets - dir - (-dir)
+          val turns = Pos.offset4 - dir - (-dir)
           val turn  = turns.find(d => grid.charAt(pos + dir + d) != ' ').get
           copy(pos = pos + dir, dir = turn)
         case _ =>

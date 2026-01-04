@@ -1,28 +1,25 @@
 package aoc2016
 
 import nmcb.*
+import nmcb.pos.*
+
 import scala.collection.*
 import scala.collection.immutable.Map
 
 object Day13 extends AoC:
 
-  case class Pos(x: Int, y: Int):
+  val favorite = 1352
 
-    infix def +(that: Pos): Pos =
-      Pos(x + that.x, y + that.y)
-
+  extension (p: Pos)
+  
     def isOpen: Boolean =
-      val number = x*x + 3*x + 2*x*y + y + y*y + Pos.favorite
+      val number = p.x*p.x + 3*p.x + 2*p.x*p.y + p.y + p.y*p.y + favorite
       val binary = number.toBinaryString
       binary.count(_ == '1') % 2 == 0
 
-    def candidates: Vector[Pos] =
-      Vector(Pos(1,0), Pos(-1,0), Pos(0,1), Pos(0,-1))
-        .map(this + _)
-        .filter(c => c.x >= 0 && c.y >= 0)
+    def candidates: Set[Pos] =
+      p.adjoint4.filter(c => c.x >= 0 && c.y >= 0)
 
-  object Pos:
-    val favorite = 1352
 
   /** breadth first search */
   def solve1(start: Pos, target: Pos): Int =
@@ -55,5 +52,5 @@ object Day13 extends AoC:
 
     cache.toMap
 
-  lazy val answer1: Int = solve1(start = Pos(1, 1), target = Pos(31, 39))
-  lazy val answer2: Int = solve2(start = Pos(1,1)).size
+  lazy val answer1: Int = solve1(start = Pos.of(1, 1), target = Pos.of(31, 39))
+  lazy val answer2: Int = solve2(start = Pos.of(1,1)).size

@@ -1,23 +1,16 @@
 package aoc2022
 
 import nmcb.*
+import nmcb.pos.*
 
 import scala.annotation.tailrec
 import scala.io.*
 
 object Day24 extends AoC:
 
-  case class Pos(x: Int, y: Int):
-    def +(p: Pos): Pos = Pos(x + p.x, y + p.y)
-    def n: Set[Pos] = Set(Pos(1,0),Pos(-1,0),Pos(0,1),Pos(0,-1)).map(this + _)
-
-  object Pos:
-    def start: Pos = Pos(-1, 0)
-    def end(bounds: Bounds): Pos = Pos(bounds.max.x, bounds.max.y)
-
-    given Ordering[Pos] with
-      def compare(a: Pos, b: Pos): Int =
-        Ordering[(Int,Int)].compare((a.y, a.x), (b.y, b.x))
+  given Ordering[Pos] with
+    def compare(a: Pos, b: Pos): Int =
+      Ordering[(Int,Int)].compare((a.y, a.x), (b.y, b.x))
 
   case class Bounds(max: Pos):
     val sizeX: Int = max.x + 1
@@ -25,6 +18,8 @@ object Day24 extends AoC:
     val fieldSize: Int = sizeX * sizeY
     def isField(p: Pos): Boolean = p.x >= 0 && p.x <= max.x && p.y >= 0 && p.y <= max.y
     def transpose: Bounds = copy(max = Pos(max.y, max.x))
+    def end: Pos = Pos(max.x, max.y)
+
 
   enum Dir(val char: Char):
     case Up    extends Dir(char = Field.UpChar)
@@ -111,7 +106,7 @@ object Day24 extends AoC:
   type Paths = Set[Pos]
 
   object Paths:
-    def start: Paths = Set(Pos.start)
+    def start: Paths = Set(Pos.of(-1, 0))
 
   case class World(
     target: Pos,
@@ -135,14 +130,13 @@ object Day24 extends AoC:
         false
 
     def paths: Paths =
-      found.flatMap(p => {
-          val ms   = p.n.filter(free(nextField))
-          val test = free(nextField)(p) && p.n.exists(free(streams.futureField)) && bounds.isField(p)
-          if test || p == Pos.end(bounds) + Pos(0,1) || p == Pos(0,-1) then
+      found.flatMap: p =>
+          val ms   = p.adjoint4.filter(free(nextField))
+          val test = free(nextField)(p) && p.adjoint4.exists(free(streams.futureField)) && bounds.isField(p)
+          if test || p == bounds.end + Pos.of(0,1) || p == Pos.of(0,-1) then
             ms + p
           else
             ms
-      })
 
     def reachedGoal: Boolean =
       found.contains(target)
@@ -193,7 +187,7 @@ object Day24 extends AoC:
       def right: Vector[LazyList[Char]] = make(Right, initField)
       def streams: Streams = Streams(up, down, left, right, bounds)
 
-      World(Pos.end(bounds), initField, streams.futureField, streams.next, 0, bounds, Paths.start)
+      World(bounds.end, initField, streams.futureField, streams.next, 0, bounds, Paths.start)
 
   @tailrec
   def solve1(world: World): Int =
@@ -215,12 +209,12 @@ object Day24 extends AoC:
       nextField    = w1.streams.futureField,
       streams      = w1.streams.next,
       minutes      = m1 + 1,
-      found        = Set(Pos.end(w1.bounds) + Pos(0,1))
+      found        = Set(w1.bounds.end + Pos.of(0,1))
     )
     val (w3, m3) = loop(w2)
 
     val w4 = w3.copy(
-      target       = Pos.end(w3.bounds),
+      target       = w3.bounds.end,
       currentField = w3.nextField,
       nextField    = w3.streams.futureField,
       streams      = w3.streams.next,

@@ -4,24 +4,24 @@ import nmcb.*
 
 object Day09 extends AoC:
 
-  enum Dir:
+  enum Direction:
     case U
     case D
     case R
     case L
 
-  import Dir.*
+  import Direction.*
 
-  case class Pos(x: Int, y: Int):
+  case class Position(x: Int, y: Int):
 
-    infix def move(d: Dir): Pos =
+    infix def move(d: Direction): Position =
       d match
         case U => copy(y = y + 1)
         case D => copy(y = y - 1)
         case L => copy(x = x - 1)
         case R => copy(x = x + 1)
 
-    private def alignment(p: Pos): List[Dir] =
+    private def alignment(p: Position): List[Direction] =
       val hor = x.compare(p.x) match
         case -1 if p.x - x >= 2 => // x < p.x
           y.compare(p.y) match
@@ -54,43 +54,43 @@ object Day09 extends AoC:
 
       List(hor,ver).flatten.distinct
 
-    def follow(h: Pos): Pos =
+    def follow(h: Position): Position =
       alignment(h).foldLeft(this)(_ move _)
 
-  object Pos:
-    def of(x: Int, y: Int): Pos = Pos(x,y)
+  object Position:
+    def of(x: Int, y: Int): Position = Position(x,y)
 
-  case class Cmd(dir: Dir, steps: Int)
+  case class Command(direction: Direction, steps: Int)
 
-  lazy val commands: Vector[Cmd] = lines.map:
-      case s"U $s" => Cmd(U, s.toInt)
-      case s"D $s" => Cmd(D, s.toInt)
-      case s"L $s" => Cmd(L, s.toInt)
-      case s"R $s" => Cmd(R, s.toInt)
+  lazy val commands: Vector[Command] = lines.map:
+      case s"U $s" => Command(U, s.toInt)
+      case s"D $s" => Command(D, s.toInt)
+      case s"L $s" => Command(L, s.toInt)
+      case s"R $s" => Command(R, s.toInt)
 
-  case class Bac(strep: List[Pos]):
+  case class Bacterium(strep: List[Position]):
 
-    private def step(d: Dir, s: List[Pos]): List[Pos] =
+    private def step(d: Direction, s: List[Position]): List[Position] =
       val nh = s.head.move(d)
       s.tail.foldLeft(List(nh))((a,t) => a :+ t.follow(a.last))
 
-    infix def move(cmd: Cmd): List[Bac] =
+    infix def move(cmd: Command): List[Bacterium] =
       List
-        .fill(cmd.steps)(cmd.dir)
-        .foldLeft(List(this))((rs,d) => rs :+ Bac(step(d, rs.last.strep)))
+        .fill(cmd.steps)(cmd.direction)
+        .foldLeft(List(this))((rs,d) => rs :+ Bacterium(step(d, rs.last.strep)))
 
-  object Bac:
+  object Bacterium:
 
-    def of(size: Int): Bac =
-      Bac(List.fill(size)(Pos.of(0,0)))
+    def of(size: Int): Bacterium =
+      Bacterium(List.fill(size)(Position.of(0,0)))
 
-    def solve(commands: Vector[Cmd], size: Int): Int =
+    def solve(commands: Vector[Command], size: Int): Int =
       commands
-        .foldLeft(List(Bac.of(size)))((p,c) => p ++ p.last.move(c))
+        .foldLeft(List(Bacterium.of(size)))((p, c) => p ++ p.last.move(c))
         .map(_.strep.last)
         .distinct
         .size
 
 
-  lazy val answer1: Int = Bac.solve(commands, 2)
-  lazy val answer2: Int = Bac.solve(commands, 10)
+  lazy val answer1: Int = Bacterium.solve(commands, 2)
+  lazy val answer2: Int = Bacterium.solve(commands, 10)

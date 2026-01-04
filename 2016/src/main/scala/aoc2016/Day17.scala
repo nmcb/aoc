@@ -1,6 +1,8 @@
 package aoc2016
 
 import nmcb.*
+import nmcb.pos.*
+
 import java.security.MessageDigest
 import scala.collection.*
 
@@ -17,14 +19,14 @@ object Day17 extends AoC:
         sb.append(hex(b & 0x0F))
       sb.toString
 
-  case class Pos(x: Int, y: Int):
+  extension (p: Pos)
 
     def move(direction: Char): Pos =
       direction match
-        case 'U' => copy(y = y - 1)
-        case 'D' => copy(y = y + 1)
-        case 'L' => copy(x = x - 1)
-        case 'R' => copy(x = x + 1)
+        case 'U' => p.copy(y = p.y - 1)
+        case 'D' => p.copy(y = p.y + 1)
+        case 'L' => p.copy(x = p.x - 1)
+        case 'R' => p.copy(x = p.x + 1)
 
 
   /** hardcoded for 4x4 grid */

@@ -1,24 +1,11 @@
 package aoc2023
 
 import nmcb.*
+import nmcb.pos.*
 
 import scala.collection.mutable
 
 object Day17 extends AoC:
-
-  case class Pos(x: Int, y: Int):
-    def unary_- =
-      Pos(-1 * x, -1 * y)
-
-    def +(that: Pos): Pos =
-      Pos(x + that.x, y + that.y)
-
-  object Pos:
-    val zero: Pos =
-      Pos(0, 0)
-
-    val directions: List[Pos] =
-      List(Pos(0, 1), Pos(0, -1), Pos(1, 0), Pos(-1, 0))
 
   type Grid[A] = Vector[Vector[A]]
 
@@ -45,7 +32,7 @@ object Day17 extends AoC:
       true
 
     def canMove2(dir: Pos): Boolean =
-      (dir == direction && steps < 10) || (dir != direction && steps >= 4) || direction == Pos.zero
+      (dir == direction && steps < 10) || (dir != direction && steps >= 4) || direction == Pos.origin
 
     def canStop2: Boolean =
       steps >= 4
@@ -54,9 +41,9 @@ object Day17 extends AoC:
   case class City(grid: Grid[Int]):
     def leastHeatLoss(canMove: Crucible => Pos => Boolean, canStop: Crucible => Boolean): Option[Int] =
 
-      def reachable(crucible: Crucible): List[(Crucible, Int)] =
+      def reachable(crucible: Crucible): Set[(Crucible, Int)] =
         for
-          direction <- Pos.directions.filterNot(_ == -crucible.direction)
+          direction <- Pos.offset4.filterNot(_ == -crucible.direction)
           if canMove(crucible)(direction)
           next = crucible.current + direction
           if grid.peek(next).isDefined
@@ -64,7 +51,7 @@ object Day17 extends AoC:
         yield
           Crucible(next, direction, steps) -> grid(next)
 
-      val start = Crucible(Pos.zero, Pos.zero, 0)
+      val start = Crucible(Pos.origin, Pos.origin, 0)
       val target = (n: Crucible) => n.current == Pos(grid.sizeX - 1, grid.sizeY - 1) && canStop(n)
 
       Dijkstra.traverse[Crucible](start, target, reachable).map((_, loss) => loss)
@@ -80,7 +67,7 @@ object Day17 extends AoC:
      * @tparam A The type of node.
      * @return The target node and associated traversal weight if reachable.
      */
-    def traverse[A](start: A, target: A => Boolean, reachable: A => List[(A, Int)]): Option[(A, Int)] =
+    def traverse[A](start: A, target: A => Boolean, reachable: A => Set[(A, Int)]): Option[(A, Int)] =
       val todo    = mutable.PriorityQueue.empty(using Ordering.Int.on[(Int, A)](_._1).reverse)
       val weights = mutable.Map.empty[A, Int]
 
@@ -98,7 +85,6 @@ object Day17 extends AoC:
       None
 
   lazy val city: City = City(lines.map(_.map(_.asDigit).toVector))
-
-
+  
   lazy val answer1: Int = city.leastHeatLoss(_.canMove1, _.canStop1).get
   lazy val answer2: Int = city.leastHeatLoss(_.canMove2, _.canStop2).get

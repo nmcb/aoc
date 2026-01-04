@@ -1,13 +1,9 @@
 package aoc2019
 
 import nmcb.*
+import nmcb.pos.*
 
 object Day18 extends AoC:
-
-  case class Pos(x: Int, y: Int):
-    def neighbours: Seq[Pos] =
-      def delta(dx: Int, dy: Int): Pos = copy(x = x + dx, y = y + dy)
-      Seq(delta(0,-1), delta(0,1), delta(-1,0), delta(1,0))
 
   case class Move(from: Pos, to: Pos, cost: Int, keysNeeded: Set[Char])
 
@@ -24,7 +20,7 @@ object Day18 extends AoC:
 
     while todo.nonEmpty do
       val pos = todo.dequeue
-      pos.neighbours.view
+      pos.adjoint4
         .filter(next => !tunnels(next).isWall)
         .filter(next => !cost.contains(next) || cost(pos) + 1 < cost(next))
         .foreach: next =>

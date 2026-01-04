@@ -1,19 +1,13 @@
 package aoc2018
 
 import nmcb.*
+import nmcb.pos.*
+
 import scala.annotation.*
 import scala.math.Integral.Implicits.*
 import scala.math.Ordering.Implicits.*
 
 object Day10 extends AoC:
-
-  case class Pos(x: Int, y: Int):
-    infix def +(p: Pos): Pos = Pos(x + p.x, y + p.y)
-    infix def -(p: Pos): Pos = Pos(x - p.x, y - p.y)
-    infix def *(i: Int): Pos = Pos(x * i, y * i)
-    infix def min(that: Pos): Pos = Pos(x min that.x, y min that.y)
-    infix def max(that: Pos): Pos = Pos(x max that.x, y max that.y)
-
 
   case class Box(min: Pos, max: Pos):
     

@@ -162,12 +162,12 @@ object Day24 extends AoC:
    * position, and calculate the unframed rock position backwards from its velocity and time.
    */
   object Attempt3:
-    case class Pos(x: BigInt, y: BigInt, z: BigInt):
-      def +(rhs: Pos): Pos = Pos(x + rhs.x, y + rhs.y, z + rhs.z)
-      def -(rhs: Pos): Pos = Pos(x - rhs.x, y - rhs.y, z - rhs.z)
-      def *(n: BigInt): Pos = Pos(x * n, y * n, z * n)
+    case class Location(x: BigInt, y: BigInt, z: BigInt):
+      def +(rhs: Location): Location = Location(x + rhs.x, y + rhs.y, z + rhs.z)
+      def -(rhs: Location): Location = Location(x - rhs.x, y - rhs.y, z - rhs.z)
+      def *(n: BigInt): Location = Location(x * n, y * n, z * n)
 
-    case class Stone(position: Pos, velocity: Pos)
+    case class Stone(location: Location, velocity: Location)
 
     def parse(input: String): Seq[Stone] =
       input
@@ -175,18 +175,18 @@ object Day24 extends AoC:
         .map:
           case s"$x, $y, $z @ $vx, $vy, $vz" =>
             Stone(
-              position = Pos(x = x.trim.toLong, y = y.trim.toLong, z = z.trim.toLong),
-              velocity = Pos(x = vx.trim.toLong, y = vy.trim.toLong, z = vz.trim.toLong))
+              location = Location(x = x.trim.toLong, y = y.trim.toLong, z = z.trim.toLong),
+              velocity = Location(x = vx.trim.toLong, y = vy.trim.toLong, z = vz.trim.toLong))
         .toSeq
 
     /** straight forward future collide - this function overflows on input doubles thus we use big ints as positions */
     def futureCollide2D(l: Stone, r: Stone): Option[(Double, Double)] =
 
       // take the two lines but define them by two points each
-      val Pos(x1, y1, _) = l.position
-      val Pos(x2, y2, _) = l.position + l.velocity
-      val Pos(x3, y3, _) = r.position
-      val Pos(x4, y4, _) = r.position + r.velocity
+      val Location(x1, y1, _) = l.location
+      val Location(x2, y2, _) = l.location + l.velocity
+      val Location(x3, y3, _) = r.location
+      val Location(x4, y4, _) = r.location + r.velocity
 
       // inner cross product
       val denominator: BigInt =
@@ -205,10 +205,10 @@ object Day24 extends AoC:
         val futureR = r.velocity.x.sign == (x - x3.doubleValue).sign && r.velocity.y.sign == (y - y3.doubleValue).sign
         Option.when(futureL && futureR)((x, y))
 
-    extension (s: Stone) def reframe(velocity: Pos): Stone =
+    extension (s: Stone) def reframe(velocity: Location): Stone =
       s.copy(velocity = s.velocity - velocity)
 
-    extension (ss: Seq[Stone]) def reframe(velocity: Pos): Seq[Stone] =
+    extension (ss: Seq[Stone]) def reframe(velocity: Location): Seq[Stone] =
       ss.map(_.reframe(velocity))
 
     extension (d: Double) def toBigInt: BigInt =
@@ -233,15 +233,15 @@ object Day24 extends AoC:
 
     def calcT(stone: Stone, xy: (BigInt, BigInt)): BigInt =
       val (x, y) = xy
-      if stone.velocity.x == 0 then (y - stone.position.y) / stone.velocity.y
-      else (x - stone.position.x) / stone.velocity.x
+      if stone.velocity.x == 0 then (y - stone.location.y) / stone.velocity.y
+      else (x - stone.location.x) / stone.velocity.x
 
     def calcZ(stones: Seq[Stone], xy: (BigInt, BigInt)): Option[BigInt] =
 
       def cross(l: Stone, r: Stone): BigInt =
         val timeL = calcT(l, xy)
         val timeR = calcT(r, xy)
-        (l.position.z + timeL * l.velocity.z - (r.position.z + timeR * r.velocity.z)) / (timeL - timeR)
+        (l.location.z + timeL * l.velocity.z - (r.location.z + timeR * r.velocity.z)) / (timeL - timeR)
 
       val hit = cross(stones(0), stones(1))
       val hitAll = stones.iterator.drop(2).forall(stone => cross(stones(0), stone) == hit)
@@ -256,9 +256,9 @@ object Day24 extends AoC:
           vx <- stones.map(_.velocity.x).min to stones.map(_.velocity.x).max
           vy <- stones.map(_.velocity.y).min to stones.map(_.velocity.y).max
         yield
-          Pos(x = vx, y = vy, z = 0)
+          Location(x = vx, y = vy, z = 0)
 
-      val found: Pos =
+      val found: Location =
         search
           .flatMap: velocity =>
             val translated = stones.reframe(velocity)
@@ -268,8 +268,8 @@ object Day24 extends AoC:
               .map: (location, z) =>
                 (location, velocity.copy(z = z))
               .map: (location, v) =>
-                val z = calcT(translated(0), location) * (translated(0).velocity.z - v.z) + translated(0).position.z
-                Pos(x = location._1, y = location._2, z = z)
+                val z = calcT(translated(0), location) * (translated(0).velocity.z - v.z) + translated(0).location.z
+                Location(x = location._1, y = location._2, z = z)
           .head
 
       found.x + found.y + found.z

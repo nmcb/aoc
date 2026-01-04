@@ -1,6 +1,8 @@
 package aoc2017
 
 import nmcb.*
+import nmcb.pos.*
+
 import Day10.KnotHash
 import Day12.Dijkstra
 
@@ -27,15 +29,9 @@ object Day14 extends AoC:
     yield
       KnotHash.compute(s"uugsqrei-$i", runs = 64).toBinaryString
 
-  case class Pos(x: Int, y: Int):
-
-    infix def +(that: Pos): Pos =
-      Pos(x + that.x, y + that.y)
-
+  extension (p: Pos)
     def adjacent: Set[Pos] =
-      Set(Pos(0,1),Pos(0,-1),Pos(1,0),Pos(-1,0))
-        .map(this + _)
-        .filter(p => p.x >= 0 && p.x < 128 && p.y >= 0 && p.y < 128)
+      p.adjoint4.filter(p => p.x >= 0 && p.x < 128 && p.y >= 0 && p.y < 128)
 
   val used: Set[Pos] =
     hashes

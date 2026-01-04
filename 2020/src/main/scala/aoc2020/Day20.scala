@@ -1,13 +1,15 @@
 package aoc2020
 
 import nmcb.*
+import nmcb.pos.*
 import nmcb.predef.*
+
 import scala.annotation.tailrec
 
 object Day20 extends AoC:
 
 
-  val monster: Seq[(Int,Int)] =
+  val monster: Seq[Pos] =
     """                  #
       |#    ##    ##    ###
       | #  #  #  #  #  #
@@ -20,10 +22,7 @@ object Day20 extends AoC:
         line
           .zipWithIndex
           .collect:
-            case (c,x)if c == '#' => (x,y)
-
-  case class Pos(x: Int, y: Int):
-    infix def plus(dx: Int, dy: Int): Pos = Pos(x + dx, y + dy)
+            case (c,x)if c == '#' => Pos.of(x, y)
 
   /** note that images are squares */
   case class Image(size: Int, pixels: Map[Pos, Char]):
@@ -123,9 +122,9 @@ object Day20 extends AoC:
       val matches = for
         x <- 0 until image.size - 20 // monster dimensions are 20 x 3
         y <- 0 until image.size - 3
-        if monster.map(Pos(x, y).plus).forall(pos => candidate.pixels(pos) == '#')
+        if monster.map(_ + Pos.of(x, y)).forall(pos => candidate.pixels(pos) == '#')
       yield (x, y)
-      val monsters = matches.map(Pos(_, _)).flatMap(pos => monster.map(pos.plus)).toSet
+      val monsters = matches.map(Pos(_, _)).flatMap(pos => monster.map(_ + pos)).toSet
       candidate.pixels.keys.count(pos => candidate.pixels(pos) == '#' && !monsters.contains(pos))
 
   def solve2(tiles: Vector[Tile]): Long =

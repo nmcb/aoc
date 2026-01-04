@@ -1,23 +1,25 @@
 package aoc2024
 
 import nmcb.*
+import nmcb.pos.*
 
 import scala.annotation.*
 
 object Day15 extends AoC:
 
-  type Dir = Char
+  type Command = Char
 
-  case class Pos(x: Int, y: Int):
-    def move(d: Dir): Pos =
+  extension (p: Pos)
+
+    def move(d: Command): Pos =
       d match
-        case '^' => copy(y = y - 1)
-        case '>' => copy(x = x + 1)
-        case 'v' => copy(y = y + 1)
-        case '<' => copy(x = x - 1)
+        case '^' => p.copy(y = p.y - 1)
+        case '>' => p.copy(x = p.x + 1)
+        case 'v' => p.copy(y = p.y + 1)
+        case '<' => p.copy(x = p.x - 1)
 
     def coordinate: Int =
-      100 * y + x
+      100 * p.y + p.x
 
   type Move = (Pos,Pos)
   
@@ -42,7 +44,7 @@ object Day15 extends AoC:
     def isWall(p: Pos): Boolean = grid(p) == '#'
     def isBox(p: Pos): Boolean  = grid(p) == 'O' | grid(p) == ']' | grid(p) == '['
 
-    def moves(p: Pos, d: Dir): Set[Move] =
+    def moves(p: Pos, d: Command): Set[Move] =
       @tailrec
       def loop(todo: Set[Pos], updates: Set[Move] = Set.empty): Set[Move] =
 
@@ -65,7 +67,7 @@ object Day15 extends AoC:
 
       loop(Set(p))
 
-    infix def push(d: Dir): Grid =
+    infix def push(d: Command): Grid =
       val updates = moves(robotPosition, d)
       if updates.isEmpty then
         this
@@ -92,7 +94,7 @@ object Day15 extends AoC:
       )
 
 
-  val (grid: Grid, moves: List[Dir]) =
+  val (grid: Grid, moves: List[Command]) =
     val Array(top, bottom) = input.split("\n\n").map(_.trim)
     val positions = for {
       (l, y) <- top.split("\n").zipWithIndex

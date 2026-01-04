@@ -1,11 +1,9 @@
 package aoc2019
 
 import nmcb.*
+import nmcb.pos.*
 
 object Day20 extends AoC:
-
-  case class Pos(x: Int, y: Int):
-    def delta(dx: Int, dy: Int): Pos = copy(x = x + dx, y = y + dy)
 
   case class State(path: Seq[(Portal,Int)], total: Int)
 
@@ -49,7 +47,7 @@ object Day20 extends AoC:
       pattern <- patterns
     yield
       val pos = Pos(x,y)
-      val Seq(first,second) = pattern.map(pos.delta).map(maze)
+      val Seq(first,second) = pattern.map(pos.translate).map(maze)
       if maze(pos) == '.' && first.isLetter && second.isLetter then
         val label = s"$first$second"
         val key =
@@ -69,12 +67,10 @@ object Day20 extends AoC:
   def bfs(start: Pos, maze: Map[Pos,Char]): Map[Pos,Int] =
     val cost = collection.mutable.Map(start -> 0)
     val todo = collection.mutable.Queue(start)
-    val neighbours = Seq((-1,0), (1,0), (0,-1), (0,1))
-
     while todo.nonEmpty do
       val point = todo.dequeue
-      neighbours
-        .map(point.delta)
+      Pos.offset4
+        .map(point + _)
         .filter(next => maze(next) == '.')
         .filter(next => cost(point) + 1 < cost.getOrElse(next, Int.MaxValue))
         .foreach: next =>
