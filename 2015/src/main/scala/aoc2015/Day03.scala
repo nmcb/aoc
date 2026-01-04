@@ -1,14 +1,16 @@
 package aoc2015
 
 import nmcb.*
+import nmcb.pos.*
 
 object Day03 extends AoC:
 
   val commands: List[Char] = input.toList
 
-  case class Area(start: Area.Loc = Area.Loc.init, deliveries: Area.Deliveries = Area.Deliveries.init):
+  case class Area(start: Pos = Pos.origin, deliveries: Area.Deliveries = Area.Deliveries.init):
 
-    private def moveToAndDeliver(loc: Area.Loc): Area =
+    private def moveToAndDeliver(loc: Pos): Area =
+      import Area.*
       copy(start = loc, deliveries = deliveries.add(loc))
 
     infix def next(cmd: Area.Command): Area =
@@ -20,13 +22,7 @@ object Day03 extends AoC:
 
   object Area:
 
-    case class Loc(x: Int, y: Int)
-
-    object Loc:
-      def init: Loc =
-        Loc(0, 0)
-
-    type Deliveries = Map[Loc,Int]
+    type Deliveries = Map[Pos,Int]
 
     object Deliveries:
 
@@ -34,15 +30,15 @@ object Day03 extends AoC:
         Map.empty
 
       def init: Deliveries =
-        empty.add(Loc.init)
+        empty.add(Pos.origin)
 
-    extension (d: Deliveries) def add(loc: Loc): Deliveries =
+    extension (d: Deliveries) def add(loc: Pos): Deliveries =
       d.updatedWith(loc)(_.orElse(Some(0)).map(_ + 1))
 
     type Command = Char
 
     def init: Area =
-      Area(start = Area.Loc.init, deliveries = Area.Deliveries.init)
+      Area(start = Pos.origin, deliveries = Area.Deliveries.init)
 
 
   val (robot, santa) =

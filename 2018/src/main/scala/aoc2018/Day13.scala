@@ -1,16 +1,17 @@
 package aoc2018
 
 import nmcb.*
+import nmcb.pos.*
+
 import scala.annotation.tailrec
 
 object Day13 extends AoC:
 
-  enum Dir:
-    case N, E, S, W
+  extension (d: Dir)
 
     infix def follow(c: Char): Dir =
-      (this, c) match
-        case (_, '|') | (_, '-') => this
+      (d, c) match
+        case (_, '|') | (_, '-') => d
         case (N, '/')            => E
         case (E, '/')            => N
         case (S, '/')            => W
@@ -19,10 +20,10 @@ object Day13 extends AoC:
         case (E, '\\')           => S
         case (S, '\\')           => E
         case (W, '\\')           => N
-        case _                   => sys.error(s"unable to follow dir=$this, char=$c")
+        case _                   => sys.error(s"unable to follow dir=$d, char=$c")
 
     infix def turn(turn: Turn): Dir =
-      (this, turn) match
+      (d, turn) match
         case (N, Turn.Left)     => W
         case (E, Turn.Left)     => N
         case (S, Turn.Left)     => E
@@ -31,23 +32,7 @@ object Day13 extends AoC:
         case (E, Turn.Right)    => S
         case (S, Turn.Right)    => W
         case (W, Turn.Right)    => N
-        case (_, Turn.Straight) => this
-
-
-  import Dir.*
-
-  type Pos  = (Int,Int)
-
-  extension (pos: Pos)
-    def x: Int = pos._1
-    def y: Int = pos._2
-
-    infix def move(d: Dir): Pos =
-      d match
-        case N => (pos.x, pos.y - 1)
-        case E => (pos.x + 1, pos.y)
-        case S => (pos.x, pos.y + 1)
-        case W => (pos.x - 1, pos.y)
+        case (_, Turn.Straight) => d
 
   type Grid = Vector[Vector[Char]]
 
@@ -68,11 +53,11 @@ object Day13 extends AoC:
   case class Cart(pos: Pos, dir: Dir, atIntersection: Turn = Turn.Left):
 
     def move(grid: Grid): Cart =
-      val c = grid.charAt(pos move dir)
+      val c = grid.charAt(pos step dir)
       c match
-        case Some('|') | Some('-')  => copy(pos = pos move dir)
-        case Some('/') | Some('\\') => copy(pos = pos move dir, dir = dir follow c.get)
-        case Some('+')              => copy(pos = pos move dir, dir = dir turn atIntersection, atIntersection = atIntersection.next)
+        case Some('|') | Some('-')  => copy(pos = pos step dir)
+        case Some('/') | Some('\\') => copy(pos = pos step dir, dir = dir follow c.get)
+        case Some('+')              => copy(pos = pos step dir, dir = dir turn atIntersection, atIntersection = atIntersection.next)
         case _                      => sys.error(s"unexpected char at pos=$pos, char=$c")
 
   val (grid: Grid, carts: Vector[Cart]) =
@@ -83,11 +68,11 @@ object Day13 extends AoC:
         y <- (0 until matrix.sizeY).toVector
         x <- (0 until matrix.sizeX).toVector
       yield
-        matrix.charAt((x,y)) match
-          case Some(c) if c == '^' => Some(Cart((x,y), N))
-          case Some(c) if c == '>' => Some(Cart((x,y), E))
-          case Some(c) if c == 'v' => Some(Cart((x,y), S))
-          case Some(c) if c == '<' => Some(Cart((x,y), W))
+        matrix.charAt(Pos.of(x,y)) match
+          case Some(c) if c == '^' => Some(Cart(Pos.of(x,y), N))
+          case Some(c) if c == '>' => Some(Cart(Pos.of(x,y), E))
+          case Some(c) if c == 'v' => Some(Cart(Pos.of(x,y), S))
+          case Some(c) if c == '<' => Some(Cart(Pos.of(x,y), W))
           case _                   => None
 
     val grid =

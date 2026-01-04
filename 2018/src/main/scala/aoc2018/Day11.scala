@@ -1,18 +1,16 @@
 package aoc2018
 
 import nmcb.*
+import nmcb.pos.*
+
 import scala.collection.*
 
 object Day11 extends AoC:
 
-  type Cell = (Int,Int)
+  type Cell = Pos
 
   extension (cell: Cell)
-    def x: Int = cell._1
-    def y: Int = cell._2
-    def rackId: Int = x + 10
-
-    infix def +(that: Cell): Cell = (cell.x + that.x, cell.y + that.y)
+    def rackId: Int = cell.x + 10
 
     def powerLevel: Int =
       var level = cell.rackId * cell.y
@@ -37,7 +35,7 @@ object Day11 extends AoC:
 
   /** (x,y) cells for a 1 to 300 grid */
   val cells: Seq[Cell] =
-    for y <- 1 to 300 ; x <- 1 to 300 yield (x,y)
+    for y <- 1 to 300 ; x <- 1 to 300 yield Pos.of(x,y)
 
   /** power level value table, i.e. the i(x,y) value table for named cells */
   val grid: Map[Cell,Int] =
@@ -46,7 +44,7 @@ object Day11 extends AoC:
   /** summed power level table, i.e. the summed area table I(x,y) for named grid */
   val table: Map[Cell,Int] =
     cells.foldLeft(immutable.Map.empty[Cell,Int].withDefaultValue(0)): (result, cell) =>
-      result + (cell -> (grid(cell) + result(cell + (-1,0)) + result(cell + (0,-1)) - result(cell + (-1,-1))))
+      result + (cell -> (grid(cell) + result(cell + Pos.of(-1,0)) + result(cell + Pos.of(0,-1)) - result(cell + Pos.of(-1,-1))))
   
   /** the area sizes, cells and total power levels for named summed power level table and given area size */
   def area(size: Int): Iterator[(Int,Cell,Int)] =
@@ -54,8 +52,8 @@ object Day11 extends AoC:
       y <- (size to 300).iterator
       x <- (size to 300).iterator
     yield
-      val cell  = (x,y)
-      val total = table(cell) + table(cell + (-size,-size)) - table(cell + (-size,0)) - table(cell + (0,-size))
+      val cell  = Pos.of(x,y)
+      val total = table(cell) + table(cell + Pos.of(-size,-size)) - table(cell + Pos.of(-size,0)) - table(cell + Pos.of(0,-size))
       (size, cell, total)
 
   extension (result: (Int,Cell,Int))

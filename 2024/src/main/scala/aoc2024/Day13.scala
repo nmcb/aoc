@@ -19,7 +19,7 @@ object Day13 extends AoC:
       val div      = a.x * b.y - b.x * a.y
       val (ma, ra) = (px * b.y - py * b.x) /% div
       val (nb, rb) = (py * a.x - px * a.y) /% div
-      if ra == 0 & rb == 0 then Some(cost(ma, nb)) else None
+      if ra == 0 && rb == 0 then Some(cost(ma, nb)) else None
 
   val machines: Vector[Machine] =
     val as = lines.collect:
