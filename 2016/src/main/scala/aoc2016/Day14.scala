@@ -13,16 +13,6 @@ object Day14 extends AoC:
   val Three: UnanchoredRegex = "(.)\\1{2}".r.unanchored
   val Five: UnanchoredRegex  = "(.)\\1{4}".r.unanchored
 
-  val HEX_CHARS: Array[Char] = "0123456789abcdef".toCharArray
-
-  extension (bytes: Array[Byte])
-    def toHexString: String =
-      val sb: StringBuffer = StringBuffer(bytes.length * 2)
-      for b <- bytes do
-        sb.append(HEX_CHARS((b & 0xF0) >> 4))
-        sb.append(HEX_CHARS(b & 0x0F))
-      sb.toString
-
   def hash(string: String): String =
     md5.digest(string.getBytes).toHexString
 
