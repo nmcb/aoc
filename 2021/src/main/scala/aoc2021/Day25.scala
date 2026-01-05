@@ -9,17 +9,11 @@ object Day25 extends AoC:
 
   case class Floor(tiles: Map[Pos,Char], sizeX: Int, sizeY: Int):
 
-    def eastFacing: Set[Pos] =
-      tiles.filter((p,c) => c == '>').keySet
-    
-    def southFacing: Set[Pos] =
-      tiles.filter((p,c) => c == 'v').keySet
-    
     def eastOf(p: Pos): Pos =
-      if p.x < sizeX - 1 then p + Pos(1,0) else p.copy(x = 0)
+      if p.x < sizeX - 1 then p step E else p.copy(x = 0)
     
     def southOf(p: Pos): Pos =
-      if p.y < sizeY - 1 then p + Pos(0,1) else p.copy(y = 0)
+      if p.y < sizeY - 1 then p step S else p.copy(y = 0)
 
     def turn: Floor =
       val (eastMove, eastRemoved) = tiles.partition((_,c) => c == '>')

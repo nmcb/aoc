@@ -84,7 +84,7 @@ object Dijkstra:
   /** classic dijkstra traverses the shortest found paths first */
   def run[A](from: A, graph: Graph[A]): Result[A] =
     val edgeTo: mutable.Map[A, Edge[A]] = mutable.Map.empty
-    val distTo: mutable.Map[A, Int] = mutable.Map.from(graph.neighbours.map((node, _) => node -> Int.MaxValue))
+    val distTo: mutable.Map[A, Int] = mutable.Map.from(graph.neighbours.map((node, _) => node -> Int.MaxValue)).withDefaultValue(Int.MaxValue)
 
     distTo += from -> 0
     val sourceEdge = from -> distTo(from)
@@ -94,13 +94,16 @@ object Dijkstra:
       val (minDistNode, _) = queue.dequeue()
       val edges = graph.neighbours.getOrElse(minDistNode, Vector.empty)
       edges.foreach: edge =>
+//        println(s"edge=$edge")
+//        println(s"distTo(edge.to)=${distTo.get(edge.to)}")
+//        println(s"distTo(edge.from)=${distTo.get(edge.from)}")
         if distTo(edge.to) > distTo(edge.from) + edge.weight then
           distTo.update(edge.to, distTo(edge.from) + edge.weight)
           edgeTo.update(edge.to, edge)
           if !queue.exists((node, _) => node == edge.to) then
             queue.enqueue((edge.to, distTo(edge.to)))
 
-    Result(edgeTo.toMap, distTo.toMap)    
+    Result(edgeTo.toMap, distTo.toMap)
 
   /** breadth first flooding */
   def reachable[N](start: N, edgesFrom: N => Set[N]): Set[N] =
