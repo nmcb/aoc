@@ -87,6 +87,9 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
         Vector.tabulate(sizeX, sizeY)((x,y) => matrix(sizeX - 1 - y)(x))
     Grid(rotateMatrixCW(matrix))
 
+  def toMap[B >: A]: Map[Pos, Set[(Pos, B)]] =
+    positions.map(p => p -> p.adjoint4.filter(within).map(n => n -> peek(n))).toMap
+
 object Grid:
 
   def fromLines(lines: Iterator[String]): Grid[Char] =
@@ -101,6 +104,9 @@ object Grid:
   def fromMatrix[A](matrix: Iterator[Seq[A]]): Grid[A] =
     Grid(matrix.iterator.to(Vector).map(_.iterator.to(Vector)))
 
+  def fromMatrix[A](matrix: Vector[Vector[A]]): Grid[A] =
+    Grid(matrix)
+
   def fill[A](sizeX: Int, sizeY: Int, default: A): Grid[A] =
     Grid(Vector.fill(sizeX, sizeY)(default))
 
@@ -111,6 +117,6 @@ object Grid:
 
     def shortest: Vector[Pos] =
       Dijkstra
-        .run(Graph.fromGrid(cleared, cleared.peek(from)), from)
+        .run(from, Graph.fromGrid(cleared, cleared.peek(from)))
         .pathTo(to)
         .toTrail

@@ -3,63 +3,25 @@ package aoc2021
 import nmcb.*
 import nmcb.pos.*
 
-import scala.annotation.tailrec
+import scala.math.Integral.Implicits.infixIntegralOps
 
 object Day15 extends AoC:
 
-  type Grid = Map[Pos, Int]
+  val grid: Grid[Int] = Grid.fromLines(lines).map(_.asDigit)
 
-  val directions = Vector(Pos.of(1, 0), Pos.of(-1, 0), Pos.of(0, -1), Pos.of(0, 1))
+  def solve(grid: Grid[Int]): Int =
+    Dijkstra
+      .run(grid.minPos, grid.toMap)
+      .distanceTo(grid.maxPos)
+      .getOrElse(sys.error(s"no path from ${grid.minPos} to ${grid.maxPos}"))
 
-  extension (grid: Grid)
-    def neighbours(pos: Pos): Vector[Pos] =
-      directions.map(_ + pos).filter(grid.contains)
-
-  val grid: Grid =
-    Vector
-      .tabulate(lines(0).length, lines.length): (x,y) =>
-        Pos(x, y) -> lines(y)(x).asDigit
-      .flatten
-      .toMap
-
-
-  def solve(grid: Grid): Int =
-
-    val start = Pos(0,0)
-    val end   = grid.keys.maxBy(p => p.x * p.y)
-
-    @tailrec
-    def dijkstra(todo: Set[Pos], risk: Grid): Int =
-      val current = todo.minBy(risk)
-      if current == end then
-        risk(end)
-      else
-        val (nextTodo, nextRisk) =
-          grid
-            .neighbours(current)
-            .filter(n => !risk.contains(n) || risk(current) + grid(n) < risk(n))
-            .foldLeft((todo - current, risk)):
-              case ((todo, risk), next) =>
-                (todo + next, risk.updated(next, risk(current) + grid(next)))
-
-        dijkstra(nextTodo, nextRisk)
-
-    dijkstra(Set(start), Map(start -> 0))
-
-  def expanded(grid: Grid): Grid =
-    val end   = grid.keys.maxBy(p => p.x * p.y)
-    val sizeX = end.x + 1
-    val sizeY = end.y + 1
-    Vector
-      .tabulate(5,5): (nx,ny) =>
-        grid.toVector.map: (p,v) =>
-          val x = nx * sizeX + p.x
-          val y = ny * sizeY + p.y
-          val risk = 1 + (v - 1 + nx + ny) % 9
-          Pos(x,y) -> risk
-      .flatten
-      .flatten
-      .toMap
+  def expanded(grid: Grid[Int]): Grid[Int] =
+    val matrix = Vector.tabulate(5 * grid.sizeX, 5 * grid.sizeY): (y, x) =>
+      val (mx, px) = x /% grid.sizeX
+      val (my, py) = y /% grid.sizeY
+      val pv = grid.peek(Pos.of(px, py))
+      1 + (pv - 1 + mx + my) % 9
+    Grid.fromMatrix(matrix)
 
   lazy val answer1: Int = solve(grid)
   lazy val answer2: Int = solve(expanded(grid))
