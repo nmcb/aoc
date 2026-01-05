@@ -3,6 +3,7 @@ package aoc2022
 import nmcb.*
 
 import scala.annotation.tailrec
+import scala.collection.parallel.CollectionConverters._
 
 object Day19 extends AoC:
 
@@ -128,5 +129,5 @@ object Day19 extends AoC:
             if scored > score then scored else score
 
 
-  lazy val answer1: Int = blueprints.map(print => simulate(print, 24) * print.index).sum
-  lazy val answer2: Int = blueprints.take(3).map(print => simulate(print, 32)).product
+  lazy val answer1: Int = blueprints.par.map(print => simulate(print, 24) * print.index).sum
+  lazy val answer2: Int = blueprints.take(3).par.map(print => simulate(print, 32)).product

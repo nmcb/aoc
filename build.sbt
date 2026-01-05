@@ -9,7 +9,10 @@ ThisBuild / libraryDependencies ++= Seq(
 
   // 2023
   ("org.scala-graph" %  "graph-core" % "2.0.3").cross(CrossVersion.for3Use2_13),
-  ("org.scala-graph" %  "graph-dot"  % "2.0.0").cross(CrossVersion.for3Use2_13)
+  ("org.scala-graph" %  "graph-dot"  % "2.0.0").cross(CrossVersion.for3Use2_13),
+
+  // 2022
+  "org.scala-lang.modules" %% "scala-parallel-collections" % "1.2.0"
 )
 
 ThisBuild / scalacOptions ++= Seq(
