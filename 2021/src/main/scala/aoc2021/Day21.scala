@@ -2,6 +2,8 @@ package aoc2021
 
 import nmcb.*
 
+import scala.annotation.tailrec
+
 object Day21 extends AoC:
 
   case class Dice(min: Int, max: Int, cur: Int = 0, rolled: Int = 0):
@@ -19,6 +21,7 @@ object Day21 extends AoC:
 
   case class Game1(player1: Player, player2: Player, pawn1: Int, pawn2: Int, dice: Dice, goal: Int)
 
+  @tailrec
   def solve1(g: Game1): Int =
 
     def won(p: Player): Boolean =

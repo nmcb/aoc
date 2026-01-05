@@ -54,7 +54,7 @@ object Day22 extends AoC:
 
   object Cuboid:
 
-    val init = cuboid(-50 to 50, -50 to 50, -50 to 50)(false)
+    val init: Cuboid = cuboid(-50 to 50, -50 to 50, -50 to 50)(false)
 
     def cuboid(xr: Range, yr: Range, zr: Range)(b: Boolean): Cuboid =
       val all =
@@ -113,9 +113,9 @@ object Day22 extends AoC:
               (split, indices) <- splits
               (step, index)    <- steps.zipWithIndex
               if index > indices.max && (split.on || !step.on)
-              intesection      <- split.cube intersect step.cube
+              intersection     <- split.cube intersect step.cube
             yield
-              (CubeStep(step.on || split.on, intesection), indices + index)
+              (CubeStep(step.on || split.on, intersection), indices + index)
           go(todo, -signum, acc)
         else
           acc

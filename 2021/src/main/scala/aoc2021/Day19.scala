@@ -1,6 +1,7 @@
 package aoc2021
 
 import nmcb.*
+
 import scala.annotation.tailrec
 
 object Day19 extends AoC:
@@ -35,14 +36,14 @@ object Day19 extends AoC:
   def find(beacons: Set[Vec3], scanner: Scanner): Option[(Set[Vec3], Vec3)] =
     val result =
       for
-        transposed <- scanner.report.map(orientations).transpose.map(_.toSet)
+        transposed <- scanner.report.map(orientations).transpose.map(_.toSet).iterator
         local      <- beacons
         remote     <- transposed
         position = remote - local
         if transposed.map(position + _).count(beacons) >= 10
       yield (transposed.map(position + _), position)
     
-    result.headOption
+    result.nextOption
   
   def solve(scanners: Vector[Scanner]): (Set[Vec3], Set[Vec3]) =
 

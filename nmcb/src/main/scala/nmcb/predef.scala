@@ -77,8 +77,20 @@ object predef:
     inline def rightMap[C](fb: B => C): (A, C)             = (p.left, fb(p.right))
     inline def bimap[C, D](fa: A => C, fb: B => D): (C, D) = (fa(p.left), fb(p.right))
 
+  
   extension [A](t: (Pos, A))
     def pos: Pos = t._1
     def element: A = t._2
+    
+    
+  extension (bytes: Array[Byte])
+    def toHexString: String =
+      val HEX_ARRAY: Array[Char] = "0123456789abcdef".toCharArray
+      val hexChars: Array[Char] = new Array[Char](bytes.length * 2)
+      for j <- bytes.indices do
+        val v = bytes(j) & 0xFF
+        hexChars(j * 2) = HEX_ARRAY(v >>> 4)
+        hexChars(j * 2 + 1) = HEX_ARRAY(v & 0x0F)
+      String(hexChars)
 
 

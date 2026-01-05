@@ -61,9 +61,9 @@ object Dijkstra:
   import scala.collection.mutable
 
   /** classic dijkstra traverses the shortest found paths first */
-  def run[A](graph: Graph[A], from: A): Result[A] =
+  def run[A](from: A, graph: A => Set[(A,Int)]): Result[A] =
     val edgeTo: mutable.Map[A,Edge[A]] = mutable.Map.empty
-    val distTo: mutable.Map[A,Int]     = mutable.Map.from(graph.neighbours.map((node,_) => node -> Int.MaxValue))
+    val distTo: mutable.Map[A,Int]     = mutable.Map.empty.withDefaultValue(Int.MaxValue)
 
     distTo += from -> 0
     val sourceEdge = from -> distTo(from)
@@ -71,12 +71,36 @@ object Dijkstra:
 
     while (queue.nonEmpty)
       val (minDistNode, _) = queue.dequeue()
+      val neighbours = graph(minDistNode)
+      neighbours.foreach: (to, weight) =>
+        if distTo(to) > distTo(minDistNode) + weight then
+          distTo.update(to, distTo(minDistNode) + weight)
+          edgeTo.update(to, Edge(minDistNode, to, weight))
+          if !queue.exists((node,_) => node == to) then
+            queue.enqueue((to, distTo(to)))
+
+    Result(edgeTo.toMap, distTo.toMap)
+
+  /** classic dijkstra traverses the shortest found paths first */
+  def run[A](from: A, graph: Graph[A]): Result[A] =
+    val edgeTo: mutable.Map[A, Edge[A]] = mutable.Map.empty
+    val distTo: mutable.Map[A, Int] = mutable.Map.from(graph.neighbours.map((node, _) => node -> Int.MaxValue)).withDefaultValue(Int.MaxValue)
+
+    distTo += from -> 0
+    val sourceEdge = from -> distTo(from)
+    val queue = mutable.PriorityQueue[(A, Int)](sourceEdge)(using Ordering.by[(A, Int), Int](_._2).reverse)
+
+    while (queue.nonEmpty)
+      val (minDistNode, _) = queue.dequeue()
       val edges = graph.neighbours.getOrElse(minDistNode, Vector.empty)
       edges.foreach: edge =>
+//        println(s"edge=$edge")
+//        println(s"distTo(edge.to)=${distTo.get(edge.to)}")
+//        println(s"distTo(edge.from)=${distTo.get(edge.from)}")
         if distTo(edge.to) > distTo(edge.from) + edge.weight then
           distTo.update(edge.to, distTo(edge.from) + edge.weight)
           edgeTo.update(edge.to, edge)
-          if !queue.exists((node,_) => node == edge.to) then
+          if !queue.exists((node, _) => node == edge.to) then
             queue.enqueue((edge.to, distTo(edge.to)))
 
     Result(edgeTo.toMap, distTo.toMap)
