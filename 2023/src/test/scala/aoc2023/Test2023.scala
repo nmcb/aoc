@@ -1,7 +1,5 @@
+package aoc2023
 
-import nmcb.*
-
-import aoc2023.*
 import org.scalatest.funsuite.AnyFunSuite
 
 class Test2023 extends AnyFunSuite:
@@ -77,30 +75,29 @@ class Test2023 extends AnyFunSuite:
     assertResult(52055)(Day18.answer1)
     assertResult(67622758357096L)(Day18.answer2)
 
-  test("Day 19: Aplenty") {
+  test("Day 19: Aplenty"):
     assertResult(449531)(Day19.answer1)
     assertResult(122756210763577L)(Day19.answer2)
-  }
-  test("Day 20: Pulse Propagation") {
+
+  test("Day 20: Pulse Propagation"):
     assertResult(812609846)(Day20.answer1)
     assertResult(245114020323037L)(Day20.answer2)
-  }
-  test("Day 21: Step Counter") {
+
+  test("Day 21: Step Counter"):
     assertResult(3788)(Day21.answer1)
     assertResult(631357596621921L)(Day21.answer2)
-  }
-  test("Day 22: Sand Slabs") {
+
+  test("Day 22: Sand Slabs"):
     assertResult(454)(Day22.answer1)
     assertResult(74287)(Day22.answer2)
-  }
-  test("Day 23: A Long Walk") {
+
+  test("Day 23: A Long Walk"):
     assertResult(2430)(Day23.answer1)
     assertResult(6534)(Day23.answer2)
-  }
-  test("Day 24: Never Tell Me The Odds") {
+
+  test("Day 24: Never Tell Me The Odds"):
     assertResult(14799)(Day24.answer1)
     assertResult(1007148211789625L)(Day24.answer2)
-  }
-  test("Day 25: Snowverload") {
+
+  test("Day 25: Snowverload"):
     assertResult(569904)(Day25.answer1)
-  }
