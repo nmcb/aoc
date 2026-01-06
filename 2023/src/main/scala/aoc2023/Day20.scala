@@ -15,7 +15,7 @@ object Day20 extends AoC:
   type Name = String
   type Message = (Name, Name, Pulse)
 
-  trait Module:
+  sealed trait Module:
     def name: Name
     def destinations: Vector[Name]
     def receive(from: Name, pulse: Pulse): (Vector[Message], Module)
@@ -34,7 +34,7 @@ object Day20 extends AoC:
     def withInputs(modules: Vector[Module]): Conjunction =
       copy(inputs = modules.map(_.name -> L).toMap)
 
-    override def receive(from: Name, pulse: Pulse): (Vector[Message], Module) =
+    def receive(from: Name, pulse: Pulse): (Vector[Message], Module) =
       val next = inputs.updated(from, pulse)
       val sent = if next.view.values.forall(_ == H) then L else H
       (destinations.map((name, _, sent)), copy(inputs = next))
@@ -42,7 +42,7 @@ object Day20 extends AoC:
 
   case class Broadcaster(name: Name, destinations: Vector[Name]) extends Module:
 
-    override def receive(from: Name, pulse: Pulse): (Vector[Message], Module) =
+    def receive(from: Name, pulse: Pulse): (Vector[Message], Module) =
       (destinations.map((name, _, pulse)), this)
 
 

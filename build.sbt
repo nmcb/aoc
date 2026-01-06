@@ -51,6 +51,7 @@ lazy val aoc2025 = project.in(file("2025")).dependsOn(input, nmcb)
 
 lazy val aoc = (project in file("."))
   .aggregate(
+    nmcb,
     aoc2015,
     aoc2016,
     aoc2017,
