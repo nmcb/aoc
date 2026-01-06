@@ -7,7 +7,7 @@ import scala.annotation.*
 
 object Day06 extends AoC:
 
-  private val grid: Grid[Char] = Grid.fromLines(lines)
+  val grid: Grid[Char] = Grid.fromLines(lines)
 
   extension (g: Grid[Char])
 
@@ -15,9 +15,9 @@ object Day06 extends AoC:
     def walkGuard(pos: Pos, dir: Dir, result: Set[Pos] = Set.empty): Set[Pos] =
       val next = pos step dir
       g.peekOrElse(next, ' ') match
-        case ' '       => result + pos
-        case '.' | '^' => walkGuard(next, dir, result + pos)
-        case '#'       => walkGuard(pos, dir.cw, result)
+        case ' ' => result + pos
+        case '.' => walkGuard(next, dir, result + pos)
+        case '#' => walkGuard(pos, dir.cw, result)
 
     def peekWithObstruction(p: Pos, obstruct: Pos): Char =
         if p == obstruct then '#' else g.peekOrElse(p, ' ')
@@ -29,13 +29,14 @@ object Day06 extends AoC:
       else
         val next = pos step dir
         g.peekWithObstruction(next, obstruct) match
-          case ' '       => false
-          case '.' | '^' => walkCircular(next, dir, obstruct, visited + (pos -> dir))
-          case '#'       => walkCircular(pos, dir.cw, obstruct, visited)
+          case ' ' => false
+          case '.' => walkCircular(next, dir, obstruct, visited + (pos -> dir))
+          case '#' => walkCircular(pos, dir.cw, obstruct, visited)
 
 
-  def start: Pos   = grid.findOne('^')
-  lazy val answer1: Int = grid.walkGuard(start, N).size
+  lazy val start: Pos          = grid.findOne('^')
+  lazy val cleared: Grid[Char] = grid.map(c => if c == '^' then '.' else c)
+  lazy val answer1: Int = cleared.walkGuard(start, N).size
 
-  def obstructions: Set[Pos] = grid.walkGuard(start, N) - start
-  lazy val answer2: Int = obstructions.count(o => grid.walkCircular(start, N, o))
+  def obstructions: Set[Pos] = cleared.walkGuard(start, N) - start
+  lazy val answer2: Int = obstructions.count(o => cleared.walkCircular(start, N, o))

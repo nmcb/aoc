@@ -1,3 +1,5 @@
+package aoc2015
+
 import org.scalatest.funsuite.AnyFunSuite
 
 class TestParser extends AnyFunSuite:
