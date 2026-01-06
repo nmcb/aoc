@@ -1,113 +1,74 @@
 package aoc2023
 
 import nmcb.*
+import nmcb.pos.*
 
 import scala.collection.mutable
 
-/** @see Credits - https://github.com/sanraith */
+/** @see Credits - https://github.com/merlinorg */
 object Day23 extends AoC:
+  
+  private val prohibited: Map[Dir, Char] =
+    Map(Dir.W -> '>', Dir.N -> 'v', Dir.S -> '^', Dir.E -> '<')
 
-  def part1(input: String): Int =
-    val (start, end, maze) = parseMaze(input)
-    val queue = mutable.Queue((start, S, 0))
-    val visited = mutable.Map.empty[Position, Int]
-    while queue.nonEmpty do
-      val (pos, dir, dist) = queue.dequeue()
-      visited.get(pos) match
-        case Some(prevDist) if prevDist >= dist => ()
-        case _ =>
-          visited(pos) = dist
-          val nextDirs = maze.grid(pos) match
-            case '>' => Seq(E)
-            case 'v' => Seq(S)
-            case '<' => Seq(W)
-            case '^' => Seq(N)
-            case '.' => Dir
-            case _ => throw new Exception(s"input error: pos=$pos")
-          nextDirs
-            .map(d => (pos + d, d))
-            .filter((p, d) => maze.grid.contains(p) && -d != dir)
-            .foreach((p, d) => queue.enqueue((p, d, dist + 1)))
-    visited(end)
+  private type Graph = Map[Pos, Vector[(Pos, Int)]]
 
-  def part2(input: String): Int =
-    val (startPoint, endPoint, maze) = parseMaze(input)
-    val nodes = parseNodes(startPoint, endPoint, maze)
-    val start = nodes(startPoint)
-    val end   = nodes(endPoint)
+  extension (grid: Grid[Char])
 
-    var longest = 0
-    val queue = mutable.Queue((start, Set.empty[Node], 0))
-    while queue.nonEmpty do
-      val (node, path, dist) = queue.dequeue()
-      if node == end then
-        longest = math.max(longest, dist)
+    private def isEdge(loc: Pos): Boolean =
+      loc.adjoint4.count(adj => grid.within(adj) && grid.peek(adj) != '#') > 2
+
+    private def computeEdges(from: Pos, to: Pos): Vector[(Pos, Int)] =
+      val results = mutable.ListBuffer.empty[(Pos, Int)]
+
+      def loop(p: Pos, visited: Set[Pos], length: Int): Unit =
+        if p == to || isEdge(p) && p != from then results.addOne(p -> length)
+        else if !visited.contains(p) then
+          for
+            d <- Dir.values
+            n  = p step d
+            if grid.within(n) && grid.peek(n) != '#' && grid.peek(n) != prohibited(d)
+          do loop(n, visited + p, length + 1)
+
+      loop(from, Set.empty, 0)
+      results.toVector
+
+    private def computeGraph(from: Pos, to: Pos): Graph =
+      val result = mutable.Map.empty[Pos, Vector[(Pos, Int)]]
+
+      def loop(p: Pos): Unit =
+        val edges = computeEdges(p, to)
+        result.update(p, edges)
+        for
+          (next, _) <- edges
+          if !result.contains(next)
+        do loop(next)
+
+      loop(from)
+      result.toMap
+
+  def solve1(grid: Grid[Char]): Int =
+    val from  = Pos(0, 1)
+    val to    = Pos(grid.sizeX - 2, grid.sizeY - 1)
+    val graph = grid.computeGraph(from, to)
+
+    def loop(p: Pos, visited: Set[Pos], length: Int, longest: Int): Int =
+      if p == to then
+        length max longest
       else
-        val pathNext = path + node
-        node.edges
-          .filter((d, n) => !pathNext.contains(n))
-          .foreach((d, n) => queue.enqueue((n, pathNext, dist + d)))
-    longest
+        val lengths =
+          for
+            (next, distance) <- graph(p)
+            if !visited.contains(next)
+          yield
+            loop(next, visited + p, length + distance, longest)
+        (lengths :+ longest).max
 
-  def parseNodes(start: Position, end: Position, layout: Maze): Map[Position, Node] =
-    val queue = mutable.Queue((start, 0, S, None: Option[Node]))
-    val nodes = mutable.Map.empty[Position, Node]
+    loop(from, Set.empty, 0, 0)
 
-    while queue.nonEmpty do
-      val (pos, dist, dir, fromNode) = queue.dequeue()
-      val nextPair =
-        if Dir.map(pos + _).count(layout.grid.contains) != 2 then
-          val newNode = !nodes.contains(pos)
-          val node = nodes.getOrElseUpdate(pos, Node(pos))
-          fromNode.foreach: fromNode =>
-            fromNode.edges.addOne(dist, node)
-            node.edges.addOne(dist, fromNode)
-          if newNode then Some(1, Some(node)) else None
-        else Some(dist + 1, fromNode)
-      nextPair.foreach: (nextDist, nextFrom) =>
-        Dir
-          .map(d => (pos + d, d))
-          .filter: (p, d) =>
-            layout.grid.contains(p) && -d != dir && fromNode.forall(f => f.pos != p)
-          .foreach((p, d) => queue.enqueue((p, nextDist, d, nextFrom)))
-
-    nodes.toMap
-
-  def parseMaze(input: String): (Position, Position, Maze) =
-    val width = input.linesIterator.next.length
-    val height = input.linesIterator.length
-    val grid = input.linesIterator.zipWithIndex
-      .flatMap: (l, y) =>
-        l.zipWithIndex
-          .map((c, x) => Position(x, y) -> c)
-          .filter((_, c) => c != '#')
-          .map((p, c) => p -> c)
-      .toMap
-    val sortedPath = grid.keySet.toSeq.sortBy(p => (p.y, p.x))
-    val start = sortedPath.head
-    val end = sortedPath.last
-    (start, end, Maze(grid, width, height))
-
-  case class Maze(grid: Map[Position, Char], width: Int, height: Int)
-
-  case class Node(pos: Position):
-    val edges = mutable.Map.empty[Int, Node]
-
-  case class Position(x: Int, y: Int):
-    def +(other: Position): Position = Position(x + other.x, y + other.y)
-    def -(other: Position): Position = Position(x - other.x, y - other.y)
-    def *(other: Position): Position = Position(x * other.x, y * other.y)
-    def *(scalar: Int): Position = Position(x * scalar, y * scalar)
-    def manhattan(other: Position): Int = (x - other.x).abs + (y - other.y).abs
-    def unary_- : Position = Position(-x, -y)
-
-  type Dir = Position
-  val E: Dir = Position(1, 0)
-  val S: Dir = Position(0, 1)
-  val W: Dir = Position(-1, 0)
-  val N: Dir = Position(0, -1)
-  val Dir: Seq[Dir] = Seq(E, S, W, N)
+  def solve2(board: Grid[Char]): Int =
+    solve1(board.map(c => if c != '#' then '.' else c))
 
 
-  lazy val answer1: Int = part1(input)
-  lazy val answer2: Int = part2(input)
+  lazy val answer1: Int = solve1(Grid.fromLines(lines))
+  lazy val answer2: Int = solve2(Grid.fromLines(lines))
