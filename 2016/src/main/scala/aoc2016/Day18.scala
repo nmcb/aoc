@@ -4,16 +4,16 @@ import nmcb.*
 
 object Day18 extends AoC:
 
-  def next(row: String): String =
-    ("." + row + ".")
+  def next(row: Vector[Char]): Vector[Char] =
+    ('.' +: row :+ '.')
       .sliding(3)
       .map:
-        case "^^." | ".^^" | "^.." | "..^" => '^'
+        case Vector('^', '^', '.') | Vector('.', '^', '^') | Vector('^', '.', '.') | Vector('.', '.', '^') => '^'
         case _                             => '.'
-      .mkString
+      .toVector
 
-  def safe(row: String): Int =
+  def safe(row: Vector[Char]): Int =
     row.count(_ == '.')
 
-  lazy val answer1: Int = Iterator.iterate(input)(next).map(safe).take(40).sum
-  lazy val answer2: Int = Iterator.iterate(input)(next).map(safe).take(400000).sum
+  lazy val answer1: Int = Iterator.iterate(input.toVector)(next).map(safe).take(40).sum
+  lazy val answer2: Int = Iterator.iterate(input.toVector)(next).map(safe).take(400000).sum
