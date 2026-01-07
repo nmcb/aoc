@@ -31,7 +31,7 @@ class TestDijkstra extends AnyFunSuite:
   test("Dijkstra.run") {
     val grid   = Grid.fromString(input)
     val graph  = Graph.fromGrid(grid, '.')
-    val result = Dijkstra.run[Pos](graph, grid.minPos)
+    val result = Dijkstra.run[Pos](grid.minPos, graph)
     val output = result.pathTo(grid.maxPos).toTrail.foldLeft(grid)(_.updated(_, 'O')).asString
 
     assertResult(expected = shortest)(output)

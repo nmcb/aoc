@@ -10,13 +10,13 @@ object SecurityExercise extends App:
   type Node    = String
   type Cluster = Set[Node]
 
-  case class Route(a: Node, b: Node)
+  type Route = (a: Node, b: Node)
 
   object Route:
     def fromString(s: String): Set[Route] =
       s match
         case s"$from: $tos" =>
-          tos.split(" ").map(to => Route(from, to)).toSet
+          tos.split(" ").map(to => (from, to)).toSet
 
   val routes: Vector[Route] =
     Source
@@ -31,7 +31,7 @@ object SecurityExercise extends App:
       if clusters.size <= 2 then
         (clusters, routes)
       else
-        val Route(a: Node, b: Node) = routes.head
+        val (a: Node, b: Node) = routes.head
         val va: Cluster = clusters.find(_.contains(a)).get
         val vb: Cluster = clusters.find(_.contains(b)).get
         val vc: Cluster = va ++ vb

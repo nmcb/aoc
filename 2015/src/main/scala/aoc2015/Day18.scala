@@ -2,50 +2,42 @@ package aoc2015
 
 import nmcb.*
 
+import scala.annotation.tailrec
+
 object Day18 extends AoC:
 
-  case class Light(underlying: Char):
-    assert(underlying == '#' || underlying == '.')
+  type Light = Char
+  val on: Light  = '#'
+  val off: Light = '.'
+  
+  extension (l: Light) 
 
-    import Light.*
+    def isOn:  Boolean = l == on
+    def isOff: Boolean = l == off
 
-    def isOn:  Boolean = underlying == '#'
-    def isOff: Boolean = underlying == '.'
-
-    def next(neighbours: List[Light]): Light =
-      val n = neighbours.count(_.isOn)
+    def next(neighbouring: Vector[Light]): Light =
+      val n = neighbouring.count(_.isOn)
 
       if isOn then
         if n == 2 || n == 3 then on else off
       else
         if n == 3 then on else off
-
-
-  object Light:
-    val on: Light  = Light('#')
-    val off: Light = Light('.')
-
-    def fromChar(c: Char): Light =
-      Light.apply(c)
-
-  /** zero based left-to-right indexed, ie. [x0, x1 .. xn] */
-  type Row = List[Light]
+  
+  type Row = Vector[Light]
 
   object Row:
     def empty: Row =
-      List.empty[Light]
+      Vector.empty[Light]
 
   /** zero based top-to-bottom-left-to-right indexed, ie. [y0, y1 .. yn][x0, x1 .. xn] */
-  type Conf = List[Row]
+  type Conf = Vector[Row]
 
   object Conf:
     def empty: Conf =
-      List.empty[Row]
+      Vector.empty[Row]
 
   /** grid encapsulates the animation of a light configuration */
   case class Grid(conf: Conf, overlay: Set[(Int,Int)] = Set.empty):
-    import Light.*
-
     val sizeX: Int = conf.map(_.size).max
     val sizeY: Int = conf.size
     val minX: Int  = 0
@@ -57,23 +49,21 @@ object Day18 extends AoC:
       copy(overlay = Set.from(on))
 
     def fold[A](zero: A)(inc: A => A)(f: (Int,Int,A) => A): A =
-      (minY to maxY).foldLeft(zero)((z,y) =>
-        (minX to maxX).foldLeft(inc(z))((z,x) =>
-          f(x,y,z)))
-
-    def mkString: String =
-      fold("")(_ + "\n")((x,y,str) => str + light(x,y).underlying) + "\n"
+      (minY to maxY).foldLeft(zero): (z, y) =>
+        (minX to maxX).foldLeft(inc(z)): (z, x) =>
+          f(x,y,z)
 
     def count: Int =
-      fold(0)(identity)((x,y,n) => if light(x, y).isOn then n + 1 else n)
+      fold(0)(identity): (x, y, n) =>
+        if light(x, y).isOn then n + 1 else n
 
     def light(x: Int, y: Int): Light =
       if overlay(y, x) then on else conf(y)(x)
 
-    def neighbours(x: Int, y: Int): List[Light] =
-      List((-1,-1),(0,-1),(1,-1),(-1, 0),(1, 0),(-1,1),(0, 1),(1, 1))
-        .map((dx,dy) => (x + dx,y + dy))
-        .filter((px,py) => px >= minX && px <= maxX && py >= minY && py <= maxY)
+    def neighbours(x: Int, y: Int): Vector[Light] =
+      Vector((-1,-1),(0,-1),(1,-1),(-1, 0),(1, 0),(-1,1),(0, 1),(1, 1))
+        .map((dx, dy) => (x + dx, y + dy))
+        .filter((px, py) => px >= minX && px <= maxX && py >= minY && py <= maxY)
         .map(light)
 
     def next: Grid =
@@ -82,7 +72,8 @@ object Day18 extends AoC:
           conf.init :+ (conf.last :+ light(x,y).next(neighbours(x,y))))
       copy(conf = step)
 
-    def animate(steps: Int, grid: Grid = this): Grid =
+    @tailrec
+    final def animate(steps: Int, grid: Grid = this): Grid =
       if steps <= 0 then grid else animate(steps = steps - 1, grid = grid.next)
 
   val grid: Grid =
@@ -90,7 +81,7 @@ object Day18 extends AoC:
       lines
         .foldLeft(Conf.empty)((conf,line) =>
           conf :+ line.foldLeft(Row.empty)((row, char) =>
-            row :+ Light.fromChar(char)))
+            row :+ char))
     Grid(initial)
 
   import grid.*
