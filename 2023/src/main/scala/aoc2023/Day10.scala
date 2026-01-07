@@ -85,7 +85,7 @@ object Day10 extends AoC:
     val cacheX: Vector[Pos] = path.sortBy((p,_) => p.x).map((p,_) => p)
     val cacheY: Vector[Pos] = path.sortBy((p,_) => p.y).map((p,_) => p)
 
-    /** right handed enclosure */
+    /** right-handed enclosure */
     def scan(pos: Pos, dir: Dir): Set[Pos] =
       dir match
         case N if pos.y > 0 =>
