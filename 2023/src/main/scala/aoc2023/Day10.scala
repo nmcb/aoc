@@ -43,8 +43,6 @@ object Day10 extends AoC:
         case W if p.x > 0    => Some((x = p.x - 1, y = p.y))
         case _             => None
 
-  given Ordering[Pos] = Ordering.by(p => (p.x, p.y))
-
   lazy val tiles: Map[Pos,Tile] =
     lines
       .zipWithIndex
@@ -104,6 +102,7 @@ object Day10 extends AoC:
           if r.nonEmpty then (r.last.x + 1 until pos.x).map(x => Pos.of(x, pos.y)).toSet else Set.empty
         case _ => Set.empty
 
+    @tailrec
     def loop(todo: Vector[(Pos,Dir)], prev: Dir, acc: Set[Pos]): Set[Pos] =
       todo match
         case (p, n) +: rest =>

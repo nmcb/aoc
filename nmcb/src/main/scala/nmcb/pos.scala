@@ -30,7 +30,7 @@ object pos:
 
   type Pos = (x: Int, y: Int)
 
-  given Ordering[Pos] = Ordering.by(p => (p.x, p.y))
+  given Ordering[Pos] = Ordering.by(_.toTuple)
 
   extension (p: Pos)
 
@@ -95,6 +95,9 @@ object pos:
 
   object Pos:
 
+    val orderingByManhattanDistance: Ordering[Pos] =
+      Ordering.fromLessThan((a, b) => a.manhattan(Pos.origin) < b.manhattan(Pos.origin))
+    
     val origin: Pos =
       of(0, 0)
 

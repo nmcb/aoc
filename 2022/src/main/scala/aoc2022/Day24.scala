@@ -1,16 +1,12 @@
 package aoc2022
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 import scala.annotation.tailrec
 import scala.io.*
 
 object Day24 extends AoC:
-
-  given Ordering[Pos] with
-    def compare(a: Pos, b: Pos): Int =
-      Ordering[(Int,Int)].compare((a.y, a.x), (b.y, b.x))
 
   case class Bounds(max: Pos):
     val sizeX: Int = max.x + 1

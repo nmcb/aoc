@@ -7,9 +7,6 @@ object Day03 extends AoC:
 
   val Vector(description1, description2) = lines
 
-  given Ordering[Pos] =
-    Ordering.fromLessThan((a,b) => a.manhattan(Pos.origin) < b.manhattan(Pos.origin))
-
   def append(wire: Vector[Pos], cmd: String): Vector[Pos] =
 
     val length: Int = cmd.drop(1).toInt
@@ -23,11 +20,10 @@ object Day03 extends AoC:
 
   def wire(description: String): Vector[Pos] =
     description.split(',').foldLeft(Vector.empty)((wire,cmd) => append(wire, cmd))
-
+  
   def distances(description1: String, description2: String): Vector[Pos] =
-    wire(description1).toSet.intersect(wire(description2).toSet).toVector.sorted
-
-
+    wire(description1).toSet.intersect(wire(description2).toSet).toVector.sorted(using Pos.orderingByManhattanDistance)
+  
   type Crossing = (Pos,Int)
 
   extension (crossing: Crossing)

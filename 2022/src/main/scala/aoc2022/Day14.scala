@@ -13,10 +13,6 @@ object Day14 extends AoC:
     case A extends E('.')
     case R extends E('#')
 
-  given Ordering[Pos] with
-    def compare(a: Pos, b: Pos): Int =
-      Ordering[(Int,Int)].compare((a.x, a.y), (b.x, b.y))
-
   def parse(s: String): Vector[Pos] =
     @tailrec
     def loop(ps: Vector[String], a: Vector[Pos] = Vector.empty): Vector[Pos] =
