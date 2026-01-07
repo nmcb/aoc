@@ -13,7 +13,7 @@ object Day11 extends AoC:
   object Panels:
     val empty: Panels = Map.empty.withDefaultValue(0L)
 
-  case class Robot(cpu: CPU, pos: Pos = Pos(0,0), dir: Dir = N, panels: Panels = Panels.empty):
+  case class Robot(cpu: CPU, pos: Pos = Pos.of(0,0), dir: Dir = N, panels: Panels = Panels.empty):
     @tailrec
     final def paint: Panels =
       cpu.withInput(panels(pos)).outputStates match
@@ -32,7 +32,7 @@ object Day11 extends AoC:
     val program: Mem = Mem.parse(input)
     Robot(
       cpu    = CPU(program),
-      pos    = Pos(0,0),
+      pos    = Pos.of(0,0),
       dir    = N,
       panels = Panels.empty
     )
@@ -47,9 +47,9 @@ object Day11 extends AoC:
       val sb = StringBuffer()
       for y <- minY to maxY do
         for x <- minX to maxX do
-          sb.append(if panels(Pos(x,y)) == 1 then '█' else '░')
+          sb.append(if panels(Pos.of(x,y)) == 1 then '█' else '░')
         sb.append("\n")
       sb.toString
 
   lazy val answer1: Int    = robot.paint.size
-  lazy val answer2: String = robot.copy(panels = Map(Pos(0,0) -> 1L).withDefaultValue(0L)).paint.asString
+  lazy val answer2: String = robot.copy(panels = Map(Pos.of(0,0) -> 1L).withDefaultValue(0L)).paint.asString

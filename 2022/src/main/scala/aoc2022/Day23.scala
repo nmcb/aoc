@@ -11,7 +11,7 @@ object Day23 extends AoC:
 
     def parse(y: Int, s: String): Set[Pos] =
       s.zipWithIndex.foldLeft(Set.empty):
-        case (a, ('#', x)) => a + Pos(x,y)
+        case (a, ('#', x)) => a + Pos.of(x,y)
         case (a,_)         => a
 
     lines
@@ -88,7 +88,7 @@ object Day23 extends AoC:
         for
         x <- minX to maxX
         y <- minY to maxY
-        if !elves.contains(Pos(x,y))
+        if !elves.contains(Pos.of(x,y))
       yield 1
       size.sum
 

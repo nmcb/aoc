@@ -18,7 +18,7 @@ object Day21 extends AoC:
           y <- 0 until sizeY
           x <- 0 until sizeX
         yield
-          Pos(x, y)
+          Pos.of(x, y)
       result.toSet
 
     lazy val startPos: Pos =

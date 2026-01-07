@@ -63,14 +63,14 @@ object Day16 extends AoC:
       trace(start, direction).toMap.keys.size
 
     def maxEnergized: Int =
-      val north = List.tabulate(sizeX)(x => Pos(x, 0) -> S)
-      val east  = List.tabulate(sizeY)(y => Pos(sizeX - 1, y) -> W)
-      val south = List.tabulate(sizeX)(x => Pos(x, sizeY - 1) -> N)
-      val west  = List.tabulate(sizeY)(y => Pos(0, y) -> E)
+      val north = List.tabulate(sizeX)(x => Pos.of(x, 0) -> S)
+      val east  = List.tabulate(sizeY)(y => Pos.of(sizeX - 1, y) -> W)
+      val south = List.tabulate(sizeX)(x => Pos.of(x, sizeY - 1) -> N)
+      val west  = List.tabulate(sizeY)(y => Pos.of(0, y) -> E)
       val entries = List(north, east, south, west).flatten
       entries.map((p,d) => energized(p,d)).max
 
   lazy val grid: Grid = Grid(lines.map(_.toVector))
 
-  lazy val answer1: Long = grid.energized(start = Pos(0,0), direction = E)
+  lazy val answer1: Long = grid.energized(start = Pos.of(0,0), direction = E)
   lazy val answer2: Long = grid.maxEnergized

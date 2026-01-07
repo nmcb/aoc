@@ -52,7 +52,7 @@ object Day17 extends AoC:
           Crucible(next, direction, steps) -> grid(next)
 
       val start = Crucible(Pos.origin, Pos.origin, 0)
-      val target = (n: Crucible) => n.current == Pos(grid.sizeX - 1, grid.sizeY - 1) && canStop(n)
+      val target = (n: Crucible) => n.current == Pos.of(grid.sizeX - 1, grid.sizeY - 1) && canStop(n)
 
       Dijkstra.traverse[Crucible](start, target, reachable).map((_, loss) => loss)
 

@@ -31,7 +31,7 @@ object Day16 extends AoC:
       for {
         (l, y) <- maze.zipWithIndex
         (c, x) <- l.zipWithIndex
-      } yield (Pos(x, y), c)
+      } yield (Pos.of(x, y), c)
 
     def find(f: Char => Boolean): Vector[Pos] =
       positions.filter((p, c) => f(c)).map((p, _) => p)

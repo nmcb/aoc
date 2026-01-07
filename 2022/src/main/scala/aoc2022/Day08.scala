@@ -64,7 +64,7 @@ object Day08 extends AoC:
           case (a,(r,y)) =>
             r.zipWithIndex.foldLeft(a):
               case (a,(t,x)) =>
-                a + (Pos(x,y) -> t.toString.toInt)
+                a + (Pos.of(x,y) -> t.toString.toInt)
     )
 
 

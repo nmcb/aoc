@@ -9,7 +9,7 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
   val sizeY: Int = matrix.size
   val sizeX: Int = matrix.head.size
   val minPos: Pos = Pos.origin
-  val maxPos: Pos = (sizeX - 1, sizeY - 1).toPos
+  val maxPos: Pos = Pos.of(sizeX - 1, sizeY - 1)
 
   assert(matrix.forall(row => row.size == sizeX))
 
@@ -17,7 +17,7 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
     positions.map(p => p -> peek(p))
 
   lazy val positions: Set[Pos] =
-    (for { x <- 0 until sizeX ; y <- 0 until sizeY } yield (x, y).toPos).toSet
+    (for { x <- 0 until sizeX ; y <- 0 until sizeY } yield Pos.of(x, y)).toSet
 
   def within(p: Pos): Boolean =
     p.withinBounds(minPos, maxPos)

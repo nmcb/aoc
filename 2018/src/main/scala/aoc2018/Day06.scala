@@ -18,7 +18,7 @@ object Day06 extends AoC:
     val maxY: Int = coordinates.maxBy(_.y).y
 
     val positions: Vector[Pos] =
-      (for x <- minX to maxX ; y <- minY to maxY yield Pos(x,y)).toVector
+      (for x <- minX to maxX ; y <- minY to maxY yield Pos.of(x,y)).toVector
 
     type UnitDistance = (Pos, Long)
 
@@ -52,7 +52,7 @@ object Day06 extends AoC:
 
 
   val coordinates: Vector[Pos] = lines.map:
-    case s"$x, $y" => Pos(x.toInt, y.toInt)
+    case s"$x, $y" => Pos.of(x.toInt, y.toInt)
 
   lazy val answer1: Long = Grid(coordinates).largestAreaSize
   lazy val answer2: Int  = Grid(coordinates).withinManhattanSumLimit(10000).size

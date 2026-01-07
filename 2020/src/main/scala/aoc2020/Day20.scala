@@ -26,19 +26,19 @@ object Day20 extends AoC:
 
   /** note that images are squares */
   case class Image(size: Int, pixels: Map[Pos, Char]):
-    val top: IndexedSeq[Char]    = (0 until size).map(x => pixels(Pos(x, 0)))
-    val left: IndexedSeq[Char]   = (0 until size).map(y => pixels(Pos(0, y)))
-    val bottom: IndexedSeq[Char] = (0 until size).map(x => pixels(Pos(x, size - 1)))
-    val right: IndexedSeq[Char]  = (0 until size).map(y => pixels(Pos(size - 1, y)))
+    val top: IndexedSeq[Char]    = (0 until size).map(x => pixels(Pos.of(x, 0)))
+    val left: IndexedSeq[Char]   = (0 until size).map(y => pixels(Pos.of(0, y)))
+    val bottom: IndexedSeq[Char] = (0 until size).map(x => pixels(Pos.of(x, size - 1)))
+    val right: IndexedSeq[Char]  = (0 until size).map(y => pixels(Pos.of(size - 1, y)))
 
     private def rotateCW: Image =
-      Image(size, pixels.map((pos, pixel) => Pos(size - pos.y - 1, pos.x) -> pixel))
+      Image(size, pixels.map((pos, pixel) => Pos.of(size - pos.y - 1, pos.x) -> pixel))
 
     private def flipH: Image =
-      Image(size, pixels.map((pos, pixel) => Pos(size - pos.x - 1, pos.y) -> pixel))
+      Image(size, pixels.map((pos, pixel) => Pos.of(size - pos.x - 1, pos.y) -> pixel))
 
     private def flipV: Image =
-      Image(size, pixels.map((pos, pixel) => Pos(pos.x, size - pos.y - 1) -> pixel))
+      Image(size, pixels.map((pos, pixel) => Pos.of(pos.x, size - pos.y - 1) -> pixel))
 
     def permutations: Vector[Image] =
       import Iterator.*
@@ -79,7 +79,7 @@ object Day20 extends AoC:
       .map: tile =>
         val id     = tile.head.slice(5, 9).toLong
         val data   = tile.drop(1)
-        val pixels = for y <- 0 to 9; x <- 0 to 9 yield Pos(x, y) -> data(y)(x)
+        val pixels = for y <- 0 to 9; x <- 0 to 9 yield Pos.of(x, y) -> data(y)(x)
         Tile(id, Image(10, pixels.toMap))
       .toVector
 
@@ -88,7 +88,7 @@ object Day20 extends AoC:
 
   def unscrambleTiles(tiles: Vector[Tile]): Map[Pos, Tile] =
     val size = math.sqrt(tiles.size).toInt
-    val positions = for x <- 0 until size; y <- 0 until size yield Pos(x, y)
+    val positions = for x <- 0 until size; y <- 0 until size yield Pos.of(x, y)
     val corner = corners(tiles).head.permutations
     val occurrences = tiles.flatMap(_.edges).groupMapReduce(identity)(_ => 1)(_ + _)
 
@@ -98,9 +98,9 @@ object Day20 extends AoC:
         ordered
       else
         val tile = positions.head match
-          case Pos(0, 0) => corner.filter(tile => occurrences(tile.top) == 1 && occurrences(tile.left) == 1).head
-          case Pos(0, y) => remaining.filter(tile => tile.top == ordered(Pos(0, y - 1)).bottom).head
-          case Pos(x, y) => remaining.filter(tile => tile.left == ordered(Pos(x - 1, y)).right).head
+          case (x = 0, y = 0) => corner.filter(tile => occurrences(tile.top) == 1 && occurrences(tile.left) == 1).head
+          case (x = 0, y = y) => remaining.filter(tile => tile.top == ordered(Pos.of(0, y - 1)).bottom).head
+          case (x = x, y = y) => remaining.filter(tile => tile.left == ordered(Pos.of(x - 1, y)).right).head
         go(remaining.filterNot(_.id == tile.id), positions.tail, ordered.updated(positions.head, tile))
 
     go(tiles.flatMap(_.permutations), positions.toVector, Map.empty)
@@ -111,7 +111,7 @@ object Day20 extends AoC:
       x <- 0 until size
       y <- 0 until size
     yield
-      Pos(x, y) -> unscrambled(Pos(x / 8, y / 8)).image.pixels(Pos(1 + x % 8, 1 + y % 8))
+      Pos.of(x, y) -> unscrambled(Pos.of(x / 8, y / 8)).image.pixels(Pos.of(1 + x % 8, 1 + y % 8))
 
     Image(size, pixels.toMap)
 
@@ -124,7 +124,7 @@ object Day20 extends AoC:
         y <- 0 until image.size - 3
         if monster.map(_ + Pos.of(x, y)).forall(pos => candidate.pixels(pos) == '#')
       yield (x, y)
-      val monsters = matches.map(Pos(_, _)).flatMap(pos => monster.map(_ + pos)).toSet
+      val monsters = matches.map(Pos.of(_, _)).flatMap(pos => monster.map(_ + pos)).toSet
       candidate.pixels.keys.count(pos => candidate.pixels(pos) == '#' && !monsters.contains(pos))
 
   def solve2(tiles: Vector[Tile]): Long =

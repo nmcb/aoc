@@ -1,7 +1,7 @@
 package aoc2019
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 import scala.annotation.tailrec
 
@@ -14,7 +14,7 @@ object Day10 extends AoC:
     val sizeX = lines(0).length
     val sizeY = lines.length
     List
-      .tabulate(sizeX, sizeY)((x,y) => if lines(y)(x) == '#' then Some(Pos(x,y)) else None)
+      .tabulate(sizeX, sizeY)((x,y) => if lines(y)(x) == '#' then Some(Pos.of(x,y)) else None)
       .flatten
       .flatten
 
@@ -29,7 +29,7 @@ object Day10 extends AoC:
     val d = gcd(math.abs(x), math.abs(y))
     val nx = x / d
     val ny = y / d
-    (1 until d).exists(m => astroids.contains(Pos(a.x + (m * nx), a.y + (m * ny))))
+    (1 until d).exists(m => astroids.contains(Pos.of(a.x + (m * nx), a.y + (m * ny))))
 
   def maxBlockedByCount(astroids: List[Pos]): Int =
 
@@ -51,10 +51,11 @@ object Day10 extends AoC:
     def target: Pos      = aim._3
 
   def testLaser(astroid: Pos)(astroids: List[Pos]): List[Aim] =
+
     import Ordering.Double.TotalOrdering
     astroids
       .filterNot(_ == astroid)
-      .map(other => (astroid.angle(other), astroid.distance(other), other))
+      .map(other => (astroid.angleDegrees(other), astroid.euclideanDistance(other), other))
       .sortBy(s => (s.angle, s.distance, s.target.x, s.target.y))
 
   @tailrec
@@ -71,4 +72,4 @@ object Day10 extends AoC:
       fireAll(nr)(right, done ++ left, count + 1, Option.when (count == nr)(aim.target).orElse(result))
 
   lazy val answer1: Int = maxBlockedByCount(astroids)
-  lazy val answer2: Int = fireAll(200)(testLaser(Pos(8,16))(astroids)).get.part2
+  lazy val answer2: Int = fireAll(200)(testLaser(Pos.of(8,16))(astroids)).get.part2

@@ -28,54 +28,57 @@ object pos:
 
   export Dir.*
 
-  case class Pos(x: Int, y: Int):
+  type Pos = (x: Int, y: Int)
 
-    def unary_- : Pos = Pos(-x, -y)
+  given Ordering[Pos] = Ordering.by(p => (p.x, p.y))
 
-    infix inline def +(p: Pos): Pos = copy(x = x + p.x, y = y + p.y)
-    infix inline def -(p: Pos): Pos = copy(x = x - p.x, y = y - p.y)
-    infix inline def *(i: Int): Pos = copy(x = x * i  , y = y * i  )
+  extension (p: Pos)
 
-    def translate(dx: Int, dy: Int): Pos = Pos(x + dx, y + dy)
+    def ×(that: Pos): Long = p.x.toLong * that.y.toLong - that.x.toLong * p.y.toLong
 
-    infix def min(that: Pos): Pos = Pos(x min that.x, y min that.y)
-    infix def max(that: Pos): Pos = Pos(x max that.x, y max that.y)
+    def unary_- : Pos = (-p.x, -p.y)
 
-    infix def >(b: Pos): Boolean  = x > b.x && y > b.y
-    infix def <(b: Pos): Boolean  = x < b.x && y < b.y
-    infix def >=(b: Pos): Boolean = x >= b.x && y >= b.y
-    infix def <=(b: Pos): Boolean = x <= b.x && y <= b.y
+    infix inline def +(that: Pos): Pos = (x = p.x + that.x, y = p.y + that.y)
+    infix inline def -(that: Pos): Pos = (x = p.x - that.x, y = p.y - that.y)
+    infix inline def *(i: Int): Pos    = (x = p.x * i , y = p.y * i  )
 
-    def ×(that: Pos): Long = x.toLong * that.y.toLong - that.x.toLong * y.toLong
+    infix inline def translate(dx: Int, dy: Int): Pos = (p.x + dx, p.y + dy)
 
+    infix inline def min(that: Pos): Pos = (p.x min that.x, p.y min that.y)
+    infix inline def max(that: Pos): Pos = (p.x max that.x, p.y max that.y)
 
-    def distance(o: Pos): Double =
-      val dx = o.x - x
-      val dy = o.y - y
+    infix inline def >(that: Pos): Boolean  = p.x > that.x && p.y > that.y
+    infix inline def <(that: Pos): Boolean  = p.x < that.x && p.y < that.y
+    infix inline def >=(that: Pos): Boolean = p.x >= that.x && p.y >= that.y
+    infix inline def <=(that: Pos): Boolean = p.x <= that.x && p.y <= that.y
+
+    def euclideanDistance(that: Pos): Double =
+      val dx = that.x - p.x
+      val dy = that.y - p.y
       math.sqrt(math.pow(dx.toDouble, 2) + math.pow(dy.toDouble, 2))
 
-    def angle(o: Pos): Double =
-      val dx = (o.x - x).toDouble
-      val dy = (o.y - y).toDouble
+    def angleDegrees(that: Pos): Double =
+      val dx = (that.x - p.x).toDouble
+      val dy = (that.y - p.y).toDouble
       val d = 90 - math.atan2(-dy, dx) * 180 / math.Pi
       if d >= 0 then d else d + 360
 
-    lazy val adjoint4: Set[Pos] =
-      Pos.offset4.map(_ + this)
+    def adjoint4: Set[Pos] =
+      Pos.offset4.map(_ + p)
 
-    lazy val adjoint8: Set[Pos] =
-      Pos.offset8.map(_ + this)
+    def adjoint8: Set[Pos] =
+      Pos.offset8.map(_ + p)
 
     infix inline def step(dir: Dir): Pos =
       dir match
-        case N => copy(y = y - 1)
-        case E => copy(x = x + 1)
-        case S => copy(y = y + 1)
-        case W => copy(x = x - 1)
+        case N => (x = p.x, y = p.y - 1)
+        case E => (x = p.x + 1, y = p.y)
+        case S => (x = p.x, y = p.y + 1)
+        case W => (x = p.x - 1, y = p.y)
 
-    def directionTo(neighbour: Pos): Vector[Dir] =
-      val ew = if x != neighbour.x then Vector(if neighbour.x < x then W else E) else Vector.empty
-      val ns = if y != neighbour.y then Vector(if neighbour.y < y then N else S) else Vector.empty
+    def directionTo(that: Pos): Vector[Dir] =
+      val ew = if p.x != that.x then Vector(if that.x < p.x then W else E) else Vector.empty
+      val ns = if p.y != that.y then Vector(if that.y < p.y then N else S) else Vector.empty
       ew ++ ns
 
     def adjointWithinBounds(min: Pos, max: Pos): Set[Pos] =
@@ -85,10 +88,10 @@ object pos:
       adjointWithinBounds(g.minPos, g.maxPos).filter(p => filter(p, g.peek(p)))
 
     def withinBounds(min: Pos, max: Pos): Boolean =
-      x >= min.x & x <= max.x & y >= min.y & y <= max.y
+      p.x >= min.x & p.x <= max.x & p.y >= min.y & p.y <= max.y
 
-    infix def manhattan(p: Pos): Long =
-      math.abs(x - p.x) + math.abs(y - p.y)
+    infix inline def manhattan(that: Pos): Long =
+      math.abs(p.x - that.x) + math.abs(p.y - that.y)
 
   object Pos:
 
@@ -116,14 +119,9 @@ object pos:
       )
 
     inline def of(x: Int, y: Int): Pos =
-      Pos(x, y)
-
-    given Ordering[Pos] = Ordering.by(p => (p.x, p.y))
-
-    extension (tuple: (Int, Int))
-      def toPos: Pos = Pos(tuple._1, tuple._2)
+      (x = x, y = y)
 
     extension [A](it: Array[A])
       def toPos: Pos =
         assert(it.length == 2)
-        Pos(it(0).toString.toInt, it(1).toString.toInt)
+        (x = it(0).toString.toInt, y = it(1).toString.toInt)

@@ -11,15 +11,15 @@ object Day15 extends AoC:
   import cpu.*
 
   val neighbours: Vector[(Pos,Int)] =
-    Vector(Pos(0, -1) -> 1, Pos(0, 1) -> 2, Pos(-1, 0) -> 3, Pos(1, 0) -> 4)
+    Vector(Pos.of(0, -1) -> 1, Pos.of(0, 1) -> 2, Pos.of(-1, 0) -> 3, Pos.of(1, 0) -> 4)
 
   def move(pos: Pos, cpu: CPU)(delta: Pos, command: Int): (Pos,CPU,Long) =
     val (next, status) = cpu.withInput(command).outputStates.last
     (pos + delta, next, status)
 
   def dijkstra(cpu: CPU): (Map[Pos,Int], Option[(Pos,CPU)]) =
-    val steps = mutable.Map(Pos(0,0) -> 0)
-    val todo  = mutable.PriorityQueue(Pos(0,0) -> cpu)(using Ordering.by((point, _) => steps(point)))
+    val steps = mutable.Map(Pos.of(0,0) -> 0)
+    val todo  = mutable.PriorityQueue(Pos.of(0,0) -> cpu)(using Ordering.by((point, _) => steps(point)))
     var target = Option.empty[(Pos,CPU)]
 
     while todo.nonEmpty do

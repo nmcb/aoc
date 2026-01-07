@@ -6,9 +6,9 @@ import nmcb.pos.*
 object Day17 extends AoC:
 
   extension (p: Pos)
-    def e: Pos = p.copy(x = p.x - 1)
-    def w: Pos = p.copy(x = p.x + 1)
-    def s: Pos = p.copy(y = p.y + 1)
+    def e: Pos = (x = p.x - 1, y = p.y)
+    def w: Pos = (x = p.x + 1, y = p.y)
+    def s: Pos = (x = p.x, y = p.y + 1)
 
   case class Area(clay: Set[Pos], minY: Int, maxY: Int, spring: Pos)
 
@@ -39,7 +39,7 @@ object Day17 extends AoC:
         case Stopped =>
           val minX = iterate(p)(_.e).dropWhile(next => go(next.s) == Stopped && !blocked(next.e)).next
           val maxX = iterate(p)(_.w).dropWhile(next => go(next.s) == Stopped && !blocked(next.w)).next
-          val surface = for x <- minX.x to maxX.x yield Pos(x, p.y)
+          val surface = for x <- minX.x to maxX.x yield Pos.of(x, p.y)
           if blocked(minX.e) && blocked(maxX.w) then
             stopped ++= surface
             Stopped
@@ -55,15 +55,15 @@ object Day17 extends AoC:
     val clay =
       lines
         .flatMap:
-          case s"x=$x, y=$start..$end" => (start.toInt to end.toInt).map(y => Pos(x.toInt, y))
-          case s"y=$y, x=$start..$end" => (start.toInt to end.toInt).map(x => Pos(x, y.toInt))
+          case s"x=$x, y=$start..$end" => (start.toInt to end.toInt).map(y => Pos.of(x.toInt, y))
+          case s"y=$y, x=$start..$end" => (start.toInt to end.toInt).map(x => Pos.of(x, y.toInt))
         .toSet
 
     Area(
       clay   = clay,
       minY   = clay.map(_.y).min,
       maxY   = clay.map(_.y).max,
-      spring = Pos(500,0)
+      spring = Pos.of(500,0)
     )
   
   def solve1(area: Area): Int =

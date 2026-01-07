@@ -13,10 +13,10 @@ object Day15 extends AoC:
 
     def move(d: Command): Pos =
       d match
-        case '^' => p.copy(y = p.y - 1)
-        case '>' => p.copy(x = p.x + 1)
-        case 'v' => p.copy(y = p.y + 1)
-        case '<' => p.copy(x = p.x - 1)
+        case '^' => (x = p.x, y = p.y - 1)
+        case '>' => (x = p.x + 1, y = p.y)
+        case 'v' => (x = p.x, y = p.y + 1)
+        case '<' => (x = p.x - 1, y = p.y)
 
     def coordinate: Int =
       100 * p.y + p.x
@@ -36,7 +36,7 @@ object Day15 extends AoC:
       val representation = for {
         y <- 0 until sizeY
         x <- 0 until sizeX
-        p = Pos(x, y)
+        p = Pos.of(x, y)
       } yield grid(p)
       representation.mkString("").grouped(sizeX).mkString("\n")
 
@@ -51,8 +51,8 @@ object Day15 extends AoC:
         def widen(c: Set[Pos]): Set[Pos] =
           val pl = c.minBy(_.x)
           val pr = c.maxBy(_.x)
-          val l = if (d == '^' | d == 'v') & grid(pl) == ']' then Set(pl.copy(x = pl.x - 1)) else Set.empty
-          val r = if (d == '^' | d == 'v') & grid(pr) == '[' then Set(pr.copy(x = pr.x + 1)) else Set.empty
+          val l = if (d == '^' | d == 'v') & grid(pl) == ']' then Set((x = pl.x - 1, y = pl.y)) else Set.empty
+          val r = if (d == '^' | d == 'v') & grid(pr) == '[' then Set((x = pr.x + 1, y = pr.y)) else Set.empty
           l ++ c ++ r
 
         def unblocked(ms: Set[Pos]): Boolean = ms.forall(isFree)
@@ -86,10 +86,10 @@ object Day15 extends AoC:
     def resize: Grid =
       Grid(
         grid.flatMap:
-          case (p,'#') => Map(p.copy(x = p.x * 2) -> '#', p.copy(x = (p.x * 2) + 1) -> '#')
-          case (p,'.') => Map(p.copy(x = p.x * 2) -> '.', p.copy(x = (p.x * 2) + 1) -> '.')
-          case (p,'O') => Map(p.copy(x = p.x * 2) -> '[', p.copy(x = (p.x * 2) + 1) -> ']')
-          case (p,'@') => Map(p.copy(x = p.x * 2) -> '@', p.copy(x = (p.x * 2) + 1) -> '.')
+          case (p,'#') => Map((x = p.x * 2, y = p.y) -> '#', (x = (p.x * 2) + 1, y = p.y) -> '#')
+          case (p,'.') => Map((x = p.x * 2, y = p.y) -> '.', (x = (p.x * 2) + 1, y = p.y) -> '.')
+          case (p,'O') => Map((x = p.x * 2, y = p.y) -> '[', (x = (p.x * 2) + 1, y = p.y) -> ']')
+          case (p,'@') => Map((x = p.x * 2, y = p.y) -> '@', (x = (p.x * 2) + 1, y = p.y) -> '.')
           case (p, c ) => sys.error(s"invalid element: p=$p, c=$c")
       )
 
@@ -99,7 +99,7 @@ object Day15 extends AoC:
     val positions = for {
       (l, y) <- top.split("\n").zipWithIndex
       (c, x) <- l.trim.zipWithIndex
-    } yield Pos(x, y) -> c
+    } yield Pos.of(x, y) -> c
     val moves = bottom.filterNot(_ == '\n').toList
     (Grid(positions.toMap), moves)
 

@@ -76,7 +76,7 @@ object Day18 extends AoC:
     )
 
   def parse(lines: Vector[String]): (tunnels: Map[Pos,Char], keys: Set[Pos], robots: Set[Pos]) =
-    val tunnels = for y <- lines.indices; x <- lines(0).indices yield Pos(x, y) -> lines(y)(x)
+    val tunnels = for y <- lines.indices; x <- lines(0).indices yield Pos.of(x, y) -> lines(y)(x)
     val keys    = tunnels.filter(_.symbol.isKey).map(_.pos)
     val robots  = tunnels.filter(_.symbol.isRobot).map(_.pos)
     (tunnels.toMap, keys.toSet, robots.toSet)

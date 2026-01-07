@@ -37,10 +37,10 @@ object Day10 extends AoC:
 
     def move(d: Dir): Option[Pos] =
       d match
-        case N if p.y > 0    => Some(p.copy(y = p.y - 1))
-        case E if p.x < maxX => Some(p.copy(x = p.x + 1))
-        case S if p.y < maxY => Some(p.copy(y = p.y + 1))
-        case W if p.x > 0    => Some(p.copy(x = p.x - 1))
+        case N if p.y > 0    => Some((x = p.x, y = p.y - 1))
+        case E if p.x < maxX => Some((x = p.x + 1, y = p.y))
+        case S if p.y < maxY => Some((x = p.x, y = p.y + 1))
+        case W if p.x > 0    => Some((x = p.x - 1, y = p.y))
         case _             => None
 
   given Ordering[Pos] = Ordering.by(p => (p.x, p.y))
@@ -52,7 +52,7 @@ object Day10 extends AoC:
         case (a,(l,y)) =>
           l.zipWithIndex.foldLeft(a):
             case (a,(c,x)) =>
-              a + (Pos(x,y) -> Tile.fromChar(c))
+              a + (Pos.of(x,y) -> Tile.fromChar(c))
 
   lazy val maxX: Int = tiles.keys.map(_.x).max
   lazy val maxY: Int = tiles.keys.map(_.y).max
@@ -92,16 +92,16 @@ object Day10 extends AoC:
       dir match
         case N if pos.y > 0 =>
           val r = cacheY.filter(p => p.x == pos.x && p.y < pos.y)
-          if r.nonEmpty then (r.last.y + 1 until pos.y).map(y => Pos(pos.x, y)).toSet else Set.empty
+          if r.nonEmpty then (r.last.y + 1 until pos.y).map(y => Pos.of(pos.x, y)).toSet else Set.empty
         case E if pos.x < maxX =>
           val r = cacheX.filter(p => p.y == pos.y && p.x > pos.x)
-          if r.nonEmpty then (pos.x + 1 until r.head.x).map(x => Pos(x, pos.y)).toSet else Set.empty
+          if r.nonEmpty then (pos.x + 1 until r.head.x).map(x => Pos.of(x, pos.y)).toSet else Set.empty
         case S if pos.y < maxY =>
           val r = cacheY.filter(p => p.x == pos.x && p.y > pos.y)
-          if r.nonEmpty then (pos.y + 1 until r.head.y).map(y => Pos(pos.x, y)).toSet else Set.empty
+          if r.nonEmpty then (pos.y + 1 until r.head.y).map(y => Pos.of(pos.x, y)).toSet else Set.empty
         case W if pos.x > 0 =>
           val r = cacheX.filter(p => p.y == pos.y && p.x < pos.x)
-          if r.nonEmpty then (r.last.x + 1 until pos.x).map(x => Pos(x, pos.y)).toSet else Set.empty
+          if r.nonEmpty then (r.last.x + 1 until pos.x).map(x => Pos.of(x, pos.y)).toSet else Set.empty
         case _ => Set.empty
 
     def loop(todo: Vector[(Pos,Dir)], prev: Dir, acc: Set[Pos]): Set[Pos] =

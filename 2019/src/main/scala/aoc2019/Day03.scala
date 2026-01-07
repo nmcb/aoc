@@ -16,10 +16,10 @@ object Day03 extends AoC:
     val next: Pos   = wire.lastOption.getOrElse(Pos.origin)
 
     cmd.head match
-      case 'R' => wire ++ (1 to length).map(i => Pos(next.x + i, next.y))
-      case 'L' => wire ++ (1 to length).map(i => Pos(next.x - i, next.y))
-      case 'U' => wire ++ (1 to length).map(i => Pos(next.x, next.y + i))
-      case 'D' => wire ++ (1 to length).map(i => Pos(next.x, next.y - i))
+      case 'R' => wire ++ (1 to length).map(i => Pos.of(next.x + i, next.y))
+      case 'L' => wire ++ (1 to length).map(i => Pos.of(next.x - i, next.y))
+      case 'U' => wire ++ (1 to length).map(i => Pos.of(next.x, next.y + i))
+      case 'D' => wire ++ (1 to length).map(i => Pos.of(next.x, next.y - i))
 
   def wire(description: String): Vector[Pos] =
     description.split(',').foldLeft(Vector.empty)((wire,cmd) => append(wire, cmd))

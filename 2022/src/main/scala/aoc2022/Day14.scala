@@ -22,7 +22,7 @@ object Day14 extends AoC:
     def loop(ps: Vector[String], a: Vector[Pos] = Vector.empty): Vector[Pos] =
       ps match
         case Vector()      => a
-        case s"$x,$y" +: t => loop(t, a :+ Pos(x.toInt,y.toInt))
+        case s"$x,$y" +: t => loop(t, a :+ Pos.of(x.toInt,y.toInt))
         case _ => sys.error("boom!")
     loop(s.trim.split(""" -> """).toVector)
 
@@ -36,10 +36,10 @@ object Day14 extends AoC:
         .toVector
 
     def segment(f: Pos, t: Pos): Vector[Pos] =
-      (if     f.x == t.x && f.y < t.y then (f.y to t.y).map(y => Pos(t.x, y))
-      else if f.x == t.x && f.y > t.y then (t.y to f.y).map(y => Pos(t.x, y))
-      else if f.y == t.y && f.x < t.x then (f.x to t.x).map(x => Pos(x, t.y))
-      else if f.y == t.y && f.x > t.x then (t.x to f.x).map(x => Pos(x, t.y))
+      (if     f.x == t.x && f.y < t.y then (f.y to t.y).map(y => Pos.of(t.x, y))
+      else if f.x == t.x && f.y > t.y then (t.y to f.y).map(y => Pos.of(t.x, y))
+      else if f.y == t.y && f.x < t.x then (f.x to t.x).map(x => Pos.of(x, t.y))
+      else if f.y == t.y && f.x > t.x then (t.x to f.x).map(x => Pos.of(x, t.y))
       else sys.error("boom!")).toVector
 
     @tailrec
@@ -64,7 +64,7 @@ object Day14 extends AoC:
     @tailrec
     private def land(cur: Pos): (Pos,Boolean) =
       def find(p: Pos): Option[Pos] =
-        val below: Vector[Pos] = Vector(Pos(p.x, p.y + 1), Pos(p.x - 1, p.y + 1), Pos(p.x + 1, p.y + 1))
+        val below: Vector[Pos] = Vector(Pos.of(p.x, p.y + 1), Pos.of(p.x - 1, p.y + 1), Pos.of(p.x + 1, p.y + 1))
         below.find(p => get(p).isEmpty || get(p).contains(A))
       find(cur) match
         case None                      => (cur, false)
@@ -112,8 +112,7 @@ object Day14 extends AoC:
           :+ Vector.fill(1000)(A) :+ Vector.fill(1000)(R)
       Cave(view, 0)
 
-    private val drip: Pos =
-      Pos(500,0)
+    private val drip: Pos = (x = 500,y = 0)
 
 
   lazy val answer1: Int = Cave.from1(rocks).solve1
