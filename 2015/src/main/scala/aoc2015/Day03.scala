@@ -15,10 +15,10 @@ object Day03 extends AoC:
 
     infix def next(cmd: Area.Command): Area =
       cmd match
-        case '>' => moveToAndDeliver(start.copy(x = start.x + 1))
-        case '<' => moveToAndDeliver(start.copy(x = start.x - 1))
-        case '^' => moveToAndDeliver(start.copy(y = start.y + 1))
-        case 'v' => moveToAndDeliver(start.copy(y = start.y - 1))
+        case '>' => moveToAndDeliver((x = start.x + 1, y = start.y))
+        case '<' => moveToAndDeliver((x = start.x - 1, y = start.y))
+        case '^' => moveToAndDeliver((x = start.x, y = start.y + 1))
+        case 'v' => moveToAndDeliver((x = start.x, y = start.y - 1))
 
   object Area:
 

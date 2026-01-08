@@ -24,7 +24,7 @@ object Day17 extends AoC:
     val pattern: LazyList[Move] = moves.to(LazyList) #::: pattern
 
   sealed abstract class Rock(val relative: List[Pos]):
-    def withOrigin(o: Pos): List[Pos] = relative.map(p => Pos(p.x + o.x, p.y + o.y))
+    def withOrigin(o: Pos): List[Pos] = relative.map(p => Pos.of(p.x + o.x, p.y + o.y))
 
   case object Min   extends Rock(List(Pos.of(0,0), Pos.of(1,0), Pos.of(2,0), Pos.of(3,0)))
   case object Plus  extends Rock(List(Pos.of(1,0), Pos.of(0,1), Pos.of(1,1), Pos.of(2,1), Pos.of(1,2)))
@@ -81,7 +81,7 @@ object Day17 extends AoC:
       Chamber(rocks = rocks.tail, pattern = consumed, stopped = dropped.filter(_.y >= maxY - slidingWindow), height = maxY)
 
     def cycleInvariant: Set[Pos] =
-      stopped.map(_ - Pos(0, height - slidingWindow))
+      stopped.map(_ - Pos.of(0, height - slidingWindow))
 
 
   object Chamber:

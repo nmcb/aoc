@@ -1,15 +1,11 @@
 package aoc2022
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 import scala.io.Source
 
 object Day08 extends AoC:
-
-  given Ordering[Pos] with
-    def compare(a: Pos, b: Pos): Int =
-      Ordering[(Int,Int)].compare((a.y, a.x), (b.y, b.x))
 
   case class Mat(heightOf: Map[Pos,Int]):
 
@@ -64,7 +60,7 @@ object Day08 extends AoC:
           case (a,(r,y)) =>
             r.zipWithIndex.foldLeft(a):
               case (a,(t,x)) =>
-                a + (Pos(x,y) -> t.toString.toInt)
+                a + (Pos.of(x,y) -> t.toString.toInt)
     )
 
 

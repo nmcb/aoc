@@ -60,7 +60,7 @@ class Test2024 extends AnyFunSuite:
     assertResult(37221261688308L)(Day17.answer2)
   test("Day 18: RAM Run"):
     assertResult(436)(Day18.answer1)
-    assertResult(Pos(61, 50))(Day18.answer2)
+    assertResult(Pos.of(61, 50))(Day18.answer2)
   test("Day 19: Linen Layout"):
     assertResult(353)(Day19.answer1)
     assertResult(880877787214477L)(Day19.answer2)

@@ -7,14 +7,14 @@ object Day04 extends AoC:
 
   type Direction = Pos => Pos
 
-  val N:  Direction = p => Pos(p.x, p.y - 1)
-  val E:  Direction = p => Pos(p.x + 1, p.y)
-  val S:  Direction = p => Pos(p.x, p.y + 1)
-  val W:  Direction = p => Pos(p.x - 1, p.y)
-  val NE: Direction = p => Pos(p.x + 1, p.y - 1)
-  val SE: Direction = p => Pos(p.x + 1, p.y + 1)
-  val NW: Direction = p => Pos(p.x - 1, p.y - 1)
-  val SW: Direction = p => Pos(p.x - 1, p.y + 1)
+  val N:  Direction = p => Pos.of(p.x, p.y - 1)
+  val E:  Direction = p => Pos.of(p.x + 1, p.y)
+  val S:  Direction = p => Pos.of(p.x, p.y + 1)
+  val W:  Direction = p => Pos.of(p.x - 1, p.y)
+  val NE: Direction = p => Pos.of(p.x + 1, p.y - 1)
+  val SE: Direction = p => Pos.of(p.x + 1, p.y + 1)
+  val NW: Direction = p => Pos.of(p.x - 1, p.y - 1)
+  val SW: Direction = p => Pos.of(p.x - 1, p.y + 1)
 
   val grid: Grid[Char] = Grid.fromLines(lines)
   

@@ -66,7 +66,7 @@ object Day22 extends AoC:
   private val carrier: Carrier =
 
     val current: Pos =
-      Pos(lines(0).length / 2, lines.length / 2)
+      Pos.of(lines(0).length / 2, lines.length / 2)
 
     val nodes: Map[Pos,Status] =
       lines
@@ -75,8 +75,8 @@ object Day22 extends AoC:
           row
             .zipWithIndex
             .map:
-              case ('#',x) => Pos(x,y) -> Infected
-              case ('.',x) => Pos(x,y) -> Clean
+              case ('#',x) => Pos.of(x,y) -> Infected
+              case ('.',x) => Pos.of(x,y) -> Clean
               case ( c ,_) => sys.error(s"unexpected char=$c")
         .toMap
         .withDefaultValue(Clean)

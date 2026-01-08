@@ -24,8 +24,8 @@ object Day15 extends AoC:
 
   case class Fighter(fighterType: FighterType, pos: Pos, hitPoints: Int = 200, attackPower: Int = 3)
 
-  given posReadingOrdering: Ordering[Pos]            = Ordering.by(p => (p.y, p.x))
-  given combatUnitReadingOrdering: Ordering[Fighter] = Ordering.by(_.pos)
+  given Ordering[Pos]     = Ordering.by(_.toTuple.swap)
+  given Ordering[Fighter] = Ordering.by(_.pos)
 
   def targetsOf(fighter: Fighter)(using fighters: List[Fighter]): Set[Fighter] =
     fighters.filter(_.fighterType == fighter.fighterType.target).toSet
@@ -182,7 +182,7 @@ object Day15 extends AoC:
       for
         (row,y)  <- parseGrid(input).view.zipWithIndex.toList
         (tile,x) <- row.view.zipWithIndex
-        fighter  <- parseFighter(tile, Pos(x,y))
+        fighter  <- parseFighter(tile, Pos.of(x,y))
       yield fighter
 
     val grid: Grid =

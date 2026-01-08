@@ -10,7 +10,7 @@ object Day03 extends AoC:
   case class Page(chars: Vector[Vector[Char]]):
 
     def size: Pos =
-      Pos(chars.map(_.size).max, chars.size)
+      Pos.of(chars.map(_.size).max, chars.size)
 
     def charAt(p: Pos): Char =
       chars(p.y)(p.x)
@@ -28,7 +28,7 @@ object Day03 extends AoC:
       isGear(charAt(p))
 
     def adjacents(pos: Pos): Set[Pos] =
-      Set(Pos(1,-1), Pos(1,0), Pos(1,1), Pos(0,-1), Pos(0,0), Pos(0,1), Pos(-1,-1), Pos(-1,0), Pos(-1,1))
+      Set(Pos.of(1,-1), Pos.of(1,0), Pos.of(1,1), Pos.of(0,-1), Pos.of(0,0), Pos.of(0,1), Pos.of(-1,-1), Pos.of(-1,0), Pos.of(-1,1))
         .map(d => pos + d)
         .filter(p => p.x >= 0 && p.x < size.x && p.y >= 0 && p.y < size.y)
 
@@ -41,23 +41,23 @@ object Day03 extends AoC:
         Num(loc, number, symbols)
 
     @tailrec
-    private final def numbers(pos: Pos = Pos(0,0), cur: String = "", loc: Vector[Pos] = Vector.empty, acc: Vector[Num] = Vector.empty): Vector[Num] =
+    private final def numbers(pos: Pos = Pos.of(0,0), cur: String = "", loc: Vector[Pos] = Vector.empty, acc: Vector[Num] = Vector.empty): Vector[Num] =
       if pos.y >= size.y then
         acc
       else
         if pos.x >= size.x then
-          numbers(Pos(0, pos.y + 1), "", Vector.empty, if cur.nonEmpty then acc :+ Num(loc) else acc)
+          numbers(Pos.of(0, pos.y + 1), "", Vector.empty, if cur.nonEmpty then acc :+ Num(loc) else acc)
         else
           if isDigit(pos) then
-            numbers(Pos(pos.x + 1, pos.y), s"$cur${charAt(pos)}", loc :+ pos, acc)
+            numbers(Pos.of(pos.x + 1, pos.y), s"$cur${charAt(pos)}", loc :+ pos, acc)
           else
-            numbers(Pos(pos.x + 1, pos.y), "", Vector.empty, if cur.nonEmpty then acc :+ Num(loc) else acc)
+            numbers(Pos.of(pos.x + 1, pos.y), "", Vector.empty, if cur.nonEmpty then acc :+ Num(loc) else acc)
 
     lazy val numbersWithAdjacentSymbols: Vector[Num] = numbers().filter(_.symbols.nonEmpty)
 
     lazy val gearsWithAdjacentNumbers: Map[Pos,Set[Num]] =
       chars
-        .zipWithIndex.flatMap((l, y) => l.zipWithIndex.map((c, x) => Pos(x, y)))
+        .zipWithIndex.flatMap((l, y) => l.zipWithIndex.map((c, x) => Pos.of(x, y)))
         .filter(isGear)
         .map(p => p -> numbersWithAdjacentSymbols.filter(_.symbols.exists((g,_) => g == p)).toSet)
         .toMap

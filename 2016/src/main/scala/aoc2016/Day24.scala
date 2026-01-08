@@ -11,8 +11,8 @@ object Day24 extends AoC:
   type Routes    = Vector[Vector[Int]]
   
   val(grid: Grid, nodes: Nodes) =
-    val grid  = for y <- lines.indices ; x <- lines.head.indices if lines(y)(x) != '#'  yield Pos(x, y)
-    val nodes = for y <- lines.indices ; x <- lines.head.indices if lines(y)(x).isDigit yield lines(y)(x).asDigit -> Pos(x, y)
+    val grid  = for y <- lines.indices ; x <- lines.head.indices if lines(y)(x) != '#'  yield Pos.of(x, y)
+    val nodes = for y <- lines.indices ; x <- lines.head.indices if lines(y)(x).isDigit yield lines(y)(x).asDigit -> Pos.of(x, y)
     (grid.toSet, nodes.toMap)
 
   /** breath first search */

@@ -4,7 +4,6 @@ import nmcb.*
 import nmcb.pos.*
 
 import scala.io.*
-import scala.math.*
 
 object Day15 extends AoC:
 
@@ -13,9 +12,9 @@ object Day15 extends AoC:
   private case class Lock(sensor: Pos, beacon: Pos):
 
     def cover(y: Int): Option[Cover] =
-      if y >= sensor.y - sensor.manhattan(beacon) && y <= sensor.y + sensor.manhattan(beacon) then
-        val min = sensor.x + abs(y - sensor.y) - sensor.manhattan(beacon)
-        val max = sensor.x - abs(y - sensor.y) + sensor.manhattan(beacon)
+      if y >= sensor.y - sensor.manhattanDistance(beacon) && y <= sensor.y + sensor.manhattanDistance(beacon) then
+        val min = sensor.x + math.abs(y - sensor.y) - sensor.manhattanDistance(beacon)
+        val max = sensor.x - math.abs(y - sensor.y) + sensor.manhattanDistance(beacon)
         Some(Cover(min, max))
       else
         None
@@ -27,12 +26,12 @@ object Day15 extends AoC:
       .toList
       .map:
         case s"Sensor at x=$sx, y=$sy: closest beacon is at x=$bx, y=$by" =>
-          Lock(Pos(sx.toInt,sy.toInt), Pos(bx.toInt,by.toInt))
+          Lock((x = sx.toInt, y = sy.toInt), (x = bx.toInt, y = by.toInt))
 
   lazy val answer1: Int =
     val covers: List[Cover] = locks.flatMap(_.cover(2000000))
-    val maxX: Long = max(covers.map(_.max).max, 2000000)
-    val minX: Long = min(covers.map(_.min).min, 0)
+    val maxX: Long = math.max(covers.map(_.max).max, 2000000)
+    val minX: Long = math.min(covers.map(_.min).min, 0)
     (minX to maxX).foldLeft(0): (count, x) =>
       if covers.exists(c => c.min <= x && c.max >= x) then count + 1 else count
 
@@ -44,5 +43,5 @@ object Day15 extends AoC:
       val lcs = locks.flatMap(_.cover(y)).sortBy(_.min)
       lcs.foldLeft(0L): (x, cur) =>
           if cur.min > x then answer = x * 4000000 + y
-          max(x + 1, cur.max)
+          math.max(x + 1, cur.max)
     answer

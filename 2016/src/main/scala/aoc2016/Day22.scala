@@ -21,7 +21,7 @@ object Day22 extends AoC:
       .filter(_.startsWith("/dev/grid/node"))
       .map: line =>
         val Array(x, y, _, used, avail, _) = line.split("\\D+").tail.map(_.toInt)
-        Pos(x, y) -> Node(used, avail)
+        Pos.of(x, y) -> Node(used, avail)
       .toMap
 
   def viable(nodes: Map[Pos,Node]): Vector[(Node,Node)] =
@@ -46,10 +46,10 @@ object Day22 extends AoC:
         y <- 0 to maxY
         x <- 0 to maxX
       do
-        val pos = Pos(x, y)
+        val pos = Pos.of(x, y)
         val node = nodes(pos)
-        if pos == Pos(0, 0) then sb.append('T')
-        else if pos == Pos(maxX, 0) then sb.append('S')
+        if pos == Pos.of(0, 0) then sb.append('T')
+        else if pos == Pos.of(maxX, 0) then sb.append('S')
         else sb.append(node.toChar)
         if x == maxX then sb.append('\n')
       sb.append('\n').toString
@@ -104,8 +104,8 @@ object Day22 extends AoC:
    *
    */
 
-  val source: Pos  = Pos(nodes.maxX, 0)
-  val target: Pos  = Pos(0, 0)
+  val source: Pos  = Pos.of(nodes.maxX, 0)
+  val target: Pos  = Pos.of(0, 0)
   val empty: Pos = nodes.find(_.node.isEmpty).map(_.pos).get
   val massive: Vector[Pos] = nodes.filter(_.node.isMassive).map(_.pos).toVector
 

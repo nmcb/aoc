@@ -23,20 +23,20 @@ object Day17 extends AoC:
 
     def move(direction: Char): Pos =
       direction match
-        case 'U' => p.copy(y = p.y - 1)
-        case 'D' => p.copy(y = p.y + 1)
-        case 'L' => p.copy(x = p.x - 1)
-        case 'R' => p.copy(x = p.x + 1)
+        case 'U' => (x = p.x, y = p.y - 1)
+        case 'D' => (x = p.x, y = p.y + 1)
+        case 'L' => (x = p.x - 1, y = p.y)
+        case 'R' => (x = p.x + 1, y = p.y)
 
 
   /** hardcoded for 4x4 grid */
-  case class Path(passcode: String, path: String = "", target: Pos = Pos(0, 0)):
+  case class Path(passcode: String, path: String = "", target: Pos = Pos.of(0, 0)):
 
     def withinGrid: Boolean =
       target.x >= 0 && target.x < 4 && target.y >= 0 && target.y < 4
 
     def reachedVault: Boolean =
-      target == Pos(3, 3)
+      target == Pos.of(3, 3)
 
     def openDoors: String =
       md5

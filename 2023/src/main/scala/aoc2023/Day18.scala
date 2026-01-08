@@ -30,18 +30,18 @@ object Day18 extends AoC:
 
     infix def move1(op: Op): Vector[Pos] =
       op match
-        case Op('U', length) => Vector.tabulate(length)(dy => p.copy(y = p.y - dy - 1))
-        case Op('D', length) => Vector.tabulate(length)(dy => p.copy(y = p.y + dy + 1))
-        case Op('L', length) => Vector.tabulate(length)(dx => p.copy(x = p.x - dx - 1))
-        case Op('R', length) => Vector.tabulate(length)(dx => p.copy(x = p.x + dx + 1))
+        case Op('U', length) => Vector.tabulate(length)(dy => (x = p.x, y = p.y - dy - 1))
+        case Op('D', length) => Vector.tabulate(length)(dy => (x = p.x, y = p.y + dy + 1))
+        case Op('L', length) => Vector.tabulate(length)(dx => (x = p.x - dx - 1, y = p.y))
+        case Op('R', length) => Vector.tabulate(length)(dx => (x = p.x + dx + 1, y = p.y))
         case Op(dir, length) => sys.error(s"invalid dir=$dir, length=$length")
 
     infix def move2(op: Op): Pos =
       op match
-        case Op('U', length) => p.copy(y = p.y - length)
-        case Op('D', length) => p.copy(y = p.y + length)
-        case Op('L', length) => p.copy(x = p.x - length)
-        case Op('R', length) => p.copy(x = p.x + length)
+        case Op('U', length) => (x = p.x, y = p.y - length)
+        case Op('D', length) => (x = p.x, y = p.y + length)
+        case Op('L', length) => (x = p.x - length, y = p.y)
+        case Op('R', length) => (x = p.x + length, y = p.y)
         case Op(dir, length) => sys.error(s"invalid dir=$dir, length=$length")
 
 
@@ -51,13 +51,13 @@ object Day18 extends AoC:
       x <- min.x to max.x
       y <- min.y to max.y
     yield
-      Pos(x, y)
+      Pos.of(x, y)
 
   /** cubic meter = one point - data driven flood algorithm with some set arithmetic */
   def dig1(operations: Vector[Op]): Long =
     val holes: Set[Pos] = operations.foldLeft(Vector(Pos.origin))((a,o) => a ++ a.last.move1(o)).toSet
-    val min = holes.reduce(_ min _) - Pos(1, 1)
-    val max = holes.reduce(_ max _) + Pos(1, 1)
+    val min = holes.reduce(_ min _) - Pos.of(1, 1)
+    val max = holes.reduce(_ max _) + Pos.of(1, 1)
 
     @tailrec
     def flood(todo: List[Pos], visited: Set[Pos] = Set.empty): Set[Pos] =
@@ -88,7 +88,7 @@ object Day18 extends AoC:
       val result =
         (vertices :+ vertices.head)
           .sliding(2)
-          .map(m => m(0) × m(1))
+          .map(m => m(0) ⋅ m(1))
           .sum / 2
       result.abs
 

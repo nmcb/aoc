@@ -11,7 +11,7 @@ object Day23 extends AoC:
 
     def parse(y: Int, s: String): Set[Pos] =
       s.zipWithIndex.foldLeft(Set.empty):
-        case (a, ('#', x)) => a + Pos(x,y)
+        case (a, ('#', x)) => a + Pos.of(x,y)
         case (a,_)         => a
 
     lines
@@ -21,36 +21,8 @@ object Day23 extends AoC:
 
   case class Mat(elves: Set[Pos], dirs: Seq[Dir] = Seq(N, S, W, E)):
 
-    override def toString: String =
-      val minX = elves.map(_.x).min
-      val maxX = elves.map(_.x).max
-      val minY = elves.map(_.y).min
-      val maxY = elves.map(_.y).max
-      val chars =
-        for
-          y <- minY to maxY
-          x <- minX to maxX
-          c = if elves.contains(Pos.of(x,y)) then '#' else '.'
-        yield
-          c
-
-      chars
-        .grouped(maxX - minX + 1)
-        .map(_.mkString("","","\n"))
-        .mkString("\n","","\n")
-
-    def neighbours(f: Pos): Int =
-      val offset = Set(
-        Pos.of(-1,-1),
-        Pos.of( 0,-1),
-        Pos.of( 1,-1),
-        Pos.of(-1, 0),
-        Pos.of( 1, 0),
-        Pos.of(-1, 1),
-        Pos.of( 0, 1),
-        Pos.of( 1, 1),
-      )
-      offset.count(d => elves.contains(f + d))
+    def neighbourCountOf(f: Pos): Int =
+      Pos.offset8.count(d => elves.contains(f + d))
 
     def valid(f: Pos, d: Dir): Boolean =
       val offset = Set(-1, 0, 1)
@@ -70,7 +42,7 @@ object Day23 extends AoC:
       ds.find(d => valid(f,d)).map(proposal)
 
     val proposals: Map[Pos,Option[Pos]] =
-      elves.map(e => if neighbours(e) == 0 then e -> None else e -> propose(e, dirs)).toMap
+      elves.map(e => if neighbourCountOf(e) == 0 then e -> None else e -> propose(e, dirs)).toMap
 
     val moves: Set[Pos] =
       val counts = proposals.view.values.flatten.groupMapReduce(identity)(_ => 1)(_ + _)
@@ -88,7 +60,7 @@ object Day23 extends AoC:
         for
         x <- minX to maxX
         y <- minY to maxY
-        if !elves.contains(Pos(x,y))
+        if !elves.contains(Pos.of(x,y))
       yield 1
       size.sum
 

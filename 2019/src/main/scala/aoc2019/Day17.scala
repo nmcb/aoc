@@ -20,7 +20,7 @@ object Day17 extends AoC:
           x <- 0 until output(0).length
           if output(y)(x) == '#'
       yield
-        Pos(x, y)
+        Pos.of(x, y)
 
     points.foldLeft(0): (total,next) =>
       if Pos.offset4.map(next + _).forall(points.contains) then
@@ -47,10 +47,10 @@ object Day17 extends AoC:
     def findRobot: (Pos,Pos) =
       def parseRobotDirection(tile: Char): Option[Pos] =
         tile match
-          case '>' => Some(Pos(1,0))
-          case '<' => Some(Pos(-1,0))
-          case 'v' => Some(Pos(0,1))
-          case '^' => Some(Pos(0,-1))
+          case '>' => Some(Pos.of(1,0))
+          case '<' => Some(Pos.of(-1,0))
+          case 'v' => Some(Pos.of(0,1))
+          case '^' => Some(Pos.of(0,-1))
           case _   => None
 
       val robots =
@@ -59,7 +59,7 @@ object Day17 extends AoC:
           (tile, x) <- row.view.zipWithIndex
           direction <- parseRobotDirection(tile)
         yield
-          (Pos(x,y), direction)
+          (Pos.of(x,y), direction)
 
       robots.head
 

@@ -1,24 +1,20 @@
 package aoc2022
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 import scala.annotation.tailrec
 import scala.io.*
 
 object Day24 extends AoC:
 
-  given Ordering[Pos] with
-    def compare(a: Pos, b: Pos): Int =
-      Ordering[(Int,Int)].compare((a.y, a.x), (b.y, b.x))
-
   case class Bounds(max: Pos):
     val sizeX: Int = max.x + 1
     val sizeY: Int = max.y + 1
     val fieldSize: Int = sizeX * sizeY
     def isField(p: Pos): Boolean = p.x >= 0 && p.x <= max.x && p.y >= 0 && p.y <= max.y
-    def transpose: Bounds = copy(max = Pos(max.y, max.x))
-    def end: Pos = Pos(max.x, max.y)
+    def transpose: Bounds = copy(max = Pos.of(max.y, max.x))
+    def end: Pos = Pos.of(max.x, max.y)
 
 
   enum Dir(val char: Char):
@@ -170,7 +166,7 @@ object Day24 extends AoC:
       assert(initField.forall(_.length == initField.map(_.length).max))
       val sizeX = initField.head.size
       val sizeY = initField.size
-      val bounds: Bounds = Bounds(Pos(sizeX - 1 , sizeY - 1))
+      val bounds: Bounds = Bounds(Pos.of(sizeX - 1 , sizeY - 1))
 
       def make(dir: Dir, f: Field[Char]): Vector[Stream] =
         def stream(line: Vector[Char]): LazyList[Char] =
@@ -204,7 +200,7 @@ object Day24 extends AoC:
     val (w1, m1) = loop(world)
 
     val w2 = w1.copy(
-      target       = Pos(0,0),
+      target       = Pos.of(0,0),
       currentField = w1.nextField,
       nextField    = w1.streams.futureField,
       streams      = w1.streams.next,
@@ -219,7 +215,7 @@ object Day24 extends AoC:
       nextField    = w3.streams.futureField,
       streams      = w3.streams.next,
       minutes      = m3 + 1,
-      found        = Set(Pos(0,-1))
+      found        = Set(Pos.of(0,-1))
     )
 
     val (_, m5) = loop(w4)

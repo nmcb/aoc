@@ -14,7 +14,7 @@ object Day20 extends AoC:
       if trail.nonEmpty then
         val (from,time) = trail.head
         val rest        = trail.tail
-        val saved = rest.flatMap((to,left) => when(from.manhattan(to) <= timeframe)(left - time - from.manhattan(to)))
+        val saved = rest.flatMap((to,left) => when(from.manhattanDistance(to) <= timeframe)(left - time - from.manhattanDistance(to)))
         trace(rest, cheated + saved.count(_ >= 100))
       else
         cheated

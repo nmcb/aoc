@@ -10,10 +10,10 @@ object Day25 extends AoC:
   case class Floor(tiles: Map[Pos,Char], sizeX: Int, sizeY: Int):
 
     def eastOf(p: Pos): Pos =
-      if p.x < sizeX - 1 then p step E else p.copy(x = 0)
+      if p.x < sizeX - 1 then p step E else (x = 0, y = p.y)
     
     def southOf(p: Pos): Pos =
-      if p.y < sizeY - 1 then p step S else p.copy(y = 0)
+      if p.y < sizeY - 1 then p step S else (x = p.x, y = 0)
 
     def turn: Floor =
       val (eastMove, eastRemoved) = tiles.partition((_,c) => c == '>')
@@ -31,7 +31,7 @@ object Day25 extends AoC:
   val floor: Floor =
     val sizeX = lines.head.size
     val sizeY = lines.size
-    val tiles = Vector.tabulate(sizeX, sizeY)((x, y) => Pos(x, y) -> lines(y)(x)).flatten.toMap
+    val tiles = Vector.tabulate(sizeX, sizeY)((x, y) => Pos.of(x, y) -> lines(y)(x)).flatten.toMap
     Floor(tiles, sizeX, sizeY)
 
   @tailrec
