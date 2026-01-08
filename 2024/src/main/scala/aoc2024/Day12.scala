@@ -1,6 +1,7 @@
 package aoc2024
 
 import nmcb.*
+import nmcb.predef.*
 import nmcb.pos.*
 
 import scala.annotation.*
@@ -55,7 +56,7 @@ object Day12 extends AoC:
       def fencePositions(d: Dir, p: Map[Dir,Set[Pos]], g: Pos => Int, f: Pos => Int): Map[Int,Set[Int]] =
         p.get(d).map(_.groupMap(g)(f)).getOrElse(sys.error(s"no fence: $d"))
 
-      val fence = fences.groupMap(_._2)(_._1)
+      val fence = fences.groupMap(_.right)(_.left)
       val n = fencePositions(N, fence, _.y, _.x)
       val e = fencePositions(E, fence, _.x, _.y)
       val s = fencePositions(S, fence, _.y, _.x)

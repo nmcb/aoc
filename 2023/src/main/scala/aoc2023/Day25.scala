@@ -1,6 +1,7 @@
 package aoc2023
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.collection.mutable
 
@@ -21,7 +22,7 @@ object Day25 extends AoC:
   extension (cs: Set[Connection])
 
     def connectedTo(c: Component): Set[Component] =
-      cs.filter(_._1 == c).map(_._2) ++ cs.filter(_._2 == c).map(_._1)
+      cs.filter(_.left == c).map(_.right) ++ cs.filter(_.right == c).map(_.left)
 
     infix def disconnect(c: Connection): Set[Connection] =
       cs.filterNot(_ == c)
@@ -38,7 +39,7 @@ object Day25 extends AoC:
 
   val remove = ignoreProd
   val purged = remove.foldLeft(connections)(_ disconnect _)
-  val group0 = Dijkstra.reachable(remove(0)._1, purged.connectedTo)
+  val group0 = Dijkstra.reachable(remove(0).left, purged.connectedTo)
   val group1 = purged.components -- group0
 
 

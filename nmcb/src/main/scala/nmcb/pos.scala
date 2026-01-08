@@ -32,6 +32,47 @@ object pos:
 
   given Ordering[Pos] = Ordering.by(_.toTuple)
 
+
+  object Pos:
+
+    val orderingByManhattanDistance: Ordering[Pos] =
+      Ordering.fromLessThan((a, b) => a.manhattanDistance(Pos.origin) < b.manhattanDistance(Pos.origin))
+
+    val orderingByPythagoreanDistance: Ordering[Pos] =
+      Ordering.fromLessThan((a, b) => a.pythagoreanDistance(Pos.origin) < b.pythagoreanDistance(Pos.origin))
+
+    val origin: Pos =
+      of(0, 0)
+
+    val offset4: Set[Pos] =
+      Set(
+        of(0, -1),
+        of(0, 1),
+        of(-1, 0),
+        of(1, 0)
+      )
+
+    val offset8: Set[Pos] =
+      Set(
+        of(-1, -1),
+        of(-1, 0),
+        of(-1, 1),
+        of(0, -1),
+        of(0, 1),
+        of(1, -1),
+        of(1, 0),
+        of(1, 1),
+      )
+
+    inline def of(x: Int, y: Int): Pos =
+      (x = x, y = y)
+
+    extension [A](it: Array[A])
+      def toPos: Pos =
+        assert(it.length == 2)
+        (x = it(0).toString.toInt, y = it(1).toString.toInt)
+
+
   extension (p: Pos)
 
     def ⋅(that: Pos): Long = p.x.toLong * that.y.toLong - that.x.toLong * p.y.toLong
@@ -90,42 +131,9 @@ object pos:
 
     def withinBounds(min: Pos, max: Pos): Boolean =
       p.x >= min.x & p.x <= max.x & p.y >= min.y & p.y <= max.y
-
-  object Pos:
-
-    val orderingByManhattanDistance: Ordering[Pos] =
-      Ordering.fromLessThan((a, b) => a.manhattanDistance(Pos.origin) < b.manhattanDistance(Pos.origin))
-
-    val orderingByPythagoreanDistance: Ordering[Pos] =
-      Ordering.fromLessThan((a, b) => a.pythagoreanDistance(Pos.origin) < b.pythagoreanDistance(Pos.origin))
-
-    val origin: Pos =
-      of(0, 0)
-
-    val offset4: Set[Pos] =
-      Set(
-        of( 0,-1),
-        of( 0, 1),
-        of(-1, 0),
-        of( 1, 0)
-      )
-
-    val offset8: Set[Pos] =
-      Set(
-        of(-1, -1),
-        of(-1,  0),
-        of(-1,  1),
-        of( 0, -1),
-        of( 0, 1),
-        of( 1, -1),
-        of( 1,  0),
-        of( 1,  1),
-      )
-
-    inline def of(x: Int, y: Int): Pos =
-      (x = x, y = y)
-
-    extension [A](it: Array[A])
-      def toPos: Pos =
-        assert(it.length == 2)
-        (x = it(0).toString.toInt, y = it(1).toString.toInt)
+  
+  
+  extension [A](t: (Pos, A))
+    def pos: Pos = t._1
+    def element: A = t._2
+  

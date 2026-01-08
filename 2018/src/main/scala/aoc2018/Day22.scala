@@ -1,6 +1,8 @@
 package aoc2018
 
 import nmcb.*
+import nmcb.predef.*
+
 import scala.collection.*
 
 object Day22 extends AoC:
@@ -96,7 +98,7 @@ object Day22 extends AoC:
   /** a-star with manhattan distance as heuristic */
   def travelTime(from: State, to: State): Int =
     val times = collection.mutable.Map(from -> 0)
-    val queue = collection.mutable.PriorityQueue(from -> 0)(using Ordering.by[(State,Int),Int](_._2).reverse)
+    val queue = collection.mutable.PriorityQueue(from -> 0)(using Ordering.by[(State,Int),Int](_.right).reverse)
 
     def heuristic(state: State) =
       state.region manhattan to.region

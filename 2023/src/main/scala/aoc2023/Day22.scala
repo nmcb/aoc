@@ -1,6 +1,7 @@
 package aoc2023
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.annotation.tailrec
 
@@ -46,7 +47,7 @@ object Day22 extends AoC:
           .toSet
           .flatMap: (box, foundation) =>
             foundation.map(_ -> box)
-          .groupMap(_._1)(_._2)
+          .groupMap(_.left)(_.right)
 
       def disintegrate(box: Box): Int =
         @tailrec

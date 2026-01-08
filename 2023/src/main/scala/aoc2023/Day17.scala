@@ -1,6 +1,7 @@
 package aoc2023
 
 import nmcb.*
+import nmcb.predef.*
 import nmcb.pos.*
 
 import scala.collection.mutable
@@ -68,7 +69,7 @@ object Day17 extends AoC:
      * @return The target node and associated traversal weight if reachable.
      */
     def traverse[A](start: A, target: A => Boolean, reachable: A => Set[(A, Int)]): Option[(A, Int)] =
-      val todo    = mutable.PriorityQueue.empty(using Ordering.Int.on[(Int, A)](_._1).reverse)
+      val todo    = mutable.PriorityQueue.empty(using Ordering.Int.on[(Int, A)](_.left).reverse)
       val weights = mutable.Map.empty[A, Int]
 
       def enqueue(node: A, weight: Int): Unit =

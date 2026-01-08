@@ -1,6 +1,8 @@
 package aoc2018
 
 import nmcb.*
+import nmcb.predef.*
+
 import scala.annotation.*
 import scala.collection.immutable.SortedMap
 
@@ -30,7 +32,7 @@ object Day07 extends AoC:
         loop(next, time + 1, working, done :++ processed)
 
     loop(edges.foldLeft(SortedMap[A,Set[A]]())((ds,e) =>
-      ds + (e._1 -> ds.getOrElse(e._1, Set())) + (e._2 -> (ds.getOrElse(e._2, Set()) + e._1))
+      ds + (e.left -> ds.getOrElse(e.left, Set())) + (e.right -> (ds.getOrElse(e.right, Set()) + e.left))
     ))
 
   val steps: Vector[(Char,Char)] =
@@ -40,5 +42,5 @@ object Day07 extends AoC:
         case _ => sys.error("boom!")
     lines.map(parser)
 
-  lazy val answer1: String = solve(steps, timer = _ => 1, parallelization = 1)._2.mkString("")
+  lazy val answer1: String = solve(steps, timer = _ => 1, parallelization = 1).right.mkString("")
   lazy val (answer2, _)    = solve(steps, timer = _.toInt - 4, parallelization = 5)

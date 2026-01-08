@@ -32,10 +32,6 @@ object Day22 extends AoC:
     yield
       (a,b)
 
-  extension (location: (Pos, Node))
-    def pos:   Pos = location._1
-    def node: Node = location._2
-
   extension (nodes: Map[Pos, Node])
     def maxX: Int = nodes.maxBy(_.pos.x).pos.x
     def maxY: Int = nodes.maxBy(_.pos.y).pos.y
@@ -106,8 +102,8 @@ object Day22 extends AoC:
 
   val source: Pos  = Pos.of(nodes.maxX, 0)
   val target: Pos  = Pos.of(0, 0)
-  val empty: Pos = nodes.find(_.node.isEmpty).map(_.pos).get
-  val massive: Vector[Pos] = nodes.filter(_.node.isMassive).map(_.pos).toVector
+  val empty: Pos = nodes.find(_.element.isEmpty).map(_.pos).get
+  val massive: Vector[Pos] = nodes.filter(_.element.isMassive).map(_.pos).toVector
 
   /**
    * This brings the problem back to the following two sub-problems this time

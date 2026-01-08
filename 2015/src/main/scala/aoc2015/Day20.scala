@@ -1,6 +1,7 @@
 package aoc2015
 
 import nmcb.*
+import nmcb.predef.*
 
 object Day20 extends AoC:
 
@@ -18,7 +19,7 @@ object Day20 extends AoC:
       .zipWithIndex
       .find((count,_) => count >= puzzle)
       .getOrElse(sys.error("not found"))
-      ._2
+      .index
 
   lazy val answer2: Int =
     val size = puzzle / 10 + 1
@@ -34,4 +35,4 @@ object Day20 extends AoC:
       .zipWithIndex
       .find((count,_) => count >= puzzle)
       .getOrElse(sys.error("not found"))
-      ._2
+      .index

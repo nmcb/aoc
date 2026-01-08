@@ -1,6 +1,5 @@
 package nmcb
 
-import pos.*
 import scala.collection.*
 
 object predef:
@@ -24,8 +23,8 @@ object predef:
       var a: A = i.next
       while i.hasNext do a = i.next
       a
-
-
+  
+  
   extension [A](i: Iterable[A])
 
     def slidingPairs: Iterable[(A,A)] =
@@ -52,6 +51,7 @@ object predef:
     def findMap[B](f: A => Option[B]): B =
       i.iterator.flatMap(f).next()
 
+  
   extension (s: String)
     def leftPadTo(length: Int, char: Char): String =
       List.fill(length - s.length)(char).mkString + s
@@ -64,6 +64,7 @@ object predef:
   def memo[K,V](initial: (K,V)*): mutable.Map[K,V] =
     mutable.Map.empty[K,V] ++ initial
 
+  
   extension [K,V](cache: mutable.Map[K,V])
     def memoize(k: K)(v: => V): V =
       cache.getOrElseUpdate(k, v)
@@ -78,9 +79,9 @@ object predef:
     inline def bimap[C, D](fa: A => C, fb: B => D): (C, D) = (fa(p.left), fb(p.right))
 
   
-  extension [A](t: (Pos, A))
-    def pos: Pos = t._1
-    def element: A = t._2
+  extension [A](t: (A, Int))
+    def element: A = t._1
+    def index: Int = t._2
     
     
   extension (bytes: Array[Byte])
@@ -92,5 +93,3 @@ object predef:
         hexChars(j * 2) = HEX_ARRAY(v >>> 4)
         hexChars(j * 2 + 1) = HEX_ARRAY(v & 0x0F)
       String(hexChars)
-
-

@@ -1,6 +1,7 @@
 package aoc2023
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.math
 
@@ -215,7 +216,7 @@ object Day24 extends AoC:
       BigDecimal(d).setScale(0, BigDecimal.RoundingMode.HALF_UP).toBigInt
 
     extension (xy: (Double, Double)) def toBigInt: (BigInt, BigInt) =
-      (xy._1.toBigInt, xy._2.toBigInt)
+      (xy.left.toBigInt, xy.right.toBigInt)
 
     def collide(stones: Seq[Stone]): Option[(BigInt, BigInt)] =
       futureCollide2D(stones(0), stones(1))
@@ -269,7 +270,7 @@ object Day24 extends AoC:
                 (location, velocity.copy(z = z))
               .map: (location, v) =>
                 val z = calcT(translated(0), location) * (translated(0).velocity.z - v.z) + translated(0).location.z
-                Location(x = location._1, y = location._2, z = z)
+                Location(x = location.left, y = location.right, z = z)
           .head
 
       found.x + found.y + found.z

@@ -1,15 +1,14 @@
 package aoc2024
 
 import nmcb.*
-import pos.*
-import nmcb.predef.*
+import nmcb.pos.*
 
 object Day10 extends AoC:
 
   val grid: Grid[Int] = Grid.fromLines(lines).map(_.asDigit)
 
   val heads: Set[Pos] =
-    grid.filter(_.element == 0).map(_.pos)
+    grid.filter((_, i) => i == 0).map(_.pos)
 
   type TrailHead = Set[Vector[Pos]]
 

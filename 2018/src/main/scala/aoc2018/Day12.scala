@@ -16,7 +16,7 @@ object Day12 extends AoC:
 
     /** note that we only collect pot indices that contain a plant */
     val plants = lines(0) match
-      case s"initial state: $pots" => pots.zipWithIndex.filter(_._1 == '#').map(_._2).toSet
+      case s"initial state: $pots" => pots.zipWithIndex.filter(_.element == '#').map(_.index).toSet
 
     /** note that we only collect rules that yield a plant */
     val rules = lines.drop(2).toSet.collect:
