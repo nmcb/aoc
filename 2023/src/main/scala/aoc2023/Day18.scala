@@ -88,7 +88,7 @@ object Day18 extends AoC:
       val result =
         (vertices :+ vertices.head)
           .sliding(2)
-          .map(m => m(0) × m(1))
+          .map(m => m(0) ⋅ m(1))
           .sum / 2
       result.abs
 

@@ -34,7 +34,7 @@ object pos:
 
   extension (p: Pos)
 
-    def ×(that: Pos): Long = p.x.toLong * that.y.toLong - that.x.toLong * p.y.toLong
+    def ⋅(that: Pos): Long = p.x.toLong * that.y.toLong - that.x.toLong * p.y.toLong
 
     def unary_- : Pos = (-p.x, -p.y)
 
@@ -52,10 +52,11 @@ object pos:
     infix inline def >=(that: Pos): Boolean = p.x >= that.x && p.y >= that.y
     infix inline def <=(that: Pos): Boolean = p.x <= that.x && p.y <= that.y
 
-    def euclideanDistance(that: Pos): Double =
-      val dx = that.x - p.x
-      val dy = that.y - p.y
-      math.sqrt(math.pow(dx.toDouble, 2) + math.pow(dy.toDouble, 2))
+    inline def manhattanDistance(that: Pos): Long =
+      math.abs(p.x - that.x) + math.abs(p.y - that.y)
+
+    inline def pythagoreanDistance(that: Pos): Double =
+      math.sqrt(math.pow((that.x - p.x).toDouble, 2) + math.pow((that.y - p.y).toDouble, 2))
 
     def angleDegrees(that: Pos): Double =
       val dx = (that.x - p.x).toDouble
@@ -90,14 +91,14 @@ object pos:
     def withinBounds(min: Pos, max: Pos): Boolean =
       p.x >= min.x & p.x <= max.x & p.y >= min.y & p.y <= max.y
 
-    infix inline def manhattan(that: Pos): Long =
-      math.abs(p.x - that.x) + math.abs(p.y - that.y)
-
   object Pos:
 
     val orderingByManhattanDistance: Ordering[Pos] =
-      Ordering.fromLessThan((a, b) => a.manhattan(Pos.origin) < b.manhattan(Pos.origin))
-    
+      Ordering.fromLessThan((a, b) => a.manhattanDistance(Pos.origin) < b.manhattanDistance(Pos.origin))
+
+    val orderingByPythagoreanDistance: Ordering[Pos] =
+      Ordering.fromLessThan((a, b) => a.pythagoreanDistance(Pos.origin) < b.pythagoreanDistance(Pos.origin))
+
     val origin: Pos =
       of(0, 0)
 

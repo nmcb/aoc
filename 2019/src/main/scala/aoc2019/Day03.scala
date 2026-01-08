@@ -41,7 +41,7 @@ object Day03 extends AoC:
       .head
 
   def solve1(description1: String, description2: String): Int =
-    distances(description1, description2).head.manhattan(Pos.origin).toInt
+    distances(description1, description2).head.manhattanDistance(Pos.origin).toInt
 
   def solve2(description1: String, description2: String): Int =
     val crossings1 = wire(description1).zipWithIndex

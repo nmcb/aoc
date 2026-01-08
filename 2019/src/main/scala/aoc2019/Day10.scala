@@ -55,7 +55,7 @@ object Day10 extends AoC:
     import Ordering.Double.TotalOrdering
     astroids
       .filterNot(_ == astroid)
-      .map(other => (astroid.angleDegrees(other), astroid.euclideanDistance(other), other))
+      .map(other => (astroid.angleDegrees(other), astroid.pythagoreanDistance(other), other))
       .sortBy(s => (s.angle, s.distance, s.target.x, s.target.y))
 
   @tailrec

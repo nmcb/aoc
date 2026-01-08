@@ -28,7 +28,7 @@ object Day06 extends AoC:
 
     val closest: Vector[(Pos,Pos)] =
       positions.flatMap: p =>
-        coordinates.map(c => (c, c manhattan p))
+        coordinates.map(c => (c, c.manhattanDistance(p)))
           .sortBy(_.distance).take(2) match
             case a +: b +: _ if a.distance == b.distance => None
             case      a +: _                             => Some(p,a.coordinate)
@@ -45,7 +45,7 @@ object Day06 extends AoC:
       size
 
     def manhattanSum(position: Pos): Long =
-      coordinates.map(position.manhattan).sum
+      coordinates.map(position.manhattanDistance).sum
 
     def withinManhattanSumLimit(limit: Int): Vector[Pos] =
       positions.filter(p => manhattanSum(p) < limit)

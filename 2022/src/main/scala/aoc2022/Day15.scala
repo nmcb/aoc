@@ -12,9 +12,9 @@ object Day15 extends AoC:
   private case class Lock(sensor: Pos, beacon: Pos):
 
     def cover(y: Int): Option[Cover] =
-      if y >= sensor.y - sensor.manhattan(beacon) && y <= sensor.y + sensor.manhattan(beacon) then
-        val min = sensor.x + math.abs(y - sensor.y) - sensor.manhattan(beacon)
-        val max = sensor.x - math.abs(y - sensor.y) + sensor.manhattan(beacon)
+      if y >= sensor.y - sensor.manhattanDistance(beacon) && y <= sensor.y + sensor.manhattanDistance(beacon) then
+        val min = sensor.x + math.abs(y - sensor.y) - sensor.manhattanDistance(beacon)
+        val max = sensor.x - math.abs(y - sensor.y) + sensor.manhattanDistance(beacon)
         Some(Cover(min, max))
       else
         None
