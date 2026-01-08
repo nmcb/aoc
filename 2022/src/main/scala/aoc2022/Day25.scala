@@ -42,7 +42,7 @@ object Day25 extends AoC:
     def toLong: Long =
       digits.reverse.foldLeft((0L,1L)) { case ((a, p), d) =>
         (a + (p * d.toLong), 5L * p)
-      }.right
+      }.left
 
     override def toString: String =
       val l = toLong
