@@ -5,12 +5,13 @@ import scala.annotation.*
 
 object Day08 extends AoC:
 
-  case class Str(quoted: String):
+  extension (quoted: String)
 
     def unquoted: String =
       quoted.drop(1).dropRight(1)
 
     def unescaped: String =
+      @tailrec
       def loop(todo: List[Char], ret: String = ""): String =
         todo match
           case Nil =>
@@ -27,6 +28,7 @@ object Day08 extends AoC:
       loop(unquoted.toList)
 
     def escaped: String =
+      @tailrec
       def loop(todo: List[Char], ret: String = ""): String =
         todo match
           case Nil          => "\"" + ret + "\""
@@ -36,14 +38,5 @@ object Day08 extends AoC:
 
       loop(quoted.toList)
 
-  val strings: IndexedSeq[Str] =
-    def parser(s: String): Str =
-      s match
-        case s"""$unescaped""" => Str(unescaped)
-        case str: String => sys.error(s"could not parse '$str'")
-
-    lines.map(parser)
-
-
-  lazy val answer1: Int = strings.map(str => str.quoted.size - str.unescaped.size).sum
-  lazy val answer2: Int = strings.map(str => str.escaped.size - str.quoted.size).sum
+  lazy val answer1: Int = lines.map(str => str.length - str.unescaped.length).sum
+  lazy val answer2: Int = lines.map(str => str.escaped.length - str.length).sum
