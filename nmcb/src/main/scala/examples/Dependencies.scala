@@ -9,6 +9,13 @@ object Dependencies extends App:
   type Value = Int | List[Int]
   type Json  = String
 
+  case class Service(uri: Uri, dependencies: Set[Name], mock: Value):
+
+    def call(json: Json): Value =
+      println(s"called uri=$uri with $json returning value=$mock")
+      mock
+
+
   extension (nameValue: (Name,Value))
 
     def toJson: Json =
@@ -16,16 +23,11 @@ object Dependencies extends App:
         case (name, int: Int)        => s"\"$name\":$int"
         case (name, list: List[Int]) => s"\"$name\":[${list.mkString(",")}]"
 
+
   extension (parameters: Map[Name,Value])
 
     def toJson: Json =
       parameters.map(_.toJson).mkString("{", ",", "}")
-
-  case class Service(uri: Uri, dependencies: Set[Name], mock: Value):
-
-    def call(json: Json): Value =
-      println(s"called uri=$uri with $json returning value=$mock")
-      mock
 
 
   extension (input: Map[Name,Service])
@@ -85,6 +87,7 @@ object Dependencies extends App:
             result + (name -> response)
           .filter((n,v) => request.contains(n))
 
+
   val input: Map[Name,Service] = Map(
 
     // some dependency block note "q" should be given in the event
@@ -113,3 +116,4 @@ object Dependencies extends App:
 
   val result = input.resolve(request, event)
   println(s"result=${result.toJson}")
+  

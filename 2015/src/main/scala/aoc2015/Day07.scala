@@ -8,7 +8,7 @@ object Day07 extends AoC:
   /** Modeling */
   
   type Wire = String
-  type Env  = Map[Wire,Int]
+  type Env  = Map[Wire, Int]
 
   sealed trait Rule:
     def args: List[Wire]
@@ -19,10 +19,11 @@ object Day07 extends AoC:
 
     def run(env: Env): Option[Int] =
       val List(lhs, rhs) = args.map(env.get)
-      for {
+      for
         v1 <- lhs
         v2 <- rhs
-      } yield op(v1)(v2)
+      yield
+        op(v1)(v2)
 
   case class Op1(op: Int => Int, args: List[Wire], ret: Wire) extends Rule:
 
