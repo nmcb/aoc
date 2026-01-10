@@ -1,6 +1,7 @@
 package aoc2025
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.annotation.*
 
@@ -38,7 +39,7 @@ object Day07 extends AoC:
       if manifold.nonEmpty then
         val splitters = manifold.head.zipWithIndex.filter((s,_) => s == '^').map((_, i) => i)
         val process   = worlds.filter((w,n) => splitters.contains(w))
-        val splits    = process.toSeq.flatMap((w,n) => Seq((w-1,n), (w+1,n), (w,-n))).groupMapReduce(_._1)(_._2)(_+_)
+        val splits    = process.toSeq.flatMap((w,n) => Seq((w-1,n), (w+1,n), (w,-n))).groupMapReduce(_.left)(_.right)(_+_)
         loop(manifold.tail, worlds <+> splits)
       else
         worlds.valuesIterator.sum

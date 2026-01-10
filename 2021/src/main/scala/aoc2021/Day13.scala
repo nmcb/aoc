@@ -1,6 +1,7 @@
 package aoc2021
 
 import nmcb.*
+import nmcb.pos.*
 
 object Day13 extends AoC:
 
@@ -9,12 +10,8 @@ object Day13 extends AoC:
 
   import Axis.*
 
-  type Dots  = Set[(Int, Int)]
+  type Dots  = Set[Pos]
   type Folds = Vector[(Axis, Int)]
-
-  extension (dot: (Int, Int))
-    def x: Int = dot._1
-    def y: Int = dot._2
 
   val dots: Dots =
     lines
@@ -31,11 +28,11 @@ object Day13 extends AoC:
 
   def origami(dots: Dots, folds: Folds): Dots =
 
-    def vertical(line: Int)(x: Int, y: Int): (Int, Int) =
-      (if x < line then x else 2 * line - x, y)
+    def vertical(line: Int)(p: Pos): Pos =
+      (x = if p.x < line then p.x else 2 * line - p.x, y = p.y)
 
-    def horizontal(line: Int)(x: Int, y: Int): (Int, Int) =
-      (x, if y < line then y else 2 * line - y)
+    def horizontal(line: Int)(p: Pos): Pos =
+      (x = p.x, y = if p.y < line then p.y else 2 * line - p.y)
 
     folds.foldLeft(dots):
       case (dots, (Ver, line)) => dots.map(vertical(line))

@@ -30,7 +30,7 @@ object Day18 extends AoC:
 
     cost.keys.map(pos => Move(start, pos, cost(pos), keys(pos))).toVector
 
-  type Tile = (Pos,Char)
+  type Tile = (Pos, Char)
 
   extension (tile: Tile)
     def pos: Pos     = tile._1

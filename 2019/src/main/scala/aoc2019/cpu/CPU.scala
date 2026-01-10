@@ -2,13 +2,13 @@ package aoc2019.cpu
 
 type Value        = Long
 type Pointer      = Int
-type PointerValue = (Pointer,Value)
+type PointerValue = (Pointer, Value)
 
 extension (pv: PointerValue)
   def pointer: Pointer = pv._1
   def value: Value     = pv._2
 
-case class Mem(underlying: Map[Pointer,Value]):
+case class Mem(underlying: Map[Pointer, Value]):
   def apply(p: Pointer): Value           = underlying(p)
   def updated(p: Pointer, v: Value): Mem = Mem(underlying.updated(p, v))
   def +(pv: PointerValue): Mem           = updated(pv.pointer, pv.value)

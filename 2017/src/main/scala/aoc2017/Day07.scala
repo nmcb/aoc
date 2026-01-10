@@ -1,6 +1,7 @@
 package aoc2017
 
 import nmcb.*
+import nmcb.predef.*
 
 /** @see Credits - https://github.com/sim642 */
 object Day07 extends AoC:
@@ -59,10 +60,10 @@ object Day07 extends AoC:
           if totalWeightChildren.size <= 1 then
             Right(node.weight + childTotalWeights.values.sum)
           else
-            val badChild = totalWeightChildren.find(_._2.size == 1).get._2.head
+            val badChild = totalWeightChildren.find(_.right.size == 1).get.right.head
             val badChildWeight = nodes(badChild).weight
             val badChildTotalWeight = childTotalWeights(badChild)
-            val goodTotalWeight = totalWeightChildren.find(_._2.size > 1).get._1
+            val goodTotalWeight = totalWeightChildren.find(_.right.size > 1).get.left
             Left(goodTotalWeight - (badChildTotalWeight - badChildWeight)))
 
     val root = nodes.root

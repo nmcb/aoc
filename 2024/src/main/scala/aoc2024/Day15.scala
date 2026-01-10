@@ -29,7 +29,7 @@ object Day15 extends AoC:
   case class Grid(grid: Map[Pos,Char]):
     lazy val sizeX: Int = grid.keys.maxBy(_.x).x + 1
     lazy val sizeY: Int = grid.keys.maxBy(_.y).y + 1
-    lazy val robotPosition: Pos     = grid.find((_, c) => c == '@').map(_._1).head
+    lazy val robotPosition: Pos     = grid.find((_, c) => c == '@').map(_.pos).head
     lazy val boxPositions: Set[Pos] = grid.filter((_, c) => c == 'O' | c == '[').keySet
 
     override def toString: String =

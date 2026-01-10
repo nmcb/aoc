@@ -1,6 +1,7 @@
 package aoc2022
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.annotation.tailrec
 import scala.io.*
@@ -41,7 +42,7 @@ object Day25 extends AoC:
     def toLong: Long =
       digits.reverse.foldLeft((0L,1L)) { case ((a, p), d) =>
         (a + (p * d.toLong), 5L * p)
-      }._1
+      }.left
 
     override def toString: String =
       val l = toLong

@@ -1,6 +1,7 @@
 package aoc2015
 
 import nmcb.*
+import nmcb.predef.*
 
 object Day01 extends AoC:
 
@@ -28,4 +29,4 @@ object Day01 extends AoC:
       .zipWithIndex
       .find((f,_) => f == -1)
       .getOrElse(sys.error("not found"))
-      ._2
+      .index

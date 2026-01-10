@@ -1,6 +1,7 @@
 package aoc2023
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.annotation.tailrec
 
@@ -15,8 +16,8 @@ object Day08 extends AoC:
   case class Network(directions: Directions, nodes: Nodes):
     def step(from: String, direction: Char): String =
       direction match
-        case 'L' => nodes.getOrElse(from, sys.error(s"no step left from: $from"))._1
-        case 'R' => nodes.getOrElse(from, sys.error(s"no step right from: $from"))._2
+        case 'L' => nodes.getOrElse(from, sys.error(s"no step left from: $from")).left
+        case 'R' => nodes.getOrElse(from, sys.error(s"no step right from: $from")).right
         case _   => sys.error(s"invalid direction: $direction")
 
     @tailrec

@@ -41,7 +41,7 @@ object Day24 extends AoC:
                 case 'w' => go(point.sw, remaining.drop(2))
         go(Tile(0, 0), directions)
       .groupMapReduce(identity)(_ => 1)(_ + _)
-      .filter(_._2 % 2 == 1)
+      .filter((_, count) => count % 2 == 1)
       .keySet
 
 

@@ -1,6 +1,7 @@
 package aoc2023
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.annotation.tailrec
 import scala.math.Ordered.orderingToOrdered
@@ -101,7 +102,7 @@ object Day07 extends AoC:
           case (d, 1) :: rest => loop(rest, High :: found)
           case _              => sys.error(s"illegal state: $todo")
 
-      val countedCards = hand.groupMapReduce(identity)(_ => 1)(_ + _).toList.sortBy(_._2).reverse
+      val countedCards = hand.groupMapReduce(identity)(_ => 1)(_ + _).toList.sortBy(_.right).reverse
       loop(countedCards).reverse
 
   def orderBy(sortedSet: Cards): Ordering[Card] =

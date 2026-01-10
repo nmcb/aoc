@@ -1,6 +1,7 @@
 package aoc2024
 
 import nmcb.*
+import nmcb.predef.*
 
 /** @see Credits - https://github.com/sim642 */
 object Day23 extends AoC:
@@ -15,7 +16,7 @@ object Day23 extends AoC:
     directed ++ directed.map(_.swap)
 
   lazy val neighbours: Map[N,Set[N]] =
-    edges.groupMap(_._1)(_._2)
+    edges.groupMap(_.left)(_.right)
 
   lazy val solve1: Set[Set[N]] =
     for

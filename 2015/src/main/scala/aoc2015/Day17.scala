@@ -1,6 +1,7 @@
 package aoc2015
 
 import nmcb.*
+import nmcb.predef.*
 
 object Day17 extends AoC:
 
@@ -11,7 +12,7 @@ object Day17 extends AoC:
       .zipWithIndex
       .toSet
       .subsets
-      .map(_.toList.map(_._1))
+      .map(_.toList.map(_.element))
       .filter(_.sum == 150)
       .toList
 
