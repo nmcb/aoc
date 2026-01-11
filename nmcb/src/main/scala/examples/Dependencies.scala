@@ -116,4 +116,3 @@ object Dependencies extends App:
 
   val result = input.resolve(request, event)
   println(s"result=${result.toJson}")
-  

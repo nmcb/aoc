@@ -94,9 +94,6 @@ object Dijkstra:
       val (minDistNode, _) = queue.dequeue()
       val edges = graph.neighbours.getOrElse(minDistNode, Vector.empty)
       edges.foreach: edge =>
-//        println(s"edge=$edge")
-//        println(s"distTo(edge.to)=${distTo.get(edge.to)}")
-//        println(s"distTo(edge.from)=${distTo.get(edge.from)}")
         if distTo(edge.to) > distTo(edge.from) + edge.weight then
           distTo.update(edge.to, distTo(edge.from) + edge.weight)
           edgeTo.update(edge.to, edge)
@@ -119,7 +116,7 @@ object Dijkstra:
             todo.enqueue(to)
     found.toSet
 
-
+  /** breadth first search */
   def breadthFirstSearch[A,B](a: A)(f: A => Either[Set[A],B]): Vector[B] =
     val results = mutable.ArrayBuffer.empty[B]
     val queue   = mutable.Queue(a)
