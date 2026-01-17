@@ -92,9 +92,9 @@ object Day24 extends AoC:
 
       targets
         .toVector
-        .sortBy: (target,attacker) =>
+        .sortBy: (target, attacker) =>
           -attacker.attribute.initiative
-        .foreach: (target,attacker) =>
+        .foreach: (target, attacker) =>
           target.units = (target.units - target.computeDamage(attacker) / target.attribute.hitPower).max(0)
 
       if groups.map(_.units).sum == previous then
