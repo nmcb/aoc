@@ -34,7 +34,7 @@ object Day24 extends AoC:
   def groups(chunks: Vector[Vector[String]], boost: Int): Vector[Group] =
 
     def parseGroup(army: Army, boost: Int)(line: String): Group =
-      val GroupLine  = """(\d+) units each with (\d+) hit points (.*)with an attack that does (\d+) (\w+) damage at initiative (\d+)""".r
+      val GroupLine  = """(\d+) units each with (\d+) hit points .*with an attack that does (\d+) (\w+) damage at initiative (\d+)""".r
       val ImmuneLine = """immune to (.+?)[;|)]""".r.unanchored
       val WeakLine   = """weak to (.+?)[;|)]""".r.unanchored
 
