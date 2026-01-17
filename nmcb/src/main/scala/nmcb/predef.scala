@@ -4,6 +4,7 @@ import scala.collection.*
 
 object predef:
 
+  val HEX_ARRAY: Array[Char] = "0123456789abcdef".toCharArray
 
   extension [A](i: Iterator[A])
 
@@ -86,7 +87,6 @@ object predef:
     
   extension (bytes: Array[Byte])
     def toHexString: String =
-      val HEX_ARRAY: Array[Char] = "0123456789abcdef".toCharArray
       val hexChars: Array[Char] = new Array[Char](bytes.length * 2)
       for j <- bytes.indices do
         val v = bytes(j) & 0xFF
