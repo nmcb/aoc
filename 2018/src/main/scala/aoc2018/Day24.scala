@@ -1,6 +1,8 @@
 package aoc2018
 
 import nmcb.*
+import nmcb.predef.*
+
 import scala.annotation.tailrec
 
 object Day24 extends AoC:
@@ -31,7 +33,7 @@ object Day24 extends AoC:
       else
         attacker.effectivePower
 
-  def groups(chunks: Vector[Vector[String]], boost: Int): Vector[Group] =
+  def parseArmies(chunks: Vector[Vector[String]])(boost: Int): Vector[Group] =
 
     def parseGroup(army: Army, boost: Int)(line: String): Group =
       val GroupLine  = """(\d+) units each with (\d+) hit points .*with an attack that does (\d+) (\w+) damage at initiative (\d+)""".r
@@ -64,48 +66,43 @@ object Day24 extends AoC:
     def winner: Army = outcome._1
     def units: Int   = outcome._2
 
-  @tailrec
-  def fight(groups: Vector[Group]): Outcome =
 
-    val previous: Int =
-      groups.map(_.units).sum
-
-    val targetSelection: Vector[Group] =
-      groups.sortBy(group => (-group.effectivePower, -group.attribute.initiative))
-      
-    val targets: Map[Group,Group] =
-      targetSelection.foldLeft(Map.empty[Group, Group]): (targets,next) =>
-        val candidate = groups
-          .filterNot(targets.contains)
-          .filter(_.army != next.army)
-          .filter(_.units > 0)
-          .filter(_.computeDamage(next) > 0)
-          .maxByOption(target => (target.computeDamage(next), target.effectivePower, target.attribute.initiative))
-
-        candidate match
-          case Some(target) => targets.updated(target, next)
-          case None         => targets
-
-    targets
-      .toVector
-      .sortBy: (target,attacker) =>
-        -attacker.attribute.initiative
-      .foreach: (target,attacker) =>
-        target.units = (target.units - target.computeDamage(attacker) / target.attribute.hitPower).max(0)
-
-    if groups.map(_.units).sum == previous then
-      (Draw, -1)
-    else if groups.filter(_.units > 0).map(_.army).toSet.size == 1 then
-      (groups.filter(_.units > 0).head.army, groups.map(_.units).sum)
-    else
-      fight(groups)
-
-  def solve2(): Int =
+  extension (groups: Vector[Group])
     @tailrec
-    def go(boost: Int): Int =
-      val outcome = fight(groups(chunks, boost = boost))
-      if outcome.winner == Immune then outcome.units else go(boost + 1)
-    go(1)
+    def fight: Outcome =
 
-  lazy val answer1: Int = fight(groups(chunks, boost = 0)).units
-  lazy val answer2: Int = solve2()
+      val previous: Int =
+        groups.map(_.units).sum
+
+      val targetSelection: Vector[Group] =
+        groups.sortBy(group => (-group.effectivePower, -group.attribute.initiative))
+
+      val targets: Map[Group,Group] =
+        targetSelection.foldLeft(Map.empty[Group, Group]): (targets,next) =>
+          val candidate = groups
+            .filterNot(targets.contains)
+            .filter(_.army != next.army)
+            .filter(_.units > 0)
+            .filter(_.computeDamage(next) > 0)
+            .maxByOption(target => (target.computeDamage(next), target.effectivePower, target.attribute.initiative))
+
+          candidate match
+            case Some(target) => targets.updated(target, next)
+            case None         => targets
+
+      targets
+        .toVector
+        .sortBy: (target,attacker) =>
+          -attacker.attribute.initiative
+        .foreach: (target,attacker) =>
+          target.units = (target.units - target.computeDamage(attacker) / target.attribute.hitPower).max(0)
+
+      if groups.map(_.units).sum == previous then
+        (Draw, -1)
+      else if groups.filter(_.units > 0).map(_.army).toSet.size == 1 then
+        (groups.filter(_.units > 0).head.army, groups.map(_.units).sum)
+      else
+        groups.fight
+
+  lazy val answer1: Int = parseArmies(chunks)(boost = 0).fight.units
+  lazy val answer2: Int = Iterator.from(1).map(parseArmies(chunks)).map(_.fight).findFirst(_.winner == Immune).units
