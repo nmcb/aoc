@@ -13,7 +13,7 @@ object Day24 extends AoC:
   import Army.*
 
   type AttackKind = String
-  
+
   case class Attribute(hitPower: Int, initiative: Int)
   case class Defense(immune: Set[AttackKind], weak: Set[AttackKind])
   case class Attack(damage: Int, kind: AttackKind)
@@ -31,18 +31,18 @@ object Day24 extends AoC:
       else
         attacker.effectivePower
 
-  def groups(lines: Vector[AttackKind], boost: Int): Vector[Group] =
+  def groups(chunks: Vector[Vector[String]], boost: Int): Vector[Group] =
 
-    def parseGroup(army: Army, boost: Int, line: AttackKind): Group =
-      val GroupLine  = """(\d+) units each with (\d+) hit points (?:.*)with an attack that does (\d+) (\w+) damage at initiative (\d+)""".r
-      val ImmuneLine = """immune to (.+?)[;|\)]""".r.unanchored
-      val WeakLine   = """weak to (.+?)[;|\)]""".r.unanchored
+    def parseGroup(army: Army, boost: Int)(line: String): Group =
+      val GroupLine  = """(\d+) units each with (\d+) hit points .*with an attack that does (\d+) (\w+) damage at initiative (\d+)""".r
+      val ImmuneLine = """immune to (.+?)[;|)]""".r.unanchored
+      val WeakLine   = """weak to (.+?)[;|)]""".r.unanchored
 
-      val immune = line match
+      val immune: Set[String] = line match
         case ImmuneLine(items) => items.split(", ").toSet
         case _                 => Set.empty
 
-      val weak = line match
+      val weak: Set[String] = line match
         case WeakLine(items) => items.split(", ").toSet
         case _               => Set.empty
 
@@ -54,12 +54,11 @@ object Day24 extends AoC:
           Group(army, attribute, defense, attack)(units.toInt)
 
 
-    val index     = lines.indexOf("")
-    val immune    = lines.slice(1, index).map(parseGroup(Immune, boost, _))
-    val infection = lines.drop(index + 2).map(parseGroup(Infection, 0, _))
+    val immune    = chunks(0).tail.map(parseGroup(Immune, boost))
+    val infection = chunks(1).tail.map(parseGroup(Infection, 0))
     immune ++ infection
 
-  type Outcome = (Army,Int)
+  type Outcome = (Army, Int)
 
   extension (outcome: Outcome)
     def winner: Army = outcome._1
@@ -104,9 +103,9 @@ object Day24 extends AoC:
   def solve2(): Int =
     @tailrec
     def go(boost: Int): Int =
-      val outcome = fight(groups(lines, boost = boost))
+      val outcome = fight(groups(chunks, boost = boost))
       if outcome.winner == Immune then outcome.units else go(boost + 1)
     go(1)
 
-  lazy val answer1: Int = fight(groups(lines, boost = 0)).units
+  lazy val answer1: Int = fight(groups(chunks, boost = 0)).units
   lazy val answer2: Int = solve2()

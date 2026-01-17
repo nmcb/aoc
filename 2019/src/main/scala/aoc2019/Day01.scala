@@ -1,11 +1,10 @@
 package aoc2019
 
 import nmcb.*
+
 import scala.annotation.tailrec
 
 object Day01 extends AoC:
-
-  val masses: Vector[Int] =lines.map(_.toInt)
 
   def massToFuel(mass: Int): Int =
     (mass / 3) - 2
@@ -20,5 +19,7 @@ object Day01 extends AoC:
         go(requirement - 1, total + requirement)
     go(mass)
 
-  lazy val answer1 = masses.map(massToFuel).sum
-  lazy val answer2 = masses.map(massToFuelRequirement).sum
+  val masses: Vector[Int] = lines.map(_.toInt)
+  
+  lazy val answer1: Int = masses.map(massToFuel).sum
+  lazy val answer2: Int = masses.map(massToFuelRequirement).sum

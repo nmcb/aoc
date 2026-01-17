@@ -9,9 +9,9 @@ extension (pv: PointerValue)
   def value: Value     = pv._2
 
 case class Mem(underlying: Map[Pointer, Value]):
-  def apply(p: Pointer): Value           = underlying(p)
-  def updated(p: Pointer, v: Value): Mem = Mem(underlying.updated(p, v))
-  def +(pv: PointerValue): Mem           = updated(pv.pointer, pv.value)
+  def apply(p: Pointer): Value       = underlying(p)
+  def set(p: Pointer, v: Value): Mem = Mem(underlying.updated(p, v))
+  def +(pv: PointerValue): Mem       = set(pv.pointer, pv.value)
 
 object Mem:
 
@@ -43,8 +43,8 @@ case class CPU(mem: Mem, stdin: LazyList[Value] = LazyList.empty, ip: Pointer = 
 
   def write(offset: Int, value: Value): Mem =
     paramMode(offset) match
-      case 0 => mem.updated(param(offset).toInt, value)
-      case 2 => mem.updated((base + param(offset)).toInt, value)
+      case 0 => mem.set(param(offset).toInt, value)
+      case 2 => mem.set((base + param(offset)).toInt, value)
       case _ => sys.error(s"illegal parameter write mode ${paramMode(offset)}")
 
   def withInput(input: Value*): CPU =
