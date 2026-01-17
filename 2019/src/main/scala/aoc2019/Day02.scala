@@ -1,11 +1,10 @@
 package aoc2019
 
 import nmcb.*
+
 object Day02 extends AoC:
 
   import cpu.*
-
-  val program: Mem = Mem.parse(input)
 
   def experiment(program: Mem): Long =
     val permutations =
@@ -17,12 +16,14 @@ object Day02 extends AoC:
 
     val (noun, verb) =
       permutations
-        .dropWhile: (noun,verb) =>
-          val patch = program.updated(1,noun).updated(2,verb)
+        .dropWhile: (noun, verb) =>
+          val patch = program.set(1, noun).set(2, verb)
           CPU(patch).execFinal.mem(0) != 19690720
         .head
 
     100 * noun + verb
 
-  lazy val answer1: Value = CPU(program.updated(1,12).updated(2,2)).execFinal.mem(0)
+  val program: Mem = Mem.parse(input)
+
+  lazy val answer1: Value = CPU(program.set(1, 12).set(2, 2)).execFinal.mem(0)
   lazy val answer2: Value = experiment(program)
