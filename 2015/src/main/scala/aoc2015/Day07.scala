@@ -1,81 +1,69 @@
 package aoc2015
 
 import nmcb.*
+
 import scala.annotation.*
 
 object Day07 extends AoC:
 
-  /** Modeling */
-  
   type Wire = String
   type Env  = Map[Wire, Int]
 
   sealed trait Rule:
-    def args: List[Wire]
     def ret: Wire
-    def run(env: Env): Option[Int]
+    def call(env: Env): Option[Int]
 
-  case class Op2(op: Int => Int => Int, args: List[Wire], ret: Wire) extends Rule:
+  case class Op(op: Int => Int, ret: Wire, arg: Wire) extends Rule:
+    def call(env: Env): Option[Int] =
+      env.get(arg).map(op)
 
-    def run(env: Env): Option[Int] =
-      val List(lhs, rhs) = args.map(env.get)
-      for
-        v1 <- lhs
-        v2 <- rhs
-      yield
-        op(v1)(v2)
+  case class BinOp(op: Int => Int => Int, ret: Wire, lhs: Wire, rhs: Wire) extends Rule:
+    def call(env: Env): Option[Int] =
+      env.get(lhs).flatMap(lv => env.get(rhs).map(rv => op(lv)(rv)))
 
-  case class Op1(op: Int => Int, args: List[Wire], ret: Wire) extends Rule:
-
-    def run(env: Env): Option[Int] =
-      args.map(env.get).headOption.flatten.map(op)
-
-  case class Val(value: Int, ret: Wire) extends Rule:
-
-    def args: List[Wire] =
-      List.empty
-
-    def run(env: Env): Option[Int] =
+  case class Val(value: Int, ret: Wire, args: Vector[Wire] = Vector.empty) extends Rule:
+    def call(env: Env): Option[Int] =
       Some(value)
 
   object Solver:
-    def solve(rules: Seq[Rule], wire: Wire, setWireB: Option[Int] = None): Int =
 
-      @tailrec def fold(rules: Seq[Rule], env: Env = Map.empty): Int =
+    def solve(rules: Vector[Rule], wire: Wire, setWireB: Option[Int] = None): Int =
+      @tailrec
+      def fold(rules: Seq[Rule], env: Env = Map.empty): Int =
         env.get(wire) match
           case Some(v) => v
           case None    => rules match
-            case Seq(rule, rest*) => rule.run(env) match
-              case Some(v)        => fold(rest, env.updated(rule.ret, v))
-              case None           => fold(rest :+ rule, env)
-            case _                => sys.error(s"undefined wire=$wire")
+            case rule +: rest => rule.call(env) match
+              case Some(v)    => fold(rest, env.updated(rule.ret, v))
+              case None       => fold(rest :+ rule, env)
+            case _            => sys.error(s"undefined wire=$wire")
 
-      val puzzleInput: Seq[Rule] = setWireB.map(v => Val(v, "b") +: rules.filterNot(_.ret == "b")).getOrElse(rules)
+      val puzzleInput: Vector[Rule] = setWireB.map(v => Val(v, "b") +: rules.filterNot(_.ret == "b")).getOrElse(rules)
       fold(puzzleInput)
 
-  val rules: IndexedSeq[Rule] =
+  val rules: Vector[Rule] =
     def parser(s: Wire): Rule =
       s match
         case s"$lhs AND $rhs -> $ret" if lhs.toIntOption.isDefined
-          => Op1(rv => lhs.toInt & rv, List(rhs), ret)
+          => Op(rv => lhs.toInt & rv, ret, rhs)
         case s"$lhs AND $rhs -> $ret"
-          => Op2(lv => rv => lv & rv, List(lhs, rhs), ret)
+          => BinOp(lv => rv => lv & rv, ret, lhs, rhs)
         case s"$lhs OR $rhs -> $ret"
-          => Op2(lv => rv => lv | rv, List(lhs, rhs), ret)
+          => BinOp(lv => rv => lv | rv, ret, lhs, rhs)
         case s"$lhs RSHIFT $rhs -> $ret" if rhs.toIntOption.isDefined
-          => Op1(lv => lv >> rhs.toInt, List(lhs), ret)
+          => Op(lv => lv >> rhs.toInt, ret, lhs)
         case s"$lhs RSHIFT $rhs -> $ret"
-          => Op2(lv => rv => lv >> rv, List(lhs, rhs), ret)
+          => BinOp(lv => rv => lv >> rv, ret, lhs, rhs)
         case s"$lhs LSHIFT $rhs -> $ret" if rhs.toIntOption.isDefined
-          => Op1(lv => lv << rhs.toInt, List(lhs), ret)
+          => Op(lv => lv << rhs.toInt, ret, lhs)
         case s"$lhs LSHIFT $rhs -> $ret"
-          => Op2(lv => rv => lv << rv, List(lhs, rhs), ret)
+          => BinOp(lv => rv => lv << rv, ret, lhs, rhs)
         case s"NOT $rhs -> $ret"
-          => Op1(rv => ~rv & 0x0000FFFF, List(rhs), ret)
+          => Op(rv => ~rv & 0x0000FFFF, ret, rhs)
         case s"$arg -> $ret" if arg.toIntOption.isDefined
           => Val(arg.toInt, ret)
         case s"$rhs -> $ret"
-          => Op1(identity, List(rhs), ret)
+          => Op(identity, ret, rhs)
 
     lines.map(parser)
 
