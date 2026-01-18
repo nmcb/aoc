@@ -9,8 +9,7 @@ object Day06 extends AoC:
     input
       .sliding(size)
       .zipWithIndex
-      .find(_.element.distinct.length == size)
-      .get
+      .findFirst(_.element.distinct.length == size)
       .index + size
 
 
