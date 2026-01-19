@@ -5,23 +5,15 @@ import scala.annotation.tailrec
 
 object Day21 extends AoC:
 
-  type Codes = (Int, Int, Int, Int)
-
-  extension (codes: Codes)
-    def opcode: Int = codes._1
-    def a: Int = codes._2
-    def b: Int = codes._3
-    def c: Int = codes._4
-
   type Mem   = Map[Int,Int]
 
   extension (mem: Mem)
     private def valueOf(reg: Int): Int                      = mem.getOrElse(reg, 0)
-    def setRI(a: Int, b: Int, c: Int, f: Int => Int => Int) = mem.updated(c, f(mem.valueOf(a))(b))
-    def setIR(a: Int, b: Int, c: Int, f: Int => Int => Int) = mem.updated(c, f(a)(mem.valueOf(b)))
-    def setRR(a: Int, b: Int, c: Int, f: Int => Int => Int) = mem.updated(c, f(mem.valueOf(a))(mem.valueOf(b)))
-    def setRN(a: Int, c: Int)                               = mem.updated(c, mem.valueOf(a))
-    def setIN(a: Int, c: Int)                               = mem.updated(c, a)
+    inline def setRI(a: Int, b: Int, c: Int, f: Int => Int => Int) = mem.updated(c, f(mem.valueOf(a))(b))
+    inline def setIR(a: Int, b: Int, c: Int, f: Int => Int => Int) = mem.updated(c, f(a)(mem.valueOf(b)))
+    inline def setRR(a: Int, b: Int, c: Int, f: Int => Int => Int) = mem.updated(c, f(mem.valueOf(a))(mem.valueOf(b)))
+    inline def setRN(a: Int, c: Int)                               = mem.updated(c, mem.valueOf(a))
+    inline def setIN(a: Int, c: Int)                               = mem.updated(c, a)
 
   enum Inst:
     case ADDR(a: Int, b: Int, c: Int)
