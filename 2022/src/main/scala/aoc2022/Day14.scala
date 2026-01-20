@@ -8,67 +8,66 @@ import scala.io.*
 
 object Day14 extends AoC:
 
-  enum E(val c: Char):
-    case S extends E('o')
-    case A extends E('.')
-    case R extends E('#')
+  enum Tile:
+    case Sand
+    case Air
+    case Rock
 
-  def parse(s: String): Vector[Pos] =
-    @tailrec
-    def loop(ps: Vector[String], a: Vector[Pos] = Vector.empty): Vector[Pos] =
-      ps match
-        case Vector()      => a
-        case s"$x,$y" +: t => loop(t, a :+ Pos.of(x.toInt,y.toInt))
-        case _ => sys.error("boom!")
-    loop(s.trim.split(""" -> """).toVector)
+  def parseLine(line: String): Vector[Pos] =
+    line.trim
+      .split(""" -> """)
+      .foldLeft(Vector.empty[Pos]):
+        case (path, s"$x,$y") => path :+ Pos.of(x.toInt,y.toInt)
+        case (_, e)           => sys.error(s"unable to parse $e")
 
 
   val rocks: Vector[Pos] =
+
     val paths =
       Source
         .fromResource(s"$day.txt")
         .getLines
-        .map(parse)
+        .map(parseLine)
         .toVector
 
-    def segment(f: Pos, t: Pos): Vector[Pos] =
-      (if     f.x == t.x && f.y < t.y then (f.y to t.y).map(y => Pos.of(t.x, y))
-      else if f.x == t.x && f.y > t.y then (t.y to f.y).map(y => Pos.of(t.x, y))
-      else if f.y == t.y && f.x < t.x then (f.x to t.x).map(x => Pos.of(x, t.y))
-      else if f.y == t.y && f.x > t.x then (t.x to f.x).map(x => Pos.of(x, t.y))
+    def segment(from: Pos, to: Pos): Vector[Pos] =
+      (if     from.x == to.x && from.y < to.y then (from.y to to.y).map(y => Pos.of(to.x, y))
+      else if from.x == to.x && from.y > to.y then (to.y to from.y).map(y => Pos.of(to.x, y))
+      else if from.y == to.y && from.x < to.x then (from.x to to.x).map(x => Pos.of(x, to.y))
+      else if from.y == to.y && from.x > to.x then (to.x to from.x).map(x => Pos.of(x, to.y))
       else sys.error("boom!")).toVector
 
     @tailrec
-    def positions(path: Vector[Pos], a: Vector[Pos] = Vector.empty): Vector[Pos] =
+    def positions(path: Vector[Pos], result: Vector[Pos] = Vector.empty): Vector[Pos] =
       path match
-        case _ +: Vector() => a
-        case f +: t +: r   => positions(t +: r, a :++ segment(f, t))
-        case _             => sys.error("boom!")
+        case _ +: Vector()        => result
+        case from +: to +: rest   => positions(to +: rest, result :++ segment(from, to))
+        case _                    => sys.error("boom!")
 
-    paths.foldLeft(Vector.empty[Pos])((a,p) => a :++ positions(p)).distinct
+    paths.foldLeft(Vector.empty[Pos])((rocks, path) => rocks :++ positions(path)).distinct
 
 
-  case class Cave(view: Vector[Vector[E]], minX: Int):
-    import E.*
+  case class Cave(view: Vector[Vector[Tile]], minX: Int):
+    import Tile.*
 
-    def get(p: Pos): Option[E] =
+    def get(p: Pos): Option[Tile] =
       view.lift(p.y).flatMap(_.lift(p.x - minX))
 
     private def set(p: Pos): Cave =
-      Cave(view.updated(p.y, view(p.y).updated(p.x - minX, S)), minX)
+      Cave(view.updated(p.y, view(p.y).updated(p.x - minX, Sand)), minX)
 
     @tailrec
-    private def land(cur: Pos): (Pos,Boolean) =
+    private def land(current: Pos): (Pos, Boolean) =
       def find(p: Pos): Option[Pos] =
         val below: Vector[Pos] = Vector(Pos.of(p.x, p.y + 1), Pos.of(p.x - 1, p.y + 1), Pos.of(p.x + 1, p.y + 1))
-        below.find(p => get(p).isEmpty || get(p).contains(A))
-      find(cur) match
-        case None                      => (cur, false)
-        case Some(n) if get(n).isEmpty => (n, true)
-        case Some(n)                   => land(n)
+        below.find(p => get(p).isEmpty || get(p).contains(Air))
+      find(current) match
+        case None                      => (current, false)
+        case Some(p) if get(p).isEmpty => (p, true)
+        case Some(tile)                => land(tile)
 
     def count: Int =
-      view.flatten.count(_ == S)
+      view.flatten.count(_ == Sand)
 
     @tailrec
     final def solve1: Int =
@@ -84,32 +83,29 @@ object Day14 extends AoC:
       else
         set(p).solve2
 
-    def asString: String =
-      "\n" + view.map(_.map(_.c).mkString("")).mkString("\n")
-
   private object Cave:
-    import E.*
-    def from1(rs: Vector[Pos]): Cave =
-      val minX: Int = rs.map(_.x).min
-      val maxX: Int = rs.map(_.x).max
+    import Tile.*
+    def fromRocks1(rocks: Vector[Pos]): Cave =
+      val minX: Int = rocks.map(_.x).min
+      val maxX: Int = rocks.map(_.x).max
       val minY: Int = 0
-      val maxY: Int = rs.map(_.y).max
-      val view: Vector[Vector[E]] =
-        val rows  = Vector.fill(maxY - minY + 1, maxX - minX + 1)(A)
-        rs.foldLeft(rows)((r,p) => r.updated(p.y, r(p.y).updated(p.x - minX, R)))
+      val maxY: Int = rocks.map(_.y).max
+      val view: Vector[Vector[Tile]] =
+        val rows  = Vector.fill(maxY - minY + 1, maxX - minX + 1)(Air)
+        rocks.foldLeft(rows): (row, p) =>
+          row.updated(p.y, row(p.y).updated(p.x - minX, Rock))
       Cave(view, minX)
 
-    def from2(rs: Vector[Pos]): Cave =
-      val maxY: Int = rs.map(_.y).max
-      val view: Vector[Vector[E]] =
-        val rows  = Vector.fill(maxY + 1, 1000)(A)
-        rs.foldLeft(rows)((r,p) => r.updated(p.y, r(p.y)
-          .updated(p.x, R)))
-          :+ Vector.fill(1000)(A) :+ Vector.fill(1000)(R)
+    def fromRocks2(rocks: Vector[Pos]): Cave =
+      val maxY: Int = rocks.map(_.y).max
+      val view: Vector[Vector[Tile]] =
+        val rows  = Vector.fill(maxY + 1, 1000)(Air)
+        rocks.foldLeft(rows): (row, p) =>
+          row.updated(p.y, row(p.y).updated(p.x, Rock)) :+ Vector.fill(1000)(Air) :+ Vector.fill(1000)(Rock)
       Cave(view, 0)
 
-    private val drip: Pos = (x = 500,y = 0)
+    private val drip: Pos = Pos.of(500, 0)
 
 
-  lazy val answer1: Int = Cave.from1(rocks).solve1
-  lazy val answer2: Int = Cave.from2(rocks).solve2
+  lazy val answer1: Int = Cave.fromRocks1(rocks).solve1
+  lazy val answer2: Int = Cave.fromRocks2(rocks).solve2

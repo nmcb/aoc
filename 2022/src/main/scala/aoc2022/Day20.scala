@@ -10,13 +10,15 @@ object Day20 extends AoC:
 
   def solve(input: Vector[Long], key: Int = 1, runs: Int = 1): Vector[Long] =
 
-    extension (buffer: mutable.Buffer[(Long,Int)]) infix def mix(element: (Long,Int)): mutable.Buffer[(Long,Int)] =
-      val (steps,_) = element
-      val from = buffer.indexOf(element)
-      buffer.remove(from)
-      val to  = (from + steps) % buffer.size
-      buffer.insert(if to < 0 then to.toInt + buffer.size else to.toInt, element)
-      buffer
+    extension (buffer: mutable.Buffer[(Long, Int)])
+
+      infix def mix(element: (Long, Int)): mutable.Buffer[(Long,Int)] =
+        val (steps, _) = element
+        val from = buffer.indexOf(element)
+        buffer.remove(from)
+        val to  = (from + steps) % buffer.size
+        buffer.insert(if to < 0 then to.toInt + buffer.size else to.toInt, element)
+        buffer
 
     val indexed: Vector[(Long, Int)] =
       input.map(_ * key).zipWithIndex
@@ -28,10 +30,12 @@ object Day20 extends AoC:
 
     decrypted.map((v,_) => v)
 
-  def grove(indices: Vector[Int])(coords: Vector[Long]): Vector[Long] =
+  def grove(indices: Vector[Int])(coordinates: Vector[Long]): Vector[Long] =
+
     def get(i: Int): Long =
-      val idx = (i + coords.indexOf(0)) % coords.length
-      coords(idx)
+      val idx = (i + coordinates.indexOf(0)) % coordinates.length
+      coordinates(idx)
+
     indices.map(get)
 
 
