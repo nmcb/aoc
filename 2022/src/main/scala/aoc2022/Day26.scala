@@ -1,6 +1,7 @@
 package aoc2022
 
 import nmcb.*
+
 import scala.annotation.tailrec
 
 object Day26 extends AoC:

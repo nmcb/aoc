@@ -5,7 +5,8 @@ import scala.annotation.tailrec
 
 object Day05 extends AoC:
 
-  val jumps: Vector[Int] = lines.map(_.trim.toInt)
+  val jumps: Vector[Int] =
+    lines.map(_.trim.toInt)
 
   case class CPU(mem: Vector[Int], update: Int => Int, pc: Int = 0, steps: Int = 0):
     @tailrec
