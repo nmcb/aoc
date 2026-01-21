@@ -14,7 +14,7 @@ object Day04 extends AoC:
   extension (l: String) infix def anagram(r: String): Boolean =
     l.charCount == r.charCount
 
-  case class Passphrase(words: Seq[String]):
+  case class Passphrase(words: Vector[String]):
 
     def valid1: Boolean =
       words.size == words.distinct.size
@@ -22,9 +22,9 @@ object Day04 extends AoC:
     def valid2: Boolean =
       words.combinations(2).forall(ws => !(ws.head anagram ws.last))
 
-  val passphrases: Seq[Passphrase] =
+  val passphrases: Vector[Passphrase] =
     lines
-      .map(_.trim.split("\\s+").toSeq)
+      .map(_.trim.split("\\s+").toVector)
       .map(Passphrase.apply)
 
   lazy val answer1: Int = passphrases.count(_.valid1)
