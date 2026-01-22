@@ -1,6 +1,7 @@
 package aoc2021
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.annotation.tailrec
 
@@ -19,14 +20,14 @@ object Day21 extends AoC:
         else
           copy(cur = cur + 1, rolled = rolled + 1)
 
-    case class PlayerPart1(name: String, start: Int, rolled: Seq[Int] = Seq.empty, score: Int = 0)
+    case class Player(name: String, start: Int, rolled: Seq[Int] = Seq.empty, score: Int = 0)
 
-    case class GamePart1(player1: PlayerPart1, player2: PlayerPart1, pawn1: Int, pawn2: Int, dice: Dice, goal: Int)
+    case class Game(player1: Player, player2: Player, pawn1: Int, pawn2: Int, dice: Dice, goal: Int)
 
     @tailrec
-    def solve(g: GamePart1): Int =
+    def solve(g: Game): Int =
 
-      def won(p: PlayerPart1): Boolean =
+      def won(p: Player): Boolean =
         p.score >= g.goal
 
       if won(g.player2) then
@@ -48,23 +49,23 @@ object Day21 extends AoC:
           )
         )
 
-    val player1 = PlayerPart1(name = "#1", start = 7)
-    val player2 = PlayerPart1(name = "#2", start = 9)
-    val game1 = GamePart1(player1, player2, player1.start, player2.start, Dice(1, 100), 1000)
+    val player1 = Player(name = "#1", start = 7)
+    val player2 = Player(name = "#2", start = 9)
+    val game1 = Game(player1, player2, player1.start, player2.start, Dice(1, 100), 1000)
 
-    lazy val answer1: Int = solve(game1)
+    lazy val answer: Int = solve(game1)
 
 
   object Part2:
 
-    val rollDiracDice: Map[Long, Long] =
+    val rollDiracDice: Vector[(Long, Long)] =
       val throws =
         for
           t1 <- 1L to 3L
           t2 <- 1L to 3L
           t3 <- 1L to 3L
         yield t1 + t2 + t3
-      throws.groupMapReduce(identity)(_ => 1L)(_ + _)
+      throws.groupMapReduce(identity)(_ => 1L)(_ + _).toVector
 
     case class Player(pos: Long, score: Long):
 
@@ -87,24 +88,25 @@ object Day21 extends AoC:
         player1.score >= n || player2.score >= n
 
     @annotation.tailrec
-    def countDiracWins(games: List[(Game, Long)], tally: (Long, Long)): (Long, Long) =
-      games match
-        case Nil => tally
-        case (game, freq) :: tail if game.hasScored(21) =>
-          if game.isPlayer1Turn then countDiracWins(tail, (tally._1, tally._2 + freq))
-          else countDiracWins(tail, (tally._1 + freq, tally._2))
-        case (game, freq) :: tail =>
-          val copies =
-            for (roll, dieFreq) <- rollDiracDice.toList
-              yield game.next(roll) -> (dieFreq * freq)
-          countDiracWins(copies ::: tail, tally)
+    def countDiracWins(games: Vector[(Game, Long)], scores: (Long, Long)): (Long, Long) =
+      games.runtimeChecked match
+        case Vector() =>
+          scores
+        case (game, freq) +: rest if game.hasScored(21) =>
+          if game.isPlayer1Turn then
+            countDiracWins(rest, (scores.left, scores.right + freq))
+          else
+            countDiracWins(rest, (scores.left + freq, scores.right))
+        case (game, current) +: rest =>
+          val copies =  rollDiracDice.map((roll, freq) => game.next(roll) -> (current * freq))
+          countDiracWins(copies :++ rest, scores)
 
     val player1 = Player(pos = 7, score = 0)
     val player2 = Player(pos = 9, score = 0)
     val game = Game(player1, player2, turn = 0)
-    lazy val (score1, score2) = countDiracWins(List(game -> 1L), (0L, 0L))
+    lazy val (score1, score2) = countDiracWins(Vector(game -> 1L), (0L, 0L))
     lazy val answer: Long = score1 max score2
 
 
-  lazy val answer1: Long = Part1.answer1
+  lazy val answer1: Long = Part1.answer
   lazy val answer2: Long = Part2.answer
