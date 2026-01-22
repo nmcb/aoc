@@ -2,7 +2,7 @@ package examples
 
 import scala.annotation.tailrec
 
-object Magnus extends App:
+object Magnus:
 
   trait Order[A]:
     def gt(l: A, r: A): Boolean
@@ -32,10 +32,6 @@ object Magnus extends App:
   private val data1: List[Int] =
     List(1, 9, 2, 8, 3, 7, 4, 6, 5, 1)
 
-  println(s"data1=$data1")
-  println(s"sort1=${sort(data1)}")
-
-
   case class Person(name: String, age: Int)
 
   private object Person:
@@ -47,10 +43,14 @@ object Magnus extends App:
   private val data3: List[Person] =
     List(Person("Marco", 53), Person("Magnus", 19))
 
-  println(s"data3=$data3")
   given Order[Person]:
     def gt(l: Person, r: Person): Boolean = l.name.length > r.name.length
-  println(s"sort3=${sort(data3)}")
+
+  @main def run(): Unit =
+    println(s"data1=$data1")
+    println(s"sort1=${sort(data1)}")
+    println(s"data3=$data3")
+    println(s"sort3=${sort(data3)}")
 
 
 
