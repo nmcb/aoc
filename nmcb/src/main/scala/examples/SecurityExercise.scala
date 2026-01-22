@@ -5,7 +5,7 @@ import scala.io.*
 import scala.util.*
 
 /** @see https://en.wikipedia.org/wiki/Karger%27s_algorithm */
-object SecurityExercise extends App:
+object SecurityExercise:
 
   type Node    = String
   type Cluster = Set[Node]
@@ -49,5 +49,5 @@ object SecurityExercise extends App:
 
   given Random = Random(seed = 4) // tweaked for test performance
   lazy val (clusters: Set[Cluster], cuts: Vector[Route]) = routes.minCut(3)
-  lazy val cluster0 = clusters.head.size
-  lazy val cluster1 = clusters.last.size
+  lazy val cluster0: Int = clusters.head.size
+  lazy val cluster1: Int = clusters.last.size
