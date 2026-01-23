@@ -48,7 +48,7 @@ object Year201Day21Part2_Scala374vsScala381:
   def printResult(): Unit =
     println(s"result: ${play(Pawn(pos = 7), Pawn(pos = 9))}")
 
-  
+
   def f(x: Int): (Int, Int) = (1, 0)
 
   val result: Iterable[(Int, Int)] =
@@ -60,4 +60,4 @@ object Year201Day21Part2_Scala374vsScala381:
 
   /** @see https://github.com/scala/scala3/issues/25077 */
   @main def minimizedCode(): Unit =
-    assert(result.size == 3, "Expected 3 elements, got ${result.size}")
+    assert(result.size == 3, s"Expected 3 elements, got ${result.size}")
