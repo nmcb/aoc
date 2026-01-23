@@ -9,42 +9,39 @@ object Day21 extends AoC:
 
   object Part1:
 
-    case class Dice(min: Int, max: Int, cur: Int = 0, rolled: Int = 0):
-
-      def face: Int =
-        cur
+    case class Dice(min: Int, max: Int, face: Int = 0, rolled: Int = 0):
 
       def roll: Dice =
-        if cur >= max then
-          copy(cur = min, rolled = rolled + 1)
+        if face >= max then
+          copy(face = min, rolled = rolled + 1)
         else
-          copy(cur = cur + 1, rolled = rolled + 1)
+          copy(face = face + 1, rolled = rolled + 1)
 
     case class Player(name: String, start: Int, rolled: Seq[Int] = Seq.empty, score: Int = 0)
 
     case class Game(player1: Player, player2: Player, pawn1: Int, pawn2: Int, dice: Dice, goal: Int)
 
     @tailrec
-    def solve(g: Game): Int =
+    def solve(game: Game): Int =
 
-      def won(p: Player): Boolean =
-        p.score >= g.goal
+      def won(player: Player): Boolean =
+        player.score >= game.goal
 
-      if won(g.player2) then
-        g.dice.rolled * g.player1.score
+      if won(game.player2) then
+        game.dice.rolled * game.player1.score
       else
-        val throw1 = g.dice.roll
+        val throw1 = game.dice.roll
         val throw2 = throw1.roll
         val throw3 = throw2.roll
 
-        val position = 1 + ((g.pawn1 - 1 + throw1.face + throw2.face + throw3.face) % 10)
-        val played   = g.player1.copy(score = g.player1.score + position)
+        val position = 1 + ((game.pawn1 - 1 + throw1.face + throw2.face + throw3.face) % 10)
+        val played   = game.player1.copy(score = game.player1.score + position)
         solve(
-          g.copy(
-            player1 = g.player2,
+          game.copy(
+            player1 = game.player2,
             player2 = played,
             dice = throw3,
-            pawn1 = g.pawn2,
+            pawn1 = game.pawn2,
             pawn2 = position
           )
         )
@@ -67,13 +64,13 @@ object Day21 extends AoC:
         yield t1 + t2 + t3
       throws.groupMapReduce(identity)(_ => 1L)(_ + _).toVector
 
-    case class Player(pos: Long, score: Long):
+    case class Player(pos: Long, score: Long = 0):
 
-      def move(n: Long): Player =
-        val newPos = (pos - 1 + n) % 10 + 1
-        copy(newPos, score + newPos)
+      def move(steps: Long): Player =
+        val to = (pos - 1 + steps) % 10 + 1
+        copy(to, score + to)
 
-    case class Game(player1: Player, player2: Player, turn: Long):
+    case class Game(player1: Player, player2: Player, turn: Long = 0):
 
       def isPlayer1Turn: Boolean =
         turn % 2 == 0
@@ -87,24 +84,25 @@ object Day21 extends AoC:
       def hasScored(n: Int): Boolean =
         player1.score >= n || player2.score >= n
 
-    @annotation.tailrec
-    def countDiracWins(games: Vector[(Game, Long)], scores: (Long, Long)): (Long, Long) =
-      games.runtimeChecked match
-        case Vector() =>
-          scores
-        case (game, freq) +: rest if game.hasScored(21) =>
+    @tailrec
+    def countDiracWins(games: Vector[(Game, Long)], scores: (Long, Long) = (0L ,0L)): (Long, Long) =
+      if games.isEmpty then
+        scores
+      else
+        val (game, frequency) = games.head
+        if game.hasScored(21) then
           if game.isPlayer1Turn then
-            countDiracWins(rest, (scores.left, scores.right + freq))
+            countDiracWins(games.tail, (scores.left, scores.right + frequency))
           else
-            countDiracWins(rest, (scores.left + freq, scores.right))
-        case (game, current) +: rest =>
-          val copies =  rollDiracDice.map((roll, freq) => game.next(roll) -> (current * freq))
-          countDiracWins(copies :++ rest, scores)
+            countDiracWins(games.tail, (scores.left + frequency, scores.right))
+        else
+          val copies = rollDiracDice.map((roll, freq) => game.next(roll) -> (frequency * freq))
+          countDiracWins(copies :++ games.tail, scores)
 
-    val player1 = Player(pos = 7, score = 0)
-    val player2 = Player(pos = 9, score = 0)
-    val game = Game(player1, player2, turn = 0)
-    lazy val (score1, score2) = countDiracWins(Vector(game -> 1L), (0L, 0L))
+    val player1 = Player(pos = 7)
+    val player2 = Player(pos = 9)
+    val game = Game(player1, player2)
+    lazy val (score1, score2) = countDiracWins(Vector(game -> 1L))
     lazy val answer: Long = score1 max score2
 
 
