@@ -1,6 +1,5 @@
 package examples
 
-/** @see https://github.com/scala/scala3/issues/25077 */
 object Year201Day21Part2_Scala374vsScala381:
 
   case class Pawn(pos: Int, score: Int = 0):
@@ -48,3 +47,17 @@ object Year201Day21Part2_Scala374vsScala381:
   @main
   def printResult(): Unit =
     println(s"result: ${play(Pawn(pos = 7), Pawn(pos = 9))}")
+
+  
+  def f(x: Int): (Int, Int) = (1, 0)
+
+  val result: Iterable[(Int, Int)] =
+    for
+      (k, v) <- Map(1 -> 1, 2 -> 1, 3 -> 1)
+      x       = k + v
+      (a, b)  = f(x)
+    yield (a, b)
+
+  /** @see https://github.com/scala/scala3/issues/25077 */
+  @main def minimizedCode(): Unit =
+    assert(result.size == 3, "Expected 3 elements, got ${result.size}")
