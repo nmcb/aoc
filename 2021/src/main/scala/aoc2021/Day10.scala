@@ -41,7 +41,7 @@ object Day10 extends AoC:
           case      _                                      => Nil
     loop(s.toList)
 
-  lazy val answer1: Long =
+  override lazy val answer1: Long =
     lines
       .flatMap(incomplete)
       .map:
@@ -54,7 +54,7 @@ object Day10 extends AoC:
       .values
       .sum
 
-  lazy val answer2 =
+  override lazy val answer2 =
     val scores =
       lines
         .map(incompletes)

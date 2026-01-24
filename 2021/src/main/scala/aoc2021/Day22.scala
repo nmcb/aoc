@@ -132,5 +132,5 @@ object Day22 extends AoC:
           val set = on == "on"
           CubeStep(set, Cube(min, max))
 
-  lazy val answer1: Int  = Cuboid.reboot(cuboidSteps).all.values.count(identity)
-  lazy val answer2: Long = Cube.reboot(cubeSteps)
+  override lazy val answer1: Int  = Cuboid.reboot(cuboidSteps).all.values.count(identity)
+  override lazy val answer2: Long = Cube.reboot(cubeSteps)

@@ -49,5 +49,5 @@ object Day03 extends AoC:
     minCrossingsOnIntersection(crossings1,crossings2).count
 
 
-  lazy val answer1: Int = solve1(description1, description2)
-  lazy val answer2: Int = solve2(description1, description2)
+  override lazy val answer1: Int = solve1(description1, description2)
+  override lazy val answer2: Int = solve2(description1, description2)

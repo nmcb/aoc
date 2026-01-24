@@ -41,10 +41,10 @@ object Day06 extends AoC:
           loop(next, seen :+ current)
       loop(this)
 
-  lazy val answer1: Int =
+  override lazy val answer1: Int =
     Area(banks).redistribute.size - 1
 
-  lazy val answer2: Int =
+  override lazy val answer2: Int =
     val seen = Area(banks).redistribute
     val last = seen.last
     seen.dropWhile(_ != last).size - 1

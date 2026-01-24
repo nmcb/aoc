@@ -26,5 +26,5 @@ object Day23 extends AoC:
     yield
       Set(a,b,c)
 
-  lazy val answer1: Long = solve1.size
-  lazy val answer2: String = BronKerbosch.run(neighbours).toVector.sorted.mkString(",")
+  override lazy val answer1: Long = solve1.size
+  override lazy val answer2: String = BronKerbosch.run(neighbours).toVector.sorted.mkString(",")

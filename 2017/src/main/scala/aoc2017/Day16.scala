@@ -35,5 +35,5 @@ object Day16 extends AoC:
 
   val moves: Vector[String] = input.split(",").toVector
 
-  lazy val answer1: String = Programs.init.dance(moves)
-  lazy val answer2: String = Cycle.find(Programs.init, _.dance(moves)).simulate(1000000000L)
+  override lazy val answer1: String = Programs.init.dance(moves)
+  override lazy val answer2: String = Cycle.find(Programs.init, _.dance(moves)).simulate(1000000000L)

@@ -122,5 +122,5 @@ object Day10 extends AoC:
     loop(path.tail, d, scan(p, d.cw))
 
 
-  lazy val answer1: Int = path.length / 2
-  lazy val answer2: Int = area(path).size
+  override lazy val answer1: Int = path.length / 2
+  override lazy val answer2: Int = area(path).size

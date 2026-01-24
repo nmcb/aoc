@@ -54,7 +54,7 @@ object Day20 extends AoC:
           Particle(p, v, a)
 
   /** assume 500 simulation iterations to be enough */
-  lazy val answer1: Int =
+  override lazy val answer1: Int =
     Iterator
       .iterate(particles)(_.tick)
       .map(minDistanceParticleIndex)
@@ -63,7 +63,7 @@ object Day20 extends AoC:
       .last
 
   /** assume 100 simulation iterations to be enough */
-  lazy val answer2: Int =
+  override lazy val answer2: Int =
     Iterator
       .iterate(particles)(tickWithCollisions)
       .take(100)

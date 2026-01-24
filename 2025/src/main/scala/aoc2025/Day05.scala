@@ -34,5 +34,5 @@ object Day05 extends AoC:
         case (tail :+ last, test) if test.min <= last.max + 1 => tail :+ (last.min, last.max max test.max)
         case (result, range)                                  => result :+ range
 
-  lazy val answer1: Int = ingredients.count(i => ranges.exists(_.contains(i)))
-  lazy val answer2: Long = ranges.merge.map(_.size).sum
+  override lazy val answer1: Int = ingredients.count(i => ranges.exists(_.contains(i)))
+  override lazy val answer2: Long = ranges.merge.map(_.size).sum

@@ -82,5 +82,5 @@ object Day04 extends AoC:
     val result = minuteMaxGuardCount.maxBy(_.guardCount.count)
     result.guardCount.guard * result.minute
 
-  lazy val answer1: Int = solve1(records)
-  lazy val answer2: Int = solve2(records)
+  override lazy val answer1: Int = solve1(records)
+  override lazy val answer2: Int = solve2(records)

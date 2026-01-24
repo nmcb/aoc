@@ -104,5 +104,5 @@ object Day24 extends AoC:
       else
         groups.fight
 
-  lazy val answer1: Int = parseArmies(chunks)(boost = 0).fight.units
-  lazy val answer2: Int = Iterator.from(1).map(parseArmies(chunks)).map(_.fight).findFirst(_.winner == Immune).units
+  override lazy val answer1: Int = parseArmies(chunks)(boost = 0).fight.units
+  override lazy val answer2: Int = Iterator.from(1).map(parseArmies(chunks)).map(_.fight).findFirst(_.winner == Immune).units

@@ -33,5 +33,5 @@ object Day09 extends AoC:
           break(result)
     result
 
-  lazy val answer1: Long = solve1(preamble, inbound)
-  lazy val answer2: Long = solve2(inbound, answer1).get
+  override lazy val answer1: Long = solve1(preamble, inbound)
+  override lazy val answer2: Long = solve2(inbound, answer1).get

@@ -38,5 +38,5 @@ object Day08 extends AoC:
 
       loop(quoted.toList)
 
-  lazy val answer1: Int = lines.map(str => str.length - str.unescaped.length).sum
-  lazy val answer2: Int = lines.map(str => str.escaped.length - str.length).sum
+  override lazy val answer1: Int = lines.map(str => str.length - str.unescaped.length).sum
+  override lazy val answer2: Int = lines.map(str => str.escaped.length - str.length).sum

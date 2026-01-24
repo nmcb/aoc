@@ -86,5 +86,5 @@ object Day22 extends AoC:
   def solve(init: Carrier, iterations: Int)(next: Carrier => Carrier): Int =
     Iterator.iterate(init)(next).nth(iterations).infected
 
-  lazy val answer1: Int = solve(carrier, 10000)(_.wake1)
-  lazy val answer2: Int = solve(carrier, 10000000)(_.wake2)
+  override lazy val answer1: Int = solve(carrier, 10000)(_.wake1)
+  override lazy val answer2: Int = solve(carrier, 10000000)(_.wake2)

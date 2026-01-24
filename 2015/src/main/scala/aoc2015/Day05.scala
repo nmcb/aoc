@@ -15,5 +15,5 @@ object Day05 extends AoC:
   val twoPair: UnanchoredRegex = "(..).*\\1".r.unanchored
   val triple: UnanchoredRegex  = "(.).\\1".r.unanchored
 
-  lazy val answer1: Int = strings.count(line => vowels.matches(line) && pair.matches(line) && !naughty.matches(line))
-  lazy val answer2: Int = strings.count(line => twoPair.matches(line) && triple.matches(line))
+  override lazy val answer1: Int = strings.count(line => vowels.matches(line) && pair.matches(line) && !naughty.matches(line))
+  override lazy val answer2: Int = strings.count(line => twoPair.matches(line) && triple.matches(line))

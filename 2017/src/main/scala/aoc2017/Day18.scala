@@ -82,10 +82,10 @@ object Day18 extends AoC:
         in   = List.empty
       )
 
-  lazy val answer1: Long =
+  override lazy val answer1: Long =
     Assembly.load(0, instructions).solve1.in.last
 
-  lazy val answer2: Int =
+  override lazy val answer2: Int =
     var assembly0 = Assembly.load(0, instructions)
     var assembly1 = Assembly.load(1, instructions)
     var count = 0

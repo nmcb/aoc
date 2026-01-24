@@ -75,7 +75,7 @@ object Day04 extends AoC:
 
 
   lazy val board1: Board[Int] = playWhoWinsFirst(draws)
-  lazy val answer1: Int       = board1.unmarked.sum * board1.lastDraw
+  override lazy val answer1: Int       = board1.unmarked.sum * board1.lastDraw
 
   lazy val board2: Board[Int] = playWhoWinsLast(draws)
-  lazy val answer2: Int       = board2.unmarked.sum * board2.lastDraw
+  override lazy val answer2: Int       = board2.unmarked.sum * board2.lastDraw

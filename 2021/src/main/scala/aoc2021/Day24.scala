@@ -128,5 +128,5 @@ object Day24 extends AoC:
 
     go(14)
 
-  lazy val answer1: String = solve(constraints).map(_.max).mkString
-  lazy val answer2: String = solve(constraints).map(_.min).mkString
+  override lazy val answer1: String = solve(constraints).map(_.max).mkString
+  override lazy val answer2: String = solve(constraints).map(_.min).mkString

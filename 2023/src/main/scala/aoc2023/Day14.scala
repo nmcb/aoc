@@ -53,5 +53,5 @@ object Day14 extends AoC:
   lazy val grid: Grid = Grid(lines.map(_.toVector))
   
   
-  lazy val answer1: Long = grid.tiltN.load
-  lazy val answer2: Long = Cycle.find(grid, _.cycle, _.cycleInvariant).simulate(1_000_000_000L).load
+  override lazy val answer1: Long = grid.tiltN.load
+  override lazy val answer2: Long = Cycle.find(grid, _.cycle, _.cycleInvariant).simulate(1_000_000_000L).load

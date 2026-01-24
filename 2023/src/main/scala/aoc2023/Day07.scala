@@ -127,7 +127,7 @@ object Day07 extends AoC:
           Hand(cards.map(Card.apply).toList, bid.toInt)
 
   
-  lazy val answer1: Int =
+  override lazy val answer1: Int =
     given Ordering[Card] = orderBy(Game.sortedSet)
     lines
       .map(Hand.fromString)
@@ -136,7 +136,7 @@ object Day07 extends AoC:
       .map((h,i) => h.bid * (i + 1))
       .sum
 
-  lazy val answer2: Int =
+  override lazy val answer2: Int =
     given Ordering[Card] = orderBy(Game.sortedJokerSet)
     lines
       .map(Hand.fromString)

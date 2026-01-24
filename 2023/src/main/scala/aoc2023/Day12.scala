@@ -51,5 +51,5 @@ object Day12 extends AoC:
   lazy val puzzle: Puzzle = Puzzle(lines.map(Line.fromString).toList)
 
 
-  lazy val answer1: Long = puzzle.arrangements
-  lazy val answer2: Long = puzzle.unfoldAll.arrangements
+  override lazy val answer1: Long = puzzle.arrangements
+  override lazy val answer2: Long = puzzle.unfoldAll.arrangements

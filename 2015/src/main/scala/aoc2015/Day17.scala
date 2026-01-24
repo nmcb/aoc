@@ -16,9 +16,9 @@ object Day17 extends AoC:
       .filter(_.sum == 150)
       .toList
 
-  lazy val answer1: Int =
+  override lazy val answer1: Int =
     fits.size
 
-  lazy val answer2: Int =
+  override lazy val answer2: Int =
     val min = fits.map(_.size).min
     fits.count(_.size == min)

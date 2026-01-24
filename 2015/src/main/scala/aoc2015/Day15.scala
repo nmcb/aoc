@@ -54,5 +54,5 @@ object Day15 extends AoC:
       .toList
 
 
-  lazy val answer1: Int = recipes.map(_.score).max
-  lazy val answer2: Int = recipes.filter(_.calories == 500).map(_.score).max
+  override lazy val answer1: Int = recipes.map(_.score).max
+  override lazy val answer2: Int = recipes.filter(_.calories == 500).map(_.score).max

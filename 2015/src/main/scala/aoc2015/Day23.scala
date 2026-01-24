@@ -6,7 +6,7 @@ import scala.annotation.tailrec
 object Day23 extends AoC:
 
   type Register  = String
-  type Registers = Map[Register,Int]
+  type Registers = Map[Register, Int]
 
   extension (registers: Registers)
 
@@ -42,7 +42,6 @@ object Day23 extends AoC:
         case s"jmp $o"     => JMP(o.toInt)
         case s"jie $r, $o" => JIE(r, o.toInt)
         case s"jio $r, $o" => JIO(r, o.toInt)
-      .toVector
 
   case class CPU(prog: Vector[Inst], pc: Int = 0, registers: Registers = Map.empty.withDefaultValue(0)):
 
@@ -60,8 +59,8 @@ object Day23 extends AoC:
 
     @tailrec
     final def run: CPU =
-      if !terminated then step.run else this
+      if terminated then this else step.run
 
 
-  lazy val answer1: Int = CPU(instructions).run.registers.valueOf("b")
-  lazy val answer2: Int = CPU(instructions, registers = Map("a" -> 1).withDefaultValue(0)).run.registers.valueOf("b")
+  override lazy val answer1: Int = CPU(instructions).run.registers.valueOf("b")
+  override lazy val answer2: Int = CPU(instructions, registers = Map("a" -> 1).withDefaultValue(0)).run.registers.valueOf("b")

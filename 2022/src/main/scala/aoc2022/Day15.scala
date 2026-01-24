@@ -28,14 +28,14 @@ object Day15 extends AoC:
         case s"Sensor at x=$sx, y=$sy: closest beacon is at x=$bx, y=$by" =>
           Lock((x = sx.toInt, y = sy.toInt), (x = bx.toInt, y = by.toInt))
 
-  lazy val answer1: Int =
+  override lazy val answer1: Int =
     val covers: List[Cover] = locks.flatMap(_.cover(2000000))
     val maxX: Long = math.max(covers.map(_.max).max, 2000000)
     val minX: Long = math.min(covers.map(_.min).min, 0)
     (minX to maxX).foldLeft(0): (count, x) =>
       if covers.exists(c => c.min <= x && c.max >= x) then count + 1 else count
 
-  lazy val answer2: Long =
+  override lazy val answer2: Long =
     var answer: Long = 0
     for
       y <- 0 to 4000000

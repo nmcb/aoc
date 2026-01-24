@@ -44,5 +44,5 @@ object Day07 extends AoC:
           case _                   => sys.error("boom!")
 
 
-  lazy val answer1: Int = bags.solve1(bags.parentsOf("shinygold")).distinct.size
-  lazy val answer2: Int = bags.solve2(bags.childrenOf("shinygold"))
+  override lazy val answer1: Int = bags.solve1(bags.parentsOf("shinygold")).distinct.size
+  override lazy val answer2: Int = bags.solve2(bags.childrenOf("shinygold"))

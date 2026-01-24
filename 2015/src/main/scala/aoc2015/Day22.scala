@@ -84,5 +84,5 @@ object Day22 extends AoC:
 
   val start: Game = Game(50, 500, 0, 0, 71, 10, Map.empty)
 
-  lazy val answer1: Int = solve(start, hard = false)
-  lazy val answer2: Int = solve(start, hard = true)
+  override lazy val answer1: Int = solve(start, hard = false)
+  override lazy val answer2: Int = solve(start, hard = true)

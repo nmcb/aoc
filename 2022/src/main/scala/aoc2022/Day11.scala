@@ -94,11 +94,11 @@ object Day11 extends AoC:
       .product
 
 
-  lazy val answer1: Long =
+  override lazy val answer1: Long =
     val ms = monkeys.map(_.copy(lowerWorry = _ / 3))
     solve(20, monkeys.map(_.copy(lowerWorry = _ / 3)))
 
-  lazy val answer2: Long =
+  override lazy val answer2: Long =
     val productOfDivisible = monkeys.map(_.divisible).product
     val ms = monkeys.map(_.copy(lowerWorry = _ % productOfDivisible))
     solve(10000, ms)

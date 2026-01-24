@@ -21,5 +21,4 @@ object Day26 extends AoC:
     decompose(n).flatMap(c => Vector(c.size.toString.head, c.head))
 
 
-  lazy val answer1: Int    = Iterator.iterate(Vector('1'))(successor).take(10).toList.last.size
-  lazy val answer2: String = "<unimplemented>"
+  override lazy val answer1: Int    = Iterator.iterate(Vector('1'))(successor).take(10).toList.last.size

@@ -17,5 +17,5 @@ object Day19 extends AoC:
     while i * 3 < input do i *= 3
     input - i
 
-  lazy val answer1: Int = solve1(puzzle)
-  lazy val answer2: Int = solve2(puzzle)
+  override lazy val answer1: Int = solve1(puzzle)
+  override lazy val answer2: Int = solve2(puzzle)

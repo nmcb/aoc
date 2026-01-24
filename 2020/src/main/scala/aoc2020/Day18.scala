@@ -64,5 +64,5 @@ object Day18 extends AoC:
     expr2.run(line)
 
 
-  lazy val answer1: Long = puzzle.map(parse1).map(_.eval).sum
-  lazy val answer2: Long = puzzle.map(parse2).map(_.eval).sum
+  override lazy val answer1: Long = puzzle.map(parse1).map(_.eval).sum
+  override lazy val answer2: Long = puzzle.map(parse2).map(_.eval).sum

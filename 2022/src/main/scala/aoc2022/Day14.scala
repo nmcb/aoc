@@ -107,5 +107,5 @@ object Day14 extends AoC:
     private val drip: Pos = Pos.of(500, 0)
 
 
-  lazy val answer1: Int = Cave.fromRocks1(rocks).solve1
-  lazy val answer2: Int = Cave.fromRocks2(rocks).solve2
+  override lazy val answer1: Int = Cave.fromRocks1(rocks).solve1
+  override lazy val answer2: Int = Cave.fromRocks2(rocks).solve2

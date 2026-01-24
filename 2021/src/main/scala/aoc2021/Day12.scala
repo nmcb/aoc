@@ -34,5 +34,5 @@ object Day12 extends AoC:
       val occurrences = (next :: path).groupBy(identity).values.map(_.length)
       occurrences.exists(_ > 2) || occurrences.count(_ == 2) > 1
 
-  lazy val answer1: Int = decend(caves)((next, path) => path.contains(next))
-  lazy val answer2: Int = solve2(caves)
+  override lazy val answer1: Int = decend(caves)((next, path) => path.contains(next))
+  override lazy val answer2: Int = solve2(caves)

@@ -20,5 +20,5 @@ object Day04 extends AoC:
     r1.exists(i => r2.contains(i))
 
 
-  lazy val answer1: Int = sections.count(contained1)
-  lazy val answer2: Int = sections.count(contained2)
+  override lazy val answer1: Int = sections.count(contained1)
+  override lazy val answer2: Int = sections.count(contained2)

@@ -92,5 +92,5 @@ object Day18 extends AoC:
 
   val (tunnels, keys, robots) = parse(lines)
 
-  lazy val answer1: Int = explore(tunnels, keys, robots)
-  lazy val answer2: Int = solve2(lines)
+  override lazy val answer1: Int = explore(tunnels, keys, robots)
+  override lazy val answer2: Int = solve2(lines)

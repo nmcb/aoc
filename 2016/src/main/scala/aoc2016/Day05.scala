@@ -33,5 +33,5 @@ object Day05 extends AoC:
 
     (0 to 7).map(buffer).mkString
 
-  lazy val answer1: String = solve1(id).toLowerCase
-  lazy val answer2: String = solve2(id).toLowerCase
+  override lazy val answer1: String = solve1(id).toLowerCase
+  override lazy val answer2: String = solve2(id).toLowerCase

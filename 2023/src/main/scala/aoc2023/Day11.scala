@@ -36,5 +36,5 @@ object Day11 extends AoC:
       galaxies.map(_.mkString("")).mkString("", "\n", "\n")
 
 
-  lazy val answer1: Long = image.distances(2L).sum
-  lazy val answer2: Long = image.distances(1000000L).sum
+  override lazy val answer1: Long = image.distances(2L).sum
+  override lazy val answer2: Long = image.distances(1000000L).sum

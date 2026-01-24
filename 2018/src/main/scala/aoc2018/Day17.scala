@@ -74,5 +74,5 @@ object Day17 extends AoC:
     val (flowing, stopped) = stream(area)
     stopped
 
-  lazy val answer1: Int = solve1(area)
-  lazy val answer2: Int = solve2(area)
+  override lazy val answer1: Int = solve1(area)
+  override lazy val answer2: Int = solve2(area)

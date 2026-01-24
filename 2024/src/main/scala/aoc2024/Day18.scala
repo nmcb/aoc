@@ -13,7 +13,7 @@ object Day18 extends AoC:
   val bytes: Vector[Pos] = lines.map(_.split(',')).map(_.toPos)
   val memory: Grid[Char] = Grid.fill(71, 71, '.')
 
-  lazy val answer1: Int =
+  override lazy val answer1: Int =
     val fallen = bytes.take(1024).foldLeft(memory)(_.updated(_, '#'))
     val graph  = Graph.fromGrid(fallen, '.')
     val result = Dijkstra.run(fallen.minPos, graph)
@@ -26,4 +26,4 @@ object Day18 extends AoC:
     val distance = Dijkstra.run(test.minPos, graph).distanceTo(test.maxPos)
     if distance.isEmpty then loop(todo.tail, test) else todo.head
 
-  lazy val answer2: Pos = loop(bytes.reverse, bytes.foldLeft(memory)(_.updated(_, '#')))
+  override lazy val answer2: Pos = loop(bytes.reverse, bytes.foldLeft(memory)(_.updated(_, '#')))

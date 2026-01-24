@@ -56,5 +56,5 @@ object Day08 extends AoC:
         case RotateRow(index, by)    => shiftRow(index, by)
         case RotateCol(index, by)    => transpose.shiftRow(index, by).transpose
 
-  lazy val answer1: Int = operations.foldLeft(Screen.empty)(_ process _).countLit
-  lazy val answer2: String = operations.foldLeft(Screen.empty)(_ process _).asString
+  override lazy val answer1: Int = operations.foldLeft(Screen.empty)(_ process _).countLit
+  override lazy val answer2: String = operations.foldLeft(Screen.empty)(_ process _).asString

@@ -20,5 +20,5 @@ object Day02 extends AoC:
   val boxes: Vector[Box] = lines.collect:
     case s"${l}x${h}x${w}" => Box(l.toInt, h.toInt, w.toInt)
 
-  lazy val answer1: Int = boxes.map(b => b.area + b.slack).sum
-  lazy val answer2: Int = boxes.map(b => b.volume + b.wrap).sum
+  override lazy val answer1: Int = boxes.map(b => b.area + b.slack).sum
+  override lazy val answer2: Int = boxes.map(b => b.volume + b.wrap).sum

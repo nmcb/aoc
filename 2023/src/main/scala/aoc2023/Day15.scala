@@ -62,5 +62,5 @@ object Day15 extends AoC:
       Boxes(Map.empty)
 
 
-  lazy val answer1: Long = operations.map(op => hash(op.line)).sum
-  lazy val answer2: Long = operations.foldLeft(Boxes.empty)(_ process _).power
+  override lazy val answer1: Long = operations.map(op => hash(op.line)).sum
+  override lazy val answer2: Long = operations.foldLeft(Boxes.empty)(_ process _).power

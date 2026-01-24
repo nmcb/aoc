@@ -70,5 +70,5 @@ object Day23 extends AoC:
     solve1(board.map(c => if c != '#' then '.' else c))
 
 
-  lazy val answer1: Int = solve1(Grid.fromLines(lines))
-  lazy val answer2: Int = solve2(Grid.fromLines(lines))
+  override lazy val answer1: Int = solve1(Grid.fromLines(lines))
+  override lazy val answer2: Int = solve2(Grid.fromLines(lines))

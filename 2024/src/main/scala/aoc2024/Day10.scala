@@ -39,5 +39,5 @@ object Day10 extends AoC:
       heads.flatMap(grid.trailsFrom).size
 
 
-  lazy val answer1: Long = grid.score
-  lazy val answer2: Long = grid.rating
+  override lazy val answer1: Long = grid.score
+  override lazy val answer2: Long = grid.rating

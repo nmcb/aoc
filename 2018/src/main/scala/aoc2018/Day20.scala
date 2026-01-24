@@ -75,5 +75,5 @@ object Day20 extends AoC:
       branches    = Vector.empty
     )
 
-  lazy val answer1: Int = solve(input).max
-  lazy val answer2: Int = solve(input).count(_ >= 1000)
+  override lazy val answer1: Int = solve(input).max
+  override lazy val answer2: Int = solve(input).count(_ >= 1000)

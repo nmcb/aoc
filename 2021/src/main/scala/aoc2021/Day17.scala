@@ -25,5 +25,5 @@ object Day17 extends AoC:
       case Probe(nx, ny, nvx, nvy) => go(nx, ny, nvx, nvy, if ny > maxY then ny else maxY)
 
 
-  lazy val answer1: Int = (0 to 50).flatMap(vx => (0 to 200).flatMap(vy => go(0, 0, vx, vy))).max
-  lazy val answer2: Int = (0 to 200).flatMap(vx => (-200 to 200).flatMap(vy => go(0, 0, vx, vy))).size
+  override lazy val answer1: Int = (0 to 50).flatMap(vx => (0 to 200).flatMap(vy => go(0, 0, vx, vy))).max
+  override lazy val answer2: Int = (0 to 200).flatMap(vx => (-200 to 200).flatMap(vy => go(0, 0, vx, vy))).size

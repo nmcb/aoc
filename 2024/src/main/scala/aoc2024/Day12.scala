@@ -117,5 +117,5 @@ object Day12 extends AoC:
 
   val garden: Grid[Tree] = Grid.fromLines(lines)
 
-  lazy val answer1: Long = garden.regions.map(_.fencePrize).sum
-  lazy val answer2: Long = garden.regions.map(_.fencePrizeWithBulkDiscount).sum
+  override lazy val answer1: Long = garden.regions.map(_.fencePrize).sum
+  override lazy val answer2: Long = garden.regions.map(_.fencePrizeWithBulkDiscount).sum

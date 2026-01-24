@@ -23,5 +23,5 @@ object Day15 extends AoC:
       1 + (pv - 1 + mx + my) % 9
     Grid.fromMatrix(matrix)
 
-  lazy val answer1: Int = solve(grid)
-  lazy val answer2: Int = solve(expanded(grid))
+  override lazy val answer1: Int = solve(grid)
+  override lazy val answer2: Int = solve(expanded(grid))

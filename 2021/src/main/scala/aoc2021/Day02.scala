@@ -42,5 +42,5 @@ object Day02 extends AoC:
 
   val instructions: Vector[Inst] = lines.map(Inst.fromLine)
 
-  lazy val answer1: Long = Sub.init.run(instructions).solution
-  lazy val answer2: Long = Sub.init.run(instructions, part2 = true).solution
+  override lazy val answer1: Long = Sub.init.run(instructions).solution
+  override lazy val answer2: Long = Sub.init.run(instructions, part2 = true).solution

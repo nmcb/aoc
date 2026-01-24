@@ -61,5 +61,5 @@ object Day07 extends AoC:
   lazy val free: Long = 70000000L - fileSystem.sizeOf("/")
   lazy val clean: Long = 30000000L - free
 
-  lazy val answer1: Long = fileSystem.sizes.filter(_ <= 100000L).sum
-  lazy val answer2: Long = fileSystem.sizes.filter(_ >= clean).min
+  override lazy val answer1: Long = fileSystem.sizes.filter(_ <= 100000L).sum
+  override lazy val answer2: Long = fileSystem.sizes.filter(_ >= clean).min

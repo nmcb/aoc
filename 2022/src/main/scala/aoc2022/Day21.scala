@@ -111,6 +111,6 @@ object Day21 extends AoC:
       case m                               => Some(m)
 
 
-  lazy val answer1: Long = SAT(program).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
-  lazy val answer2: Long = SAT(patch).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
+  override lazy val answer1: Long = SAT(program).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
+  override lazy val answer2: Long = SAT(patch).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
 

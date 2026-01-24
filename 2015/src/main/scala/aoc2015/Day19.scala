@@ -14,7 +14,7 @@ object Day19 extends AoC:
   val replacements: Vector[(String,String)] = lines.collect:
     case s"$molecule => $replacement" => molecule -> replacement
 
-  lazy val answer1: Int =
+  override lazy val answer1: Int =
     var generations = Set.empty[String]
     for from -> to <- replacements do
       for index <- 0 until molecules.length do
@@ -25,7 +25,7 @@ object Day19 extends AoC:
     generations.size
 
   /** Luck > Skill : replacements are already in the right order */
-  lazy val answer2: Int =
+  override lazy val answer2: Int =
     var target = molecules
     var count  = 0
     while target != "e" do

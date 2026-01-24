@@ -81,5 +81,5 @@ object Day17 extends AoC:
 
       result
 
-  lazy val answer1: String = Path(passcode = "vwbaicqe").solve1.map(_.path).getOrElse("<none>")
-  lazy val answer2: Int    = Path(passcode = "vwbaicqe").solve2.map(_.path.length).getOrElse(-1)
+  override lazy val answer1: String = Path(passcode = "vwbaicqe").solve1.map(_.path).getOrElse("<none>")
+  override lazy val answer2: Int    = Path(passcode = "vwbaicqe").solve2.map(_.path.length).getOrElse(-1)

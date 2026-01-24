@@ -52,5 +52,5 @@ object Day13 extends AoC:
     val zero = name -> preferences.keys.map(n => n -> 0).toMap
     preferences.map((n,p) => n -> (p + (name -> 0))) + zero
 
-  lazy val answer1: Int = names.permutations.map(setting => Table(setting, preferences).totalHappiness).max
-  lazy val answer2: Int = names2.permutations.map(setting => Table(setting, preferences2).totalHappiness).max
+  override lazy val answer1: Int = names.permutations.map(setting => Table(setting, preferences).totalHappiness).max
+  override lazy val answer2: Int = names2.permutations.map(setting => Table(setting, preferences2).totalHappiness).max

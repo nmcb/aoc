@@ -92,5 +92,5 @@ object Day09 extends AoC:
         .size
 
 
-  lazy val answer1: Int = Bacterium.solve(commands, 2)
-  lazy val answer2: Int = Bacterium.solve(commands, 10)
+  override lazy val answer1: Int = Bacterium.solve(commands, 2)
+  override lazy val answer2: Int = Bacterium.solve(commands, 10)

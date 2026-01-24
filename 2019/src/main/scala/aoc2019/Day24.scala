@@ -55,5 +55,5 @@ object Day24 extends AoC:
 
   import Iterator.*
 
-  lazy val answer1: Int = solve1(eris)
-  lazy val answer2: Int = iterate(eris)(step(_, neighbouring3D)).nth(200).size
+  override lazy val answer1: Int = solve1(eris)
+  override lazy val answer2: Int = iterate(eris)(step(_, neighbouring3D)).nth(200).size

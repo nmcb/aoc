@@ -86,5 +86,5 @@ object Day18 extends AoC:
 
   import grid.*
 
-  lazy val answer1: Int = grid.animate(100).count
-  lazy val answer2: Int = grid.withOverlay((minY,minX), (minY,maxX), (maxY,minX), (maxY,maxX)).animate(100).count
+  override lazy val answer1: Int = grid.animate(100).count
+  override lazy val answer2: Int = grid.withOverlay((minY,minX), (minY,maxX), (maxY,minX), (maxY,maxX)).animate(100).count

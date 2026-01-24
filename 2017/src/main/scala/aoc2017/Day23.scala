@@ -205,5 +205,5 @@ object Day23 extends AoC:
   def notPrime(n: Int): Boolean =
     (2 to math.sqrt(n.toDouble).toInt).exists(n % _ == 0)
 
-  lazy val answer1: Long = solve(instructions)
-  lazy val answer2: Int  = (105700 to 122700 by 17).count(notPrime)
+  override lazy val answer1: Long = solve(instructions)
+  override lazy val answer2: Int  = (105700 to 122700 by 17).count(notPrime)

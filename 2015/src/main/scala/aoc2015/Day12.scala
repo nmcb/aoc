@@ -51,5 +51,5 @@ object Day12 extends AoC:
 
   lazy val puzzle: Json = Json.parse(input)
 
-  lazy val answer1: Long = solve(puzzle)
-  lazy val answer2: Long = solve(puzzle, _ != Str("red"))
+  override lazy val answer1: Long = solve(puzzle)
+  override lazy val answer2: Long = solve(puzzle, _ != Str("red"))

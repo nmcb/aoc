@@ -7,7 +7,7 @@ object Day01 extends AoC:
 
   val commands: List[Char] = input.toList
 
-  lazy val answer1: Int =
+  override lazy val answer1: Int =
     commands
       .foldLeft(0): (f,c) =>
         if c == '(' then
@@ -17,7 +17,7 @@ object Day01 extends AoC:
         else
           sys.error(s"unknown command: '$c'")
   
-  lazy val answer2: Int =
+  override lazy val answer2: Int =
     commands
       .scanLeft(0): (f,c) =>
         if c == '(' then

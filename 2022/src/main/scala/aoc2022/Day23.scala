@@ -73,5 +73,5 @@ object Day23 extends AoC:
       solve2(next, c + 1)
 
 
-  lazy val answer1: Int = (1 to 10).foldLeft(Mat(positions))((m, _) => m.next).countEmpty
-  lazy val answer2: Long = solve2(Mat(positions))
+  override lazy val answer1: Int = (1 to 10).foldLeft(Mat(positions))((m, _) => m.next).countEmpty
+  override lazy val answer2: Long = solve2(Mat(positions))

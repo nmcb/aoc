@@ -89,5 +89,5 @@ object Day25 extends AoC:
     val sample     = List.tabulate(sampleSize)(n => if n % 2 == 0 then '0' else '1').mkString
     Iterator.from(0).map(experiment(instructions, sampleSize)).indexWhere(_ == sample)
 
-  lazy val answer1: Int    = solve1(instructions)
-  lazy val answer2: String = "<unimplemented>"
+  override lazy val answer1: Int    = solve1(instructions)
+  override lazy val answer2: String = "<unimplemented>"

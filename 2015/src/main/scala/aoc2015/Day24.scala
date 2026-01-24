@@ -17,5 +17,5 @@ object Day24 extends AoC:
           .map(_.product)               // all other groups can be balanced, finally
       .next                             // we calculate the quantum entanglement.
 
-  lazy val answer1: Long = solve(weights, 3)
-  lazy val answer2: Long = solve(weights, 4)
+  override lazy val answer1: Long = solve(weights, 3)
+  override lazy val answer2: Long = solve(weights, 4)

@@ -20,6 +20,6 @@ object Day03 extends AoC:
     val overlaps = claims.flatten.groupMapReduce(identity)(_ => 1)(_ + _)
     (claims, overlaps)
 
-  lazy val answer1: Int = overlaps.valuesIterator.count(_ >= 2)
-  lazy val answer2: Int = 1 + claims.indexWhere(claim => claim.forall(pos => overlaps(pos) == 1))
+  override lazy val answer1: Int = overlaps.valuesIterator.count(_ >= 2)
+  override lazy val answer2: Int = 1 + claims.indexWhere(claim => claim.forall(pos => overlaps(pos) == 1))
 

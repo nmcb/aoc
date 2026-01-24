@@ -41,5 +41,5 @@ object Day03 extends AoC:
         loop(n + 1, squares.updated(point, result))
     loop(2)
 
-  lazy val answer1: Int = position(277678).manhattanDistance(Pos.origin).toInt
-  lazy val answer2: Int = spiralSquares(277678)
+  override lazy val answer1: Int = position(277678).manhattanDistance(Pos.origin).toInt
+  override lazy val answer2: Int = spiralSquares(277678)

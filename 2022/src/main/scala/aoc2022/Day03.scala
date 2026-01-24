@@ -30,5 +30,5 @@ object Day03 extends AoC:
     priority(c)
 
 
-  lazy val answer1: Int = items.map(priority).sum
-  lazy val answer2: Int = items.grouped(3).map(priority).sum
+  override lazy val answer1: Int = items.map(priority).sum
+  override lazy val answer2: Int = items.grouped(3).map(priority).sum

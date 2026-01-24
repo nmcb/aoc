@@ -57,5 +57,5 @@ object Day20 extends AoC:
         result.flatMap: open =>
           open - blocked
 
-  lazy val answer1: IP   = remaining(blacklist).minBy(_.min).min
-  lazy val answer2: Long = remaining(blacklist).foldLeft(0L)(_ + _.size)
+  override lazy val answer1: IP   = remaining(blacklist).minBy(_.min).min
+  override lazy val answer2: Long = remaining(blacklist).foldLeft(0L)(_ + _.size)

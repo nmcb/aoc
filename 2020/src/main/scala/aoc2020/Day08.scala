@@ -67,5 +67,5 @@ object Day08 extends AoC:
 
   val program: Program = lines.map(Instruction.fromLine)
 
-  lazy val answer1: Int = VM(program).run(debug = true).state.accumulator
-  lazy val answer2: Int = VM(patch(program)).run(debug = false).state.accumulator
+  override lazy val answer1: Int = VM(program).run(debug = true).state.accumulator
+  override lazy val answer2: Int = VM(patch(program)).run(debug = false).state.accumulator

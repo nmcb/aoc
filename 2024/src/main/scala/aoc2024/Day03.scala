@@ -18,5 +18,5 @@ object Day03 extends AoC:
         solve(memory.tail, result, enabled, part2)
 
 
-  lazy val answer1: Int = solve(memory = input, result = 0, enabled = true, part2 = false)
-  lazy val answer2: Int = solve(memory = input, result = 0, enabled = true, part2 = true)
+  override lazy val answer1: Int = solve(memory = input, result = 0, enabled = true, part2 = false)
+  override lazy val answer2: Int = solve(memory = input, result = 0, enabled = true, part2 = true)

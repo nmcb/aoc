@@ -82,5 +82,5 @@ object Day11 extends AoC:
     loop(floor)
 
 
-  lazy val answer1: Int = solve(lines, _.nextState1).totalOccupied
-  lazy val answer2: Int = solve(lines, _.nextState2).totalOccupied
+  override lazy val answer1: Int = solve(lines, _.nextState1).totalOccupied
+  override lazy val answer2: Int = solve(lines, _.nextState2).totalOccupied

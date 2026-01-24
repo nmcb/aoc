@@ -32,5 +32,5 @@ object Day16 extends AoC:
     departures.map((_,field) => field.toLong).product
 
 
-  lazy val answer1: Long = solve1(rules, mine, nearby)
-  lazy val answer2: Long = solve2(rules, mine, nearby)
+  override lazy val answer1: Long = solve1(rules, mine, nearby)
+  override lazy val answer2: Long = solve2(rules, mine, nearby)

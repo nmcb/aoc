@@ -53,18 +53,6 @@ object Day10 extends AoC:
             loop(bs >> 1, count + 1, result)
       loop(buttons)
 
-    def asButtonString: String =
-      @tailrec
-      def loop(bs: Button, count: Int = 0, result: Vector[Int] = Vector.empty): String =
-        if bs <= 0 then
-          s"(${result.mkString(",")})"
-        else
-          if (bs & 1) == 1 then
-            loop(bs >> 1, count + 1, result :+ count)
-          else
-            loop(bs >> 1, count + 1, result)
-      loop(buttons)
-
   object Button:
 
     def fromString(s: String): Button =
@@ -94,7 +82,7 @@ object Day10 extends AoC:
       import scala.jdk.CollectionConverters.*
 
       val ctx = new Context(Map("model" -> "true").asJava)
-      import ctx._
+      import ctx.*
 
       //        (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
       //
@@ -153,5 +141,5 @@ object Day10 extends AoC:
 
   lazy val machines: Vector[Machine] = lines.map(Machine.fromString)
 
-  lazy val answer1: Long = machines.map(_.solve1).sum
-  lazy val answer2: Long = machines.map(_.solve2).sum
+  override lazy val answer1: Long = machines.map(_.solve1).sum
+  override lazy val answer2: Long = machines.map(_.solve2).sum

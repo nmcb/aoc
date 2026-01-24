@@ -11,5 +11,5 @@ object Day01 extends AoC:
 
     (values.map(_.left).sorted, values.map(_.right).sorted)
 
-  lazy val answer1: Int = left.zip(right).map(_ - _).map(math.abs).sum
-  lazy val answer2: Int = left.foldLeft(0)((a,l) => a + l * right.count(_ == l))
+  override lazy val answer1: Int = left.zip(right).map(_ - _).map(math.abs).sum
+  override lazy val answer2: Int = left.foldLeft(0)((a,l) => a + l * right.count(_ == l))

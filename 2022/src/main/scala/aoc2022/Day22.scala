@@ -172,12 +172,12 @@ object Day22 extends AoC:
     def start: Location = Location(tiles(1).indexOf('.'), 1, E, path)
 
   
-  lazy val answer1: Long =
+  override lazy val answer1: Long =
     var location = Location.start
     while (location.hasNext) location = location.next1
     location.value
 
-  lazy val answer2: Long =
+  override lazy val answer2: Long =
     var location = Location.start
     while (location.hasNext) location = location.next2
     location.value

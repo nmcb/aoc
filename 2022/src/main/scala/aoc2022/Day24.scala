@@ -223,5 +223,5 @@ object Day24 extends AoC:
     m5 + 1
 
 
-  lazy val answer1: Int = solve1(World.init) + 1
-  lazy val answer2: Int = solve2(World.init)
+  override lazy val answer1: Int = solve1(World.init) + 1
+  override lazy val answer2: Int = solve2(World.init)

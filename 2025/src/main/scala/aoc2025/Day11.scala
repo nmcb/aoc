@@ -30,5 +30,5 @@ object Day11 extends AoC:
       Vector("svr", "fft", "dac", "out")
     ).map(paths).sum
   
-  lazy val answer1: Long = solve1("you", "out", edges)
-  lazy val answer2: Long = solve2(edges)
+  override lazy val answer1: Long = solve1("you", "out", edges)
+  override lazy val answer2: Long = solve2(edges)

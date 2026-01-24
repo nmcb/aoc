@@ -85,5 +85,5 @@ object Day19 extends AoC:
       Option.when(found)(line.length)
 
 
-  lazy val answer1: Int = solve(rules, messages)
-  lazy val answer2: Int = solve(rules.updated(0, RuleZero(8)), messages)
+  override lazy val answer1: Int = solve(rules, messages)
+  override lazy val answer2: Int = solve(rules.updated(0, RuleZero(8)), messages)

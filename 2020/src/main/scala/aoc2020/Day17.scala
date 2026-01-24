@@ -34,5 +34,5 @@ object Day17 extends AoC:
     val directions = Seq.tabulate(3,3,3,3)((x,y,z,w) => Cube(x - 1, y - 1, z - 1, w - 1)).flatten.flatten.flatten.toSet
     Iterator.iterate(points)(step(directions)).nth(6).size
 
-  lazy val answer1: Int = solve1(points)
-  lazy val answer2: Int = solve2(points)
+  override lazy val answer1: Int = solve1(points)
+  override lazy val answer2: Int = solve2(points)

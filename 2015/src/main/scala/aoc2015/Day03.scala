@@ -48,5 +48,5 @@ object Day03 extends AoC:
         if (index % 2 != 0) (robot next command, santa) else (robot, santa next command)
       }
 
-  lazy val answer1: Int = commands.foldLeft(Area.init)(_ next _).deliveries.values.size
-  lazy val answer2: Int = (robot.deliveries ++ santa.deliveries).values.size
+  override lazy val answer1: Int = commands.foldLeft(Area.init)(_ next _).deliveries.values.size
+  override lazy val answer2: Int = (robot.deliveries ++ santa.deliveries).values.size

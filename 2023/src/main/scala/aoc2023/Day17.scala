@@ -87,5 +87,5 @@ object Day17 extends AoC:
 
   lazy val city: City = City(lines.map(_.map(_.asDigit).toVector))
   
-  lazy val answer1: Int = city.leastHeatLoss(_.canMove1, _.canStop1).get
-  lazy val answer2: Int = city.leastHeatLoss(_.canMove2, _.canStop2).get
+  override lazy val answer1: Int = city.leastHeatLoss(_.canMove1, _.canStop1).get
+  override lazy val answer2: Int = city.leastHeatLoss(_.canMove2, _.canStop2).get

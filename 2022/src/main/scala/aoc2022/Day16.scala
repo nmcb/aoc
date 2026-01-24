@@ -68,5 +68,5 @@ object Day16 extends AoC:
       if max2a + max2b > max then max2a + max2b else max
 
 
-  lazy val answer1: Int = solve1(0, 0, 0, "AA", nonzero, 30)
-  lazy val answer2: Int = solve2()
+  override lazy val answer1: Int = solve1(0, 0, 0, "AA", nonzero, 30)
+  override lazy val answer2: Int = solve2()

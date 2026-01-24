@@ -64,5 +64,5 @@ object Day08 extends AoC:
     )
 
 
-  lazy val answer1: Long = grid.maxVisibleTrees
-  lazy val answer2: Long = grid.maxScenicScore
+  override lazy val answer1: Long = grid.maxVisibleTrees
+  override lazy val answer2: Long = grid.maxScenicScore

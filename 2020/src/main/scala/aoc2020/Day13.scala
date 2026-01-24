@@ -69,5 +69,5 @@ object Day13 extends AoC:
       .map((b,i) => (Try(b.toLong).getOrElse[Long](1),i))
       .toMap
 
-  lazy val answer1: Long = solve1(schedule, begin.toLong)
-  lazy val answer2: Long = crt(equations.keys.toList, equations.values.toList).getOrElse(sys.error("boom")) - puzzle.length + 1
+  override lazy val answer1: Long = solve1(schedule, begin.toLong)
+  override lazy val answer2: Long = crt(equations.keys.toList, equations.values.toList).getOrElse(sys.error("boom")) - puzzle.length + 1

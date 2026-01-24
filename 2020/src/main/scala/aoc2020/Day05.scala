@@ -18,5 +18,5 @@ object Day05 extends AoC:
   def missing(seatIds: Set[Id]): Set[Id] =
     (seatIds.min to seatIds.max).toSet -- seatIds
 
-  lazy val answer1: Id = seatIds.max
-  lazy val answer2: Id = missing(seatIds).head
+  override lazy val answer1: Id = seatIds.max
+  override lazy val answer2: Id = missing(seatIds).head

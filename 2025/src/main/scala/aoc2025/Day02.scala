@@ -28,5 +28,5 @@ object Day02 extends AoC:
     val doubled = s + s
     doubled.substring(1, doubled.length - 1).contains(s)
 
-  lazy val answer1: Long = filter(ranges, doubles).sum
-  lazy val answer2: Long = filter(ranges, repeats).sum
+  override lazy val answer1: Long = filter(ranges, doubles).sum
+  override lazy val answer2: Long = filter(ranges, repeats).sum

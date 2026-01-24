@@ -61,5 +61,5 @@ object Day18 extends AoC:
     val area  = List.tabulate(sizeX, sizeY)((x,y) => Pos.of(x,y) -> lines(y)(x)).flatten.toMap
     Landscape(area, sizeX, sizeY)
 
-  lazy val answer1: Int = Iterator.iterate(landscape)(_.tick).nth(10).resourceValue
-  lazy val answer2: Int = Cycle.find(landscape, _.tick).simulate(1000000000).resourceValue
+  override lazy val answer1: Int = Iterator.iterate(landscape)(_.tick).nth(10).resourceValue
+  override lazy val answer2: Int = Cycle.find(landscape, _.tick).simulate(1000000000).resourceValue

@@ -52,5 +52,5 @@ object Day08 extends AoC:
   val boxes: Vector[Box] = lines.collect:
     case s"$x,$y,$z" => (x = x.toInt, y = y.toInt, z = z.toInt)
 
-  lazy val answer1: Long = solve1(boxes, 1000)
-  lazy val answer2: Long = solve2(boxes)
+  override lazy val answer1: Long = solve1(boxes, 1000)
+  override lazy val answer2: Long = solve2(boxes)

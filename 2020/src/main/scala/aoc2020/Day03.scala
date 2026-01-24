@@ -35,5 +35,5 @@ object Day03 extends AoC:
     )
 
 
-  lazy val answer1: Long = forest.walk(3, 1)
-  lazy val answer2: Long = walks.product
+  override lazy val answer1: Long = forest.walk(3, 1)
+  override lazy val answer2: Long = walks.product

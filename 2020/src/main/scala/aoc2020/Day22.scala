@@ -62,5 +62,5 @@ object Day22 extends AoC:
     Game(deck1, deck2)
 
 
-  lazy val answer1: Int = game.combat.score
-  lazy val answer2: Int = game.recursiveCombat.score
+  override lazy val answer1: Int = game.combat.score
+  override lazy val answer2: Int = game.recursiveCombat.score

@@ -136,13 +136,13 @@ object Day19 extends AoC:
 
               process2(splits ++ searches.tail, workflows, found)
 
-  lazy val answer1: Long =
+  override lazy val answer1: Long =
     parts
       .filter(part => process1(part, "in", workflows) == Accepted)
       .map(p => p.x + p.m + p.a + p.s)
       .sum
 
-  lazy val answer2: Long =
+  override lazy val answer2: Long =
     val start = Search(Range(1, 4000), Range(1, 4000), Range(1, 4000), Range(1, 4000), "in")
     val ranges = process2(List(start), workflows, List.empty)
     ranges.map(_.size).sum

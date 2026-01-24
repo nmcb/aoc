@@ -119,5 +119,5 @@ object Day23 extends AoC:
     move(burrow, None)
 
 
-  lazy val answer1: Int = shuffle(parsePart1(lines)).get
-  lazy val answer2: Int = shuffle(parsePart2(lines)).get
+  override lazy val answer1: Int = shuffle(parsePart1(lines)).get
+  override lazy val answer2: Int = shuffle(parsePart2(lines)).get

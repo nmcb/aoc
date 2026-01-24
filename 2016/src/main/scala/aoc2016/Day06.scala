@@ -36,5 +36,5 @@ object Day06 extends AoC:
       .transpose
       .map(_.foldLeft(Counter.empty)(_ add _))
 
-  lazy val answer1: String = counted(lines).map(_.max).mkString
-  lazy val answer2: String = counted(lines).map(_.min).mkString
+  override lazy val answer1: String = counted(lines).map(_.max).mkString
+  override lazy val answer2: String = counted(lines).map(_.min).mkString

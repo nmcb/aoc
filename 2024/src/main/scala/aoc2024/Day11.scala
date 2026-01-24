@@ -48,5 +48,5 @@ object Day11 extends AoC:
         )
     loop(stones)
 
-  lazy val answer1: Long = blink(25, stones)
-  lazy val answer2: Long = blink(75, stones)
+  override lazy val answer1: Long = blink(25, stones)
+  override lazy val answer2: Long = blink(75, stones)

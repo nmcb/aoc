@@ -68,5 +68,5 @@ object Day07 extends AoC:
     lines.map(parser)
 
 
-  lazy val answer1: Int = Solver.solve(rules = rules, wire = "a")
-  lazy val answer2: Int = Solver.solve(rules = rules, wire = "a", setWireB = Some(answer1))
+  override lazy val answer1: Int = Solver.solve(rules = rules, wire = "a")
+  override lazy val answer2: Int = Solver.solve(rules = rules, wire = "a", setWireB = Some(answer1))

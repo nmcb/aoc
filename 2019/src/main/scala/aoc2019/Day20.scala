@@ -114,5 +114,5 @@ object Day20 extends AoC:
     result
 
 
-  lazy val answer1: Int = explore(lines, recursive = false)
-  lazy val answer2: Int = explore(lines, recursive = true)
+  override lazy val answer1: Int = explore(lines, recursive = false)
+  override lazy val answer2: Int = explore(lines, recursive = true)

@@ -57,5 +57,5 @@ object Day05 extends AoC:
       run(moves.tail, ns, place)
 
 
-  lazy val answer1: String = run(moves, stack, _.reverse)
-  lazy val answer2: String = run(moves, stack, identity)
+  override lazy val answer1: String = run(moves, stack, _.reverse)
+  override lazy val answer2: String = run(moves, stack, identity)

@@ -8,5 +8,5 @@ object Day09 extends AoC:
 
   val program: Mem = Mem.parse(input)
 
-  lazy val answer1: Value = CPU(program).withInput(1).outputs.last
-  lazy val answer2: Value = CPU(program).withInput(2).outputs.last
+  override lazy val answer1: Value = CPU(program).withInput(1).outputs.last
+  override lazy val answer2: Value = CPU(program).withInput(2).outputs.last

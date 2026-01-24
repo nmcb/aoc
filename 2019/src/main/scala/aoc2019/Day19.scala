@@ -35,5 +35,5 @@ object Day19 extends AoC:
 
   val program: Mem = Mem.parse(input)
 
-  lazy val answer1: Int  = pulls(program, 0 until 50, 0 until 50).count(_ == 1)
-  lazy val answer2: Long = wiggleSouthEast(program, maxX = 99, maxY = 99)
+  override lazy val answer1: Int  = pulls(program, 0 until 50, 0 until 50).count(_ == 1)
+  override lazy val answer2: Long = wiggleSouthEast(program, maxX = 99, maxY = 99)

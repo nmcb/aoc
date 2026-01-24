@@ -20,5 +20,5 @@ object Day04 extends AoC:
       val rule3 = window(number, 3).collect { case Seq(a,b,c) if a == b && b == c =>      a }.toSet
       rule1 && (rule2 -- rule3).nonEmpty
 
-  lazy val answer1: Int = solve1(235741, 706948)
-  lazy val answer2: Int = solve2(235741, 706948)
+  override lazy val answer1: Int = solve1(235741, 706948)
+  override lazy val answer2: Int = solve2(235741, 706948)

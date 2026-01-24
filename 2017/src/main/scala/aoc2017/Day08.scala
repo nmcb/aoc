@@ -59,5 +59,5 @@ object Day08 extends AoC:
         .toList
     CPU(instructions, Map.empty.withDefaultValue(0))
 
-  lazy val answer1: Int = cpu.run.largestValue
-  lazy val answer2: Int = cpu.run.largestHeld
+  override lazy val answer1: Int = cpu.run.largestValue
+  override lazy val answer2: Int = cpu.run.largestHeld

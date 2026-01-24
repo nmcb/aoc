@@ -56,5 +56,5 @@ object Day24 extends AoC:
     shortestPath(graph, routes)
 
 
-  lazy val answer1: Int = solve1(grid, nodes)
-  lazy val answer2: Int = solve2(grid, nodes)
+  override lazy val answer1: Int = solve1(grid, nodes)
+  override lazy val answer2: Int = solve2(grid, nodes)

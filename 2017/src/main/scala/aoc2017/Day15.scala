@@ -15,5 +15,5 @@ object Day15 extends AoC:
   def generator1: Iterator[(Long, Long)] = generatorA zip generatorB
   def generator2: Iterator[(Long, Long)] = generatorA.filter(_ % 4 == 0) zip generatorB.filter(_ % 8 == 0)
 
-  lazy val answer1: Long = generator1.take(40000000).count(same)
-  lazy val answer2: Long = generator2.take(5000000).count(same)
+  override lazy val answer1: Long = generator1.take(40000000).count(same)
+  override lazy val answer2: Long = generator2.take(5000000).count(same)

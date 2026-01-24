@@ -39,5 +39,5 @@ object Day11 extends AoC:
 
   val path: Vector[Dir] = input.split(",").map(d => Dir.valueOf(d.toUpperCase)).toVector
 
-  lazy val answer1: Int = path.foldLeft(Hex.zero)(_ move _) manhattanDistance Hex.zero
-  lazy val answer2: Int = path.scanLeft(Hex.zero)(_ move _).map(_ manhattanDistance Hex.zero).max
+  override lazy val answer1: Int = path.foldLeft(Hex.zero)(_ move _) manhattanDistance Hex.zero
+  override lazy val answer2: Int = path.scanLeft(Hex.zero)(_ move _).map(_ manhattanDistance Hex.zero).max

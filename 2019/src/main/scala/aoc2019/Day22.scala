@@ -39,5 +39,5 @@ object Day22 extends AoC:
         case Array("cut", n)        => Technique(1, size - n.toLong, size)
       .reduce(_ merge _)
 
-  lazy val answer1: Long = solve(lines, 10007).shuffle(2019)
-  lazy val answer2: Long = solve(lines, 119315717514047L).inverse.pow(101741582076661L).shuffle(2020)
+  override lazy val answer1: Long = solve(lines, 10007).shuffle(2019)
+  override lazy val answer2: Long = solve(lines, 119315717514047L).inverse.pow(101741582076661L).shuffle(2020)

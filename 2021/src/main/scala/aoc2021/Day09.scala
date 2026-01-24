@@ -23,11 +23,11 @@ object Day09 extends AoC:
         case (result, _)                                                                => result
 
 
-  lazy val answer1: Int =
+  override lazy val answer1: Int =
     floor.heights.map((_, h) => h + 1).sum
 
 
-  lazy val answer2: Int =
+  override lazy val answer2: Int =
     @tailrec
     def loop(todo: Set[Pos], acc: Set[Pos] = Set.empty): Int =
       if todo.isEmpty then

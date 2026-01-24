@@ -21,5 +21,5 @@ object Day01 extends AoC:
 
   val masses: Vector[Int] = lines.map(_.toInt)
   
-  lazy val answer1: Int = masses.map(massToFuel).sum
-  lazy val answer2: Int = masses.map(massToFuelRequirement).sum
+  override lazy val answer1: Int = masses.map(massToFuel).sum
+  override lazy val answer2: Int = masses.map(massToFuelRequirement).sum

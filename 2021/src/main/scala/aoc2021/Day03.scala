@@ -39,8 +39,8 @@ object Day03 extends AoC:
 
   lazy val gamma   = diagnostics.transpose.map(_.mostCommon).toInt
   lazy val epsilon = diagnostics.transpose.map(_.leastCommon).toInt
-  lazy val answer1 = gamma * epsilon
+  override lazy val answer1 = gamma * epsilon
 
   lazy val oxygenRating       = rating(diagnostics, _.mostCommon)
   lazy val co2SchrubberRating = rating(diagnostics, _.leastCommon)
-  lazy val answer2            = oxygenRating * co2SchrubberRating
+  override lazy val answer2            = oxygenRating * co2SchrubberRating

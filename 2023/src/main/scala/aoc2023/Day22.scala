@@ -68,8 +68,8 @@ object Day22 extends AoC:
   val stack: Stack = Stack(lines.map(Box.fromString))
 
   
-  lazy val answer1: Int = stack.disintegrable
-  lazy val answer2: Int = stack.disintegrated
+  override lazy val answer1: Int = stack.disintegrable
+  override lazy val answer2: Int = stack.disintegrated
 
   // Geometry
 

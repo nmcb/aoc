@@ -130,5 +130,5 @@ object Day16 extends AoC:
     val instructionOf: Map[Int,Inst] = reengineer(tests)
     program.foldLeft(Map.empty[Int,Int])((mem,codes) => instructionOf(codes.opcode).execute(codes)(mem))(0)
 
-  lazy val answer1: Int = tests.map(comply).count(_.size >= 3)
-  lazy val answer2: Int = solve2(tests, program)
+  override lazy val answer1: Int = tests.map(comply).count(_.size >= 3)
+  override lazy val answer2: Int = solve2(tests, program)

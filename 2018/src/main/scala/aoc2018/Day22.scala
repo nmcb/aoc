@@ -116,5 +116,5 @@ object Day22 extends AoC:
           queue.enqueue(neighbour -> priority)
     -1
 
-  lazy val answer1: Int = sumOfRiskLevels(Region.mouth, Region.target)
-  lazy val answer2: Int = travelTime(State.initial, State.target)
+  override lazy val answer1: Int = sumOfRiskLevels(Region.mouth, Region.target)
+  override lazy val answer2: Int = travelTime(State.initial, State.target)

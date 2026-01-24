@@ -344,5 +344,5 @@ object Day24 extends AoC:
   lazy val planeXZ: Plane = v => (v.x, v.z)
   lazy val planeYZ: Plane = v => (v.y, v.z)
 
-  lazy val answer1: Int    = solve1(min = 200000000000000L, max = 400000000000000L)
-  lazy val answer2: BigInt = Attempt3.solve()
+  override lazy val answer1: Int    = solve1(min = 200000000000000L, max = 400000000000000L)
+  override lazy val answer2: BigInt = Attempt3.solve()

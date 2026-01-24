@@ -39,5 +39,5 @@ object Day20 extends AoC:
     indices.map(get)
 
 
-  lazy val answer1: Long = grove(Vector(1000,2000,3000))(solve(numbers)).sum
-  lazy val answer2: Long = grove(Vector(1000,2000,3000))(solve(numbers, 811589153, 10)).sum
+  override lazy val answer1: Long = grove(Vector(1000,2000,3000))(solve(numbers)).sum
+  override lazy val answer2: Long = grove(Vector(1000,2000,3000))(solve(numbers, 811589153, 10)).sum

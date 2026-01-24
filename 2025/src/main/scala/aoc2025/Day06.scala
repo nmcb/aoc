@@ -34,5 +34,5 @@ object Day06 extends AoC:
 
     calculate(operators, operands)
 
-  lazy val answer1: Long = solve1(lines).sum
-  lazy val answer2: Long = solve2(lines).sum
+  override lazy val answer1: Long = solve1(lines).sum
+  override lazy val answer2: Long = solve2(lines).sum

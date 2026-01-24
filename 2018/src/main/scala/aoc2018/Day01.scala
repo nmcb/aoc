@@ -17,5 +17,5 @@ object Day01 extends AoC:
         case h :: t                           => go(t, seen + (h + acc), h + acc)
     go(frequencies)
 
-  lazy val answer1: Int = frequencies.sum
-  lazy val answer2: Int = firstFrequencyFoundTwice(frequencies)
+  override lazy val answer1: Int = frequencies.sum
+  override lazy val answer2: Int = firstFrequencyFoundTwice(frequencies)

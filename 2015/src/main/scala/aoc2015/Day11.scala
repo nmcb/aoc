@@ -105,5 +105,5 @@ object Day11 extends AoC:
       num.mkString
 
 
-  lazy val answer1: String = Password.fromString(puzzle).next.toString
-  lazy val answer2: String = Password.fromString(answer1).next.toString
+  override lazy val answer1: String = Password.fromString(puzzle).next.toString
+  override lazy val answer2: String = Password.fromString(answer1).next.toString

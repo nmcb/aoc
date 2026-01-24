@@ -49,5 +49,5 @@ object Day13 extends AoC:
           buffer.append('.')
     buffer.toString + "\n"
 
-  lazy val answer1: Int    = origami(dots, folds.take(1)).size
-  lazy val answer2: String = origami(dots, folds).asString
+  override lazy val answer1: Int    = origami(dots, folds.take(1)).size
+  override lazy val answer2: String = origami(dots, folds).asString

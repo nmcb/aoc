@@ -20,5 +20,5 @@ object Day01 extends AoC:
       .scanLeft(50)(_ + _)
       .count(step => step % 100 == 0)
 
-  lazy val answer1: Int = solve1(lines)
-  lazy val answer2: Int = solve2(lines)
+  override lazy val answer1: Int = solve1(lines)
+  override lazy val answer2: Int = solve2(lines)

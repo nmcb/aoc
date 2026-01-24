@@ -46,14 +46,14 @@ object Day13 extends AoC:
       .toList
 
   
-  lazy val answer1: Int =
+  override lazy val answer1: Int =
     expressions
       .grouped(2)
       .zipWithIndex
       .map((es,idx) => if es(0) <= es(1) then idx + 1 else 0)
       .sum
 
-  lazy val answer2: Long =
+  override lazy val answer2: Long =
     val divider1: E = L(L(N(2)))
     val divider2: E = L(L(N(6)))
 
