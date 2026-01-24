@@ -9,4 +9,3 @@ object Day25 extends AoC:
     BigInt(card).modPow(Iterator.iterate(1)(step).indexWhere(_ == door), 20201227).toInt
 
   override lazy val answer1: Int    = solve(card = 5290733, door = 15231938)
-  override lazy val answer2: String = "<unimplemented>"

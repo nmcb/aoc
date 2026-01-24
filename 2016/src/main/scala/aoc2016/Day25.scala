@@ -90,4 +90,3 @@ object Day25 extends AoC:
     Iterator.from(0).map(experiment(instructions, sampleSize)).indexWhere(_ == sample)
 
   override lazy val answer1: Int    = solve1(instructions)
-  override lazy val answer2: String = "<unimplemented>"

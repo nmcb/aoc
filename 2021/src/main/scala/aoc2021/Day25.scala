@@ -43,4 +43,3 @@ object Day25 extends AoC:
       solve(next, i + 1)
 
   override lazy val answer1: Int    = solve(floor)
-  override lazy val answer2: String = "<unimplemented>"

@@ -116,4 +116,3 @@ object Day25 extends AoC:
 
 
   override lazy val answer1: Int    = group0.size * group1.size
-  override lazy val answer2: String = "<unimplemented>"

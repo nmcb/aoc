@@ -19,4 +19,3 @@ object Day25 extends AoC:
     case s"$x,$y,$z,$w" => Dim4(x.toInt, y.toInt, z.toInt, w.toInt)
 
   override lazy val answer1: Int    = solve(positions)
-  override lazy val answer2: String = "<unimplemented>"

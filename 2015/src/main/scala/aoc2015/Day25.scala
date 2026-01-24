@@ -15,4 +15,3 @@ object Day25 extends AoC:
   val exponent: Int    = indexOf(row = 2947, column = 3029) - 1
 
   override lazy val answer1: BigInt = initial * base.modPow(exponent, modulo) % modulo
-  override lazy val answer2: String = "<unimplemented>"

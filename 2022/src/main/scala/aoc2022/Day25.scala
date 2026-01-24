@@ -74,4 +74,3 @@ object Day25 extends AoC:
 
 
   override lazy val answer1: String = Number.fromLong(snafus.map(_.toLong).sum).toString
-  override lazy val answer2: String = "<unimplemented>"

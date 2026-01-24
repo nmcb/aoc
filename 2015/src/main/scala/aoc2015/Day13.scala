@@ -23,15 +23,13 @@ object Day13 extends AoC:
 
   case class Table(setting: List[String], prefs: Preferences):
 
-    def boom: Nothing = sys.error("<unimplemented>")
-
     val neighbours: Map[String,List[String]] =
       val n1 = List(setting.init.last, setting.last, setting.head)
       val n2 = List(setting.last, setting.head, setting.tail.head)
       (n1 :: n2 :: setting.sliding(3).toList)
         .map {
           case List(nl, name, nr) => name -> List(nl, nr)
-          case _ => boom
+          case _ => sys.error("expected a list of size 3")
         }
         .toMap
 

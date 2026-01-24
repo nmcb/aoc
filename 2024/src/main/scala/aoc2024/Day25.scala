@@ -41,4 +41,3 @@ object Day25 extends AoC:
     fits.distinct.size
 
   override lazy val answer1: Int = fit(schematics)
-  override lazy val answer2: Any = "<unimplemented>>"
