@@ -85,5 +85,5 @@ object Day05 extends AoC:
     Puzzle(seeds, dependencies)
 
 
-  lazy val answer1: Long = puzzle.minSeedByLocation
-  lazy val answer2: Long = puzzle.minSeedRangeByLocation
+  override lazy val answer1: Long = puzzle.minSeedByLocation
+  override lazy val answer2: Long = puzzle.minSeedRangeByLocation

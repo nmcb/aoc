@@ -62,5 +62,5 @@ object Day02 extends AoC:
   def solve(pad: Pad, lines: Vector[Line]): String =
     lines.scanLeft(pad)(_ process _).map(_.current).tail.mkString
 
-  lazy val answer1: String = solve(Pad.pad1, puzzle)
-  lazy val answer2: String = solve(Pad.pad2, puzzle)
+  override lazy val answer1: String = solve(Pad.pad1, puzzle)
+  override lazy val answer2: String = solve(Pad.pad2, puzzle)

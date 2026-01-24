@@ -51,5 +51,5 @@ object Day11 extends AoC:
         sb.append("\n")
       sb.toString
 
-  lazy val answer1: Int    = robot.paint.size
-  lazy val answer2: String = robot.copy(panels = Map(Pos.of(0,0) -> 1L).withDefaultValue(0L)).paint.asString
+  override lazy val answer1: Int    = robot.paint.size
+  override lazy val answer2: String = robot.copy(panels = Map(Pos.of(0,0) -> 1L).withDefaultValue(0L)).paint.asString

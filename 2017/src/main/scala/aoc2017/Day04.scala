@@ -27,5 +27,5 @@ object Day04 extends AoC:
       .map(_.trim.split("\\s+").toVector)
       .map(Passphrase.apply)
 
-  lazy val answer1: Int = passphrases.count(_.valid1)
-  lazy val answer2: Int = passphrases.count(_.valid2)
+  override lazy val answer1: Int = passphrases.count(_.valid1)
+  override lazy val answer2: Int = passphrases.count(_.valid2)

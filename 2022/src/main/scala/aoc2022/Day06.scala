@@ -13,5 +13,5 @@ object Day06 extends AoC:
       .index + size
 
 
-  lazy val answer1: Int = solve(input, 4)
-  lazy val answer2: Int = solve(input, 14)
+  override lazy val answer1: Int = solve(input, 4)
+  override lazy val answer2: Int = solve(input, 14)

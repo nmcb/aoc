@@ -25,5 +25,5 @@ object Day13 extends AoC:
       Iterator.from(0).find(delay => layers.rangesCaught(delay).isEmpty).get
 
 
-  lazy val answer1: Int = layers.tripSeverity
-  lazy val answer2: Int = layers.uncaughtDelay
+  override lazy val answer1: Int = layers.tripSeverity
+  override lazy val answer2: Int = layers.uncaughtDelay

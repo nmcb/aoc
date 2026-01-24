@@ -35,5 +35,5 @@ object Day02 extends AoC:
 
   private val reports: Seq[Report] = lines.map(s => Report(s.split(' ').map(_.toInt).toSeq))
 
-  lazy val answer1: Int = reports.count(_.isSafe)
-  lazy val answer2: Int = reports.count(r => r.isSafe || r.isSafeWithOneLevelRemoved)
+  override lazy val answer1: Int = reports.count(_.isSafe)
+  override lazy val answer2: Int = reports.count(r => r.isSafe || r.isSafeWithOneLevelRemoved)

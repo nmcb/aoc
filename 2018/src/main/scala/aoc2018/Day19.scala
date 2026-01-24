@@ -4,6 +4,8 @@ import nmcb.*
 import scala.annotation.tailrec
 
 object Day19 extends AoC:
+  
+  import Day16.*
 
   type Codes = (Int, Int, Int, Int)
 
@@ -126,5 +128,5 @@ object Day19 extends AoC:
       if n % x == 0 then if n / x < x then total else go(x + 1, total + x + n / x) else go(x + 1, total)
     go()
 
-  lazy val answer1: Int = cpu.run.mem.valueOf(0)
-  lazy val answer2: Int = sumOfFactorsOf(nPart2)
+  override lazy val answer1: Int = cpu.run.mem.valueOf(0)
+  override lazy val answer2: Int = sumOfFactorsOf(nPart2)

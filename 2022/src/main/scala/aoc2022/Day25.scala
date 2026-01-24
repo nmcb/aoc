@@ -73,5 +73,4 @@ object Day25 extends AoC:
       if dividend == 0 then Number(acc) else fromLong(dividend, acc)
 
 
-  lazy val answer1: String = Number.fromLong(snafus.map(_.toLong).sum).toString
-  lazy val answer2: String = "<unimplemented>"
+  override lazy val answer1: String = Number.fromLong(snafus.map(_.toLong).sum).toString

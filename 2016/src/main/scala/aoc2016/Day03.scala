@@ -29,5 +29,5 @@ object Day03 extends AoC:
       case a +: b +: c +: rest => triangulate(rest, result :+ Vector(a, b, c))
       case _                   => result
 
-  lazy val answer1: Int = triangles.count(_.isValid)
-  lazy val answer2: Int = triangulate(triangles.transpose.flatten).count(_.isValid)
+  override lazy val answer1: Int = triangles.count(_.isValid)
+  override lazy val answer2: Int = triangulate(triangles.transpose.flatten).count(_.isValid)

@@ -12,4 +12,5 @@ project/.bloop/
 metals.sbt
 .bloop/
 .metals/
+.scala-build/
 .DS_Store

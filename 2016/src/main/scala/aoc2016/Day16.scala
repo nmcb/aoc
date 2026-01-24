@@ -15,5 +15,5 @@ object Day16 extends AoC:
     val result = s.grouped(2).map(p => if p(0) == p(1) then '1' else '0').mkString
     if result.length % 2 == 0 then checksum(result) else result
 
-  lazy val answer1: String = checksum(dragon("10001001100000001", 272))
-  lazy val answer2: String = checksum(dragon("10001001100000001", 35651584))
+  override lazy val answer1: String = checksum(dragon("10001001100000001", 272))
+  override lazy val answer2: String = checksum(dragon("10001001100000001", 35651584))

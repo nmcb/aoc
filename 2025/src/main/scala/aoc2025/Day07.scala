@@ -47,5 +47,5 @@ object Day07 extends AoC:
     loop(manifold.tail, Map(manifold.head.indexOf('S') -> 1L))
 
 
-  lazy val answer1: Long = solve1(lines)
-  lazy val answer2: Long = solve2(lines)
+  override lazy val answer1: Long = solve1(lines)
+  override lazy val answer2: Long = solve2(lines)

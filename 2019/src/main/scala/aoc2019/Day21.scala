@@ -37,5 +37,5 @@ object Day21 extends AoC:
 
   val program: Mem = Mem.parse(input)
 
-  lazy val answer1: Long = survey(program, script = walk :+ "WALK")
-  lazy val answer2: Long = survey(program, script = run :+ "RUN")
+  override lazy val answer1: Long = survey(program, script = walk :+ "WALK")
+  override lazy val answer2: Long = survey(program, script = run :+ "RUN")

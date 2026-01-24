@@ -17,5 +17,5 @@ object Day05 extends AoC:
         case Some(offset) =>
           CPU(mem.updated(pc, update(offset)), update, pc + offset, steps + 1).run
 
-  lazy val answer1: Int = CPU(jumps, offset => offset + 1).run.steps
-  lazy val answer2: Int = CPU(jumps, offset => if offset >= 3 then offset - 1 else offset + 1).run.steps
+  override lazy val answer1: Int = CPU(jumps, offset => offset + 1).run.steps
+  override lazy val answer2: Int = CPU(jumps, offset => if offset >= 3 then offset - 1 else offset + 1).run.steps

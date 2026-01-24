@@ -48,5 +48,5 @@ object Day08 extends AoC:
   lazy val network: Network =
     Network(Directions(lines.head), lines.drop(2).map { case s"$src = ($left, $right)" => src -> (left, right) }.toMap)
 
-  lazy val answer1: Int = network.steps1
-  lazy val answer2: Long = network.step2
+  override lazy val answer1: Int = network.steps1
+  override lazy val answer2: Long = network.step2

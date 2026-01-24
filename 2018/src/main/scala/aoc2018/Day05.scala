@@ -23,5 +23,5 @@ object Day05 extends AoC:
     val units   = reacted.toLowerCase.toSet
     units.map(unit => reacted.filterNot(_.toLower == unit)).map(solve1).min
 
-  lazy val answer1: Int = solve1(input)
-  lazy val answer2: Int = solve2(input)
+  override lazy val answer1: Int = solve1(input)
+  override lazy val answer2: Int = solve2(input)

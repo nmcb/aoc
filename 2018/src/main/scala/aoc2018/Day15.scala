@@ -207,5 +207,5 @@ object Day15 extends AoC:
       .flatMap(withElfAttackPower)
       .head
 
-  lazy val answer1: Int = combatOutcome(grid, fighters)
-  lazy val answer2: Int = combatOutcomeElfWin(grid, fighters)
+  override lazy val answer1: Int = combatOutcome(grid, fighters)
+  override lazy val answer2: Int = combatOutcomeElfWin(grid, fighters)

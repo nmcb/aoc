@@ -28,5 +28,5 @@ object Day16 extends AoC:
 
   val signal: Seq[Int] = input.map(_.asDigit)
 
-  lazy val answer1: String = solve1(signal)
-  lazy val answer2: String = solve2(signal.mkString * 10000)
+  override lazy val answer1: String = solve1(signal)
+  override lazy val answer2: String = solve2(signal.mkString * 10000)

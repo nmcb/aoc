@@ -30,5 +30,5 @@ object Day08 extends AoC:
 
   val grid: Grid[Char] = Grid.fromLines(lines)
 
-  lazy val answer1: Long = grid.pairs.flatMap((c,ps) => ps.flatMap(grid.createTwice)).size
-  lazy val answer2: Long = grid.pairs.flatMap((c,ps) => ps.flatMap(grid.createInline)).size
+  override lazy val answer1: Long = grid.pairs.flatMap((c,ps) => ps.flatMap(grid.createTwice)).size
+  override lazy val answer2: Long = grid.pairs.flatMap((c,ps) => ps.flatMap(grid.createInline)).size

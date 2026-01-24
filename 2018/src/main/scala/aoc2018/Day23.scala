@@ -59,5 +59,5 @@ object Day23 extends AoC:
 
     bronKerbosch(overlappingRadiiOf).map(bot => bot.loc.manhattan(Location.origin) - bot.radius).max
 
-  lazy val answer1: Int = solve1(bots)
-  lazy val answer2: Int = solve2(bots)
+  override lazy val answer1: Int = solve1(bots)
+  override lazy val answer2: Int = solve2(bots)

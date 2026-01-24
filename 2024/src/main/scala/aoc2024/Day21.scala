@@ -80,5 +80,5 @@ object Day21 extends AoC:
 
   val grid: Grid[Char] = Grid.fromLines(lines)
 
-  lazy val answer1: Long = solve(grid.matrix, 2)
-  lazy val answer2: Long = solve(grid.matrix, 25)
+  override lazy val answer1: Long = solve(grid.matrix, 2)
+  override lazy val answer2: Long = solve(grid.matrix, 25)

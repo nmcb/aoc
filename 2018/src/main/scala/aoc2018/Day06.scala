@@ -54,5 +54,5 @@ object Day06 extends AoC:
   val coordinates: Vector[Pos] = lines.map:
     case s"$x, $y" => Pos.of(x.toInt, y.toInt)
 
-  lazy val answer1: Long = Grid(coordinates).largestAreaSize
-  lazy val answer2: Int  = Grid(coordinates).withinManhattanSumLimit(10000).size
+  override lazy val answer1: Long = Grid(coordinates).largestAreaSize
+  override lazy val answer2: Int  = Grid(coordinates).withinManhattanSumLimit(10000).size

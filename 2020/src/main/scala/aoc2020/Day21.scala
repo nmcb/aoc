@@ -64,5 +64,5 @@ object Day21 extends AoC:
     findIngredient(risky)
 
 
-  lazy val answer1: Int    = part1(puzzle)
-  lazy val answer2: String = part2(puzzle)
+  override lazy val answer1: Int    = part1(puzzle)
+  override lazy val answer2: String = part2(puzzle)

@@ -47,5 +47,5 @@ object Day04 extends AoC:
     scratch()
 
 
-  lazy val answer1: Int = cards.view.values.map(_.points).sum
-  lazy val answer2: Int = solve2(cards)
+  override lazy val answer1: Int = cards.view.values.map(_.points).sum
+  override lazy val answer2: Int = solve2(cards)

@@ -65,5 +65,5 @@ object Day12 extends AoC:
 
   lazy val instructions: Vector[Instruction] = lines.map(Instruction.fromString)
 
-  lazy val answer1: Value = CPU(instructions).run.registers.valueOf("a")
-  lazy val answer2: Value = CPU(instructions = instructions, registers = Map("c" -> 1)).run.registers.valueOf("a")
+  override lazy val answer1: Value = CPU(instructions).run.registers.valueOf("a")
+  override lazy val answer2: Value = CPU(instructions = instructions, registers = Map("c" -> 1)).run.registers.valueOf("a")

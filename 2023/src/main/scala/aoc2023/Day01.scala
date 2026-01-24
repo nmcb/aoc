@@ -38,5 +38,5 @@ object Day01 extends AoC:
       "zero"  -> '0'
     )
 
-  lazy val answer1: Int = lines.map(recover(digits)).sum
-  lazy val answer2: Int = lines.map(recover(digits ++ names)).sum
+  override lazy val answer1: Int = lines.map(recover(digits)).sum
+  override lazy val answer2: Int = lines.map(recover(digits ++ names)).sum

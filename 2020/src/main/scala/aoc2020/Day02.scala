@@ -20,5 +20,5 @@ object Day02 extends AoC:
     chars.get(x - 1).contains(char) ^ chars.get(y - 1).contains(char)
 
 
-  lazy val answer1: Int = answer(check1)
-  lazy val answer2: Int = answer(check2)
+  override lazy val answer1: Int = answer(check1)
+  override lazy val answer2: Int = answer(check2)

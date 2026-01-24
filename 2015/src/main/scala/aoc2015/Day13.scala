@@ -23,16 +23,13 @@ object Day13 extends AoC:
 
   case class Table(setting: List[String], prefs: Preferences):
 
-    def boom: Nothing = sys.error("<unimplemented>")
-
     val neighbours: Map[String,List[String]] =
       val n1 = List(setting.init.last, setting.last, setting.head)
       val n2 = List(setting.last, setting.head, setting.tail.head)
       (n1 :: n2 :: setting.sliding(3).toList)
-        .map {
+        .map:
           case List(nl, name, nr) => name -> List(nl, nr)
-          case _ => boom
-        }
+          case _ => sys.error("expected a list of size 3")
         .toMap
 
     def happiness(name: String): Int =
@@ -52,5 +49,5 @@ object Day13 extends AoC:
     val zero = name -> preferences.keys.map(n => n -> 0).toMap
     preferences.map((n,p) => n -> (p + (name -> 0))) + zero
 
-  lazy val answer1: Int = names.permutations.map(setting => Table(setting, preferences).totalHappiness).max
-  lazy val answer2: Int = names2.permutations.map(setting => Table(setting, preferences2).totalHappiness).max
+  override lazy val answer1: Int = names.permutations.map(setting => Table(setting, preferences).totalHappiness).max
+  override lazy val answer2: Int = names2.permutations.map(setting => Table(setting, preferences2).totalHappiness).max

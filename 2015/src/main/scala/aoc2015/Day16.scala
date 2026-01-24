@@ -37,5 +37,5 @@ object Day16 extends AoC:
 
   val sues: List[Sue] = lines.map(Sue.fromString).toList
 
-  lazy val answer1: Int = sues.find(_.matches1(compounds)).getOrElse(sys.error("not found")).nr
-  lazy val answer2: Int = sues.find(_.matches2(compounds)).getOrElse(sys.error("not found")).nr
+  override lazy val answer1: Int = sues.find(_.matches1(compounds)).getOrElse(sys.error("not found")).nr
+  override lazy val answer2: Int = sues.find(_.matches2(compounds)).getOrElse(sys.error("not found")).nr

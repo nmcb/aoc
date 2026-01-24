@@ -54,5 +54,5 @@ object Day12 extends AoC:
     else
       Iterator.iterate(plants)(_.next(rules)).nth(generations.toInt).sum.toLong
 
-  lazy val answer1: Long = solve(plants, rules, generations = 20)
-  lazy val answer2: Long = solve(plants, rules, generations = 50000000000L)
+  override lazy val answer1: Long = solve(plants, rules, generations = 20)
+  override lazy val answer2: Long = solve(plants, rules, generations = 50000000000L)

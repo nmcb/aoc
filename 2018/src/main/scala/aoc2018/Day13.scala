@@ -132,5 +132,5 @@ object Day13 extends AoC:
     val last = go(carts.sortBy(_.pos))
     s"${last.x},${last.y}"
 
-  lazy val answer1: String = solve1(grid, carts)
-  lazy val answer2: String = solve2(grid, carts)
+  override lazy val answer1: String = solve1(grid, carts)
+  override lazy val answer2: String = solve2(grid, carts)

@@ -78,5 +78,5 @@ object Day21 extends AoC:
         case s: String => sys.error(s"match error: '$s'")
 
 
-  lazy val answer1: String = operations.foldLeft("abcdefgh")((s, o) => o.scramble(s))
-  lazy val answer2: String = operations.foldRight("fbgdceah")((o, s) => o.unscramble(s))
+  override lazy val answer1: String = operations.foldLeft("abcdefgh")((s, o) => o.scramble(s))
+  override lazy val answer2: String = operations.foldRight("fbgdceah")((o, s) => o.unscramble(s))

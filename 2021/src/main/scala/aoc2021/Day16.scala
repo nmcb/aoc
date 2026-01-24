@@ -138,5 +138,5 @@ object Day16 extends AoC:
     def header(bits: Vector[Bit]): (Version, Id, Vector[Bit]) =
       (int(bits.take(3)), int(bits.slice(3, 6)), bits.drop(6))
 
-  lazy val answer1: Int  = Packet(puzzle).versionSum
-  lazy val answer2: Long = Packet(puzzle).value
+  override lazy val answer1: Int  = Packet(puzzle).versionSum
+  override lazy val answer2: Long = Packet(puzzle).value

@@ -57,5 +57,5 @@ object Day24 extends AoC:
     Iterator.iterate(solve1(flips))(step).nth(100).size
 
 
-  lazy val answer1: Int = solve1(lines).size
-  lazy val answer2: Int = solve2(lines)
+  override lazy val answer1: Int = solve1(lines).size
+  override lazy val answer2: Int = solve2(lines)

@@ -52,5 +52,5 @@ object Day23 extends AoC:
 
   val digits: Vector[Int] = "193467258".trim.map(_.asDigit).toVector
 
-  lazy val answer1: Long = solve1(digits)
-  lazy val answer2: Long = solve2(digits)
+  override lazy val answer1: Long = solve1(digits)
+  override lazy val answer2: Long = solve2(digits)

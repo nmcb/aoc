@@ -38,5 +38,5 @@ object Day02 extends AoC:
 
   val games: Vector[Game] = lines.map(Game.fromString)
 
-  lazy val answer1: Long = games.filter(_.possibleWith(12, 13, 14)).map(_.id).sum
-  lazy val answer2: Long = games.map(_.power).sum
+  override lazy val answer1: Long = games.filter(_.possibleWith(12, 13, 14)).map(_.id).sum
+  override lazy val answer2: Long = games.map(_.power).sum

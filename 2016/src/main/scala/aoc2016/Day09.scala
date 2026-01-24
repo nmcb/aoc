@@ -29,5 +29,5 @@ object Day09 extends AoC:
       case None =>
         str.length
 
-  lazy val answer1: Long = solve1(input)
-  lazy val answer2: Long = solve2(input)
+  override lazy val answer1: Long = solve1(input)
+  override lazy val answer2: Long = solve2(input)

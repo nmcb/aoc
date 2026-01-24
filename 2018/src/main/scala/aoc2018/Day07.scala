@@ -42,5 +42,5 @@ object Day07 extends AoC:
         case _ => sys.error("boom!")
     lines.map(parser)
 
-  lazy val answer1: String = solve(steps, timer = _ => 1, parallelization = 1).right.mkString("")
-  lazy val (answer2, _)    = solve(steps, timer = _.toInt - 4, parallelization = 5)
+  override lazy val answer1: String = solve(steps, timer = _ => 1, parallelization = 1).right.mkString("")
+  override lazy val answer2: Int    = solve(steps, timer = _.toInt - 4, parallelization = 5).left

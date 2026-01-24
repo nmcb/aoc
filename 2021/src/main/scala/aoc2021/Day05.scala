@@ -72,5 +72,5 @@ object Day05 extends AoC:
         Floor(locations.toMap)
 
 
-  lazy val answer1: Int = Floor(puzzle.filterNot(_.isInstanceOf[DLine])).crossings
-  lazy val answer2: Int = Floor(puzzle).crossings
+  override lazy val answer1: Int = Floor(puzzle.filterNot(_.isInstanceOf[DLine])).crossings
+  override lazy val answer2: Int = Floor(puzzle).crossings

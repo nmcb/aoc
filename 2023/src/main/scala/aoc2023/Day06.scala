@@ -24,5 +24,5 @@ object Day06 extends AoC:
 
       (0 to time).grouped(8).map(r => loop(start = r.start, end = r.end)).sum
 
-  lazy val answer1: Long = List(Race(45,295L),Race(98,1734L),Race(83,1278L),Race(73,1210L)).map(_.wins).product
-  lazy val answer2: Long = Race(45988373,295173412781210L).wins
+  override lazy val answer1: Long = List(Race(45,295L),Race(98,1734L),Race(83,1278L),Race(73,1210L)).map(_.wins).product
+  override lazy val answer2: Long = Race(45988373,295173412781210L).wins

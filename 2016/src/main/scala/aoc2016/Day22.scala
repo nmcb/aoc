@@ -177,5 +177,5 @@ object Day22 extends AoC:
    *
    */
 
-  lazy val answer1: Int = viable(nodes).size
-  lazy val answer2: Int = steps1 + steps2
+  override lazy val answer1: Int = viable(nodes).size
+  override lazy val answer2: Int = steps1 + steps2

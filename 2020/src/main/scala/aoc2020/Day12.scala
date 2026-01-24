@@ -75,5 +75,5 @@ object Day12 extends AoC:
 
   lazy val actions: Vector[Action] = lines.map(Action.fromLine)
 
-  lazy val answer1: Int = actions.foldLeft(Ship())(_ perform _).manhattan
-  lazy val answer2: Int = actions.foldLeft(WayPointedShip())(_ perform _).manhattan
+  override lazy val answer1: Int = actions.foldLeft(Ship())(_ perform _).manhattan
+  override lazy val answer2: Int = actions.foldLeft(WayPointedShip())(_ perform _).manhattan

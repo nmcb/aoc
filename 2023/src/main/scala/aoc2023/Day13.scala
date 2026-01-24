@@ -35,5 +35,5 @@ object Day13 extends AoC:
       .map(Image.fromString)
       .toVector
 
-  lazy val answer1: Long = images.map(_.summarize).sum
-  lazy val answer2: Long = images.map(_.smudgeCorrection(true).summarize).sum
+  override lazy val answer1: Long = images.map(_.summarize).sum
+  override lazy val answer2: Long = images.map(_.smudgeCorrection(true).summarize).sum

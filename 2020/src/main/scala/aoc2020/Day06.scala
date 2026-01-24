@@ -13,5 +13,5 @@ object Day06 extends AoC:
   def chars(list: Vector[String]): String =
     list.fold("")(_+_).distinct
     
-  lazy val answer1: Int = answers.map(chars).map(_.length).sum
-  lazy val answer2: Int = answers.map(grp => grp.fold(chars(grp))(_ intersect _).length).sum
+  override lazy val answer1: Int = answers.map(chars).map(_.length).sum
+  override lazy val answer2: Int = answers.map(grp => grp.fold(chars(grp))(_ intersect _).length).sum

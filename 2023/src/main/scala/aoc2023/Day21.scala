@@ -93,5 +93,5 @@ object Day21 extends AoC:
   val garden: Garden = Garden(lines.map(_.toVector))
 
 
-  lazy val answer1: Int = garden.solve1(64)
-  lazy val answer2: Long = garden.solve2(26501365)
+  override lazy val answer1: Int = garden.solve1(64)
+  override lazy val answer2: Long = garden.solve2(26501365)

@@ -27,5 +27,5 @@ object Day09 extends AoC:
       .toVector
 
 
-  lazy val answer1: Int = solve(edges).min
-  lazy val answer2: Int = solve(edges).max
+  override lazy val answer1: Int = solve(edges).min
+  override lazy val answer2: Int = solve(edges).max

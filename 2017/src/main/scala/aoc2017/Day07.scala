@@ -69,5 +69,5 @@ object Day07 extends AoC:
     val root = nodes.root
     eitherDiffOrTotalWeight(nodes(root)).swap.getOrElse(sys.error("no bad child"))
 
-  lazy val answer1: String = nodes.root
-  lazy val answer2: Int    = nodes.correctBalanceWeight
+  override lazy val answer1: String = nodes.root
+  override lazy val answer2: Int    = nodes.correctBalanceWeight

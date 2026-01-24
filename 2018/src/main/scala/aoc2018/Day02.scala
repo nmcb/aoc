@@ -40,5 +40,5 @@ object Day02 extends AoC:
         a.identifier intersect b.identifier
     search.headOption.getOrElse(sys.error("unable to find"))
 
-  lazy val answer1: Int    = solve1(boxes)
-  lazy val answer2: String = solve2(boxes)
+  override lazy val answer1: Int    = solve1(boxes)
+  override lazy val answer2: String = solve2(boxes)

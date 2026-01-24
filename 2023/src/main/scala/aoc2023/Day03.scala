@@ -74,5 +74,5 @@ object Day03 extends AoC:
   val page: Page = Page(lines.map(_.toVector).toVector)
 
 
-  lazy val answer1: Int = page.numbersWithAdjacentSymbols.map(_.value).sum
-  lazy val answer2: Int = page.gearRatios.map(_.map(_.value).product).sum
+  override lazy val answer1: Int = page.numbersWithAdjacentSymbols.map(_.value).sum
+  override lazy val answer2: Int = page.gearRatios.map(_.map(_.value).product).sum

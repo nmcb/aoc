@@ -61,5 +61,5 @@ object Day10 extends AoC:
       solve2(cpu.nextCycle, pixels :+ cpu.draw)
 
 
-  lazy val answer1: Int = solve1(CPU(instructions))
-  lazy val answer2: String = solve2(CPU(instructions))
+  override lazy val answer1: Int = solve1(CPU(instructions))
+  override lazy val answer2: String = solve2(CPU(instructions))

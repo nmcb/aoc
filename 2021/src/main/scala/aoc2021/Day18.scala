@@ -94,7 +94,7 @@ object Day18 extends AoC:
 
   def parse(s: String): Num =
     def vp: P[Num] = digits.map(Lit.apply)
-    def pp: P[Num] = for { _ <- char('[') ; l <- np ; _ <- char(',') ; r <- np ; _ <- char(']') } yield Pair(l, r)
+    def pp: P[Num] = for _ <- char('[') ; l <- np ; _ <- char(',') ; r <- np ; _ <- char(']') yield Pair(l, r)
     def np: P[Num] = vp | pp
 
     np.run(s)
@@ -102,5 +102,5 @@ object Day18 extends AoC:
   val numbers: Vector[Num] = lines.map(parse)
 
 
-  lazy val answer1: Long = numbers.reduceLeft(_ + _).magnitude
-  lazy val answer2: Long = numbers.combinations(2).flatMap(ns => List(ns(0) + ns(1), ns(1) + ns(0))).map(_.magnitude).max
+  override lazy val answer1: Long = numbers.reduceLeft(_ + _).magnitude
+  override lazy val answer2: Long = numbers.combinations(2).flatMap(ns => List(ns(0) + ns(1), ns(1) + ns(0))).map(_.magnitude).max

@@ -92,5 +92,5 @@ object Day10 extends AoC:
   def solvePart2(input: String): Int =
     solve2(instructionsFromString(input))
 
-  lazy val answer1: Int = solvePart1(input)
-  lazy val answer2: Int = solvePart2(input)
+  override lazy val answer1: Int = solvePart1(input)
+  override lazy val answer2: Int = solvePart2(input)

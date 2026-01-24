@@ -73,5 +73,5 @@ object Day12 extends AoC:
 
   import Iterator.*
 
-  lazy val answer1: Int  = iterate(moons)(_.step).drop(1000).next.map(_.energy).sum
-  lazy val answer2: Long = moons.period
+  override lazy val answer1: Int  = iterate(moons)(_.step).drop(1000).next.map(_.energy).sum
+  override lazy val answer2: Long = moons.period

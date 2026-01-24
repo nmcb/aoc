@@ -116,5 +116,5 @@ object Day20 extends AoC:
 
     Machine(modules)
 
-  lazy val answer1: Long = (1 to 1000).foldLeft(machine)((m,_) => m.press).result
-  lazy val answer2: Long = machine.solveRX
+  override lazy val answer1: Long = (1 to 1000).foldLeft(machine)((m,_) => m.press).result
+  override lazy val answer2: Long = machine.solveRX

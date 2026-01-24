@@ -62,5 +62,5 @@ object Day09 extends AoC:
     input match
       case s"$players players; last marble is worth $points points" => (players.toInt, points.toInt)
 
-  lazy val answer1: Long = solve(players, points)
-  lazy val answer2: Long = solve(players, points, 100)
+  override lazy val answer1: Long = solve(players, points)
+  override lazy val answer2: Long = solve(players, points, 100)

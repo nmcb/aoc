@@ -57,5 +57,5 @@ object Day04 extends AoC:
       .filter(valEcl)
       .filter(valPid)
 
-  lazy val answer1: Int = solve1(passports).size
-  lazy val answer2: Int = solve2(passports).size
+  override lazy val answer1: Int = solve1(passports).size
+  override lazy val answer2: Int = solve2(passports).size

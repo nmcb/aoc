@@ -7,7 +7,7 @@ object Day20 extends AoC:
 
   val puzzle: Int = 36000000
 
-  lazy val answer1: Int =
+  override lazy val answer1: Int =
     val presents: Array[Int] = Array.fill(puzzle / 10 + 1)(0)
     for
       e <- Range.inclusive(1, puzzle / 10)
@@ -21,7 +21,7 @@ object Day20 extends AoC:
       .getOrElse(sys.error("not found"))
       .index
 
-  lazy val answer2: Int =
+  override lazy val answer2: Int =
     val size = puzzle / 10 + 1
     val presents: Array[Int] = Array.fill(size)(0)
     for

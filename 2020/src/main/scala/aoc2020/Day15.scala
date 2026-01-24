@@ -26,5 +26,5 @@ object Day15 extends AoC:
     loop(numbers.length, numbers.last)
 
 
-  lazy val answer1: Int = solve(numbers, 2020)
-  lazy val answer2: Int = solve(numbers, 30000000)
+  override lazy val answer1: Int = solve(numbers, 2020)
+  override lazy val answer2: Int = solve(numbers, 30000000)

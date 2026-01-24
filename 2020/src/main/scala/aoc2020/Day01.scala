@@ -13,5 +13,5 @@ object Day01 extends AoC:
       .next
 
 
-  lazy val answer1: Int = answer(numberOfArgs = 2, sumEquals = 2020)
-  lazy val answer2: Int = answer(numberOfArgs = 3, sumEquals = 2020)
+  override lazy val answer1: Int = answer(numberOfArgs = 2, sumEquals = 2020)
+  override lazy val answer2: Int = answer(numberOfArgs = 3, sumEquals = 2020)

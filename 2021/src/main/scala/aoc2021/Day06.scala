@@ -26,5 +26,5 @@ object Day06 extends AoC:
   def solve(generations: Map[Int,Long], years: Int): Long =
     Iterator.iterate(generations)(_.next).nth(years).values.sum
 
-  lazy val answer1: Long = solve(ages, 80)
-  lazy val answer2: Long = solve(ages, 256)
+  override lazy val answer1: Long = solve(ages, 80)
+  override lazy val answer2: Long = solve(ages, 256)

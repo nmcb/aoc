@@ -72,5 +72,5 @@ object Day21 extends AoC:
       Player.equip(100, w, a, rs)
 
 
-  lazy val answer1: Int = equipped.filter(Game.make(_).play == Outcome.Won).map(_.gold).min
-  lazy val answer2: Int = equipped.filter(Game.make(_).play == Outcome.Lost).map(_.gold).max
+  override lazy val answer1: Int = equipped.filter(Game.make(_).play == Outcome.Won).map(_.gold).min
+  override lazy val answer2: Int = equipped.filter(Game.make(_).play == Outcome.Lost).map(_.gold).max

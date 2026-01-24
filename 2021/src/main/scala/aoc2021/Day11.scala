@@ -53,5 +53,5 @@ object Day11 extends AoC:
   val octopuses: Octopuses = Octopuses.make(config)
 
 
-  lazy val answer1: Int = Iterator.iterate(octopuses)(_.step).take(101).map(_.flashed).sum
-  lazy val answer2: Int = Iterator.iterate(octopuses)(_.step).takeWhile(_.flashed != 100).size
+  override lazy val answer1: Int = Iterator.iterate(octopuses)(_.step).take(101).map(_.flashed).sum
+  override lazy val answer2: Int = Iterator.iterate(octopuses)(_.step).takeWhile(_.flashed != 100).size

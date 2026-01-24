@@ -115,5 +115,4 @@ object Day25 extends AoC:
         case e: Exception => println(s"unable to show visualisation [ignoring]\n${e.getMessage}")
 
 
-  lazy val answer1: Int    = group0.size * group1.size
-  lazy val answer2: String = "<unimplemented>"
+  override lazy val answer1: Int    = group0.size * group1.size

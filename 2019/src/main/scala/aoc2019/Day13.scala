@@ -103,5 +103,5 @@ object Day13 extends AoC:
 
     go(CPU(program + (0 -> 2L)), GameState(None, None, None, Map.empty.withDefaultValue(Empty)))
 
-  lazy val answer1: Int   = CPU(program).outputs.render.values.count(_ == Block)
-  lazy val answer2: Value = play(program, onScreen = false)
+  override lazy val answer1: Int   = CPU(program).outputs.render.values.count(_ == Block)
+  override lazy val answer2: Value = play(program, onScreen = false)

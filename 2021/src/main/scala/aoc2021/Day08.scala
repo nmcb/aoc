@@ -65,7 +65,7 @@ object Day08 extends AoC:
     loop(input)
 
 
-  lazy val answer1: Int =
+  override lazy val answer1: Int =
     puzzle
       .map: (_,output) =>
         output.count: digit =>
@@ -76,7 +76,7 @@ object Day08 extends AoC:
           is1 || is4 || is7 || is8
       .sum
 
-  lazy val answer2: Int =
+  override lazy val answer2: Int =
     @tailrec
     def search(wirings: List[String])(input: List[String]): String =
       val wiring = wirings.head

@@ -52,5 +52,5 @@ object Day13 extends AoC:
 
     cache.toMap
 
-  lazy val answer1: Int = solve1(start = Pos.of(1, 1), target = Pos.of(31, 39))
-  lazy val answer2: Int = solve2(start = Pos.of(1,1)).size
+  override lazy val answer1: Int = solve1(start = Pos.of(1, 1), target = Pos.of(31, 39))
+  override lazy val answer2: Int = solve2(start = Pos.of(1,1)).size

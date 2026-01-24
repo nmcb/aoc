@@ -30,5 +30,5 @@ object Day07 extends AoC:
       .map(signalWithFeedback)
       .max
 
-  lazy val answer1: Value = highestSignal(program, 0 to 4)
-  lazy val answer2: Value = highestSignalWithFeedback(program, 5 to 9)
+  override lazy val answer1: Value = highestSignal(program, 0 to 4)
+  override lazy val answer2: Value = highestSignalWithFeedback(program, 5 to 9)

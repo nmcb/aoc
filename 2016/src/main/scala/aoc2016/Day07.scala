@@ -44,5 +44,5 @@ object Day07 extends AoC:
 
   val ips: Vector[IP] = lines.map(IP.fromString)
 
-  lazy val answer1: Int = ips.count(_.hasTLS)
-  lazy val answer2: Int = ips.count(_.hasSSL)
+  override lazy val answer1: Int = ips.count(_.hasTLS)
+  override lazy val answer2: Int = ips.count(_.hasSSL)

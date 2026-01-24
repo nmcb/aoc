@@ -71,5 +71,5 @@ object Day19 extends AoC:
   val (beacons: Set[Vec3], positions: Set[Vec3]) = solve(scanners)
 
 
-  lazy val answer1: Int = beacons.size
-  lazy val answer2: Int = (for a <- positions; b <- positions yield Vec3.distance(b, a)).max
+  override lazy val answer1: Int = beacons.size
+  override lazy val answer2: Int = (for a <- positions; b <- positions yield Vec3.distance(b, a)).max

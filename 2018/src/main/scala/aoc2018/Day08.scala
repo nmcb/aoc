@@ -30,5 +30,5 @@ object Day08 extends AoC:
       assert(rest.isEmpty)
       root
 
-  lazy val answer1: Int = Node.parseTree(input).licenceNumber
-  lazy val answer2: Int = Node.parseTree(input).value
+  override lazy val answer1: Int = Node.parseTree(input).licenceNumber
+  override lazy val answer2: Int = Node.parseTree(input).value

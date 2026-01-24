@@ -81,5 +81,5 @@ object Day14 extends AoC:
           molecule -> Reaction(from = Molecules.fromString(from), amount = amount)
       .toMap
 
-  lazy val answer1: Amount = reactions.makeFuel(1)
-  lazy val answer2: Amount = reactions.makeMaxFuel(1000000000000L)
+  override lazy val answer1: Amount = reactions.makeFuel(1)
+  override lazy val answer2: Amount = reactions.makeMaxFuel(1000000000000L)

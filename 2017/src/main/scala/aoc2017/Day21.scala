@@ -114,5 +114,5 @@ object Day21 extends AoC:
         loop(iteration = iteration + 1, accumulator = next)
     loop(0, grid)
 
-  lazy val answer1: Int = solve(Grid.init, rules, 5)
-  lazy val answer2: Int = solve(Grid.init, rules, 18)
+  override lazy val answer1: Int = solve(Grid.init, rules, 5)
+  override lazy val answer2: Int = solve(Grid.init, rules, 18)

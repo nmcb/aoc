@@ -55,5 +55,5 @@ object Day14 extends AoC:
         loop(todo -- region - square, regions + region)
     loop(used)
 
-  lazy val answer1: Int = hashes.mkString("").count(_ == '1')
-  lazy val answer2: Int = regions(used).size
+  override lazy val answer1: Int = hashes.mkString("").count(_ == '1')
+  override lazy val answer2: Int = regions(used).size

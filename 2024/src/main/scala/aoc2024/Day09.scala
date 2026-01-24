@@ -50,7 +50,7 @@ object Day09 extends AoC:
         loop(d.tail, position + 1, result + position * d.head.id)
     loop(disk)
 
-  lazy val answer1: Long = checksum(compact1(disk))
+  override lazy val answer1: Long = checksum(compact1(disk))
 
   case class Chunk(id: Int, size: Int):
     def isFileChunk: Boolean    = id != -1
@@ -112,7 +112,7 @@ object Day09 extends AoC:
     val start = converted.map(_.id).max
     loop(converted, start).flatMap(_.toBlocks)
 
-  lazy val answer2: Long = checksum(compact2(disk))
+  override lazy val answer2: Long = checksum(compact2(disk))
 
   /**
    * class Mem():

@@ -123,5 +123,4 @@ object Day25 extends AoC:
 
   def turing: Turing = Turing(transitions, beginState)
 
-  lazy val answer1: Int    = Iterator.iterate(turing)(_.step).nth(steps).tape.count((s,v) => v == 1)
-  lazy val answer2: String = "<unimplemented>"
+  override lazy val answer1: Int    = Iterator.iterate(turing)(_.step).nth(steps).tape.count((s,v) => v == 1)

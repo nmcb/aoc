@@ -39,6 +39,6 @@ object Day09 extends AoC:
   
   given order: Ordering[(Position,Position)] = Ordering.by(_.area)
 
-  lazy val answer1: Long = corners.pairs(using order).drain.area
-  lazy val answer2: Long = corners.pairs(using order.reverse).findFirst((a,b) => isValid(a, b, perimeter)).area
+  override lazy val answer1: Long = corners.pairs(using order).drain.area
+  override lazy val answer2: Long = corners.pairs(using order.reverse).findFirst((a,b) => isValid(a, b, perimeter)).area
 

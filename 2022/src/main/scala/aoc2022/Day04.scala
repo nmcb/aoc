@@ -10,7 +10,8 @@ object Day04 extends AoC:
     Source
       .fromResource(s"$day.txt")
       .getLines
-      .map { case s"$l1-$r1,$l2-$r2" => (l1.toInt to r1.toInt, l2.toInt to r2.toInt) }
+      .map:
+        case s"$l1-$r1,$l2-$r2" => (l1.toInt to r1.toInt, l2.toInt to r2.toInt)
       .toList
 
   def contained1(r1: Range, r2: Range): Boolean =
@@ -20,5 +21,5 @@ object Day04 extends AoC:
     r1.exists(i => r2.contains(i))
 
 
-  lazy val answer1: Int = sections.count(contained1)
-  lazy val answer2: Int = sections.count(contained2)
+  override lazy val answer1: Int = sections.count(contained1)
+  override lazy val answer2: Int = sections.count(contained2)

@@ -79,5 +79,5 @@ object Day08 extends AoC:
   def render(layer: Layer[Pix]): String =
     layer.digs.map(line => line.map(_.render).mkString + "\n").mkString
 
-  lazy val answer1: Int    = image.sortWith(_.count0 < _.count0).headOption.map(l => l.count1 * l.count2).get
-  lazy val answer2: String = render(image.map(l => l.map(_.digitToPix)).foldRight(Layer.fill(Trans))(stack))
+  override lazy val answer1: Int    = image.sortWith(_.count0 < _.count0).headOption.map(l => l.count1 * l.count2).get
+  override lazy val answer2: String = render(image.map(l => l.map(_.digitToPix)).foldRight(Layer.fill(Trans))(stack))

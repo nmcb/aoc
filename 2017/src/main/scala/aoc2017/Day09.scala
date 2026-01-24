@@ -30,5 +30,5 @@ object Day09 extends AoC:
       else if char == '<' then
         garbage = true
 
-  lazy val answer1: Int = score
-  lazy val answer2: Int = counter
+  override lazy val answer1: Int = score
+  override lazy val answer2: Int = counter

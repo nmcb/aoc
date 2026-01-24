@@ -91,5 +91,5 @@ object Day10 extends AoC:
     (points.map(_.step(fastest)), fastest)
 
 
-  lazy val answer1: String = sky.asString
-  lazy val answer2: Int    = fastest
+  override lazy val answer1: String = sky.asString
+  override lazy val answer2: Int    = fastest

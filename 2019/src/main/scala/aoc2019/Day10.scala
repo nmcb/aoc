@@ -71,5 +71,5 @@ object Day10 extends AoC:
       val right = rest.dropWhile(a => a.angle == aim.angle)
       fireAll(nr)(right, done ++ left, count + 1, Option.when (count == nr)(aim.target).orElse(result))
 
-  lazy val answer1: Int = maxBlockedByCount(astroids)
-  lazy val answer2: Int = fireAll(200)(testLaser(Pos.of(8,16))(astroids)).get.part2
+  override lazy val answer1: Int = maxBlockedByCount(astroids)
+  override lazy val answer2: Int = fireAll(200)(testLaser(Pos.of(8,16))(astroids)).get.part2

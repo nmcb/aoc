@@ -45,5 +45,5 @@ object Day17 extends AoC:
       Iterator.iterate(Circle2.init)(_.insert(steps)).nth(amount)
 
 
-  lazy val answer1: Int = Circle1.spin(370, 2017).nextValue
-  lazy val answer2: Int = Circle2.spin(370, 50000000).value
+  override lazy val answer1: Int = Circle1.spin(370, 2017).nextValue
+  override lazy val answer2: Int = Circle2.spin(370, 50000000).value

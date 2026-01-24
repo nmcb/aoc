@@ -43,5 +43,5 @@ object Day19 extends AoC:
   val tracer: Tracer    = Tracer.start(grid)
   val path: Seq[Tracer] = Iterator.iterate(tracer)(_.next).takeWhile(_.isPath).toList
 
-  lazy val answer1: String = path.map(_.char).filter(_.isLetter).mkString("")
-  lazy val answer2: Int    = path.size
+  override lazy val answer1: String = path.map(_.char).filter(_.isLetter).mkString("")
+  override lazy val answer2: Int    = path.size

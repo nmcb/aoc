@@ -42,6 +42,6 @@ object Day12 extends AoC:
     Option.when(path.nonEmpty)(path.length)
 
 
-  lazy val answer1: Int = solve(from, to, grid.toGraph).getOrElse(sys.error(s"no path from $from to $to"))
-  lazy val answer2: Int = grid.filter((_,c) => c == 'a' || c == 'S').flatMap((f,_) => solve(f, to, grid.toGraph)).min
+  override lazy val answer1: Int = solve(from, to, grid.toGraph).getOrElse(sys.error(s"no path from $from to $to"))
+  override lazy val answer2: Int = grid.filter((_,c) => c == 'a' || c == 'S').flatMap((f,_) => solve(f, to, grid.toGraph)).min
 

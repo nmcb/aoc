@@ -156,5 +156,5 @@ object Day17 extends AoC:
   def parseInputGrid(program: Mem): Grid =
     parseGrid(CPU(program).outputs.map(_.toChar).mkString)
 
-  lazy val answer1: Int = solve1(program)
-  lazy val answer2: Int = dustCollected(program)
+  override lazy val answer1: Int = solve1(program)
+  override lazy val answer2: Int = dustCollected(program)

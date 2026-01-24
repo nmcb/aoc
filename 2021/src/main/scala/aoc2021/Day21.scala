@@ -106,5 +106,5 @@ object Day21 extends AoC:
     lazy val answer: Long = score1 max score2
 
 
-  lazy val answer1: Long = Part1.answer
-  lazy val answer2: Long = Part2.answer
+  override lazy val answer1: Long = Part1.answer
+  override lazy val answer2: Long = Part2.answer

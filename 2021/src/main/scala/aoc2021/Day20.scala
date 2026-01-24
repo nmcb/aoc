@@ -52,5 +52,5 @@ object Day20 extends AoC:
   val (algorithm: Vector[Boolean], image0: Image) = parse(input)
 
 
-  lazy val answer1: Int = enhance(algorithm, image0).pixels.map(_.count(_ == true)).sum
-  lazy val answer2: Int = (1 to 50).foldLeft(image0)((img, _) => enhance(algorithm, img)).pixels.map(_.count(_ == true)).sum
+  override lazy val answer1: Int = enhance(algorithm, image0).pixels.map(_.count(_ == true)).sum
+  override lazy val answer2: Int = (1 to 50).foldLeft(image0)((img, _) => enhance(algorithm, img)).pixels.map(_.count(_ == true)).sum

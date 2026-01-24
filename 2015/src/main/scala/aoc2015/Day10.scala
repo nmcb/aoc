@@ -20,5 +20,5 @@ object Day10 extends AoC:
   def solve(s: String, times: Int): Int =
     Iterator.iterate(s)(lookAndSay).nth(times).length
 
-  lazy val answer1: Int = solve(puzzle, 40)
-  lazy val answer2: Int = solve(puzzle, 50)
+  override lazy val answer1: Int = solve(puzzle, 40)
+  override lazy val answer2: Int = solve(puzzle, 50)

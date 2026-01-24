@@ -58,5 +58,5 @@ object Day06 extends AoC:
     val on     = v => v + 1
     val off    = v => if v <= 0 then 0 else v - 1
 
-  lazy val answer1: Int = BooleanLights.run.count(identity)
-  lazy val answer2: Int = IntLights.run.sum
+  override lazy val answer1: Int = BooleanLights.run.count(identity)
+  override lazy val answer2: Int = IntLights.run.sum

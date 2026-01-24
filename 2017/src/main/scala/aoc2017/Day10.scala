@@ -57,5 +57,5 @@ object Day10 extends AoC:
       .map(_.toInt)
       .toVector
 
-  lazy val answer1: Int    = KnotHash.compute(lengths, runs = 1).productOfFirstTwo
-  lazy val answer2: String = KnotHash.compute(input, runs = 64).toString
+  override lazy val answer1: Int    = KnotHash.compute(lengths, runs = 1).productOfFirstTwo
+  override lazy val answer2: String = KnotHash.compute(input, runs = 64).toString

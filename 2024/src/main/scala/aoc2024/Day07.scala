@@ -69,8 +69,8 @@ object  Day07 extends AoC:
         Iterator.single(List.empty)
 
 
-  lazy val answer1: Long = equations.filter(_.valid(OperatorsPart1)).map(_.result).sum
-  lazy val answer2: Long = equations.filter(_.valid(OperatorsPart2)).map(_.result).sum
+  override lazy val answer1: Long = equations.filter(_.valid(OperatorsPart1)).map(_.result).sum
+  override lazy val answer2: Long = equations.filter(_.valid(OperatorsPart2)).map(_.result).sum
 
 
   /** https://github.com/stewSquared/advent-of-code/blob/master/src/main/scala/2024/Day07.worksheet.sc */

@@ -52,5 +52,5 @@ object Day01 extends AoC:
     val next = path.last.process(commands.head)
     if twice(next, path).nonEmpty then twice(next, path).get else solve(commands.tail :+ commands.head, path :++ next)
 
-  lazy val answer1: Int = commands.foldLeft(Vector(Ikke.airDrop))(_.last process _).last.manhattan
-  lazy val answer2: Int = solve(commands, Vector(Ikke.airDrop)).manhattan
+  override lazy val answer1: Int = commands.foldLeft(Vector(Ikke.airDrop))(_.last process _).last.manhattan
+  override lazy val answer2: Int = solve(commands, Vector(Ikke.airDrop)).manhattan

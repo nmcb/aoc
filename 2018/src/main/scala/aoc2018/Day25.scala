@@ -18,5 +18,4 @@ object Day25 extends AoC:
   val positions: Vector[Dim4] = lines.map:
     case s"$x,$y,$z,$w" => Dim4(x.toInt, y.toInt, z.toInt, w.toInt)
 
-  lazy val answer1: Int    = solve(positions)
-  lazy val answer2: String = "<unimplemented>"
+  override lazy val answer1: Int    = solve(positions)

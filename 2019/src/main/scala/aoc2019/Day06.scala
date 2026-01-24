@@ -45,5 +45,5 @@ object Day06 extends AoC:
       case (l1 +: _       , r1 +: _      ) if l1 == r1             => l.reverse ++ r.tail
       case _                                                       => sys.error(s"unmatched l=$l, r=$r")
 
-  lazy val answer1: Int = planets.map(orbits).map(_.length).sum
-  lazy val answer2: Int = path(pathToCom("YOU"), pathToCom("SAN")).length
+  override lazy val answer1: Int = planets.map(orbits).map(_.length).sum
+  override lazy val answer2: Int = path(pathToCom("YOU"), pathToCom("SAN")).length

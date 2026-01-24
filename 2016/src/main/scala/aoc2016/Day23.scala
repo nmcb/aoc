@@ -142,5 +142,5 @@ object Day23 extends AoC:
    *
    */
 
-  lazy val answer1: Value = CPU(instructions(), registers = Map("a" -> 7)).run.registers.valueOf("a")
-  lazy val answer2: Value = CPU(instructions(patched = true), registers = Map("a" -> 12)).run.registers.valueOf("a")
+  override lazy val answer1: Value = CPU(instructions(), registers = Map("a" -> 7)).run.registers.valueOf("a")
+  override lazy val answer2: Value = CPU(instructions(patched = true), registers = Map("a" -> 12)).run.registers.valueOf("a")

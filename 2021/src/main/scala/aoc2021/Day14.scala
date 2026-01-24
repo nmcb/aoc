@@ -53,5 +53,5 @@ object Day14 extends AoC:
 
   val polymer: Polymer = Polymer.make(rules, template)
 
-  lazy val answer1: Long = solve(polymer, 10)
-  lazy val answer2: Long = solve(polymer, 40)
+  override lazy val answer1: Long = solve(polymer, 10)
+  override lazy val answer2: Long = solve(polymer, 40)

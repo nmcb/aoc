@@ -33,5 +33,5 @@ object Day14 extends AoC:
   def stretched(string: String): String =
     Iterator.iterate(string)(hash).nth(2016 + 1)
 
-  lazy val answer1: Int = solve(index => hash(s"$puzzle$index"))
-  lazy val answer2: Int = solve(index => stretched(s"$puzzle$index"))
+  override lazy val answer1: Int = solve(index => hash(s"$puzzle$index"))
+  override lazy val answer2: Int = solve(index => stretched(s"$puzzle$index"))

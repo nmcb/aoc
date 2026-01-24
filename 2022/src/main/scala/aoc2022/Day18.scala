@@ -52,5 +52,5 @@ object Day18 extends AoC:
     boxes.toSeq.map(_.neighbours.count(outer.contains)).sum
 
   
-  lazy val answer1: Int = boxes.toList.map(p => 6 - (p.neighbours intersect boxes).size).sum
-  lazy val answer2: Int = solve2()
+  override lazy val answer1: Int = boxes.toList.map(p => 6 - (p.neighbours intersect boxes).size).sum
+  override lazy val answer2: Int = solve2()

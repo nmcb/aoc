@@ -61,5 +61,5 @@ object Day11 extends AoC:
     val floor0 = init.floors(0) + Floor(generators = 2, microchips = 2)
     init.copy(floors = init.floors.updated(0, floor0))
 
-  lazy val answer1: Int = solve(start = init)
-  lazy val answer2: Int = solve(start = expanded)
+  override lazy val answer1: Int = solve(start = init)
+  override lazy val answer2: Int = solve(start = expanded)

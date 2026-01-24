@@ -54,5 +54,5 @@ object Day14 extends AoC:
       .next
       .nrOfScoresLeftOfInput
 
-  lazy val answer1: Int = solve1(puzzle)
-  lazy val answer2: Int = solve2(puzzle)
+  override lazy val answer1: Int = solve1(puzzle)
+  override lazy val answer2: Int = solve2(puzzle)

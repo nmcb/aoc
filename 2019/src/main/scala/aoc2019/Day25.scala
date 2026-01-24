@@ -158,5 +158,6 @@ object Day25 extends AoC:
     password
 
   val program: Mem = Mem.parse(input)
-  lazy val answer1: Int    = findPassword(program)
-  lazy val answer2: String = "<unimplemented>"
+
+
+  override lazy val answer1: Int    = findPassword(program)

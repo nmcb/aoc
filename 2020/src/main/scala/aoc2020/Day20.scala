@@ -133,5 +133,5 @@ object Day20 extends AoC:
     val roughness     = findMonsters(completeImage)
     roughness.min
 
-  lazy val answer1: Long = solve1(tiles)
-  lazy val answer2: Long = solve2(tiles)
+  override lazy val answer1: Long = solve1(tiles)
+  override lazy val answer2: Long = solve2(tiles)

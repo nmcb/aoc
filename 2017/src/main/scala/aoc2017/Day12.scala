@@ -39,5 +39,5 @@ object Day12 extends AoC:
           graph(node).iterator.foreach(todo.enqueue)
       found.toSet
 
-  lazy val answer1: Int = Dijkstra.reachable(0, graph).size
-  lazy val answer2: Int = graph.groups
+  override lazy val answer1: Int = Dijkstra.reachable(0, graph).size
+  override lazy val answer2: Int = graph.groups

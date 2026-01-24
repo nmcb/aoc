@@ -21,5 +21,5 @@ object Day03 extends AoC:
 
       loop(bank, digits)
 
-  lazy val answer1: Long = lines.map(_.maxJoltage(2)).sum
-  lazy val answer2: Long = lines.map(_.maxJoltage(12)).sum
+  override lazy val answer1: Long = lines.map(_.maxJoltage(2)).sum
+  override lazy val answer2: Long = lines.map(_.maxJoltage(12)).sum

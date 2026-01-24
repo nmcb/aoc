@@ -36,7 +36,7 @@ object Day06 extends AoC:
 
   lazy val start: Pos          = grid.findOne('^')
   lazy val cleared: Grid[Char] = grid.map(c => if c == '^' then '.' else c)
-  lazy val answer1: Int = cleared.walkGuard(start, N).size
+  override lazy val answer1: Int = cleared.walkGuard(start, N).size
 
   def obstructions: Set[Pos] = cleared.walkGuard(start, N) - start
-  lazy val answer2: Int = obstructions.count(o => cleared.walkCircular(start, N, o))
+  override lazy val answer2: Int = obstructions.count(o => cleared.walkCircular(start, N, o))

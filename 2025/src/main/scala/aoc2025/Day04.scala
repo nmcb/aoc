@@ -29,5 +29,5 @@ object Day04 extends AoC:
       val remove = accessible
       if remove.isEmpty then rolls else (rolls -- remove).clearAll
 
-  lazy val answer1: Int = rolls.accessible.size
-  lazy val answer2: Int = (rolls -- rolls.clearAll).size
+  override lazy val answer1: Int = rolls.accessible.size
+  override lazy val answer2: Int = (rolls -- rolls.clearAll).size

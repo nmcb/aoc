@@ -38,4 +38,3 @@ object Day12 extends AoC:
 
 
   override lazy val answer1: Int    = solve1(regions, presents)
-  override lazy val answer2: String = "<unimplemented>"

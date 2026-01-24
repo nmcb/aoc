@@ -99,5 +99,5 @@ object Day16 extends AoC:
 
   val maze: Maze = Maze(lines.map(_.toVector).toVector)
 
-  lazy val answer1: Long = maze.solve1
-  lazy val answer2: Long = maze.solve2
+  override lazy val answer1: Long = maze.solve1
+  override lazy val answer2: Long = maze.solve2

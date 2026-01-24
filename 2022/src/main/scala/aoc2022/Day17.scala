@@ -96,10 +96,10 @@ object Day17 extends AoC:
       Chamber(Rock.sequence, Move.pattern, Set.empty, 0)
 
 
-  lazy val answer1: Int =
+  override lazy val answer1: Int =
     Iterator.iterate(Chamber.empty)(_.next).nth(2022).height
 
-  lazy val answer2: Long =
+  override lazy val answer2: Long =
 
     val cycle: Cycle[Chamber] =
       CycleFinder.find(Chamber.empty, _.next)(_.cycleInvariant)

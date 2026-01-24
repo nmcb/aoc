@@ -50,5 +50,5 @@ object Day14 extends AoC:
 
   /** Part 1 */
 
-  lazy val answer1: Int = Race.run(deer, 2503).maxDistance
-  lazy val answer2: Int = Race.run(deer, 2503).maxScore
+  override lazy val answer1: Int = Race.run(deer, 2503).maxDistance
+  override lazy val answer2: Int = Race.run(deer, 2503).maxScore

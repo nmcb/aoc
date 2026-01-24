@@ -21,5 +21,5 @@ object Day19 extends AoC:
           .sum
     loop(target)
 
-  lazy val answer1: Long = designs.map(d => count(towels, d)).count(_ > 0)
-  lazy val answer2: Long = designs.map(d => count(towels, d)).sum
+  override lazy val answer1: Long = designs.map(d => count(towels, d)).count(_ > 0)
+  override lazy val answer2: Long = designs.map(d => count(towels, d)).sum

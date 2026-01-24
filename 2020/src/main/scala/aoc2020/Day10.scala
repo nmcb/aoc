@@ -47,5 +47,5 @@ object Day10 extends AoC:
   
 
   // # of rating configurations is # paths to last rating
-  lazy val answer1: Int  = solve1(ratings)
-  lazy val answer2: Long = paths(search.length - 1)
+  override lazy val answer1: Int  = solve1(ratings)
+  override lazy val answer2: Long = paths(search.length - 1)

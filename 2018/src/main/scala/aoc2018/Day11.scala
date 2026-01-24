@@ -67,5 +67,5 @@ object Day11 extends AoC:
     val (size, cell, total) = (for size <- (1 to 300).iterator yield area(size)).flatten.maxBy(_.total)
     s"${cell.asIdString(size)},${size.toString}"
 
-  lazy val answer1: String = solve1()
-  lazy val answer2: String = solve2()
+  override lazy val answer1: String = solve1()
+  override lazy val answer2: String = solve2()

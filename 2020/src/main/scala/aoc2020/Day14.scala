@@ -82,5 +82,5 @@ object Day14 extends AoC:
     loop(program).values.map(_.underlying).sum
 
 
-  lazy val answer1: Long = run(program)(address => value => mask => memory => memory ++ Map(address -> mask.mask(value)))
-  lazy val answer2: Long = run(program)(address => value => mask => memory => memory ++ mask.float(address).map(a => a -> value))
+  override lazy val answer1: Long = run(program)(address => value => mask => memory => memory ++ Map(address -> mask.mask(value)))
+  override lazy val answer2: Long = run(program)(address => value => mask => memory => memory ++ mask.float(address).map(a => a -> value))

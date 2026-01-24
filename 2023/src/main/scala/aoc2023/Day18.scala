@@ -107,5 +107,5 @@ object Day18 extends AoC:
   lazy val operationsPart2: Vector[Op] = lines.map(Op.fromHexPart)
 
 
-  lazy val answer1: Long = dig1(operationsPart1)
-  lazy val answer2: Long = dig2(operationsPart2)
+  override lazy val answer1: Long = dig1(operationsPart1)
+  override lazy val answer2: Long = dig2(operationsPart2)

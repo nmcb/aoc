@@ -75,5 +75,5 @@ object Day23 extends AoC:
 
   val program: Mem = Mem.parse(input)
 
-  lazy val answer1: Value = solve1(program)
-  lazy val answer2: Value = solve2(program)
+  override lazy val answer1: Value = solve1(program)
+  override lazy val answer2: Value = solve2(program)

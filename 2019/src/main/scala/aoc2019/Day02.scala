@@ -25,5 +25,5 @@ object Day02 extends AoC:
 
   val program: Mem = Mem.parse(input)
 
-  lazy val answer1: Value = CPU(program.set(1, 12).set(2, 2)).execFinal.mem(0)
-  lazy val answer2: Value = experiment(program)
+  override lazy val answer1: Value = CPU(program.set(1, 12).set(2, 2)).execFinal.mem(0)
+  override lazy val answer2: Value = experiment(program)

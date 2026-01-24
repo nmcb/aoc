@@ -22,5 +22,5 @@ object Day07 extends AoC:
       (positions.min to positions.max).map(fuelTo(positions)).min
 
 
-  lazy val answer1: Int = positions.solve(_.fuelConsumptionTo1)
-  lazy val answer2: Int = positions.solve(_.fuelConsumptionTo2)
+  override lazy val answer1: Int = positions.solve(_.fuelConsumptionTo1)
+  override lazy val answer2: Int = positions.solve(_.fuelConsumptionTo2)

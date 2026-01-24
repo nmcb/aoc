@@ -34,5 +34,5 @@ object Day02 extends AoC:
       case _ => sys.error(s"illegal chars: ($p1,$p2)")
 
   
-  lazy val answer1: Int = codes.map(score1).sum
-  lazy val answer2: Int = codes.map(score2).sum
+  override lazy val answer1: Int = codes.map(score1).sum
+  override lazy val answer2: Int = codes.map(score2).sum

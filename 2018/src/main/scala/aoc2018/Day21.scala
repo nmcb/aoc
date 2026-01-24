@@ -109,11 +109,11 @@ object Day21 extends AoC:
    * Together with the rest of the program not containing an eqrr instruction yields, that
    * we can just check what register 5 contains the first time the line is executed.
    */
-  lazy val answer1: Int = cpu.nextAfterEQRR.mem.valueOf(5)
+  override lazy val answer1: Int = cpu.nextAfterEQRR.mem.valueOf(5)
 
   /**
    * For part 2, we check when the value in register 5 repeats. When it does,
    * the last value must have been the one that causes the most instructions.
    * The solution takes about 2 minutes so the result is copied in.
    */
-  lazy val answer2: Int = 5876609 // Cycle.find(cpu, _.nextAfterEQRR, _.mem.valueOf(5)).cycleLast.mem.valueOf(5)
+  override lazy val answer2: Int = 5876609 // Cycle.find(cpu, _.nextAfterEQRR, _.mem.valueOf(5)).cycleLast.mem.valueOf(5)
