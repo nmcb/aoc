@@ -94,7 +94,7 @@ object Day18 extends AoC:
 
   def parse(s: String): Num =
     def vp: P[Num] = digits.map(Lit.apply)
-    def pp: P[Num] = for { _ <- char('[') ; l <- np ; _ <- char(',') ; r <- np ; _ <- char(']') } yield Pair(l, r)
+    def pp: P[Num] = for _ <- char('[') ; l <- np ; _ <- char(',') ; r <- np ; _ <- char(']') yield Pair(l, r)
     def np: P[Num] = vp | pp
 
     np.run(s)

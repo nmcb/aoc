@@ -27,10 +27,9 @@ object Day13 extends AoC:
       val n1 = List(setting.init.last, setting.last, setting.head)
       val n2 = List(setting.last, setting.head, setting.tail.head)
       (n1 :: n2 :: setting.sliding(3).toList)
-        .map {
+        .map:
           case List(nl, name, nr) => name -> List(nl, nr)
           case _ => sys.error("expected a list of size 3")
-        }
         .toMap
 
     def happiness(name: String): Int =

@@ -10,7 +10,8 @@ object Day04 extends AoC:
     Source
       .fromResource(s"$day.txt")
       .getLines
-      .map { case s"$l1-$r1,$l2-$r2" => (l1.toInt to r1.toInt, l2.toInt to r2.toInt) }
+      .map:
+        case s"$l1-$r1,$l2-$r2" => (l1.toInt to r1.toInt, l2.toInt to r2.toInt)
       .toList
 
   def contained1(r1: Range, r2: Range): Boolean =

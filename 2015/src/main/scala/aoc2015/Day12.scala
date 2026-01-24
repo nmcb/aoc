@@ -8,19 +8,19 @@ object Day12 extends AoC:
   object Json:
 
     val string: P[String] =
-      for { _ <- char('"') ; s <- satisfy(_.isLetter).zeroOrMore ; _ <- char('"') } yield s.mkString
+      for _ <- char('"') ; s <- satisfy(_.isLetter).zeroOrMore ; _ <- char('"') yield s.mkString
 
     val number: P[Long] =
-      (for { _ <- char('-') ; i <- digits } yield -i) | digits
+      (for _ <- char('-') ; i <- digits yield -i) | digits
 
     val member: P[(String,Json)] =
-      for { k <- string ; _ <- char(':') ; v <- json } yield (k,v)
+      for k <- string ; _ <- char(':') ; v <- json yield (k,v)
 
     val obj: P[Json] =
-      for { _ <- char('{') ; ms <- separated(',', member) ; _ <- char('}') } yield Obj(ms.toMap)
+      for _ <- char('{') ; ms <- separated(',', member) ; _ <- char('}') yield Obj(ms.toMap)
 
     val arr: P[Json] =
-      for { _ <- char('[') ; es <- separated(',', json) ; _ <- char(']') } yield Arr(es)
+      for _ <- char('[') ; es <- separated(',', json) ; _ <- char(']') yield Arr(es)
 
     val num: P[Json] =
       number.map(i => Num(i))
