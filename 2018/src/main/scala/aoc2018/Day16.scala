@@ -1,6 +1,8 @@
 package aoc2018
 
 import nmcb.*
+import nmcb.predef.*
+
 import scala.annotation.tailrec
 
 object Day16 extends AoC:
@@ -13,10 +15,10 @@ object Day16 extends AoC:
     def b: Int = codes._3
     def c: Int = codes._4
 
-  type Mem   = Map[Int,Int]
+  type Mem   = Map[Int, Int]
 
   extension (mem: Mem)
-    private def valueOf(reg: Int): Int                      = mem.getOrElse(reg, 0)
+    def valueOf(reg: Int): Int                              = mem.getOrElse(reg, 0)
     def setRI(a: Int, b: Int, c: Int, f: Int => Int => Int) = mem.updated(c, f(mem.valueOf(a))(b))
     def setIR(a: Int, b: Int, c: Int, f: Int => Int => Int) = mem.updated(c, f(a)(mem.valueOf(b)))
     def setRR(a: Int, b: Int, c: Int, f: Int => Int => Int) = mem.updated(c, f(mem.valueOf(a))(mem.valueOf(b)))
@@ -61,7 +63,7 @@ object Day16 extends AoC:
         case EQRI => mem.setRI(a, b, c, (a: Int) => (b: Int) => if a == b then 1 else 0)
         case EQRR => mem.setRR(a, b, c, (a: Int) => (b: Int) => if a == b then 1 else 0)
 
-  type Test  = (Mem,Codes,Mem)
+  type Test  = (Mem, Codes, Mem)
 
   extension (test: Test)
     def before: Mem  = test._1
@@ -104,15 +106,15 @@ object Day16 extends AoC:
     val (before, codes, after) = test
     Inst.values.filter(_.execute(codes)(before) == after).toSet
 
-  def reengineer(tests: Vector[Test]): Map[Int,Inst] =
+  def reengineer(tests: Vector[Test]): Map[Int, Inst] =
     @tailrec
-    def go(todo: Map[Int,Set[Inst]], found: Map[Int,Inst] = Map.empty): Map[Int,Inst] =
+    def go(todo: Map[Int, Set[Inst]], found: Map[Int, Inst] = Map.empty): Map[Int, Inst] =
 
-      type Todo = (Int,Set[Inst])
+      type Todo = (Int, Set[Inst])
 
       extension (todo: Todo)
-        def opcode: Int           = todo._1
-        def candidates: Set[Inst] = todo._2
+        def opcode: Int           = todo.left
+        def candidates: Set[Inst] = todo.right
         def instruction: Inst     = candidates.head
 
       todo.find(_.candidates.size == 1) match
