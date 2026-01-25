@@ -7,13 +7,9 @@ object Day11 extends AoC:
 
   val puzzle: String = "hxbxwxba"
 
-  /** Modeling */
-
   case class Dig(value: Char = 'a'):
     import Dig.*
     import Carry.*
-
-    assert((MinValue to MaxValue).contains(value), s"illegal digit value=${value.toInt}")
 
     override def toString: String =
       value.toString
@@ -39,8 +35,10 @@ object Day11 extends AoC:
     val MaxValue: Char   = 'z'
     val ValueRange: Char = (MaxValue - MinValue + 1).toChar
 
-    extension (c: Char) def toDig: Dig =
-      Dig(c)
+    extension (c: Char)
+      
+      def toDig: Dig =
+        Dig(c)
 
 
   case class Password(num: Array[Dig]):
@@ -48,7 +46,7 @@ object Day11 extends AoC:
     import Carry.*
     import Password.*
 
-    assert(num.size == 8)
+    assert(num.length == 8)
 
     override def toString: String =
       num.mkString
@@ -77,6 +75,7 @@ object Day11 extends AoC:
       num.forall(d => d.value != 'i' && d.value != 'o' && d.value != 'l')
 
     def includesNonOverlappingPair: Boolean =
+      @tailrec
       def hasNonOverlappingPair(todo: String, foundFirst: Boolean = false): Boolean =
         todo.toList match
           case c0 :: c1 :: _ if c0 == c1 && foundFirst => true

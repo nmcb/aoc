@@ -5,20 +5,20 @@ import nmcb.predef.*
 
 object Day17 extends AoC:
 
-  val containers: List[Int] = lines.map(_.toInt).toList
+  val containers: Vector[Int] = lines.map(_.toInt)
 
-  val fits =
+  lazy val fits: Vector[Vector[Int]] =
     containers
       .zipWithIndex
       .toSet
       .subsets
-      .map(_.toList.map(_.element))
+      .map(_.toVector.map(_.element))
       .filter(_.sum == 150)
-      .toList
+      .toVector
 
-  override lazy val answer1: Int =
-    fits.size
+  lazy val min: Int =
+    fits.map(_.size).min
 
-  override lazy val answer2: Int =
-    val min = fits.map(_.size).min
-    fits.count(_.size == min)
+
+  override lazy val answer1: Int = fits.size
+  override lazy val answer2: Int = fits.count(_.size == min)
