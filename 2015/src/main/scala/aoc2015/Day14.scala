@@ -12,12 +12,14 @@ object Day14 extends AoC:
         case s"$name can fly $speed km/s for $fly seconds, but then must rest for $rest seconds." =>
           Deer(name, speed.toInt, fly.toInt, rest.toInt)
 
-  sealed abstract class Count(value: Int)
-  case class FC(value: Int) extends Count(value)
-  case class RC(value: Int) extends Count(value)
+  enum Count(val value: Int):
+    case FC(override val value: Int) extends Count(value)
+    case RC(override val value: Int) extends Count(value)
+    
+  case class Race(state: List[(Deer, Count, Int)], duration: Int, scores: Map[Deer,Int]):
 
-  case class Race(state: List[(Deer,Count,Int)], duration: Int, scores: Map[Deer,Int]):
-
+    import Count.*
+    
     val maxDistance: Int =
       state.map((_,_,distance) => distance).max
 
@@ -28,27 +30,31 @@ object Day14 extends AoC:
       scores.values.max
 
     def tick: Race =
-      val leg = copy(state =
-        state.map((deer,count,distance) =>
-          count match
-            case FC(c) if c + 1 <= deer.flyTime  => (deer, FC(c + 1), distance + deer.velocity)
-            case FC(_)                           => (deer, RC(1), distance)
-            case RC(c) if c + 1 <= deer.restTime => (deer, RC(c + 1), distance)
-            case RC(_)                           => (deer, FC(1), distance + deer.velocity)
-        ))
-      leg.copy(scores =
-        leg.scores.map((d,s) =>
+
+      val leg: Race =
+        copy(
+          state = state.map: (deer, count, distance) =>
+            count match
+              case FC(c) if c + 1 <= deer.flyTime => (deer, FC(c + 1), distance + deer.velocity)
+              case FC(_) => (deer, RC(1), distance)
+              case RC(c) if c + 1 <= deer.restTime => (deer, RC(c + 1), distance)
+              case RC(_) => (deer, FC(1), distance + deer.velocity)
+        )
+      
+      leg.copy(
+        scores = leg.scores.map: (d,s) =>
           if leg.lead.contains(d) then d -> (s + 1) else d -> s
-        ))
+        )
 
   object Race:
+    
+    import Count.*
+    
     def run(deer: List[Deer], duration: Int): Race =
       val start = Race(deer.map(d => (d, FC(0), 0)), duration, deer.map(_ -> 0).toMap)
-      (1 to duration).foldLeft(start)((race,_) => race.tick)
+      (1 to duration).foldLeft(start)((race, _) => race.tick)
 
   val deer: List[Deer] = lines.map(Deer.fromString).toList
-
-  /** Part 1 */
 
   override lazy val answer1: Int = Race.run(deer, 2503).maxDistance
   override lazy val answer2: Int = Race.run(deer, 2503).maxScore
