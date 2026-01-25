@@ -4,7 +4,6 @@ import nmcb.*
 import nmcb.pos.*
 
 import scala.annotation.*
-import scala.io.*
 
 object Day14 extends AoC:
 
@@ -23,12 +22,7 @@ object Day14 extends AoC:
 
   val rocks: Vector[Pos] =
 
-    val paths =
-      Source
-        .fromResource(s"$day.txt")
-        .getLines
-        .map(parseLine)
-        .toVector
+    val paths = lines.map(parseLine)
 
     def segment(from: Pos, to: Pos): Vector[Pos] =
       (if     from.x == to.x && from.y < to.y then (from.y to to.y).map(y => Pos.of(to.x, y))

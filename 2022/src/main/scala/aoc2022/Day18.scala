@@ -27,8 +27,7 @@ object Day18 extends AoC:
       val zs = Set(Box( 0, 0,-1), Box(0, 0, 1))
       (xs ++ ys ++ zs).map(this + _)
 
-
-
+  
   def solve2(): Int =
     val min = boxes.reduce(_ min _) - Box(1,1,1)
     val max = boxes.reduce(_ max _) + Box(1,1,1)

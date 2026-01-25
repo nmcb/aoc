@@ -33,8 +33,6 @@ object Day13 extends AoC:
                case  1 => 1
 
 
-  /** Solutions */
-
   import E.{*, given}
 
   import math.Ordered.orderingToOrdered

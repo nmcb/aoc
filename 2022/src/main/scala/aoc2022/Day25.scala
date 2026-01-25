@@ -4,21 +4,15 @@ import nmcb.*
 import nmcb.predef.*
 
 import scala.annotation.tailrec
-import scala.io.*
 
 object Day25 extends AoC:
 
-  val snafus: List[Number] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
-      .map(s => Number.fromString(s.toList))
-      .toList
+  val snafus: Vector[Number] = lines.map(Number.fromString)
 
-  case class Digit(c: Char):
+  case class Digit(char: Char):
 
     def toLong: Long =
-      c match
+      char match
         case '2' =>  2L
         case '1' =>  1L
         case '0' =>  0L
@@ -26,7 +20,7 @@ object Day25 extends AoC:
         case '=' => -2L
 
     override def toString: String =
-      s"${c.toString}"
+      s"${char.toString}"
 
 
   object Digit:
@@ -50,11 +44,13 @@ object Day25 extends AoC:
 
   object Number:
 
-    @tailrec
-    def fromString(s: List[Char], a: List[Digit] = List.empty): Number =
-      s match
-        case Nil    => Number(a)
-        case h :: t => fromString(t, a :+ Digit.fromChar(h))
+    def fromString(s: String): Number =
+      @tailrec
+      def loop(s: List[Char], a: List[Digit] = List.empty): Number =
+        s match
+          case Nil    => Number(a)
+          case h :: t => loop(t, a :+ Digit.fromChar(h))
+      loop(s.toList)
 
     @tailrec
     def fromLong(l: Long, a: List[Digit] = List.empty): Number =

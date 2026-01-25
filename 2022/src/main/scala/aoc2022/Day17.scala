@@ -5,7 +5,6 @@ import nmcb.pos.*
 import nmcb.predef.*
 
 import scala.annotation.*
-import scala.collection.AbstractIterator
 import scala.math.*
 import scala.math.Integral.Implicits.*
 
@@ -95,17 +94,15 @@ object Day17 extends AoC:
     def empty: Chamber =
       Chamber(Rock.sequence, Move.pattern, Set.empty, 0)
 
+  def solve1(nr: Int): Int =
+    Iterator.iterate(Chamber.empty)(_.next).nth(nr).height
 
-  override lazy val answer1: Int =
-    Iterator.iterate(Chamber.empty)(_.next).nth(2022).height
-
-  override lazy val answer2: Long =
-
+  def solve2(nr: Long): Long =
     val cycle: Cycle[Chamber] =
-      CycleFinder.find(Chamber.empty, _.next)(_.cycleInvariant)
+      Cycle.find(Chamber.empty, _.next, _.cycleInvariant)
 
     val (cycleNr, tailNr) =
-      (1000_000_000_000L - cycle.stemLength) /% cycle.cycleLength
+      (nr - cycle.stemSize) /% cycle.cycleSize
 
     val stemHeight: Long =
       cycle.cycleHead.height
@@ -119,53 +116,5 @@ object Day17 extends AoC:
     stemHeight + cycleNr * cycleHeight + tailHeight
 
 
-  /** Utilities */
-
-  case class Cycle[A](stemLength: Int, cycleLength: Int, cycleHead: A, cycleLast: A, cycleHeadRepeat: A)
-
-  object CycleFinder:
-
-    import scala.collection.*
-
-    extension [A](it: Iterator[A]) def zipWithPrev: Iterator[(Option[A], A)] =
-        new AbstractIterator[(Option[A], A)]:
-
-          private var prevOption: Option[A] =
-            None
-
-          override def hasNext: Boolean =
-            it.hasNext
-
-          override def next: (Option[A], A) =
-            val cur = it.next
-            val ret = (prevOption, cur)
-            prevOption = Some(cur)
-            ret
-
-    def find[A, B](coll: IterableOnce[A])(m: A => B): Option[Cycle[A]] =
-
-      val trace: mutable.Map[B, (A, Int)] =
-        mutable.Map[B, (A, Int)]()
-
-      coll.iterator
-        .zipWithPrev
-        .zipWithIndex
-        .map { case ((last, prev), idx) => (last, prev, trace.put(m(prev), (prev, idx)), idx) }
-        .collectFirst { case (Some(last), repeat, Some((prev, prevIdx)), idx) =>
-          Cycle(
-            stemLength      = prevIdx,
-            cycleLength     = idx - prevIdx,
-            cycleHead       = prev,
-            cycleLast       = last,
-            cycleHeadRepeat = repeat
-          )
-        }
-
-    def find[A, B](x0: A, f: A => A)(m: A => B): Cycle[A] =
-      find(Iterator.iterate(x0)(f))(m).get
-
-
-
-
-
-
+  override lazy val answer1: Int  = solve1(nr = 2022)
+  override lazy val answer2: Long = solve2(nr = 1000_000_000_000L)

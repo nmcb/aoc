@@ -1,9 +1,7 @@
 package aoc2022
 
 import nmcb.*
-import nmcb.predef.*
 
-import scala.io.*
 import scala.collection.*
 
 object Day16 extends AoC:
@@ -11,15 +9,11 @@ object Day16 extends AoC:
   case class Valve(name: String, rate: Int, tunnels: Vector[String], closed: Boolean = true)
 
   val valves: Vector[Valve] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines()
-      .toVector
-      .map:
-        case s"Valve $name has flow rate=$rate; tunnels lead to valves $tunnels" =>
-          Valve(name, rate.toInt, tunnels.trim.split(',').map(_.trim).toVector)
-        case s"Valve $name has flow rate=$rate; tunnel leads to valve $tunnel" =>
-          Valve(name, rate.toInt, Vector(tunnel))
+    lines.map:
+      case s"Valve $name has flow rate=$rate; tunnels lead to valves $tunnels" =>
+        Valve(name, rate.toInt, tunnels.trim.split(',').map(_.trim).toVector)
+      case s"Valve $name has flow rate=$rate; tunnel leads to valve $tunnel" =>
+        Valve(name, rate.toInt, Vector(tunnel))
 
   val reachability: Map[String,Vector[String]] =
     valves.map(v => v.name -> v.tunnels).toMap

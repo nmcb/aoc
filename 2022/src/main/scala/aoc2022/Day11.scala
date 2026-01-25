@@ -2,15 +2,12 @@ package aoc2022
 
 import nmcb.*
 
-import scala.io.*
 import scala.util.*
 
 object Day11 extends AoC:
 
   lazy val monkeys: List[Monkey] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
+    lines
       .filterNot(_.isBlank)
       .grouped(6)
       .map(_.toList)
