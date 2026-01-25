@@ -3,25 +3,12 @@ package aoc2022
 import nmcb.*
 import nmcb.pos.*
 
-import scala.io.*
-
 object Day22 extends AoC:
 
-  val puzzle: Seq[String] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
-      .toIndexedSeq
+  val map: Seq[String] = chunks(0)
+  val path: String     = chunks(1).head
 
-  val map: Seq[String] =
-    puzzle.takeWhile(l => !l.isBlank)
-
-  val path: String =
-    puzzle.drop(map.size + 1).head
-
-  val tiles: Array[Array[Char]] =
-    Array.fill(map.length + 2, map.head.length + 2)(' ')
-
+  val tiles: Array[Array[Char]] = Array.fill(map.length + 2, map.head.length + 2)(' ')
   map.zipWithIndex.foreach((r,y) => r.zipWithIndex.foreach((t,x) => tiles(y + 1)(x + 1) = t))
 
   case class Location(x: Int, y: Int, dir: Dir, path: String):
@@ -152,8 +139,8 @@ object Day22 extends AoC:
 
     private def next(f: Int => Location): Location =
       path match
-        case s if s.startsWith("R") => right.copy(path = s.drop(1))
-        case s if s.startsWith("L") => left.copy(path = s.drop(1))
+        case s if s.startsWith("R") => right.copy(path = s.tail)
+        case s if s.startsWith("L") => left.copy(path = s.tail)
         case s => f(s.takeWhile(_.isDigit).toInt).copy(path = s.dropWhile(_.isDigit))
 
     def next1: Location = next(move1)
@@ -174,10 +161,10 @@ object Day22 extends AoC:
   
   override lazy val answer1: Long =
     var location = Location.start
-    while (location.hasNext) location = location.next1
+    while location.hasNext do location = location.next1
     location.value
 
   override lazy val answer2: Long =
     var location = Location.start
-    while (location.hasNext) location = location.next2
+    while location.hasNext do location = location.next2
     location.value

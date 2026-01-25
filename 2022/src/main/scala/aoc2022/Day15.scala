@@ -3,8 +3,6 @@ package aoc2022
 import nmcb.*
 import nmcb.pos.*
 
-import scala.io.*
-
 object Day15 extends AoC:
 
   private case class Cover(min: Long, max: Long)
@@ -19,17 +17,13 @@ object Day15 extends AoC:
       else
         None
 
-  private val locks: List[Lock] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines()
-      .toList
-      .map:
-        case s"Sensor at x=$sx, y=$sy: closest beacon is at x=$bx, y=$by" =>
-          Lock((x = sx.toInt, y = sy.toInt), (x = bx.toInt, y = by.toInt))
+  private val locks: Vector[Lock] =
+    lines.map:
+      case s"Sensor at x=$sx, y=$sy: closest beacon is at x=$bx, y=$by" =>
+        Lock((x = sx.toInt, y = sy.toInt), (x = bx.toInt, y = by.toInt))
 
   override lazy val answer1: Int =
-    val covers: List[Cover] = locks.flatMap(_.cover(2000000))
+    val covers: Vector[Cover] = locks.flatMap(_.cover(2000000))
     val maxX: Long = math.max(covers.map(_.max).max, 2000000)
     val minX: Long = math.min(covers.map(_.min).min, 0)
     (minX to maxX).foldLeft(0): (count, x) =>

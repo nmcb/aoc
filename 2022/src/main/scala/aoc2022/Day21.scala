@@ -3,7 +3,6 @@ package aoc2022
 import nmcb.*
 
 import scala.annotation.targetName
-import scala.io.*
 
 object Day21 extends AoC:
 

@@ -4,7 +4,6 @@ import nmcb.*
 import nmcb.pos.{*, given}
 
 import scala.annotation.tailrec
-import scala.io.*
 
 object Day24 extends AoC:
 
@@ -157,9 +156,7 @@ object Day24 extends AoC:
 
     def init: World =
       val initField: Field[Char] =
-        Source
-          .fromResource(s"$day.txt")
-          .getLines
+        lines
           .foldLeft(Vector.empty[Vector[Char]])(_ :+ _.toVector)
           .trimBorder
 

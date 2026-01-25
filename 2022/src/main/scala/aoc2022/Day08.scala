@@ -3,8 +3,6 @@ package aoc2022
 import nmcb.*
 import nmcb.pos.{*, given}
 
-import scala.io.Source
-
 object Day08 extends AoC:
 
   case class Mat(heightOf: Map[Pos,Int]):
@@ -52,9 +50,7 @@ object Day08 extends AoC:
 
   private val grid: Mat =
     Mat(
-      Source
-        .fromResource(s"$day.txt")
-        .getLines
+      lines
         .zipWithIndex
         .foldLeft(Map.empty[Pos,Int]):
           case (a,(r,y)) =>

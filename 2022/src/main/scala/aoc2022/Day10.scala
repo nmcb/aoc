@@ -3,7 +3,6 @@ package aoc2022
 import nmcb.*
 
 import scala.annotation.tailrec
-import scala.io.Source
 
 object Day10 extends AoC:
 
@@ -11,26 +10,22 @@ object Day10 extends AoC:
   case object Nop                             extends Inst
   case class  Add(value: Int, steps: Int = 2) extends Inst
 
-  lazy val instructions: List[Inst] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
+  lazy val instructions: Vector[Inst] =
+    lines
       .map(_.trim)
-      .map {
+      .map:
         case s"noop"    => Nop
         case s"addx $v" => Add(v.toInt)
-      }
-      .toList
 
-  case class CPU(is: List[Inst], cycle: Int = 0, x: Int = 1):
+  case class CPU(is: Vector[Inst], cycle: Int = 0, x: Int = 1):
 
     val sync: Seq[Int] = List(20, 60, 100, 140, 180, 220).map(_ - 1)
 
     def nextCycle: CPU =
       is match
-        case Nop      :: r => CPU(r            , cycle + 1, x    )
-        case Add(v,2) :: r => CPU(Add(v,1) :: r, cycle + 1, x    )
-        case Add(v,1) :: r => CPU(r            , cycle + 1, x + v)
+        case Nop       +: rest => CPU(            rest, cycle + 1, x    )
+        case Add(v, 2) +: rest => CPU(Add(v,1) +: rest, cycle + 1, x    )
+        case Add(v, 1) +: rest => CPU(            rest, cycle + 1, x + v)
         case _ => sys.error("boom!")
 
     val signalStrength: Int =
