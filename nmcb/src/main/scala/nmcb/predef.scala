@@ -49,6 +49,12 @@ object predef:
         .sorted
         .iterator
 
+    def findFirst(f: A => Boolean): A =
+      i.find(a => f(a)).getOrElse(sys.error("not found"))
+
+    def findFirstNot(f: A => Boolean): A =
+      i.find(a => !f(a)).getOrElse(sys.error("not found"))
+
     def findMap[B](f: A => Option[B]): B =
       i.iterator.flatMap(f).next()
 
