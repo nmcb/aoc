@@ -13,7 +13,7 @@ object Day08 extends AoC:
   object Node:
 
     def parseTree(s: String): Node =
-      
+
       def loop(input: Vector[Int], todoChildren: Int, todoMeta: Int, children: Vector[Node] = Vector.empty): (Node, Vector[Int]) =
         if todoChildren == 0 then
           (Node(children, input.take(todoMeta)), input.drop(todoMeta))
