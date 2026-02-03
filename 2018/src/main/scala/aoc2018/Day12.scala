@@ -15,12 +15,15 @@ object Day12 extends AoC:
   val (rules: Rules, plants: Plants) =
 
     /** note that we only collect pot indices that contain a plant */
-    val plants = lines(0) match
-      case s"initial state: $pots" => pots.zipWithIndex.filter(_.element == '#').map(_.index).toSet
+    val plants = lines.toSet
+      .collect:
+        case s"initial state: $pots" => pots.zipWithIndex.filter(_.element == '#').map(_.index).toSet
+      .flatten
 
     /** note that we only collect rules that yield a plant */
-    val rules = lines.drop(2).toSet.collect:
-      case s"$pattern => $output" if output == "#" => pattern
+    val rules = lines.toSet
+      .collect:
+        case s"$pattern => $output" if output == "#" => pattern
 
     (rules, plants)
 
@@ -40,7 +43,7 @@ object Day12 extends AoC:
 
   def solve(plants: Plants, rules: Rules, generations: Long): Long =
 
-    /** utilises the observation that the problem converses linearly from generation 102 and on */
+    /** utilizes the observation that the problem converses linearly from generation 102 and on */
     if generations >= 102 then
       @tailrec
       def go(plants: Plants, conversion: Int, generation: Int): Long =

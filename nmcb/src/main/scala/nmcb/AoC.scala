@@ -32,4 +32,3 @@ abstract class AoC:
     val start2: Long = System.currentTimeMillis
     if answer2 != "<unimplemented>" then
       println(s"Answer $day part 2: $answer2 [${System.currentTimeMillis - start2}ms]")
-
