@@ -1,6 +1,7 @@
 package aoc2018
 
 import nmcb.*
+import nmcb.predef.*
 
 object Day14 extends AoC:
 
@@ -23,8 +24,7 @@ object Day14 extends AoC:
   def solve1(input: Int): Int =
     Iterator
       .iterate(Recipes.init)(_.next)
-      .dropWhile(_.scores.size < input + 10)
-      .next
+      .findFirst(_.scores.size >= input + 10)
       .scores
       .slice(input, input + 10)
       .mkString
@@ -34,7 +34,7 @@ object Day14 extends AoC:
 
     val digits = input.toString.map(_.asDigit)
 
-    type Search = (Recipes,Int)
+    type Search = (Recipes, Int)
 
     object Search:
       val NotFound = -1
@@ -50,8 +50,7 @@ object Day14 extends AoC:
 
     Iterator
       .iterate(Search.init)(_.next)
-      .dropWhile(_.nrOfScoresLeftOfInput == Search.NotFound)
-      .next
+      .findFirst(_.nrOfScoresLeftOfInput != Search.NotFound)
       .nrOfScoresLeftOfInput
 
   override lazy val answer1: Int = solve1(puzzle)
