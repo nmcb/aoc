@@ -95,7 +95,7 @@ object Day15 extends AoC:
             (todo,breakout)
           case fighter :: rest =>
             given otherUnits: List[Fighter] = todo ++ rest
-            given Grid                = grid
+            given Grid                      = grid
 
             val targets = targetsOf(fighter)
             val ready   = breakout || targets.isEmpty
