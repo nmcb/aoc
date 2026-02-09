@@ -21,10 +21,10 @@ object Day08 extends AoC:
   object Screen:
 
     val empty: Screen =
-      Screen(List.fill(6, 50)('.'))
+      Screen(Vector.fill(6, 50)('.'))
 
 
-  case class Screen(pixels: List[List[Char]]):
+  case class Screen(pixels: Vector[Vector[Char]]):
     import Operation.*
 
     val sizeX: Int = pixels.head.size
@@ -41,13 +41,13 @@ object Day08 extends AoC:
 
     def rectangle(sizeX: Int, sizeY: Int): Screen =
       val (top, bottom) = pixels.splitAt(sizeY)
-      val updated = top.map(row => List.fill(sizeX)('#') :++ row.drop(sizeX))
+      val updated = top.map(row => Vector.fill(sizeX)('#') :++ row.drop(sizeX))
       Screen(updated :++ bottom)
 
     def shiftRow(index: Int, by: Int): Screen =
       val (top, bottom) = pixels.splitAt(index)
       val (row, rest)   = bottom.splitAt(1)
-      val shifted       = Iterator.continually(row.head).flatten.slice(sizeX - by, 2 * sizeX - by).toList
+      val shifted       = Iterator.continually(row.head).flatten.slice(sizeX - by, 2 * sizeX - by).toVector
       Screen(top :+ shifted :++ rest)
 
     infix def process(op: Operation): Screen =
