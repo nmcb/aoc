@@ -5,9 +5,9 @@ import scala.collection.mutable
 
 object Day10 extends AoC:
 
-  enum Target(val i: Int):
-    case Bot(override val i: Int) extends Target(i)
-    case Out(override val i: Int) extends Target(i)
+  enum Target(val index: Int):
+    case Bot(override val index: Int) extends Target(index)
+    case Out(override val index: Int) extends Target(index)
 
   import Target.*
 
@@ -59,16 +59,16 @@ object Day10 extends AoC:
 
   def solve1(instructions: Vector[Inst], values: Set[Int]): Int =
     val (_, targets) = solve(instructions)
-    targets.find(_.values.contains(values)).get.target.i
+    targets.find(_.values.contains(values)).get.target.index
 
   def solve2(instructions: Vector[Inst]): Int =
     val (targets, _) = solve(instructions)
     targets(Out(0)).head * targets(Out(1)).head * targets(Out(2)).head
 
-  private val init =
+  private val ParseInit =
     """value (\d+) goes to bot (\d+)""".r
 
-  private val sort =
+  private val ParseSort =
     """bot (\d+) gives low to (bot|output) (\d+) and high to (bot|output) (\d+)""".r
 
   def targetFromString(s: String, i: Int): Target =
@@ -78,10 +78,10 @@ object Day10 extends AoC:
 
   def instFromString(s: String): Inst =
     s match
-      case init(value, boti) =>
-        Init(Bot(boti.toInt), value.toInt)
-      case sort(boti, lowTarget, lowi, highTarget, highi) =>
-        Sort(Bot(boti.toInt), targetFromString(lowTarget, lowi.toInt), targetFromString(highTarget, highi.toInt))
+      case ParseInit(value, index) =>
+        Init(Bot(index.toInt), value.toInt)
+      case ParseSort(index, lowTarget, low, highTarget, high) =>
+        Sort(Bot(index.toInt), targetFromString(lowTarget, low.toInt), targetFromString(highTarget, high.toInt))
 
   def instructionsFromString(s: String): Vector[Inst] =
     s.linesIterator.map(instFromString).toVector
