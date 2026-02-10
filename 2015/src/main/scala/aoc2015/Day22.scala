@@ -12,6 +12,8 @@ object Day22 extends AoC:
     case Recharge     extends Spell(229, 5)
 
   import Spell.*
+  
+  given CanEqual[Spell, Spell] = CanEqual.derived
 
   val Spells = Set(MagicMissile, Drain, Shield, Poison, Recharge)
 

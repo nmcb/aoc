@@ -11,6 +11,8 @@ object Day09 extends AoC:
     case L
 
   import Direction.*
+  
+  given CanEqual[Direction, Direction] = CanEqual.derived
 
   case class Position(x: Int, y: Int):
 
@@ -58,6 +60,9 @@ object Day09 extends AoC:
       alignment(h).foldLeft(this)(_ move _)
 
   object Position:
+    
+    given CanEqual[Position, Position] = CanEqual.derived
+    
     def of(x: Int, y: Int): Position = Position(x,y)
 
   case class Command(direction: Direction, steps: Int)

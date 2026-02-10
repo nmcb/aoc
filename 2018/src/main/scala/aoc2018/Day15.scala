@@ -1,7 +1,7 @@
 package aoc2018
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 import scala.annotation.tailrec
 import scala.util.Try
@@ -22,10 +22,13 @@ object Day15 extends AoC:
 
   import FighterType.*
 
+  given CanEqual[FighterType, FighterType] = CanEqual.derived
+
   case class Fighter(fighterType: FighterType, pos: Pos, hitPoints: Int = 200, attackPower: Int = 3)
 
-  given Ordering[Pos]     = Ordering.by(_.toTuple.swap)
-  given Ordering[Fighter] = Ordering.by(_.pos)
+  given Ordering[Pos]              = Ordering.by(_.toTuple.swap)
+  given Ordering[Fighter]          = Ordering.by(_.pos)
+  given CanEqual[Fighter, Fighter] = CanEqual.derived
 
   def targetsOf(fighter: Fighter)(using fighters: List[Fighter]): Set[Fighter] =
     fighters.filter(_.fighterType == fighter.fighterType.target).toSet

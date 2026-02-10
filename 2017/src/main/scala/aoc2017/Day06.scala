@@ -41,6 +41,8 @@ object Day06 extends AoC:
           loop(next, seen :+ current)
       loop(this)
 
+  given CanEqual[Area, Area] = CanEqual.derived
+  
   override lazy val answer1: Int =
     Area(banks).redistribute.size - 1
 

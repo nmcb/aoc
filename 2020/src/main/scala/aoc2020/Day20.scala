@@ -1,7 +1,7 @@
 package aoc2020
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 import nmcb.predef.*
 
 import scala.annotation.tailrec

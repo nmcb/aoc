@@ -1,7 +1,7 @@
 package aoc2021
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 import scala.annotation.tailrec
 
@@ -27,7 +27,8 @@ object Day25 extends AoC:
       val southTiles   = southRemoved ++ southUpdated ++ southMoved
       copy(tiles = southTiles)
 
-
+  given CanEqual[Floor, Floor] = CanEqual.derived
+  
   val floor: Floor =
     val sizeX = lines.head.size
     val sizeY = lines.size

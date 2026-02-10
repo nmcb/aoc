@@ -1,7 +1,7 @@
 package aoc2019
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 import scala.collection.*
 import scala.collection.immutable.Map

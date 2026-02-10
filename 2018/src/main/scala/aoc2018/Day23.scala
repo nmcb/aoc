@@ -14,6 +14,8 @@ object Day23 extends AoC:
     infix def hasOverlappingRadiusWith(that: Bot): Boolean =
       loc.manhattan(that.loc) <= radius + that.radius
 
+  given CanEqual[Bot, Bot] = CanEqual.derived
+
   val bots: Set[Bot] =
     lines
       .collect:

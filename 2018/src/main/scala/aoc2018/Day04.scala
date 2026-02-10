@@ -12,6 +12,8 @@ object Day04 extends AoC:
 
   import Event.*
 
+  given CanEqual[Event, Event] = CanEqual.derived
+
   type Timestamp = String
 
   case class Record(timestamp: Timestamp, event: Event):

@@ -37,6 +37,7 @@ object Day22 extends AoC:
     def max(that: Position): Position =
       Position(x.max(that.x), y.max(that.y), z.max(that.z))
 
+  given CanEqual[Position, Position] = CanEqual.derived
 
   case class Cuboid(all: Map[Position,Boolean]):
 

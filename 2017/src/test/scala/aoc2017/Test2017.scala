@@ -3,6 +3,8 @@ package aoc2017
 import org.scalatest.funsuite.AnyFunSuite
 
 class Test2017 extends AnyFunSuite:
+
+  given CanEqual[Any, Any] = CanEqual.derived
   
   test("Day 1: Inverse Captcha"):
     assertResult(1069)(Day01.answer1)

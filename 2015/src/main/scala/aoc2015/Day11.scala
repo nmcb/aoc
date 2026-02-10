@@ -31,6 +31,8 @@ object Day11 extends AoC:
       case Zero extends Carry(0x00)
       case One  extends Carry(value = 0x01)
 
+    given CanEqual[Carry, Carry] = CanEqual.derived
+    
     val MinValue: Char   = 'a'
     val MaxValue: Char   = 'z'
     val ValueRange: Char = (MaxValue - MinValue + 1).toChar

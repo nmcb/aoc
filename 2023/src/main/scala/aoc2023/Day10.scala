@@ -1,7 +1,7 @@
 package aoc2023
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 import scala.annotation.tailrec
 
@@ -20,6 +20,8 @@ object Day10 extends AoC:
       if directions.contains(d.opposite) then directions.find(_ != d.opposite) else None
 
   import Tile.*
+  
+  given CanEqual[Tile, Tile] = CanEqual.derived
 
   object Tile:
     def fromChar(c: Char): Tile =

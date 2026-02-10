@@ -37,10 +37,10 @@ object Day03 extends AoC:
     filter(bits).toInt
 
 
-  lazy val gamma   = diagnostics.transpose.map(_.mostCommon).toInt
-  lazy val epsilon = diagnostics.transpose.map(_.leastCommon).toInt
-  override lazy val answer1 = gamma * epsilon
+  lazy val gamma: Int            = diagnostics.transpose.map(_.mostCommon).toInt
+  lazy val epsilon: Int          = diagnostics.transpose.map(_.leastCommon).toInt
+  override lazy val answer1: Int = gamma * epsilon
 
-  lazy val oxygenRating       = rating(diagnostics, _.mostCommon)
-  lazy val co2SchrubberRating = rating(diagnostics, _.leastCommon)
-  override lazy val answer2            = oxygenRating * co2SchrubberRating
+  lazy val oxygenRating: Int       = rating(diagnostics, _.mostCommon)
+  lazy val co2SchrubberRating: Int = rating(diagnostics, _.leastCommon)
+  override lazy val answer2: Int   = oxygenRating * co2SchrubberRating

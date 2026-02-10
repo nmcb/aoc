@@ -20,6 +20,8 @@ object Day13 extends AoC:
 
   import Tile.*
 
+  given CanEqual[Tile, Tile] = CanEqual.derived
+
   case class Location(x: Long, y: Long)
 
   extension (outputs: LazyList[Value])

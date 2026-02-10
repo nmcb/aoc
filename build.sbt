@@ -20,6 +20,7 @@ ThisBuild / scalacOptions ++= Seq(
   "-feature",
   "-language:implicitConversions",
   "-language:existentials",
+  "-language:strictEquality",
   "-unchecked",
   "-Werror",
   "-deprecation"

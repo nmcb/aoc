@@ -1,7 +1,7 @@
 package aoc2023
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 import scala.annotation.*
 
@@ -67,7 +67,7 @@ object Day03 extends AoC:
         for
           (g1, ns1) <- gearsWithAdjacentNumbers
           (g2, ns2) <- gearsWithAdjacentNumbers
-          if g1 == g2 && ns1.size == 2 && ns2.size == 2 && ns1 == ns2
+          if g1 == g2 && ns1.size == 2 && ns2.size == 2 && (ns1 diff ns2).isEmpty
         yield ns1
       ratios.toVector
 

@@ -2,7 +2,7 @@ package aoc2016
 
 import nmcb.*
 import nmcb.predef.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 import java.security.MessageDigest
 import scala.collection.*

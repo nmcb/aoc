@@ -39,6 +39,8 @@ object Day12 extends AoC:
   case class Num(underlying: Long)             extends Json
   case class Arr(underlying: List[Json])       extends Json
   case class Obj(underlying: Map[String,Json]) extends Json
+  
+  given CanEqual[Json, Json] = CanEqual.derived
 
   def solve(json: Json, objValueFilter: Json => Boolean = _ => true): Long =
     def loop(acc: Long, json: Json): Long =

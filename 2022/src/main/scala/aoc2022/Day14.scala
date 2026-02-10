@@ -1,7 +1,7 @@
 package aoc2022
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 import scala.annotation.*
 
@@ -11,6 +11,8 @@ object Day14 extends AoC:
     case Sand
     case Air
     case Rock
+    
+  given CanEqual[Tile, Tile] = CanEqual.derived    
 
   def parseLine(line: String): Vector[Pos] =
     line.trim

@@ -54,6 +54,8 @@ object Day04 extends AoC:
 
 
   object Board:
+    
+    given [A] => CanEqual[Board[A], Board[A]] = CanEqual.derived
 
     def empty[A]: Board[A] =
       Board[A](Vector.empty)
@@ -66,6 +68,7 @@ object Day04 extends AoC:
 
   @tailrec
   def playWhoWinsLast[A](draws: Vector[A], game: Vector[Board[A]] = boards): Board[A] =
+    given CanEqual[A, A] = CanEqual.derived
     val round = game.map(_.draw(draws.head))
     val todo  = round.filterNot(_.hasBingo)
     if todo.nonEmpty then

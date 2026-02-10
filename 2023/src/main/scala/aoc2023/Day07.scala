@@ -21,6 +21,8 @@ object Day07 extends AoC:
     case FiveOfAKind
 
   import Strength.*
+  
+  given CanEqual[Strength, Strength] = CanEqual.derived
 
   given Ordering[Strength] with
 

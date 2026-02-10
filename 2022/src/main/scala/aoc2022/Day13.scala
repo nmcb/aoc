@@ -8,6 +8,8 @@ object Day13 extends AoC:
   enum E:
     case N(n: Long)
     case L(l: List[E])
+    
+  given CanEqual[E, E] = CanEqual.derived    
 
   object E:
     def L(es: E*): L = L(es.toList)

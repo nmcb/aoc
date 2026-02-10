@@ -3,6 +3,8 @@ package aoc2021
 import org.scalatest.funsuite.AnyFunSuite
 
 class Test2021 extends AnyFunSuite:
+  
+  given CanEqual[Any, Any] = CanEqual.derived
 
   test("Day 1: Sonar Sweep"):
     assertResult(1602)(Day01.answer1)

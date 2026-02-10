@@ -1,7 +1,7 @@
 package aoc2019
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 object Day20 extends AoC:
 
@@ -14,6 +14,8 @@ object Day20 extends AoC:
     case Inner(label: String)
 
   import Portal.*
+  
+  given CanEqual[Portal, Portal] = CanEqual.derived
 
   def portalToPortalRoutes(lines: Seq[String]): Map[Portal,Set[(Portal,Int)]] =
     def peek(x: Int, y: Int): Char = lines.lift(y).flatMap(_.lift(x)).getOrElse(' ')
