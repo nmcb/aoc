@@ -1,7 +1,7 @@
 package aoc2016
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 object Day22 extends AoC:
 
@@ -16,6 +16,8 @@ object Day22 extends AoC:
       else if isMassive then '#'
       else                   '.'
 
+  given CanEqual[Node, Node] = CanEqual.derived
+  
   val nodes: Map[Pos,Node] =
     lines
       .filter(_.startsWith("/dev/grid/node"))
@@ -24,7 +26,7 @@ object Day22 extends AoC:
         Pos.of(x, y) -> Node(used, avail)
       .toMap
 
-  def viable(nodes: Map[Pos,Node]): Vector[(Node,Node)] =
+  def viable(nodes: Map[Pos, Node]): Vector[(Node, Node)] =
     for
       (_,a) <- nodes.toVector
       (_,b) <- nodes.toVector

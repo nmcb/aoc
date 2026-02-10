@@ -1,6 +1,8 @@
 package aoc2016
 
 import nmcb.*
+
+import scala.CanEqual.derived
 import scala.collection.mutable
 
 object Day10 extends AoC:
@@ -10,6 +12,8 @@ object Day10 extends AoC:
     case Out(override val index: Int) extends Target(index)
 
   import Target.*
+  
+  given CanEqual[Target, Target] = CanEqual.derived
 
   enum Inst:
     case Init(bot: Bot, value: Int)

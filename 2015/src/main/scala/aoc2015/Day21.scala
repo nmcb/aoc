@@ -9,7 +9,7 @@ object Day21 extends AoC:
   object Player:
     def equip(points: Int, weapon: Weapon, armor: Option[Armor], rings: Seq[Ring]): Player =
       assert(rings.size <= 2, "max 2 rings")
-      assert(rings == rings.distinct, "max one of a kind")
+      assert((rings diff rings.distinct).isEmpty, "max one of a kind")
       Player( points = points
             , damage = weapon.damage + rings.map(_.damage).sum
             , armor  = armor.map(_.armor).getOrElse(0) + rings.map(_.armor).sum
@@ -41,6 +41,8 @@ object Day21 extends AoC:
   enum Outcome:
     case Won
     case Lost
+    
+  given CanEqual[Outcome, Outcome] = CanEqual.derived    
 
   case class Game(player: Player, boss: Player):
     import Outcome.*
@@ -67,7 +69,7 @@ object Day21 extends AoC:
       w  <- Weapon.values.toList
       a  <- Armor.values.toList.map(Option(_)) :+ Option.empty[Armor]
       rs <- Ring.values.toList.map(List(_)) ++ Ring.values.toList.combinations(2) ++ List(List.empty[Ring])
-      if rs == rs.distinct
+      if (rs diff rs.distinct).isEmpty
     yield
       Player.equip(100, w, a, rs)
 

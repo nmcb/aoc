@@ -11,6 +11,8 @@ object Day20 extends AoC:
     case L
 
   import Pulse.*
+  
+  given CanEqual[Pulse, Pulse] = CanEqual.derived
 
   type Name = String
   type Message = (Name, Name, Pulse)

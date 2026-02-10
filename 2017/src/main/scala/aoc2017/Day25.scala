@@ -9,6 +9,8 @@ object Day25 extends AoC:
     case L, R
 
   import Move.*
+  
+  given CanEqual[Move, Move] = CanEqual.derived
 
   type State       = String
   type Value       = Int

@@ -1,7 +1,7 @@
 package aoc2017
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 import nmcb.predef.*
 
 object Day22 extends AoC:
@@ -10,6 +10,8 @@ object Day22 extends AoC:
     case Clean, Infected, Weakened, Flagged
 
   import Status.*
+  
+  given CanEqual[Status, Status] = CanEqual.derived
 
   case class Carrier(nodes: Map[Pos,Status], current: Pos, dir: Dir, infected: Int = 0):
 

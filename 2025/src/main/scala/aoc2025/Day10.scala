@@ -3,6 +3,7 @@ package aoc2025
 import nmcb.*
 import nmcb.predef.*
 
+import scala.CanEqual.derived
 import scala.annotation.*
 
 object Day10 extends AoC:
@@ -82,7 +83,6 @@ object Day10 extends AoC:
       import scala.jdk.CollectionConverters.*
 
       val ctx = new Context(Map("model" -> "true").asJava)
-      import ctx.*
 
       //        (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
       //
@@ -97,33 +97,35 @@ object Day10 extends AoC:
       //      x0 = 1, x1 = 3, x2 = 3, x4 = 1, x5 = 2
 
 
-      val optimizer = mkOptimize()
+      val optimizer = ctx.mkOptimize()
 
       /** defines variables x0, x1, ... xn */
       val xs: Vector[IntExpr] =
         buttons
           .zipWithIndex
-          .map((_,i) => mkIntConst(s"x$i"))
+          .map((_,i) => ctx.mkIntConst(s"x$i"))
 
       /** add constraints x0 >= 0, x1 >= 0 ... xn >= 0 */
       for presses <- xs do
-        optimizer.Add(mkGe(presses, mkInt(0)))
+        optimizer.Add(ctx.mkGe(presses, ctx.mkInt(0)))
 
       /** add goal minimise for x0 + x1 + ... xn */
       val total: ArithExpr[IntSort] =
-        xs.foldLeft[ArithExpr[IntSort]](mkInt(0)): (x,y) =>
-          mkAdd(x,y)
+        xs.foldLeft[ArithExpr[IntSort]](ctx.mkInt(0)): (x,y) =>
+          ctx.mkAdd(x,y)
       optimizer.MkMinimize(total)
 
       /** joltage(i) - b(i0) - b(i1) - b(in) = 0 */
-      (buttons zip xs)
-        .foldLeft(joltages.map[ArithExpr[IntSort]](mkInt)):
+      buttons
+        .zip(xs)
+        .foldLeft(joltages.map[ArithExpr[IntSort]](ctx.mkInt)):
           case (expressions, (b, x)) =>
             b.indices.foldLeft(expressions): (expressions, i) =>
-              expressions.updated(i, mkSub(expressions(i), x))
+              expressions.updated(i, ctx.mkSub(expressions(i), x))
         .foreach: joltageLeft =>
-          optimizer.Add(mkEq(joltageLeft, mkInt(0)))
+          optimizer.Add(ctx.mkEq(joltageLeft, ctx.mkInt(0)))
 
+      given CanEqual[Status, Status] = CanEqual.derived
       assert(optimizer.Check() == Status.SATISFIABLE)
 
       optimizer.getModel.evaluate(total, false).toString.toInt

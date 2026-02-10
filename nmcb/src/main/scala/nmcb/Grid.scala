@@ -1,7 +1,7 @@
 package nmcb
 
 import Dijkstra.*
-import pos.*
+import pos.{*, given}
 
 case class Grid[+A](matrix: Vector[Vector[A]]):
   val sizeY: Int = matrix.size
@@ -32,13 +32,13 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
   def peekOrElse[A1 >: A](p: Pos, default: => A1): A1 =
     peekOption(p).getOrElse(default)
 
-  def find[A1 >: A](a: A1): Option[Pos] =
+  def find[A1 >: A](a: A1)(using CanEqual[A, A1]): Option[Pos] =
     elements.find(_.element == a).map(_.pos)
 
-  def findAll[A1 >: A](a: A1): Set[Pos] =
+  def findAll[A1 >: A](a: A1)(using CanEqual[A, A1]): Set[Pos] =
     elements.filter(_.element == a).map(_.pos)
 
-  def findOne[A1 >: A](a: A1, default: => Pos = sys.error(s"not found")): Pos =
+  def findOne[A1 >: A](a: A1, default: => Pos = sys.error(s"not found"))(using CanEqual[A, A1]): Pos =
     find(a).getOrElse(default)
 
   def filter[A1 >: A](f: ((Pos,A1)) => Boolean): Set[(Pos,A1)] =
@@ -59,7 +59,7 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
   def asString: String =
     matrix.map(_.mkString("")).mkString("\n")
 
-  def extractPath[A1 >: A](from: A1, to: A1, node: A1): (Pos,Pos,Grid[A1]) =
+  def extractPath[A1 >: A](from: A1, to: A1, node: A1)(using CanEqual[A, A1]): (Pos,Pos,Grid[A1]) =
     val fromPos  = findOne(from)
     val toPos    = findOne(to)
     val cleared  = updated(fromPos, node).updated(toPos, node)
@@ -113,8 +113,10 @@ object Grid:
     def to: Pos   = g._2
     def cleared: Grid[A] = g._3
 
-    def shortest: Vector[Pos] =
+    def shortest: Vector[Pos] = {
+      given CanEqual[A, A] = CanEqual.derived
       Dijkstra
         .run(from, Graph.fromGrid(cleared, cleared.peek(from)))
         .pathTo(to)
         .toTrail
+    }

@@ -13,6 +13,8 @@ object Day24 extends AoC:
     case Infection
 
   import Army.*
+  
+  given CanEqual[Army, Army] = CanEqual.derived
 
   type AttackKind = String
 

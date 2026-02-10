@@ -15,6 +15,8 @@ object Day19 extends AoC:
     case Compared(select1: Part => Boolean, select2: Long => Boolean, workflow: String, selector: Char)
 
   import Rule.*
+  
+  given CanEqual[Rule, Rule] = CanEqual.derived
 
   case class Range(from: Long, to: Long):
     def size: Long = to - from + 1

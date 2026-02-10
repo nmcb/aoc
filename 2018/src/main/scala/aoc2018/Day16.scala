@@ -63,6 +63,8 @@ object Day16 extends AoC:
         case EQRI => mem.setRI(a, b, c, (a: Int) => (b: Int) => if a == b then 1 else 0)
         case EQRR => mem.setRR(a, b, c, (a: Int) => (b: Int) => if a == b then 1 else 0)
 
+  given CanEqual[Inst, Inst] = CanEqual.derived
+  
   type Test  = (Mem, Codes, Mem)
 
   extension (test: Test)

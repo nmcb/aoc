@@ -95,6 +95,8 @@ object Day22 extends AoC:
       intersect(that).isDefined
 
   object Box:
+    
+    given CanEqual[Box, Box] = CanEqual.derived
 
     def fromString(s: String): Box =
       s match

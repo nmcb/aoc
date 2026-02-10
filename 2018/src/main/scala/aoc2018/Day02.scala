@@ -18,6 +18,9 @@ object Day02 extends AoC:
       idLettersWith(3) >= 1
 
   object Box:
+
+    given CanEqual[Box, Box] = CanEqual.derived
+
     val IdCharSet: String = "abcdefghijklmnopqrstuvwxyz"
     def fromString(id: String): Box = Box(id)
 

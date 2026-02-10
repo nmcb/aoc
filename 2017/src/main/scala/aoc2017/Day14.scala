@@ -1,7 +1,7 @@
 package aoc2017
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 import Day10.KnotHash
 import Day12.Dijkstra

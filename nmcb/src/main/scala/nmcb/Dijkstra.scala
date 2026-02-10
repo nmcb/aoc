@@ -1,6 +1,6 @@
 package nmcb
 
-import pos.*
+import pos.{*, given}
 import predef.*
 
 import scala.annotation.*
@@ -30,7 +30,7 @@ object Dijkstra:
     def fromEdges[A](edges: Vector[Edge[A]]): Graph[A] =
       Graph(edges.groupMap(_.from)(identity))
 
-    def fromGrid[A](grid: Grid[A], node: A, dist: (Pos,Pos) => Int = (_,_) => 1): Graph[Pos] =
+    def fromGrid[A](grid: Grid[A], node: A, dist: (Pos,Pos) => Int = (_,_) => 1)(using CanEqual[A, A]): Graph[Pos] =
       grid.elements
         .filter(_.element == node)
         .foldLeft(Graph.empty): (graph,from) =>
@@ -61,7 +61,7 @@ object Dijkstra:
   import scala.collection.mutable
 
   /** classic dijkstra traverses the shortest found paths first */
-  def run[A](from: A, graph: A => Set[(A,Int)]): Result[A] =
+  def run[A](from: A, graph: A => Set[(A,Int)])(using CanEqual[A, A]): Result[A] =
     val edgeTo: mutable.Map[A,Edge[A]] = mutable.Map.empty
     val distTo: mutable.Map[A,Int]     = mutable.Map.empty.withDefaultValue(Int.MaxValue)
 
@@ -82,7 +82,7 @@ object Dijkstra:
     Result(edgeTo.toMap, distTo.toMap)
 
   /** classic dijkstra traverses the shortest found paths first */
-  def run[A](from: A, graph: Graph[A]): Result[A] =
+  def run[A](from: A, graph: Graph[A])(using CanEqual[A, A]): Result[A] =
     val edgeTo: mutable.Map[A, Edge[A]] = mutable.Map.empty
     val distTo: mutable.Map[A, Int] = mutable.Map.from(graph.neighbours.map((node, _) => node -> Int.MaxValue)).withDefaultValue(Int.MaxValue)
 

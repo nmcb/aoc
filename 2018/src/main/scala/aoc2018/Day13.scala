@@ -50,6 +50,8 @@ object Day13 extends AoC:
         case Straight => Right
         case Right    => Left
 
+  given CanEqual[Turn, Turn] = CanEqual.derived
+
   case class Cart(pos: Pos, dir: Dir, atIntersection: Turn = Turn.Left):
 
     def move(grid: Grid): Cart =

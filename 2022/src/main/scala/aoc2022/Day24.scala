@@ -22,6 +22,8 @@ object Day24 extends AoC:
     case Left  extends Dir(char = Field.LeftChar)
     case Right extends Dir(char = Field.RightChar)
 
+  given CanEqual[Dir, Dir] = CanEqual.derived
+
   type Field[A] = Vector[Vector[A]]
 
   object Field:

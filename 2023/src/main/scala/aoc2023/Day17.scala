@@ -2,7 +2,7 @@ package aoc2023
 
 import nmcb.*
 import nmcb.predef.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 import scala.collection.mutable
 

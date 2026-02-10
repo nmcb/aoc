@@ -7,8 +7,8 @@ import scala.annotation.*
 object Day09 extends AoC:
 
   case class Block(id: Int):
-    def isFileBlock: Boolean = this != Block.free
-    def isFreeBlock: Boolean = this == Block.free
+    def isFileBlock: Boolean = this.id != Block.free.id
+    def isFreeBlock: Boolean = this.id == Block.free.id
     def asString: String     = if id == -1 then "." else id.toString
 
   object Block:

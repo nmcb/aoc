@@ -1,7 +1,7 @@
 package aoc2018
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 object Day17 extends AoC:
 
@@ -15,6 +15,8 @@ object Day17 extends AoC:
   enum Stream:
     case Stopped
     case Flowing
+
+  given CanEqual[Stream, Stream] = CanEqual.derived
 
   import Stream.*
 

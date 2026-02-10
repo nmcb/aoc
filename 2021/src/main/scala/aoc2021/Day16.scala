@@ -29,6 +29,8 @@ object Day16 extends AoC:
         case I => "1"
 
   import Bit.*
+  
+  given CanEqual[Bit, Bit] = CanEqual.derived
 
   type Version = Int       // 3 lsb
   type Id      = Int       // 3 lsb

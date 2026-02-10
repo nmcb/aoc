@@ -1,7 +1,7 @@
 package nmcb
 
 import nmcb.*
-import pos.*
+import pos.{*, given}
 import nmcb.Dijkstra.*
 import nmcb.predef.*
 import org.scalatest.funsuite.AnyFunSuite

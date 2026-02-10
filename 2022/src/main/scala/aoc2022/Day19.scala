@@ -35,7 +35,12 @@ object Day19 extends AoC:
 
   import Material.*
 
+  given CanEqual[Material, Material] = CanEqual.derived
+
+
   case class Robot(material: Material)
+  
+  given CanEqual[Robot, Robot] = CanEqual.derived
 
   case class MaterialStash(ore: Int = 0, clay: Int = 0, obsidian: Int = 0, geode: Int = 0)
 
@@ -47,6 +52,8 @@ object Day19 extends AoC:
     case GeodeRobot
 
   import Build.*
+  
+  given CanEqual[Build, Build] = CanEqual.derived
 
   def buildActions(print: Blueprint, material: MaterialStash, robots: Vector[Robot]): Vector[Build] =
     import material.*

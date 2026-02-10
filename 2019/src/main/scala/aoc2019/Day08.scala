@@ -11,6 +11,8 @@ object Day08 extends AoC:
   type Line[A] = List[A]
 
   case class Layer[A](digs: List[Line[A]]):
+    
+    given CanEqual[A, Dig] = CanEqual.derived
 
     def count(d: Dig): Int =
       digs.foldLeft(0)((a, l) => a + l.count(_ == d))
@@ -50,6 +52,8 @@ object Day08 extends AoC:
     case Trans
     case White
 
+    given CanEqual[Pix, Pix] = CanEqual.derived
+
     def render: Char =
       this match
         case Black => '░'
@@ -63,7 +67,7 @@ object Day08 extends AoC:
         case (_, Trans) => this
 
   import Pix.*
-
+  
   extension (dig: Dig)
 
     def digitToPix: Pix =

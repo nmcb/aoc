@@ -1,5 +1,7 @@
 package nmcb
 
+import scala.CanEqual.derived
+
 object pos:
 
   enum Dir:
@@ -26,11 +28,15 @@ object pos:
         case E => W
         case W => E
 
-  export Dir.*
+  export Dir.{*, given}
 
   type Pos = (x: Int, y: Int)
 
   given Ordering[Pos] = Ordering.by(_.toTuple)
+
+  given CanEqual[Pos, Pos] = CanEqual.derived
+
+  given CanEqual[Dir, Dir] = CanEqual.derived
 
 
   object Pos:
@@ -111,7 +117,7 @@ object pos:
     def adjoint8: Set[Pos] =
       Pos.offset8.map(_ + p)
 
-    infix inline def step(dir: Dir): Pos =
+    infix inline def step(dir: Dir)(using CanEqual[Dir, Dir]): Pos =
       dir match
         case N => (x = p.x, y = p.y - 1)
         case E => (x = p.x + 1, y = p.y)

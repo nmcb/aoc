@@ -1,7 +1,7 @@
 package aoc2016
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
 
 object Day24 extends AoC:
 

@@ -12,6 +12,8 @@ object Day22 extends AoC:
     case Wet    extends RegionType(1)
     case Narrow extends RegionType(2)
 
+  given CanEqual[RegionType, RegionType] = CanEqual.derived
+  
   case class Region(x: Int, y: Int):
     infix def +(x: Int, y: Int): Region    = copy(x = this.x + x, y = this.y + y)
     infix def manhattan(that: Region): Int = (x - that.x).abs + (y - that.y).abs
@@ -23,6 +25,8 @@ object Day22 extends AoC:
 
 
   object Region:
+    
+    given CanEqual[Region, Region] = CanEqual.derived
 
     val depth: Int     = 11817
     val mouth: Region  = Region(0, 0)
@@ -55,6 +59,8 @@ object Day22 extends AoC:
     case Torch
     case ClimbingGear
 
+  given CanEqual[Tool, Tool] = CanEqual.derived
+  
   import RegionType.*
   import Tool.*
 
