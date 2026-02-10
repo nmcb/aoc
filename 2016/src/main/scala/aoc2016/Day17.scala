@@ -1,6 +1,7 @@
 package aoc2016
 
 import nmcb.*
+import nmcb.predef.*
 import nmcb.pos.*
 
 import java.security.MessageDigest
@@ -9,15 +10,6 @@ import scala.collection.*
 object Day17 extends AoC:
 
   val md5: MessageDigest = MessageDigest.getInstance("MD5")
-  val hex: Array[Char]   = "0123456789abcdef".toCharArray
-
-  extension (bytes: Array[Byte])
-    def toHexString: String =
-      val sb: StringBuffer = StringBuffer(bytes.length * 2)
-      for b <- bytes do
-        sb.append(hex((b & 0xF0) >> 4))
-        sb.append(hex(b & 0x0F))
-      sb.toString
 
   extension (p: Pos)
 
