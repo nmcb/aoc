@@ -23,7 +23,7 @@ object Day22 extends AoC:
           val on = set == "on" 
           CuboidStep(on, xr, yr, zr)
 
-  case class Position(x: Int, y: Int, z: Int):
+  case class Position(x: Int, y: Int, z: Int) derives CanEqual:
 
     def +(that: Position): Position =
       Position(x + that.x, y + that.y, z + that.z)
@@ -36,8 +36,6 @@ object Day22 extends AoC:
 
     def max(that: Position): Position =
       Position(x.max(that.x), y.max(that.y), z.max(that.z))
-
-  given CanEqual[Position, Position] = CanEqual.derived
 
   case class Cuboid(all: Map[Position,Boolean]):
 

@@ -10,7 +10,7 @@ object Day08 extends AoC:
   type Dig     = Int
   type Line[A] = List[A]
 
-  case class Layer[A](digs: List[Line[A]]):
+  case class Layer[A](digs: List[Line[A]]) derives CanEqual:
     
     given CanEqual[A, Dig] = CanEqual.derived
 
@@ -47,12 +47,10 @@ object Day08 extends AoC:
       .grouped(sizeY).toList
       .map(Layer[Dig].apply)
 
-  enum Pix:
+  enum Pix derives CanEqual:
     case Black
     case Trans
     case White
-
-    given CanEqual[Pix, Pix] = CanEqual.derived
 
     def render: Char =
       this match

@@ -5,14 +5,12 @@ import scala.util.matching.*
 
 object Day04 extends AoC:
 
-  enum Event:
+  enum Event derives CanEqual:
     case BeginShift(guard: Int)
     case FallAsleep
     case WakeUp
 
   import Event.*
-
-  given CanEqual[Event, Event] = CanEqual.derived
 
   type Timestamp = String
 

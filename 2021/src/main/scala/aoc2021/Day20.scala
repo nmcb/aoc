@@ -1,7 +1,7 @@
 package aoc2021
 
 import nmcb.*
-import nmcb.pos.{*, given}
+import nmcb.pos.*
 
 object Day20 extends AoC:
 

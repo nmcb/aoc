@@ -41,16 +41,16 @@ object Day13 extends AoC:
     def sizeY: Int = grid.size
     def charAt(p: Pos): Option[Char] = grid.lift(p.y).flatMap(_.lift(p.x))
 
-  enum Turn:
-    case Left, Straight, Right
+  enum Turn derives CanEqual:
+    case Left
+    case Straight
+    case Right
 
     def next: Turn =
       this match
         case Left     => Straight
         case Straight => Right
         case Right    => Left
-
-  given CanEqual[Turn, Turn] = CanEqual.derived
 
   case class Cart(pos: Pos, dir: Dir, atIntersection: Turn = Turn.Left):
 

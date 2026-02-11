@@ -1,13 +1,13 @@
 package aoc2021
 
 import nmcb.*
-import nmcb.pos.{*, given}
+import nmcb.pos.*
 
 import scala.annotation.tailrec
 
 object Day25 extends AoC:
 
-  case class Floor(tiles: Map[Pos,Char], sizeX: Int, sizeY: Int):
+  case class Floor(tiles: Map[Pos,Char], sizeX: Int, sizeY: Int) derives CanEqual:
 
     def eastOf(p: Pos): Pos =
       if p.x < sizeX - 1 then p step E else (x = 0, y = p.y)
@@ -27,8 +27,6 @@ object Day25 extends AoC:
       val southTiles   = southRemoved ++ southUpdated ++ southMoved
       copy(tiles = southTiles)
 
-  given CanEqual[Floor, Floor] = CanEqual.derived
-  
   val floor: Floor =
     val sizeX = lines.head.size
     val sizeY = lines.size

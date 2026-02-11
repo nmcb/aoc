@@ -20,8 +20,9 @@ object Day16 extends AoC:
     + "6402334F935802200087C3D8DD0E0401A8CF0A23A100A0B294CCF671E00A0002110823D4231007A0D4198EC40181E802924D3272"
     + "BE70BD3D4C8A100A613B6AFB7481668024200D4188C108C401D89716A080"
 
-  enum Bit:
-    case O, I
+  enum Bit derives CanEqual:
+    case O
+    case I
 
     def asString: String =
       this match
@@ -30,8 +31,6 @@ object Day16 extends AoC:
 
   import Bit.*
   
-  given CanEqual[Bit, Bit] = CanEqual.derived
-
   type Version = Int       // 3 lsb
   type Id      = Int       // 3 lsb
   type Word    = Vector[Bit] // grouped 4 lsb

@@ -7,7 +7,7 @@ object Day13 extends AoC:
 
   import cpu.*
 
-  enum Tile(val id: Long):
+  enum Tile(val id: Long) derives CanEqual:
     case Empty  extends Tile(0)
     case Wall   extends Tile(1)
     case Block  extends Tile(2)
@@ -19,8 +19,6 @@ object Day13 extends AoC:
       Tile.values.find(_.id == id).get
 
   import Tile.*
-
-  given CanEqual[Tile, Tile] = CanEqual.derived
 
   case class Location(x: Long, y: Long)
 

@@ -11,7 +11,7 @@ object Day06 extends AoC:
       .map(_.trim.toInt)
       .toVector
 
-  case class Area(banks: Vector[Int]):
+  case class Area(banks: Vector[Int]) derives CanEqual:
 
     extension (index: Int) private def next: Int =
       if index + 1 >= banks.size then 0 else index + 1
@@ -41,8 +41,6 @@ object Day06 extends AoC:
           loop(next, seen :+ current)
       loop(this)
 
-  given CanEqual[Area, Area] = CanEqual.derived
-  
   override lazy val answer1: Int =
     Area(banks).redistribute.size - 1
 

@@ -81,7 +81,7 @@ object Day22 extends AoC:
     def >=(that: Positon): Boolean = x >= that.x && y >= that.y && z >= that.z
     def <=(that: Positon): Boolean = x <= that.x && y <= that.y && z <= that.z
 
-  case class Box(min: Positon, max: Positon):
+  case class Box(min: Positon, max: Positon) derives CanEqual:
 
     def intersect(that: Box): Option[Box] =
       val maxmin = min max that.min
@@ -96,8 +96,6 @@ object Day22 extends AoC:
 
   object Box:
     
-    given CanEqual[Box, Box] = CanEqual.derived
-
     def fromString(s: String): Box =
       s match
         case s"$x1,$y1,$z1~$x2,$y2,$z2" =>

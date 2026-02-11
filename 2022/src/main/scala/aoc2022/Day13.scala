@@ -5,12 +5,10 @@ import nmcb.parsing.*
 
 object Day13 extends AoC:
 
-  enum E:
+  enum E derives CanEqual:
     case N(n: Long)
     case L(l: List[E])
     
-  given CanEqual[E, E] = CanEqual.derived    
-
   object E:
     def L(es: E*): L = L(es.toList)
 
@@ -35,7 +33,7 @@ object Day13 extends AoC:
                case  1 => 1
 
 
-  import E.{*, given}
+  import E.*
 
   import math.Ordered.orderingToOrdered
 

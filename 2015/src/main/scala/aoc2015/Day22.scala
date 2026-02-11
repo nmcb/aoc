@@ -4,7 +4,7 @@ import nmcb.*
 
 object Day22 extends AoC:
 
-  enum Spell(val cost: Int, val duration: Int):
+  enum Spell(val cost: Int, val duration: Int) derives CanEqual:
     case MagicMissile extends Spell(53, 1)
     case Drain        extends Spell(73, 1)
     case Shield       extends Spell(113, 6)
@@ -13,8 +13,6 @@ object Day22 extends AoC:
 
   import Spell.*
   
-  given CanEqual[Spell, Spell] = CanEqual.derived
-
   val Spells = Set(MagicMissile, Drain, Shield, Poison, Recharge)
 
   case class Game(

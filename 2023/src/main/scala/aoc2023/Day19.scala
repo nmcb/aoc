@@ -8,7 +8,7 @@ object Day19 extends AoC:
 
   case class Part(x: Long, m: Long, a: Long, s: Long)
 
-  enum Rule:
+  enum Rule derives CanEqual:
     case Accepted
     case Rejected
     case Deferred(workflow: String)
@@ -16,8 +16,6 @@ object Day19 extends AoC:
 
   import Rule.*
   
-  given CanEqual[Rule, Rule] = CanEqual.derived
-
   case class Range(from: Long, to: Long):
     def size: Long = to - from + 1
 

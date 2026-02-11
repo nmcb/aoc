@@ -4,7 +4,7 @@ import nmcb.*
 
 object Day02 extends AoC:
 
-  case class Box(identifier: String):
+  case class Box(identifier: String) derives CanEqual:
 
     private def idLettersWith(count: Int): Int =
       identifier
@@ -18,9 +18,6 @@ object Day02 extends AoC:
       idLettersWith(3) >= 1
 
   object Box:
-
-    given CanEqual[Box, Box] = CanEqual.derived
-
     val IdCharSet: String = "abcdefghijklmnopqrstuvwxyz"
     def fromString(id: String): Box = Box(id)
 

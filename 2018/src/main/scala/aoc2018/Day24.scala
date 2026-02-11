@@ -7,14 +7,12 @@ import scala.annotation.tailrec
 
 object Day24 extends AoC:
 
-  enum Army:
+  enum Army derives CanEqual:
     case Draw
     case Immune
     case Infection
 
   import Army.*
-  
-  given CanEqual[Army, Army] = CanEqual.derived
 
   type AttackKind = String
 

@@ -5,7 +5,7 @@ import nmcb.pos.{*, given}
 
 object Day22 extends AoC:
 
-  case class Node(used: Int, avail: Int):
+  case class Node(used: Int, avail: Int) derives CanEqual:
     def isEmpty: Boolean            = used == 0
     def nonEmpty: Boolean           = !isEmpty
     def fitsOn(that: Node): Boolean = that.avail >= used
@@ -16,8 +16,6 @@ object Day22 extends AoC:
       else if isMassive then '#'
       else                   '.'
 
-  given CanEqual[Node, Node] = CanEqual.derived
-  
   val nodes: Map[Pos,Node] =
     lines
       .filter(_.startsWith("/dev/grid/node"))

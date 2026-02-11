@@ -1,7 +1,7 @@
 package aoc2018
 
 import nmcb.*
-import nmcb.pos.{*, given}
+import nmcb.pos.*
 
 object Day17 extends AoC:
 
@@ -12,14 +12,11 @@ object Day17 extends AoC:
 
   case class Area(clay: Set[Pos], minY: Int, maxY: Int, spring: Pos)
 
-  enum Stream:
+  enum Stream derives CanEqual:
     case Stopped
     case Flowing
 
-  given CanEqual[Stream, Stream] = CanEqual.derived
-
   import Stream.*
-
   import Iterator.*
 
   /** return all flowing and stopped positions */

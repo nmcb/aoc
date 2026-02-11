@@ -10,11 +10,9 @@ object Day23 extends AoC:
   object Location:
     val origin: Location = Location(0,0,0)
 
-  case class Bot(loc: Location, radius: Int):
+  case class Bot(loc: Location, radius: Int) derives CanEqual:
     infix def hasOverlappingRadiusWith(that: Bot): Boolean =
       loc.manhattan(that.loc) <= radius + that.radius
-
-  given CanEqual[Bot, Bot] = CanEqual.derived
 
   val bots: Set[Bot] =
     lines

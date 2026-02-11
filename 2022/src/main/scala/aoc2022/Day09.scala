@@ -4,7 +4,7 @@ import nmcb.*
 
 object Day09 extends AoC:
 
-  enum Direction:
+  enum Direction derives CanEqual:
     case U
     case D
     case R
@@ -12,9 +12,7 @@ object Day09 extends AoC:
 
   import Direction.*
   
-  given CanEqual[Direction, Direction] = CanEqual.derived
-
-  case class Position(x: Int, y: Int):
+  case class Position(x: Int, y: Int) derives CanEqual:
 
     infix def move(d: Direction): Position =
       d match
@@ -60,8 +58,6 @@ object Day09 extends AoC:
       alignment(h).foldLeft(this)(_ move _)
 
   object Position:
-    
-    given CanEqual[Position, Position] = CanEqual.derived
     
     def of(x: Int, y: Int): Position = Position(x,y)
 

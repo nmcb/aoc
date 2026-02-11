@@ -7,14 +7,12 @@ import scala.collection.mutable
 
 object Day10 extends AoC:
 
-  enum Target(val index: Int):
+  enum Target(val index: Int) derives CanEqual:
     case Bot(override val index: Int) extends Target(index)
     case Out(override val index: Int) extends Target(index)
 
   import Target.*
   
-  given CanEqual[Target, Target] = CanEqual.derived
-
   enum Inst:
     case Init(bot: Bot, value: Int)
     case Sort(bot: Bot, low: Target, high: Target)

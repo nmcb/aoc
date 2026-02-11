@@ -38,12 +38,10 @@ object Day21 extends AoC:
     case Defence2 extends Ring(40, 0, 2)
     case Defence3 extends Ring(80, 0, 3)
 
-  enum Outcome:
+  enum Outcome derives CanEqual:
     case Won
     case Lost
     
-  given CanEqual[Outcome, Outcome] = CanEqual.derived    
-
   case class Game(player: Player, boss: Player):
     import Outcome.*
 

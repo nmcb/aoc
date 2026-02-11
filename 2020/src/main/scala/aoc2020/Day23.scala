@@ -6,10 +6,8 @@ import scala.annotation.tailrec
 object Day23 extends AoC:
 
   /** a singe linked, updatable list of cups */
-  case class Cup(value: Int, var next: Cup = null)
+  case class Cup(value: Int, var next: Cup = null) derives CanEqual
   
-  given CanEqual[Cup, Cup] = CanEqual.derived
-
   def play(digits: Vector[Int], max: Int): Cup =
 
     import Iterator.*

@@ -5,12 +5,10 @@ import nmcb.predef.*
 
 object Day25 extends AoC:
 
-  enum Move:
+  enum Move derives CanEqual:
     case L, R
 
   import Move.*
-  
-  given CanEqual[Move, Move] = CanEqual.derived
 
   type State       = String
   type Value       = Int

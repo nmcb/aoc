@@ -6,12 +6,12 @@ import scala.annotation.tailrec
 
 object Day10 extends AoC:
 
-  sealed trait Inst
-  case object Nop                             extends Inst
-  case class  Add(value: Int, steps: Int = 2) extends Inst
-  
-  given CanEqual[Inst, Inst] = CanEqual.derived
+  enum Inst derives CanEqual:
+    case Nop
+    case Add(value: Int, steps: Int = 2)
 
+  import Inst.*
+  
   lazy val instructions: Vector[Inst] =
     lines
       .map(_.trim)

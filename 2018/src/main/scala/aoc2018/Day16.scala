@@ -25,7 +25,7 @@ object Day16 extends AoC:
     def setRN(a: Int, c: Int)                               = mem.updated(c, mem.valueOf(a))
     def setIN(a: Int, c: Int)                               = mem.updated(c, a)
 
-  enum Inst:
+  enum Inst derives CanEqual:
     case ADDR
     case ADDI
     case MULR
@@ -63,8 +63,6 @@ object Day16 extends AoC:
         case EQRI => mem.setRI(a, b, c, (a: Int) => (b: Int) => if a == b then 1 else 0)
         case EQRR => mem.setRR(a, b, c, (a: Int) => (b: Int) => if a == b then 1 else 0)
 
-  given CanEqual[Inst, Inst] = CanEqual.derived
-  
   type Test  = (Mem, Codes, Mem)
 
   extension (test: Test)

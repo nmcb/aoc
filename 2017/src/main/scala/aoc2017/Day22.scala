@@ -1,18 +1,16 @@
 package aoc2017
 
 import nmcb.*
-import nmcb.pos.{*, given}
+import nmcb.pos.*
 import nmcb.predef.*
 
 object Day22 extends AoC:
 
-  enum Status:
+  enum Status derives CanEqual:
     case Clean, Infected, Weakened, Flagged
 
   import Status.*
   
-  given CanEqual[Status, Status] = CanEqual.derived
-
   case class Carrier(nodes: Map[Pos,Status], current: Pos, dir: Dir, infected: Int = 0):
 
     def wake1: Carrier =

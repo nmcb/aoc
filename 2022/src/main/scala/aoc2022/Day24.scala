@@ -16,13 +16,11 @@ object Day24 extends AoC:
     def end: Pos = Pos.of(max.x, max.y)
 
 
-  enum Dir(val char: Char):
+  enum Dir(val char: Char) derives CanEqual:
     case Up    extends Dir(char = Field.UpChar)
     case Down  extends Dir(char = Field.DownChar)
     case Left  extends Dir(char = Field.LeftChar)
     case Right extends Dir(char = Field.RightChar)
-
-  given CanEqual[Dir, Dir] = CanEqual.derived
 
   type Field[A] = Vector[Vector[A]]
 

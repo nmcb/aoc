@@ -1,7 +1,7 @@
 package aoc2022
 
 import nmcb.*
-import nmcb.pos.{*, given}
+import nmcb.pos.*
 
 object Day08 extends AoC:
 

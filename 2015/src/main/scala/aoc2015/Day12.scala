@@ -34,13 +34,13 @@ object Day12 extends AoC:
     def parse(s: String): Json =
       json.run(s)
 
-  sealed trait Json
-  case class Str(underlying: String)           extends Json
-  case class Num(underlying: Long)             extends Json
-  case class Arr(underlying: List[Json])       extends Json
-  case class Obj(underlying: Map[String,Json]) extends Json
+  enum Json derives CanEqual:
+    case Str(underlying: String)           extends Json
+    case Num(underlying: Long)             extends Json
+    case Arr(underlying: List[Json])       extends Json
+    case Obj(underlying: Map[String,Json]) extends Json
   
-  given CanEqual[Json, Json] = CanEqual.derived
+  import Json.*
 
   def solve(json: Json, objValueFilter: Json => Boolean = _ => true): Long =
     def loop(acc: Long, json: Json): Long =

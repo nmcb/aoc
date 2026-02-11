@@ -4,8 +4,11 @@ import scala.CanEqual.derived
 
 object pos:
 
-  enum Dir:
-    case N, E, S, W
+  enum Dir derives CanEqual:
+    case N
+    case E
+    case S
+    case W
 
     def cw: Dir =
       this match
@@ -28,18 +31,13 @@ object pos:
         case E => W
         case W => E
 
-  export Dir.{*, given}
+  export Dir.*
 
   type Pos = (x: Int, y: Int)
 
-  given Ordering[Pos] = Ordering.by(_.toTuple)
-
-  given CanEqual[Pos, Pos] = CanEqual.derived
-
-  given CanEqual[Dir, Dir] = CanEqual.derived
-
-
   object Pos:
+    given CanEqual[Pos, Pos] = CanEqual.derived
+    given Ordering[Pos] = Ordering.by(_.toTuple)
 
     val orderingByManhattanDistance: Ordering[Pos] =
       Ordering.fromLessThan((a, b) => a.manhattanDistance(Pos.origin) < b.manhattanDistance(Pos.origin))
@@ -78,6 +76,7 @@ object pos:
         assert(it.length == 2)
         (x = it(0).toString.toInt, y = it(1).toString.toInt)
 
+  export Pos.given
 
   extension (p: Pos)
 

@@ -1,17 +1,16 @@
 package aoc2021
 
 import nmcb.*
-import nmcb.pos.{*, given}
+import nmcb.pos.*
 
 object Day13 extends AoC:
 
-  enum Axis:
-    case Ver, Hor
+  enum Axis derives CanEqual:
+    case Ver
+    case Hor
 
   import Axis.*
   
-  given CanEqual[Axis, Axis] = CanEqual.derived
-
   type Dots  = Set[Pos]
   type Folds = Vector[(Axis, Int)]
 

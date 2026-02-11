@@ -1,7 +1,7 @@
 package aoc2016
 
 import nmcb.*
-import nmcb.pos.{*, given}
+import nmcb.pos.*
 import scala.annotation.tailrec
 import scala.util.Try
 

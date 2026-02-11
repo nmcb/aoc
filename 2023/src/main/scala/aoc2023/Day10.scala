@@ -1,13 +1,13 @@
 package aoc2023
 
 import nmcb.*
-import nmcb.pos.{*, given}
+import nmcb.pos.*
 
 import scala.annotation.tailrec
 
 object Day10 extends AoC:
 
-  enum Tile(val directions: Set[Dir]):
+  enum Tile(val directions: Set[Dir]) derives CanEqual:
     case Vertical   extends Tile(Set(N,S))
     case Horizontal extends Tile(Set(E,W))
     case BendNE     extends Tile(Set(N,E))
@@ -21,8 +21,6 @@ object Day10 extends AoC:
 
   import Tile.*
   
-  given CanEqual[Tile, Tile] = CanEqual.derived
-
   object Tile:
     def fromChar(c: Char): Tile =
       c match

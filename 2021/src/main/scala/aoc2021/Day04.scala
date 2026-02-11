@@ -67,8 +67,7 @@ object Day04 extends AoC:
       .getOrElse(playWhoWinsFirst(draws.tail, round))
 
   @tailrec
-  def playWhoWinsLast[A](draws: Vector[A], game: Vector[Board[A]] = boards): Board[A] =
-    given CanEqual[A, A] = CanEqual.derived
+  def playWhoWinsLast[A](draws: Vector[A], game: Vector[Board[A]] = boards)(using CanEqual[A, A]): Board[A] =
     val round = game.map(_.draw(draws.head))
     val todo  = round.filterNot(_.hasBingo)
     if todo.nonEmpty then

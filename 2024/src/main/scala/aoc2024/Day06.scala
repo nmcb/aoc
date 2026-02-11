@@ -1,7 +1,7 @@
 package aoc2024
 
 import nmcb.*
-import pos.{*, given}
+import nmcb.pos.{*, given}
 
 import scala.annotation.*
 
@@ -19,7 +19,7 @@ object Day06 extends AoC:
         case '.' => walkGuard(next, dir, result + pos)
         case '#' => walkGuard(pos, dir.cw, result)
 
-    def peekWithObstruction(p: Pos, obstruct: Pos): Char =
+    def peekWithObstruction(p: Pos, obstruct: Pos)(using CanEqual[Pos, Pos]): Char =
         if p == obstruct then '#' else g.peekOrElse(p, ' ')
 
     @tailrec

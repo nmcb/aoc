@@ -1,13 +1,13 @@
 package aoc2019
 
 import nmcb.*
-import nmcb.pos.{*, given}
+import nmcb.pos.*
 
 object Day20 extends AoC:
 
-  case class State(path: Seq[(Portal,Int)], total: Int)
+  case class State(path: Seq[(Portal,Int)], total: Int) derives CanEqual
 
-  enum Portal:
+  enum Portal derives CanEqual:
     case Start
     case End
     case Outer(label: String)
@@ -15,8 +15,6 @@ object Day20 extends AoC:
 
   import Portal.*
   
-  given CanEqual[Portal, Portal] = CanEqual.derived
-
   def portalToPortalRoutes(lines: Seq[String]): Map[Portal,Set[(Portal,Int)]] =
     def peek(x: Int, y: Int): Char = lines.lift(y).flatMap(_.lift(x)).getOrElse(' ')
     val sizeX   = lines.maxBy(_.length).length

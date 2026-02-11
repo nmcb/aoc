@@ -7,14 +7,12 @@ import scala.collection.*
 
 object Day22 extends AoC:
 
-  enum RegionType(val riskLevel: Int):
+  enum RegionType(val riskLevel: Int) derives CanEqual:
     case Rocky  extends RegionType(0)
     case Wet    extends RegionType(1)
     case Narrow extends RegionType(2)
 
-  given CanEqual[RegionType, RegionType] = CanEqual.derived
-  
-  case class Region(x: Int, y: Int):
+  case class Region(x: Int, y: Int) derives CanEqual:
     infix def +(x: Int, y: Int): Region    = copy(x = this.x + x, y = this.y + y)
     infix def manhattan(that: Region): Int = (x - that.x).abs + (y - that.y).abs
 
@@ -25,9 +23,6 @@ object Day22 extends AoC:
 
 
   object Region:
-    
-    given CanEqual[Region, Region] = CanEqual.derived
-
     val depth: Int     = 11817
     val mouth: Region  = Region(0, 0)
     val target: Region = Region(x = 9, y = 751)
@@ -54,13 +49,11 @@ object Day22 extends AoC:
     for y <- min.y to max.y ; x <- min.x to max.x do result = result + Region(x,y).regionType.riskLevel
     result
 
-  enum Tool:
+  enum Tool derives CanEqual:
     case None
     case Torch
     case ClimbingGear
 
-  given CanEqual[Tool, Tool] = CanEqual.derived
-  
   import RegionType.*
   import Tool.*
 

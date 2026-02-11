@@ -1,7 +1,7 @@
 package nmcb
 
 import Dijkstra.*
-import pos.{*, given}
+import pos.*
 
 case class Grid[+A](matrix: Vector[Vector[A]]):
   val sizeY: Int = matrix.size
@@ -113,10 +113,10 @@ object Grid:
     def to: Pos   = g._2
     def cleared: Grid[A] = g._3
 
-    def shortest: Vector[Pos] = {
+    def shortest: Vector[Pos] =
+      import Pos.given
       given CanEqual[A, A] = CanEqual.derived
       Dijkstra
         .run(from, Graph.fromGrid(cleared, cleared.peek(from)))
         .pathTo(to)
         .toTrail
-    }

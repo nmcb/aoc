@@ -6,14 +6,12 @@ import scala.annotation.tailrec
 
 object Day20 extends AoC:
 
-  enum Pulse:
+  enum Pulse derives CanEqual:
     case H
     case L
 
   import Pulse.*
   
-  given CanEqual[Pulse, Pulse] = CanEqual.derived
-
   type Name = String
   type Message = (Name, Name, Pulse)
 

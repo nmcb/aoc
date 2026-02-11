@@ -11,7 +11,7 @@ object Day07 extends AoC:
   case class Card(symbol: Char):
     def isJoker: Boolean = symbol == 'J'
 
-  enum Strength:
+  enum Strength derives CanEqual:
     case High
     case Pair
     case TwoPair
@@ -22,8 +22,6 @@ object Day07 extends AoC:
 
   import Strength.*
   
-  given CanEqual[Strength, Strength] = CanEqual.derived
-
   given Ordering[Strength] with
 
     def compare(a: Strength, b: Strength): Int =

@@ -7,13 +7,11 @@ import scala.annotation.*
 
 object Day14 extends AoC:
 
-  enum Tile:
+  enum Tile derives CanEqual:
     case Sand
     case Air
     case Rock
     
-  given CanEqual[Tile, Tile] = CanEqual.derived    
-
   def parseLine(line: String): Vector[Pos] =
     line.trim
       .split(""" -> """)

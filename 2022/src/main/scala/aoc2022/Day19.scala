@@ -7,7 +7,8 @@ import scala.collection.parallel.CollectionConverters._
 
 object Day19 extends AoC:
 
-  val blueprints: Vector[Blueprint] = lines.map(Blueprint.fromString).toVector
+  val blueprints: Vector[Blueprint] =
+    lines.map(Blueprint.fromString)
 
   case class Blueprint(
     index:                  Int,
@@ -27,7 +28,7 @@ object Day19 extends AoC:
         case s"""Blueprint ${nr}: Each ore robot costs ${c1} ore. Each clay robot costs ${c2} ore. Each obsidian robot costs ${c3} ore and ${c4} clay. Each geode robot costs ${c5} ore and ${c6} obsidian.""" =>
           Blueprint(nr.toInt, c1.toInt, c2.toInt, c3.toInt, c4.toInt, c5.toInt, c6.toInt)
 
-  enum Material:
+  enum Material derives CanEqual:
     case Ore
     case Clay
     case Obsidian
@@ -35,16 +36,11 @@ object Day19 extends AoC:
 
   import Material.*
 
-  given CanEqual[Material, Material] = CanEqual.derived
-
-
-  case class Robot(material: Material)
+  case class Robot(material: Material) derives CanEqual
   
-  given CanEqual[Robot, Robot] = CanEqual.derived
-
   case class MaterialStash(ore: Int = 0, clay: Int = 0, obsidian: Int = 0, geode: Int = 0)
 
-  enum Build:
+  enum Build derives CanEqual:
     case Nothing
     case OreRobot
     case ClayRobot
@@ -53,8 +49,6 @@ object Day19 extends AoC:
 
   import Build.*
   
-  given CanEqual[Build, Build] = CanEqual.derived
-
   def buildActions(print: Blueprint, material: MaterialStash, robots: Vector[Robot]): Vector[Build] =
     import material.*
     import print.*

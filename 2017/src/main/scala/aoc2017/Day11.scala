@@ -5,7 +5,7 @@ import nmcb.*
 /** @see https://www.redblobgames.com/grids/hexagons/ */
 object Day11 extends AoC:
 
-  enum Dir:
+  enum Dir derives CanEqual:
     case N
     case NE
     case SE
@@ -14,8 +14,6 @@ object Day11 extends AoC:
     case NW
 
   import Dir.*
-  
-  given CanEqual[Dir, Dir] = CanEqual.derived
 
   case class Hex(x: Int, y: Int, z: Int):
     assert(x + y + z == 0)
