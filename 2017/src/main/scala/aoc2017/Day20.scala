@@ -1,6 +1,7 @@
 package aoc2017
 
 import nmcb.*
+import nmcb.predef.*
 
 object Day20 extends AoC:
 
@@ -19,11 +20,7 @@ object Day20 extends AoC:
         position = position + velocity + acceleration,
         velocity = velocity + acceleration
       )
-
-  extension [A](t: (A,Int))
-    def element: A = t._1
-    def index: Int = t._2
-
+  
   extension (particles: Vector[Particle])
 
     def tick: Vector[Particle] =

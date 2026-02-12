@@ -8,7 +8,7 @@ object Day09 extends AoC:
 
   type Position = (x: Long, y: Long)
 
-  extension (pair: (Position,Position))
+  extension (pair: (Position, Position))
 
     def area: Long =
       val dx = (pair.left.x - pair.right.x).abs
@@ -37,7 +37,7 @@ object Day09 extends AoC:
 
   val perimeter: Set[Position] = perimeter(corners)
   
-  given order: Ordering[(Position,Position)] = Ordering.by(_.area)
+  given order: Ordering[(Position, Position)] = Ordering.by(_.area)
 
   override lazy val answer1: Long = corners.pairs(using order).drain.area
   override lazy val answer2: Long = corners.pairs(using order.reverse).findFirst((a,b) => isValid(a, b, perimeter)).area

@@ -3,7 +3,6 @@ package aoc2025
 import nmcb.*
 import nmcb.predef.*
 
-import scala.CanEqual.derived
 import scala.annotation.*
 
 object Day10 extends AoC:

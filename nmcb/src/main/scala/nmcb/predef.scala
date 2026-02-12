@@ -28,20 +28,20 @@ object predef:
   
   extension [A](i: Iterable[A])
 
-    def slidingPairs: Iterable[(A,A)] =
+    def slidingPairs: Iterable[(A, A)] =
       if i.isEmpty then Nil else i.zip(i.tail)
 
-    def allPairs: Seq[(A,A)] =
+    def allPairs: Seq[(A, A)] =
       i.tails.toSeq.tail.flatMap(i.zip)
 
-    def pairs[B](): Iterator[(A,A)] =
+    def pairs[B](): Iterator[(A, A)] =
       i.tails
         .toVector
         .tail
         .flatMap(i.zip)
         .iterator
 
-    def pairs[B](using Ordering[(A,A)]): Iterator[(A,A)] =
+    def pairs[B](using Ordering[(A,A)]): Iterator[(A, A)] =
       i.tails
         .toVector
         .tail
@@ -65,11 +65,11 @@ object predef:
 
 
   extension [A](s: Seq[A])
-    def toTuple: (A,A) = (s(0), s(1))
+    def toTuple: (A, A) = (s(0), s(1))
 
 
-  def memo[K,V](initial: (K,V)*): mutable.Map[K,V] =
-    mutable.Map.empty[K,V] ++ initial
+  def memo[K,V](initial: (K,V )*): mutable.Map[K, V] =
+    mutable.Map.empty[K, V] ++ initial
 
   
   extension [K,V](cache: mutable.Map[K,V])
