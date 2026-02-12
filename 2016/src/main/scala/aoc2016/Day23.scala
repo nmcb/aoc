@@ -22,7 +22,7 @@ object Day23 extends AoC:
     def valueOf(operand: Operand): Value =
       operand match
         case r: Register => registers.getOrElse(r, 0)
-        case i: Int      => i
+        case v: Value    => v
 
     def update(register: Operand, operand: Operand, f: Value => Value = identity): Registers =
       if register.isRegister then
