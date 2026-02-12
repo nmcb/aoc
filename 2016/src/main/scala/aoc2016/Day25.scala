@@ -1,33 +1,10 @@
 package aoc2016
 
 import nmcb.*
-import scala.util.Try
 
 object Day25 extends AoC:
 
-  type Value     = Int
-  type Register  = String
-  type Operand   = Value | Register
-  type Registers = Map[Register, Value]
-
-  extension (operand: Operand)
-    // Shut up! I know what I'm doing.
-    def isRegister: Boolean = operand.isInstanceOf[Register]
-    def toRegister: Register = operand.asInstanceOf[Register]
-
-  extension (registers: Registers)
-
-    def valueOf(operand: Operand): Value =
-      operand match
-        case r: Register => registers.getOrElse(r, 0)
-        case i: Int => i
-
-    def update(register: Operand, operand: Operand, f: Value => Value = identity): Registers =
-      if register.isRegister then
-        val value = (f compose registers.valueOf)(operand)
-        registers.updated(register.toRegister, value)
-      else
-        registers
+  import Day23.*
 
   enum Instruction:
     case CPY(x: Operand, y: Operand)
@@ -37,9 +14,6 @@ object Day25 extends AoC:
     case OUT(x: Operand)
 
   object Instruction:
-
-    extension (s: String)
-      def toOperand: Operand = Try(s.toInt).getOrElse(s)
 
     def fromString(s: String): Instruction =
       s match
@@ -84,9 +58,9 @@ object Day25 extends AoC:
       .take(size)
       .mkString
 
-  def solve1(instructions: Vector[Instruction]): Int =
+  def solve(instructions: Vector[Instruction]): Int =
     val sampleSize = 32
     val sample     = List.tabulate(sampleSize)(n => if n % 2 == 0 then '0' else '1').mkString
     Iterator.from(0).map(experiment(instructions, sampleSize)).indexWhere(_ == sample)
 
-  override lazy val answer1: Int    = solve1(instructions)
+  override lazy val answer1: Int = solve(instructions)

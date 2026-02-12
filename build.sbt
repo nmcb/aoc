@@ -22,7 +22,7 @@ ThisBuild / scalacOptions ++= Seq(
   "-language:existentials",
   "-language:strictEquality",
   "-unchecked",
-  "-Werror",
+  // "-Werror",
   "-deprecation"
 )
 

@@ -46,10 +46,10 @@ object Day23 extends AoC:
     // Part 2
     case MUL(x: Operand, y: Operand, z: Operand)
 
-  object Instruction:
+  extension (s: String)
+    def toOperand: Operand = Try(s.toInt).getOrElse(s)
 
-    extension (s: String)
-      def toOperand: Operand   = Try(s.toInt).getOrElse(s)
+  object Instruction:
 
     def line(s: String): Instruction =
       s match
