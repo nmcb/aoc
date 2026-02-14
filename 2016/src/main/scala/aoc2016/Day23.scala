@@ -24,10 +24,10 @@ object Day23 extends AoC:
         case r: Register => registers.getOrElse(r, 0)
         case v: Value    => v
 
-    def update(register: Operand, operand: Operand, f: Value => Value = identity): Registers =
-      if register.isRegister then
-        val value = (f compose registers.valueOf)(operand)
-        registers.updated(register.toRegister, value)
+    def update(target: Operand, source: Operand, f: Value => Value = identity): Registers =
+      if target.isRegister then
+        val value = (f compose registers.valueOf)(source)
+        registers.updated(target.toRegister, value)
       else
         registers
 
@@ -74,16 +74,14 @@ object Day23 extends AoC:
       def toggle(offset: Operand): Vector[Option[Instruction]] =
         val index = pc + registers.valueOf(offset)
         if instructions.indices.contains(index) then
-          instructions.updated(index, instructions(index) match
+          val update =  instructions(index).runtimeChecked match
             case None            => None
             case Some(CPY(o, r)) => Some(JNZ(o, r))
             case Some(INC(r))    => Some(DEC(r))
             case Some(DEC(r))    => Some(INC(r))
             case Some(JNZ(o, v)) => Some(CPY(o, v))
             case Some(TGL(x))    => Some(INC(x))
-            //Part 2
-            case _               => sys.error("boom!")
-          )
+          instructions.updated(index, update)
         else
           instructions
 

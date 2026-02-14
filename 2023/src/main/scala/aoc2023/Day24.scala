@@ -322,10 +322,12 @@ object Day24 extends AoC:
 
   object Stone:
     def fromString(s: String): Stone =
-      s match
+      s.runtimeChecked match
         case s"$x, $y, $z @ $vx, $vy, $vz" =>
-          Stone(Vec(x.trim.toLong, y.trim.toLong, z.trim.toLong), Vec(vx.trim.toLong, vy.trim.toLong, vz.trim.toLong))
-        case _ => sys.error(s"input error: '$s'")
+          Stone(
+            location = Vec( x.trim.toLong,  y.trim.toLong,  z.trim.toLong),
+            velocity = Vec(vx.trim.toLong, vy.trim.toLong, vz.trim.toLong)
+          )
 
   case class Vec(x: Long, y: Long, z: Long):
     def +(that: Vec): Vec = Vec(x + that.x, y + that.y, z + that.z)

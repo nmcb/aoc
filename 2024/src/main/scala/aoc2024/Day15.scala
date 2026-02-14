@@ -84,12 +84,15 @@ object Day15 extends AoC:
         Grid(updatedAndCleaned)
 
     def resize: Grid =
+      def map(p: Pos, from: Char, to: Char) =
+        Map((x = p.x * 2, y = p.y) -> from, (x = (p.x * 2) + 1, y = p.y) -> to)
+
       Grid(
         grid.flatMap:
-          case (p,'#') => Map((x = p.x * 2, y = p.y) -> '#', (x = (p.x * 2) + 1, y = p.y) -> '#')
-          case (p,'.') => Map((x = p.x * 2, y = p.y) -> '.', (x = (p.x * 2) + 1, y = p.y) -> '.')
-          case (p,'O') => Map((x = p.x * 2, y = p.y) -> '[', (x = (p.x * 2) + 1, y = p.y) -> ']')
-          case (p,'@') => Map((x = p.x * 2, y = p.y) -> '@', (x = (p.x * 2) + 1, y = p.y) -> '.')
+          case (p,'#') => map(p, '#', '#')
+          case (p,'.') => map(p, '.', '.')
+          case (p,'O') => map(p, '[', ']')
+          case (p,'@') => map(p, '@', '.')
           case (p, c ) => sys.error(s"invalid element: p=$p, c=$c")
       )
 

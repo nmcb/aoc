@@ -74,10 +74,9 @@ object Day22 extends AoC:
         .flatMap: (row,y) =>
           row
             .zipWithIndex
-            .map:
+            .collect:
               case ('#',x) => Pos.of(x,y) -> Infected
               case ('.',x) => Pos.of(x,y) -> Clean
-              case ( c ,_) => sys.error(s"unexpected char=$c")
         .toMap
         .withDefaultValue(Clean)
 

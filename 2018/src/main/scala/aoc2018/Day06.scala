@@ -29,10 +29,9 @@ object Day06 extends AoC:
     val closest: Vector[(Pos,Pos)] =
       positions.flatMap: p =>
         coordinates.map(c => (c, c.manhattanDistance(p)))
-          .sortBy(_.distance).take(2) match
+          .sortBy(_.distance).take(2).runtimeChecked match
             case a +: b +: _ if a.distance == b.distance => None
             case      a +: _                             => Some(p,a.coordinate)
-            case           _                             => sys.error(s"no distance found for position: $p")
 
     val areas: Map[Pos,Int] =
       closest.groupMapReduce((_,c) => c)((_,_) => 1)(_+_)

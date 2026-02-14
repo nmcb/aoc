@@ -87,20 +87,19 @@ object Day07 extends AoC:
       combinations.grouped(8).map(_.map(cs => strengths(cs).max).max).max
 
     private def strengths(hand: Cards): List[Strength] =
+      @tailrec
       def loop(todo: List[(Card, Int)], found: List[Strength] = List.empty): List[Strength] =
-        todo match
+        todo.runtimeChecked match
           case Nil => found.sorted
           case (d, 5) :: rest => loop(rest,  FiveOfAKind :: found)
           case (d, 4) :: rest => loop(rest,  FourOfAKind :: found)
           case (d, 3) :: rest => loop(rest, ThreeOfAKind :: found)
           case (d, 2) :: rest =>
-            found match
+            found.runtimeChecked match
               case Nil               => loop(rest, Pair :: found)
               case Pair :: _         => loop(rest, TwoPair :: found.tail)
               case ThreeOfAKind :: _ => loop(rest, FullHouse :: found.tail)
-              case _                 => sys.error(s"illegal state: found=$found, todo=$todo")
           case (d, 1) :: rest => loop(rest, High :: found)
-          case _              => sys.error(s"illegal state: $todo")
 
       val countedCards = hand.groupMapReduce(identity)(_ => 1)(_ + _).toList.sortBy(_.right).reverse
       loop(countedCards).reverse
@@ -112,12 +111,12 @@ object Day07 extends AoC:
     (a: Hand, b: Hand) =>
       val highs = strength(a) compare strength(b)
       if highs != 0 then highs else
+        @tailrec
         def highest(as: Cards, bs: Cards): Int =
-          (as, bs) match
+          (as, bs).runtimeChecked match
             case (ha :: ra, hb :: rb) if (ha compare hb) == 0 => highest(ra, rb)
             case (ha :: ra, hb :: rb)                         => ha compare hb
             case (Nil, Nil)                                   => 0
-            case (_,_) => sys.error(s"could not compare: $as with $bs")
         highest(a.cards, b.cards)
 
   object Hand:

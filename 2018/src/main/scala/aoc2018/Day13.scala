@@ -10,7 +10,7 @@ object Day13 extends AoC:
   extension (d: Dir)
 
     infix def follow(c: Char): Dir =
-      (d, c) match
+      (d, c).runtimeChecked match
         case (_, '|') | (_, '-') => d
         case (N, '/')            => E
         case (E, '/')            => N
@@ -20,7 +20,6 @@ object Day13 extends AoC:
         case (E, '\\')           => S
         case (S, '\\')           => E
         case (W, '\\')           => N
-        case _                   => sys.error(s"unable to follow dir=$d, char=$c")
 
     infix def turn(turn: Turn): Dir =
       (d, turn) match
@@ -56,11 +55,10 @@ object Day13 extends AoC:
 
     def move(grid: Grid): Cart =
       val c = grid.charAt(pos step dir)
-      c match
+      c.runtimeChecked match
         case Some('|') | Some('-')  => copy(pos = pos step dir)
         case Some('/') | Some('\\') => copy(pos = pos step dir, dir = dir follow c.get)
         case Some('+')              => copy(pos = pos step dir, dir = dir turn atIntersection, atIntersection = atIntersection.next)
-        case _                      => sys.error(s"unexpected char at pos=$pos, char=$c")
 
   val (grid: Grid, carts: Vector[Cart]) =
     val matrix = lines.map(_.toVector)

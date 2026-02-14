@@ -5,23 +5,23 @@ import scala.io.*
 
 object Day04 extends AoC:
 
-  type Passport = Map[String,String]
+  type Passport = Map[String, String]
 
   object Passport:
     val empty: Passport =
-      Map.empty[String,String]
+      Map.empty[String, String]
 
   val passports: Vector[Passport] =
-    lines.foldLeft(Vector(Passport.empty)): (acc,line) =>
+    lines.foldLeft(Vector(Passport.empty)): (result, line) =>
       line.split(' ') match
         case Array("") =>
-          Passport.empty +: acc
+          Passport.empty +: result
         case line: Array[String] =>
           val update = line.map(_.split(':')).map(kv => kv(0) -> kv(1)).toMap
-          (update ++ acc.head) +: acc.tail
+          (update ++ result.head) +: result.tail
 
-  def valYear(key: String, min: Int, max: Int)(passport: Passport): Boolean =
-    passport.get(key).exists(year => year.toInt >= min && year.toInt <= max)
+  def valYear(key: String, min: Int, max: Int)(p: Passport): Boolean =
+    p.get(key).exists(year => year.toInt >= min && year.toInt <= max)
 
   def valHgt(p: Passport): Boolean =
     p.get("hgt").exists: height =>

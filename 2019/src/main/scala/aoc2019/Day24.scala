@@ -23,12 +23,12 @@ object Day24 extends AoC:
       case Area(5, y, amount)  => Set(Area(3, 2, amount - 1))
       case Area(x, -1, amount) => Set(Area(2, 1, amount - 1))
       case Area(x, 5, amount)  => Set(Area(2, 3, amount - 1))
-      case Area(2, 2, amount)  => area match
-        case Area(2, 1, amount) => Set.tabulate(5)(x => Area(x, 0, amount + 1))
-        case Area(2, 3, amount) => Set.tabulate(5)(x => Area(x, 4, amount + 1))
-        case Area(1, 2, amount) => Set.tabulate(5)(y => Area(0, y, amount + 1))
-        case Area(3, 2, amount) => Set.tabulate(5)(y => Area(4, y, amount + 1))
-        case _                  => sys.error(s"illegal area: $area")
+      case Area(2, 2, amount)  =>
+        area.runtimeChecked match
+          case Area(2, 1, amount) => Set.tabulate(5)(x => Area(x, 0, amount + 1))
+          case Area(2, 3, amount) => Set.tabulate(5)(x => Area(x, 4, amount + 1))
+          case Area(1, 2, amount) => Set.tabulate(5)(y => Area(0, y, amount + 1))
+          case Area(3, 2, amount) => Set.tabulate(5)(y => Area(4, y, amount + 1))
       case other => Set(other)
 
   def step(grid: Set[Area], neighbours: Area => Seq[Area]): Set[Area] =

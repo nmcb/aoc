@@ -20,7 +20,7 @@ object Day01 extends AoC:
       x.abs + y.abs
 
     infix def process(cmd: Cmd): Vector[Ikke] =
-      (dir, cmd.turn) match
+      (dir, cmd.turn).runtimeChecked match
         case (N, 'L') => (1 to cmd.dist).map(dist => copy(x = x - dist, dir = W)).toVector
         case (E, 'L') => (1 to cmd.dist).map(dist => copy(y = y + dist, dir = N)).toVector
         case (S, 'L') => (1 to cmd.dist).map(dist => copy(x = x + dist, dir = E)).toVector
@@ -29,7 +29,6 @@ object Day01 extends AoC:
         case (E, 'R') => (1 to cmd.dist).map(dist => copy(y = y - dist, dir = S)).toVector
         case (S, 'R') => (1 to cmd.dist).map(dist => copy(x = x - dist, dir = W)).toVector
         case (W, 'R') => (1 to cmd.dist).map(dist => copy(y = y + dist, dir = N)).toVector
-        case _        => sys.error("boom!")
 
   object Ikke:
 
@@ -43,11 +42,10 @@ object Day01 extends AoC:
 
     @tailrec
     def twice(test: Vector[Ikke], visited: Vector[Ikke]): Option[Ikke] =
-      test match
+      test.runtimeChecked match
         case Vector()                                                         => None
         case h +: t if visited.exists(ikke => ikke.x == h.x && ikke.y == h.y) => Some(h)
         case _ +: t                                                           => twice(t, visited)
-        case _                                                                => sys.error("boom!")
 
     val next = path.last.process(commands.head)
     if twice(next, path).nonEmpty then twice(next, path).get else solve(commands.tail :+ commands.head, path :++ next)

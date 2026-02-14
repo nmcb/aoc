@@ -12,13 +12,10 @@ object Day09 extends AoC:
   def solve1(preamble: Vector[Long], inbound: Vector[Long]): Long =
     @tailrec
     def go(todo: Vector[Long], prem: Vector[Long] = preamble): Long =
-      todo match
-        case test +: rest =>
-          if prem.combinations(2).map(_.sum).contains(test) then
-            go(rest, prem.drop(1) :+ test)
-          else
-            test
-        case _            => sys.error("boom")
+      if prem.combinations(2).map(_.sum).contains(todo.head) then
+        go(todo.tail, prem.drop(1) :+ todo.head)
+      else
+        todo.head
     go(inbound)
 
   def solve2(inbound: Vector[Long], sum: Long): Option[Long] =

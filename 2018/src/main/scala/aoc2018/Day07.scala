@@ -41,9 +41,8 @@ object Day07 extends AoC:
 
   val steps: Vector[(Char,Char)] =
     def parser(s: String): (Char,Char) =
-      s match
+      s.runtimeChecked match
         case s"Step $first must be finished before step $second can begin." => (first.head, second.head)
-        case _ => sys.error("boom!")
     lines.map(parser)
 
   override lazy val answer1: String = solve(steps, timer = _ => 1, parallelization = 1).right.mkString("")

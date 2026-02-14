@@ -40,10 +40,9 @@ object Day06 extends AoC:
 
   @tailrec
   def path(l: Vector[Name], r: Vector[Name]): Vector[Name] =
-    (l,r) match
+    (l,r).runtimeChecked match
       case (l1 +: l2 +: _ , r1 +: r2 +: _) if l1 == r1 && l2 == r2 => path(l.tail, r.tail)
       case (l1 +: _       , r1 +: _      ) if l1 == r1             => l.reverse ++ r.tail
-      case _                                                       => sys.error(s"unmatched l=$l, r=$r")
 
   override lazy val answer1: Int = planets.map(orbits).map(_.length).sum
   override lazy val answer2: Int = path(pathToCom("YOU"), pathToCom("SAN")).length

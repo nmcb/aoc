@@ -53,10 +53,9 @@ object Day08 extends AoC:
   def patch(program: Program): Program =
 
     def patchLine(line: Int): Program =
-      program(line) match
+      program(line).runtimeChecked match
         case Instruction("nop", arg) => program.updated(line, Instruction("jmp", arg))
         case Instruction("jmp", arg) => program.updated(line, Instruction("nop", arg))
-        case Instruction(op, arg) => sys.error(s"invalid op=$op, arg=$arg")
 
     VM(program).run(debug = true)
       .trace

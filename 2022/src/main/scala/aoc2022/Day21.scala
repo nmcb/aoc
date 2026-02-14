@@ -48,11 +48,10 @@ object Day21 extends AoC:
 
       @targetName("eq")
       def |=|(rhs: Result): Result =
-        (lhs, rhs) match
+        (lhs, rhs).runtimeChecked match
           case (ll: Long, ro: Lazy)             => ro(ll)
           case (lo: Lazy, rl: Long)             => lo(rl)
           case (ll: Long, rl: Long) if rl == ll => rl
-          case _ => sys.error("boom!")
 
   type Defer      = Name  => Result
   type Deferrable = Defer => Result

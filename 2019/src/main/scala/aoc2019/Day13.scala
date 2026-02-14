@@ -25,8 +25,8 @@ object Day13 extends AoC:
   extension (outputs: LazyList[Value])
     def render: Map[Location,Tile] =
       outputs.grouped(3).foldLeft(Map.empty[Location,Tile]):
-        case (result, LazyList(x,y,id)) => result + (Location(x,y) -> Tile.fromId(id))
-        case output                     => sys.error(s"invalid output: $output")
+        case (result, LazyList(x, y, id)) => result + (Location(x, y) -> Tile.fromId(id))
+        case output                       => sys.error(s"invalid output: $output")
 
   val program: Mem = Mem.parse(input)
 

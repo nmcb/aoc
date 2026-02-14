@@ -35,17 +35,15 @@ case class CPU(mem: Mem, stdin: LazyList[Value] = LazyList.empty, ip: Pointer = 
   def paramMode(offset: Int): Int = ((value(0) / math.pow(10, 2 + offset).toInt) % 10).toInt
 
   def read(offset: Int): Value =
-    paramMode(offset) match
+    paramMode(offset).runtimeChecked match
       case 0 => mem(param(offset).toInt)
       case 1 => param(offset)
       case 2 => mem((base + param(offset)).toInt)
-      case _ => sys.error(s"illegal parameter read mode ${paramMode(offset)}")
 
   def write(offset: Int, value: Value): Mem =
-    paramMode(offset) match
+    paramMode(offset).runtimeChecked match
       case 0 => mem.set(param(offset).toInt, value)
       case 2 => mem.set((base + param(offset)).toInt, value)
-      case _ => sys.error(s"illegal parameter write mode ${paramMode(offset)}")
 
   def withInput(input: Value*): CPU =
     copy(stdin = input.to(LazyList))
@@ -54,7 +52,7 @@ case class CPU(mem: Mem, stdin: LazyList[Value] = LazyList.empty, ip: Pointer = 
     copy(stdin = input)
 
   def executeOne: Option[State] =
-    opcode match
+    opcode.runtimeChecked match
       case  1 => Some((copy(mem = write(2, read(0) + read(1)), ip = ip + 4), None))
       case  2 => Some((copy(mem = write(2, read(0) * read(1)), ip = ip + 4), None))
       case  3 => Option.when(stdin.nonEmpty)(copy(mem = write(0, stdin.head), ip = ip + 2, stdin = stdin.tail), None)
@@ -65,7 +63,6 @@ case class CPU(mem: Mem, stdin: LazyList[Value] = LazyList.empty, ip: Pointer = 
       case  8 => Some((copy(mem = write(2, if (read(0) == read(1)) 1 else 0), ip = ip + 4), None))
       case  9 => Some((copy(ip = ip + 2, base = base + read(0).toInt), None))
       case 99 => None
-      case _  => sys.error(s"unknown opcode $opcode")
 
   def outputs: LazyList[Value] =
     LazyList.unfold(this)(_.executeOne.map(_.swap)).flatten

@@ -38,10 +38,9 @@ object Day07 extends AoC:
       bags.filter(b => b.from == from && b.to.isDefined).map(b => b.to.get -> b.count)
 
     def solve2(inner: Vector[(Color,Int)], result: Int = 0): Int =
-        inner match
+        inner.runtimeChecked match
           case Vector()            => result
           case (child,count) +: cs => solve2(cs, result + count + count * solve2(childrenOf(child)))
-          case _                   => sys.error("boom!")
 
 
   override lazy val answer1: Int = bags.solve1(bags.parentsOf("shinygold")).distinct.size

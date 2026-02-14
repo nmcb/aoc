@@ -33,10 +33,9 @@ object Day14 extends AoC:
 
     @tailrec
     def positions(path: Vector[Pos], result: Vector[Pos] = Vector.empty): Vector[Pos] =
-      path match
+      path.runtimeChecked match
         case _ +: Vector()        => result
         case from +: to +: rest   => positions(to +: rest, result :++ segment(from, to))
-        case _                    => sys.error("boom!")
 
     paths.foldLeft(Vector.empty[Pos])((rocks, path) => rocks :++ positions(path)).distinct
 

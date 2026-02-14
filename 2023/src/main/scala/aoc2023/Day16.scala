@@ -16,7 +16,7 @@ object Day16 extends AoC:
 
     private def advance(p: Pos, d: Dir): List[(Pos,Dir)] =
       val result: List[(Pos,Dir)] =
-        (tile(p), d) match
+        (tile(p), d).runtimeChecked match
           case ('.', N)  => List(p.step(N) -> N)
           case ('.', E)  => List(p.step(E) -> E)
           case ('.', S)  => List(p.step(S) -> S)
@@ -41,8 +41,6 @@ object Day16 extends AoC:
           case ('\\', E) => List(p.step(S) -> S)
           case ('\\', S) => List(p.step(E) -> E)
           case ('\\', W) => List(p.step(N) -> N)
-
-          case _ => sys.error(s"advancing: p=$p, d=$d")
 
       result.filter((p,_) => p.x >= 0 && p.y >= 0 && p.x < sizeX && p.y < sizeY)
 

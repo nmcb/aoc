@@ -14,9 +14,8 @@ object Day04 extends AoC:
       underlying.filter(_.isDigit).toInt
 
     def checksum: String =
-      underlying match
+      underlying.runtimeChecked match
         case s"$nameAndId[$checksum]" => checksum
-        case _                        => sys.error(s"no checksum: $underlying")
 
     def isValid: Boolean =
 

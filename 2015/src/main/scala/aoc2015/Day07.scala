@@ -30,13 +30,12 @@ object Day07 extends AoC:
     def solve(rules: Vector[Rule], wire: Wire, setWireB: Option[Int] = None): Int =
       @tailrec
       def fold(rules: Seq[Rule], env: Env = Map.empty): Int =
-        env.get(wire) match
+        env.get(wire).runtimeChecked match
           case Some(v) => v
           case None    => rules match
             case rule +: rest => rule.call(env) match
               case Some(v)    => fold(rest, env.updated(rule.ret, v))
               case None       => fold(rest :+ rule, env)
-            case _            => sys.error(s"undefined wire=$wire")
 
       val puzzleInput: Vector[Rule] = setWireB.map(v => Val(v, "b") +: rules.filterNot(_.ret == "b")).getOrElse(rules)
       fold(puzzleInput)

@@ -22,7 +22,7 @@ object Day12 extends AoC:
 
     private def solve(mask: String, lengths: List[Int]): Long =
       cache.getOrElseUpdate((mask, lengths),
-        (mask, lengths) match
+        (mask, lengths).runtimeChecked match
           case (_, Nil) if mask.contains('#') => 0
           case (_, Nil)                       => 1
           case ("", _ :: _)                   => 0
@@ -39,7 +39,6 @@ object Day12 extends AoC:
                 case _       => 0
           case (s"#$tail", _ :: _) => 0
           case (s"?$tail", _)      => solve(s".$tail", lengths) + solve(s"#$tail", lengths)
-          case _                   => sys.error(s"illegal state: mask=$mask, lengths=$lengths")
       )
 
     lazy val arrangements: Long =

@@ -8,7 +8,7 @@ object Day02 extends AoC:
     case s"$p1 $p2" => (p1.head,p2.head)
 
   def score1(p1: Char, p2: Char): Int =
-    (p1,p2) match
+    (p1, p2).runtimeChecked match
       case ('A','X') => 1 + 3
       case ('A','Y') => 2 + 6
       case ('A','Z') => 3 + 0
@@ -18,10 +18,9 @@ object Day02 extends AoC:
       case ('C','X') => 1 + 6
       case ('C','Y') => 2 + 0
       case ('C','Z') => 3 + 3
-      case _ => sys.error(s"illegal chars: ($p1,$p2)")
 
   def score2(p1: Char, p2: Char): Int =
-    (p1,p2) match
+    (p1, p2).runtimeChecked match
       case ('A','X') => 3 + 0
       case ('A','Y') => 1 + 3
       case ('A','Z') => 2 + 6
@@ -31,7 +30,6 @@ object Day02 extends AoC:
       case ('C','X') => 2 + 0
       case ('C','Y') => 3 + 3
       case ('C','Z') => 1 + 6
-      case _ => sys.error(s"illegal chars: ($p1,$p2)")
 
   
   override lazy val answer1: Int = codes.map(score1).sum
