@@ -72,12 +72,11 @@ object Day19 extends AoC:
     actions.flatten
 
   def build(action: Build): Robot =
-    action match
+    action.runtimeChecked match
       case OreRobot      => Robot(Ore)
       case ClayRobot     => Robot(Clay)
       case ObsidianRobot => Robot(Obsidian)
       case GeodeRobot    => Robot(Geode)
-      case Nothing       => sys.error("boom robot!")
 
   @tailrec
   def produce(robots: Vector[Robot], stash: MaterialStash): MaterialStash =

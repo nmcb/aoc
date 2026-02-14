@@ -23,18 +23,17 @@ object Day17 extends AoC:
       if halts then this else read.run
 
     def combo: Long =
-      operand match
+      operand.runtimeChecked match
         case 0 | 1 | 2 | 3 => operand
         case 4 => a
         case 5 => b
         case 6 => c
-        case _ => sys.error(s"Invalid combo operand: $operand")
 
     def literal: Long =
       operand
 
     def read: CPU =
-      opcode match
+      opcode.runtimeChecked match
         case 0 => copy(a = a >> combo, ip = ip + 2)
         case 1 => copy(b = b ^ literal, ip = ip + 2)
         case 2 => copy(b = combo & 0x07, ip = ip + 2)
@@ -43,7 +42,6 @@ object Day17 extends AoC:
         case 5 => copy(out = (out << 3) + (combo & 0x07), ip = ip + 2)
         case 6 => copy(b = a >> combo, ip = ip + 2)
         case 7 => copy(c = a >> combo, ip = ip + 2)
-        case _ => sys.error(s"Invalid r.performed: ip=$ip, inst=${program(ip)}")
 
     @tailrec
     final def display(current: Long, result: String = ""): String =

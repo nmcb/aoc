@@ -25,9 +25,8 @@ package aoc2021
       Vec(x.toString, y.toString)
 
     def parse(s: String): Vec =
-      s match
+      s.runtimeChecked match
         case VecLit(x, y) => Vec(x, y)
-        case _            => sys.error(s"does not match ${VecLit.regex} : '$s'")
 
     val origin: Vec =
       Vec(0, 0)
@@ -62,9 +61,8 @@ package aoc2021
       Vec3(x.toString, y.toString, z.toString)
 
     def parse(s: String): Vec3 =
-      s match
+      s.runtimeChecked match
         case Vec3Lit(x, y, z) => Vec3(x, y, z)
-        case _ => sys.error(s"does not match ${Vec3Lit.regex} : '$s'")
 
     val origin: Vec3 =
       Vec3(0, 0, 0)

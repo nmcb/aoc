@@ -16,11 +16,10 @@ object Day03 extends AoC:
     def walk(dx: Int, dy: Int): Long =
       @tailrec
       def step(x: Int, y: Int, acc: Long = 0): Long =
-        sample(x, y) match
+        sample(x, y).runtimeChecked match
           case None      => acc
           case Some('.') => step(x + dx, y + dy, acc)
           case Some('#') => step(x + dx, y + dy, acc + 1)
-          case _         => sys.error(s"boom: x=$x,y=$y,dx=$dx,dy=$dy")
       step(dx,dy)
 
   val forest: Forest = Forest(lines.map(_.toVector))

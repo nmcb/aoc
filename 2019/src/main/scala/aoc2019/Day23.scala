@@ -23,8 +23,7 @@ object Day23 extends AoC:
 
           val nextInput = if cpu.stdin.nonEmpty then in else Seq.empty
 
-          run match
-            case None                   => sys.error(s"unexpected halt")
+          run.runtimeChecked match
             case Some(cpu, None)        => State(cpu, nextInput, out)
             case Some(cpu, Some(value)) => State(cpu, nextInput, out :+ value)
 

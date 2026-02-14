@@ -48,7 +48,7 @@ object Day07 extends AoC:
   lazy val fileSystem: FileSystem =
     import Path.*
     stdout
-      .foldLeft(FileSystem.empty)((sys,line) =>
+      .foldLeft(FileSystem.empty)((sys, line) =>
         line match
           case DirLine(name)        => sys.copy(ds = sys.ds :+ flatten(sys.cur :+ name))
           case FileLine(name, size) => sys.copy(fs = sys.fs :+ File(flatten(sys.cur :+ name), size))

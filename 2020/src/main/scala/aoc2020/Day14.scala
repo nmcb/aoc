@@ -35,7 +35,7 @@ object Day14 extends AoC:
                      case (('X',b), lsb) => "" +  b  + lsb
                      case (('1',_), lsb) => "" + '1' + lsb
                      case (('0',_), lsb) => "" + '0' + lsb
-                     case err => sys.error(s"boom: $err"),
+                     case err            => sys.error(s"boom: $err"),
         radix = 2
       )
 
@@ -46,12 +46,12 @@ object Day14 extends AoC:
           case (('X',_),lsb) => "" + 'X' + lsb
           case (('1',_),lsb) => "" + '1' + lsb
           case (('0',b),lsb) => "" +  b  + lsb
-          case err => sys.error(s"boom: $err")
+          case err           => sys.error(s"boom: $err")
         .foldRight(List.empty[String]):
           case ('X',acc) => if acc.nonEmpty then acc.flatMap(n => List("0" + n, "1" + n)) else List("0", "1")
           case ('1',acc) => if acc.nonEmpty then acc.map(n => "1" + n) else List("1")
           case ('0',acc) => if acc.nonEmpty then acc.map(n => "0" + n) else List("0")
-          case err => sys.error(s"boom: $err")
+          case err       => sys.error(s"boom: $err")
         .map(string => new UInt36(string, 2))
 
     override def toString: String =

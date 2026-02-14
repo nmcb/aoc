@@ -22,9 +22,8 @@ object Day05 extends AoC:
     
     val columnSize: Int =
       
-      lines.filter(isLabelLine) match
+      lines.filter(isLabelLine).runtimeChecked match
         case Vector(cols) => cols.split(' ').last.toInt
-        case _ => sys.error("multiple label lines")
         
     def crateExtractor(line: String)(idx: Int): Option[Char] =
       Try(line.charAt(1 + idx * 4)) match

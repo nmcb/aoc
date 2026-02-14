@@ -29,20 +29,18 @@ object Day18 extends AoC:
   extension (p: Pos)
 
     infix def move1(op: Op): Vector[Pos] =
-      op match
+      op.runtimeChecked match
         case Op('U', length) => Vector.tabulate(length)(dy => (x = p.x, y = p.y - dy - 1))
         case Op('D', length) => Vector.tabulate(length)(dy => (x = p.x, y = p.y + dy + 1))
         case Op('L', length) => Vector.tabulate(length)(dx => (x = p.x - dx - 1, y = p.y))
         case Op('R', length) => Vector.tabulate(length)(dx => (x = p.x + dx + 1, y = p.y))
-        case Op(dir, length) => sys.error(s"invalid dir=$dir, length=$length")
 
     infix def move2(op: Op): Pos =
-      op match
+      op.runtimeChecked match
         case Op('U', length) => (x = p.x, y = p.y - length)
         case Op('D', length) => (x = p.x, y = p.y + length)
         case Op('L', length) => (x = p.x - length, y = p.y)
         case Op('R', length) => (x = p.x + length, y = p.y)
-        case Op(dir, length) => sys.error(s"invalid dir=$dir, length=$length")
 
 
 

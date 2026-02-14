@@ -24,9 +24,8 @@ object Day04 extends AoC:
       def ints(s: String): Vector[Int] =
         s.trim.split("\\s+").map(_.toInt).toVector
 
-      s match
+      s.runtimeChecked match
         case s"Card $id: $winning | $mine" => Card(id.trim.toInt, ints(winning), ints(mine))
-        case _ => sys.error(s"unmatched: $s")
 
   val cards: Map[Int,Card] = lines.map(Card.fromString).map(c => c.id -> c).toMap
 

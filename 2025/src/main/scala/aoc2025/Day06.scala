@@ -5,10 +5,9 @@ import nmcb.*
 object Day06 extends AoC:
 
   def calculate(operators: Vector[Char], operands: Vector[Vector[Long]]): Vector[Long] =
-    operators.zip(operands).map:
+    operators.zip(operands).collect:
       case ('+', operands) => operands.sum
       case ('*', operands) => operands.product
-      case (o, _) => sys.error(s"unknown operator: $o")
 
   def solve1(lines: Vector[String]): Vector[Long] =
     val operands  = lines.init.map(_.split("\\s+").filter(_.nonEmpty).map(_.toLong)).transpose

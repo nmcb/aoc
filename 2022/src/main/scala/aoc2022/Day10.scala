@@ -24,11 +24,10 @@ object Day10 extends AoC:
     val sync: Seq[Int] = List(20, 60, 100, 140, 180, 220).map(_ - 1)
 
     def nextCycle: CPU =
-      is match
+      is.runtimeChecked match
         case Nop       +: rest => CPU(            rest, cycle + 1, x    )
         case Add(v, 2) +: rest => CPU(Add(v,1) +: rest, cycle + 1, x    )
         case Add(v, 1) +: rest => CPU(            rest, cycle + 1, x + v)
-        case _ => sys.error("boom!")
 
     val signalStrength: Int =
       x * (cycle + 1)

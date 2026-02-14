@@ -42,7 +42,7 @@ object Day21 extends AoC:
         s.patch(x, "", 1).patch(y, s.charAt(x).toString, 0)
 
     infix def scramble(s: String): String =
-      this match
+      this.runtimeChecked match
         case SwapPosition(x, y)      => s.swapPosition(x, y)
         case SwapLetter(a, b)        => s.swapLetter(a, b)
         case Rotate("left", n)       => s.rotateLeft(n)
@@ -50,10 +50,9 @@ object Day21 extends AoC:
         case RotateByPosition(a)     => s.rotateByPositionRight(a)
         case ReverseByPosition(x, y) => s.reverseByPosition(x, y)
         case Move(x, y)              => s.move(x, y)
-        case _                       => sys.error("boom!")
 
     infix def unscramble(s: String): String =
-      this match
+      this.runtimeChecked match
         case SwapPosition(x, y)      => s.swapPosition(x, y)
         case SwapLetter(a, b)        => s.swapLetter(a, b)
         case Rotate("left", n)       => s.rotateRight(n)
@@ -61,21 +60,19 @@ object Day21 extends AoC:
         case RotateByPosition(a)     => s.rotateByPositionLeft(a)
         case ReverseByPosition(x, y) => s.reverseByPosition(x, y)
         case Move(x, y)              => s.move(y, x)
-        case _                       => sys.error("boom!")
 
   import Operation.*
 
 
   val operations: Vector[Operation] =
     lines
-      .map:
+      .collect:
         case s"swap position $x with position $y"     => SwapPosition(x.toInt, y.toInt)
         case s"swap letter $a with letter $b"         => SwapLetter(a.head, b.head)
         case s"rotate based on position of letter $a" => RotateByPosition(a.head)
         case s"rotate $d $n $plural"                  => Rotate(d, n.toInt)
         case s"reverse positions $x through $y"       => ReverseByPosition(x.toInt, y.toInt)
         case s"move position $x to position $y"       => Move(x.toInt, y.toInt)
-        case s: String => sys.error(s"match error: '$s'")
 
 
   override lazy val answer1: String = operations.foldLeft("abcdefgh")((s, o) => o.scramble(s))

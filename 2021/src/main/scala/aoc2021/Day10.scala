@@ -44,12 +44,11 @@ object Day10 extends AoC:
   override lazy val answer1: Long =
     lines
       .flatMap(incomplete)
-      .map:
+      .collect:
         case ')' => 3L
         case ']' => 57L
         case '}' => 1197L
         case '>' => 25137L
-        case c => sys.error(s"invalid char: $c")
       .groupMapReduce(identity)(identity)(_ + _)
       .values
       .sum

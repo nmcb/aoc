@@ -70,7 +70,7 @@ object Day24 extends AoC:
     def nextBlizzardChar(streamField: Field[(Char,Char,Char,Char)])(x: Int, y: Int): Char =
       val count = countBlizzards(streamField)(x: Int, y: Int)
       val (uc,dc,lc,rc) = streamField(y)(x)
-      count match
+      count.runtimeChecked match
         case 0 => OpenChar
         case 1 if uc == UpChar    => UpChar
         case 1 if dc == DownChar  => DownChar
@@ -79,9 +79,8 @@ object Day24 extends AoC:
         case 2 => '2'
         case 3 => '3'
         case 4 => '4'
-        case _ => sys.error("more than 4 blizzards in one field pos")
 
-    val futureStreamField: Field[(Char,Char,Char,Char)] =
+    val futureStreamField: Field[(Char, Char, Char, Char)] =
       (for {
         y <- 0 until sizeY
         x <- 0 until sizeX
@@ -93,9 +92,8 @@ object Day24 extends AoC:
 
     val futureField: Field[Char] =
       val buffer: Array[Array[Char]] = Array.fill(sizeY, sizeX)(Field.OpenChar)
-      for (y <- 0 until sizeY ; x <- 0 until sizeX) {
+      for y <- 0 until sizeY ; x <- 0 until sizeX do
         buffer(y)(x) = nextBlizzardChar(futureStreamField)(x, y)
-      }
       buffer.map(_.toVector).toVector
 
   type Paths = Set[Pos]

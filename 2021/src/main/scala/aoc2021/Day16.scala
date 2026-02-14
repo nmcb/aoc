@@ -105,10 +105,9 @@ object Day16 extends AoC:
 
       @tailrec
       def go(groups: Vector[Vector[Bit]], acc: Vector[Group] = Vector.empty): (Vector[Group], Vector[Bit]) =
-        groups match
+        groups.runtimeChecked match
           case bits +: rest if Group.isLast(bits) => (acc :+ Group(bits), rest.flatten)
           case bits +: rest                       => go(rest, acc :+ Group(bits))
-          case _                                  => sys.error("no last group")
 
       go(rest.grouped(5).toVector)
 

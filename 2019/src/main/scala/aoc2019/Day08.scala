@@ -69,11 +69,10 @@ object Day08 extends AoC:
   extension (dig: Dig)
 
     def digitToPix: Pix =
-      dig match
+      dig.runtimeChecked match
         case 0 => Black
         case 1 => White
         case 2 => Trans
-        case _ => sys.error("boom")
 
   def stack(top: Layer[Pix], bot: Layer[Pix]): Layer[Pix] =
     top.zip(bot).map((t,b) => b.stack(t))
