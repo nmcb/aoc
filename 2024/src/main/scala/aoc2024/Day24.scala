@@ -79,15 +79,15 @@ object Day24 extends AoC:
         result
     loop(gates, Vector.empty, wires.keySet)
 
-  def debugOUT(gates: Vector[Gate]): Vector[Wire] =
+  def debugOUT(gates: Vector[Gate]): Set[Wire] =
     gates
       .filter(_.out.startsWith("z"))
       .filter(!_.isXOR)
       .map(_.out)
       .filter(_ != "z45")
-      .distinct
+      .toSet
 
-  def debugAND(gates: Vector[Gate]): Vector[Wire] =
+  def debugAND(gates: Vector[Gate]): Set[Wire] =
     gates
       .filter: op =>
         op.isAND && op.lhs.asNumber != "00" && (op.lhs.startsWith("x") || op.rhs.startsWith("x"))
@@ -95,7 +95,7 @@ object Day24 extends AoC:
         !gates.exists: op2 =>
           (op2.lhs == op.out || op2.rhs == op.out) && op2.isOR
       .map(_.out)
-      .distinct
+      .toSet
 
   def debugXOR(gates: Vector[Gate]): Vector[Wire] =
     gates
@@ -121,4 +121,4 @@ object Day24 extends AoC:
     (initial, operations)
 
   override lazy val answer1: Long = solve(sort(gates, initial), initial).output
-  override lazy val answer2: String = (debugOUT(gates) ++ debugAND(gates) ++ debugXOR(gates)).sorted.mkString(",")
+  override lazy val answer2: String = (debugOUT(gates) ++ debugAND(gates) ++ debugXOR(gates)).toVector.sorted.mkString(",")
