@@ -15,30 +15,21 @@ object Day24 extends AoC:
     def rhs: Wire
     def out: Wire
 
-    def isAND: Boolean =
-      this match
-        case a: Gate.AND => true
-        case _           => false
+    def isAND: Boolean = false
+    def isOR: Boolean  = false
+    def isXOR: Boolean = false
 
-    def isOR: Boolean =
-      this match
-        case a: Gate.OR => true
-        case _          => false
+  case class AND(lhs: Wire, rhs: Wire, out: Wire) extends Gate:
+    override def isAND: Boolean = true
 
-    def isXOR: Boolean =
-      this match
-        case a: Gate.XOR => true
-        case _           => false
+  case class  OR(lhs: Wire, rhs: Wire, out: Wire) extends Gate:
+    override def isOR: Boolean = true
 
-  object Gate:
-    case class AND(lhs: Wire, rhs: Wire, out: Wire) extends Gate
-    case class  OR(lhs: Wire, rhs: Wire, out: Wire) extends Gate
-    case class XOR(lhs: Wire, rhs: Wire, out: Wire) extends Gate
-
-  import Gate.*
+  case class XOR(lhs: Wire, rhs: Wire, out: Wire) extends Gate:
+    override def isXOR: Boolean = true
 
   @tailrec
-  def solve(gates: Vector[Gate], wires: Map[Wire,Boolean]): Map[Wire,Boolean] =
+  def solve(gates: Vector[Gate], wires: Map[Wire, Boolean]): Map[Wire, Boolean] =
     if gates.nonEmpty then
       val o = gates.head
       val r = gates.tail
@@ -71,7 +62,7 @@ object Day24 extends AoC:
     def wire: Wire     = result._1
     def value: Boolean = result._2
 
-  def sort(gates: Vector[Gate], wires: Map[Wire,Boolean]): Vector[Gate] =
+  def sort(gates: Vector[Gate], wires: Map[Wire, Boolean]): Vector[Gate] =
     @tailrec
     def loop(todo: Vector[Gate], result: Vector[Gate], resolved: Set[String]): Vector[Gate] =
       if todo.nonEmpty then
@@ -86,18 +77,17 @@ object Day24 extends AoC:
           loop(dependencies ++ todo, result, resolved)
       else
         result
-
     loop(gates, Vector.empty, wires.keySet)
 
-  def debugOUT(gates: Vector[Gate]): Set[Wire] =
+  def debugOUT(gates: Vector[Gate]): Vector[Wire] =
     gates
       .filter(_.out.startsWith("z"))
       .filter(!_.isXOR)
       .map(_.out)
       .filter(_ != "z45")
-      .toSet
+      .distinct
 
-  def debugAND(gates: Vector[Gate]): Set[Wire] =
+  def debugAND(gates: Vector[Gate]): Vector[Wire] =
     gates
       .filter: op =>
         op.isAND && op.lhs.asNumber != "00" && (op.lhs.startsWith("x") || op.rhs.startsWith("x"))
@@ -105,7 +95,7 @@ object Day24 extends AoC:
         !gates.exists: op2 =>
           (op2.lhs == op.out || op2.rhs == op.out) && op2.isOR
       .map(_.out)
-      .toSet
+      .distinct
 
   def debugXOR(gates: Vector[Gate]): Vector[Wire] =
     gates
@@ -124,11 +114,11 @@ object Day24 extends AoC:
 
     val operations =
       lines.collect[Gate]:
-        case s"$t1 XOR $t2 -> $out" => Gate.XOR(t1, t2, out)
-        case s"$t1 OR $t2 -> $out"  => Gate.OR(t1, t2, out)
-        case s"$t1 AND $t2 -> $out" => Gate.AND(t1, t2, out)
+        case s"$t1 XOR $t2 -> $out" => XOR(t1, t2, out)
+        case s"$t1 OR $t2 -> $out"  => OR(t1, t2, out)
+        case s"$t1 AND $t2 -> $out" => AND(t1, t2, out)
 
     (initial, operations)
 
   override lazy val answer1: Long = solve(sort(gates, initial), initial).output
-  override lazy val answer2: String = (debugOUT(gates) ++ debugAND(gates) ++ debugXOR(gates)).toVector.sorted.mkString(",")
+  override lazy val answer2: String = (debugOUT(gates) ++ debugAND(gates) ++ debugXOR(gates)).sorted.mkString(",")
