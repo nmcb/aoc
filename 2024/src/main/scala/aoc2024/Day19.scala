@@ -5,8 +5,6 @@ import nmcb.predef.*
 
 object Day19 extends AoC:
 
-  case class Design(stripes: String)
-
   val (towels: Vector[String], designs: Vector[String]) =
     val Array(ts, ds) = input.split("\n\n").map(_.trim)
     (ts.split(',').map(_.trim).toVector, ds.linesIterator.toVector)

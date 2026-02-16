@@ -19,7 +19,7 @@ object Day20 extends AoC:
           rest.flatMap: (to,left) =>
             val distance = from.manhattanDistance(to)
             when(distance <= timeframe)(left - time - distance)
-            
+
         trace(rest, cheated + saved.count(_ >= 100))
       else
         cheated
