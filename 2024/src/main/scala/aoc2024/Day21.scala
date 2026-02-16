@@ -29,7 +29,7 @@ object Day21 extends AoC:
         |<v>
         |""".stripMargin)
 
-  val directionButtonBy: Map[Dir,Button] =
+  val directionButtonBy: Map[Dir, Button] =
     Map(
       E -> '>',
       W -> '<',
@@ -56,16 +56,16 @@ object Day21 extends AoC:
             to -> (moves.count + shortestPathMoves(moves.pos, to, robot))
         .count
 
-    def shortestPathMoves(from: Pos, to: Pos, robot: Int): Long = cache.memoize(from,to,robot):
+    def shortestPathMoves(from: Pos, to: Pos, robot: Int): Long = cache.memoize(from, to, robot):
         Dijkstra
-          .breadthFirstSearch((from,Vector.empty[Button])):
-            case (p,pushes) if p == to => Right(
+          .breadthFirstSearch((from, Vector.empty[Button])):
+            case (p, pushes) if p == to => Right(
                 if robot < robots then
                   pointerMovesFor(pushes :+ Button.enter, robot + 1)
                 else
                   pushes.length + 1L
               )
-            case (p,code) => Left(
+            case (p, code) => Left(
                 p.directionTo(to)
                   .filterNot(d => keypadBy(robot).contains(p step d, Button.empty))
                   .map(d => (p step d, code :+ directionButtonBy(d)))
