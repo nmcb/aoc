@@ -35,10 +35,10 @@ object Day22 extends AoC:
     def sequence: Seq[Long] = p._1
     def price: Long         = p._2
 
-  def solve(secrets: Vector[Long]): Long =
+  def solve(secrets: Vector[Long], nth: Int): Long =
     secrets
       .flatMap: initial =>
-        Iterator.iterate(initial, 2001)(_.nextSecret)
+        Iterator.iterate(initial, nth + 1)(_.nextSecret)
           .map(_ % 10)
           .sliding(5)
           .map: prices =>
@@ -53,5 +53,5 @@ object Day22 extends AoC:
       .values
       .max
 
-  override lazy val answer1: Long = numbers.map(initial => Iterator.iterate(initial, 2001)(_.nextSecret).drain).sum
-  override lazy val answer2: Long = solve(numbers)
+  override lazy val answer1: Long = numbers.map(initial => Iterator.iterate(initial)(_.nextSecret).nth(2000)).sum
+  override lazy val answer2: Long = solve(numbers, 2000)

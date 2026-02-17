@@ -10,11 +10,16 @@ object Day20 extends AoC:
 
   def cheats(path: Vector[Pos], timeframe: Long): Long =
     @tailrec
-    def trace(trail: Vector[(Pos,Int)], cheated: Long): Long =
+    def trace(trail: Vector[(Pos, Int)], cheated: Long): Long =
       if trail.nonEmpty then
-        val (from,time) = trail.head
-        val rest        = trail.tail
-        val saved = rest.flatMap((to,left) => when(from.manhattanDistance(to) <= timeframe)(left - time - from.manhattanDistance(to)))
+        val (from, time) = trail.head
+        val rest         = trail.tail
+
+        val saved =
+          rest.flatMap: (to,left) =>
+            val distance = from.manhattanDistance(to)
+            when(distance <= timeframe)(left - time - distance)
+
         trace(rest, cheated + saved.count(_ >= 100))
       else
         cheated
