@@ -11,10 +11,6 @@ object Day02 extends AoC:
   val ranges: Vector[Range] = input.split(',').toVector.map:
     case s"$min-$max" => min.toLong to max.toLong
 
-  def doubles(id: Long): Boolean =
-    val s = id.toString
-    s.length % 2 == 0 && (s.drop(s.length / 2) == s.dropRight(s.length / 2))
-
   def filter(input: Vector[Range], invalid: Long => Boolean): Vector[Long] =
     for
       range <- input
@@ -22,6 +18,10 @@ object Day02 extends AoC:
       if invalid(id)
     yield
       id
+
+  def doubles(id: Long): Boolean =
+    val s = id.toString
+    s.length % 2 == 0 && (s.drop(s.length / 2) == s.dropRight(s.length / 2))
 
   def repeats(id: Long): Boolean =
     val s = id.toString
