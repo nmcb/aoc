@@ -12,9 +12,9 @@ object Day07 extends AoC:
     @tailrec
     def loop(manifold: Vector[String], beams: Set[Int], count: Int = 0): Int =
       if manifold.nonEmpty then
-        val splitters       = manifold.head.zipWithIndex.filter((s,_) => s == '^').map((_,i) => i)
+        val splitters       = manifold.head.zipWithIndex.filter(_.element == '^').map(_.index)
         val (process, pass) = beams.partition(b => splitters.contains(b))
-        val splits          = process.flatMap(b => Set(b-1, b+1))
+        val splits          = process.flatMap(b => Set(b - 1, b + 1))
         loop(manifold.tail, pass ++ splits, count + process.size)
       else
         count
@@ -37,9 +37,9 @@ object Day07 extends AoC:
     @tailrec
     def loop(manifold: Vector[String], worlds: Map[Int, Long] = Map.empty): Long =
       if manifold.nonEmpty then
-        val splitters = manifold.head.zipWithIndex.filter((s,_) => s == '^').map((_, i) => i)
-        val process   = worlds.filter((w,n) => splitters.contains(w))
-        val splits    = process.toSeq.flatMap((w,n) => Seq((w-1,n), (w+1,n), (w,-n))).groupMapReduce(_.left)(_.right)(_+_)
+        val splitters = manifold.head.zipWithIndex.filter(_.element == '^').map(_.index)
+        val process   = worlds.filter((w, _) => splitters.contains(w))
+        val splits    = process.toSeq.flatMap((w, n) => Seq((w - 1, n), (w + 1, n), (w, -n))).groupMapReduce(_.left)(_.right)(_ + _)
         loop(manifold.tail, worlds <+> splits)
       else
         worlds.valuesIterator.sum
