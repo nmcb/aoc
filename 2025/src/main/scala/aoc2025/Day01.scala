@@ -4,13 +4,16 @@ import nmcb.*
 
 object Day01 extends AoC:
 
+  def cyclesHundred(step: Int): Boolean =
+    step % 100 == 0
+
   def solve1(input: Vector[String]): Int =
     input
       .scanLeft(50): (last, rotation) =>
         rotation match
           case s"R$count" => last + count.toInt
           case s"L$count" => last - count.toInt
-      .count(step => step % 100 == 0)
+      .count(cyclesHundred)
 
   def solve2(input: Vector[String]): Int =
     input.flatMap:
@@ -18,7 +21,7 @@ object Day01 extends AoC:
           case s"L$count" => Vector.fill(count.toInt)(-1)
           case code       => sys.error(s"invalid code: $code")
       .scanLeft(50)(_ + _)
-      .count(step => step % 100 == 0)
+      .count(cyclesHundred)
 
   override lazy val answer1: Int = solve1(lines)
   override lazy val answer2: Int = solve2(lines)
