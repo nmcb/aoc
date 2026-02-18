@@ -2,8 +2,11 @@ package aoc2024
 
 import nmcb.*
 
+import scala.annotation.tailrec
+
 object Day03 extends AoC:
 
+  @tailrec
   def solve(memory: String, result: Int, enabled: Boolean, part2: Boolean): Int =
     memory match
       case "" =>
