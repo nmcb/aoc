@@ -7,22 +7,24 @@ object Day11 extends AoC:
 
   type Stone = String
 
-  extension (s: Stone) def dropLeadingZeros: Stone =
-    val dropped = s.dropWhile(_ == '0')
-    if dropped.isEmpty then "0" else dropped
+  extension (s: Stone)
 
-  type StoneCount  = (stone: Stone, count: Long)
+    def dropLeadingZeros: Stone =
+      val dropped = s.dropWhile(_ == '0')
+      if dropped.isEmpty then "0" else dropped
+
+  type StoneCount = (stone: Stone, count: Long)
 
   def update(ss: StoneCount): Vector[StoneCount] =
-    val handle = ss.stone match
-      case "0" =>
-        Vector("1")
-      case s if s.length % 2 == 0 =>
-        val (l, r) = s.splitAt(s.length / 2)
-        Vector(l.dropLeadingZeros, r.dropLeadingZeros)
-      case n =>
-        Vector((n.toLong * 2024).toString)
-
+    val handle: Vector[String] =
+      ss.stone match
+        case "0" =>
+          Vector("1")
+        case s if s.length % 2 == 0 =>
+          val (l, r) = s.splitAt(s.length / 2)
+          Vector(l.dropLeadingZeros, r.dropLeadingZeros)
+        case n =>
+          Vector((n.toLong * 2024).toString)
     handle.map(_ -> ss.count) :+ (ss.stone -> -ss.count)
 
   val stones: Vector[StoneCount] = input.split(' ').toVector.map(_ -> 1L)

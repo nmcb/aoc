@@ -12,7 +12,7 @@ object Day10 extends AoC:
   type TrailHead = Set[Vector[Pos]]
 
   extension (trails: TrailHead)
-    
+
     def reachableSummits: Iterable[Int] =
       trails.groupMap(_.head)(_.last).values.map(_.size)
 
