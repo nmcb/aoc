@@ -3,6 +3,8 @@ package aoc2024
 import nmcb.*
 import pos.*
 
+import scala.annotation.tailrec
+
 object Day04 extends AoC:
 
   type Direction = Pos => Pos
@@ -20,6 +22,7 @@ object Day04 extends AoC:
   
   extension (grid: Grid[Char])
 
+    @tailrec
     def read(length: Int, direction: Direction, from: Pos, result: String = ""): String =
       if length == 0 then
         result
