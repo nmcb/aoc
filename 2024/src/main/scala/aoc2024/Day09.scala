@@ -16,15 +16,15 @@ object Day09 extends AoC:
 
   val disk: Vector[Block] =
     @tailrec
-    def loop(todo: List[Char], id: Int = 0, result: Vector[Block] = Vector.empty): Vector[Block] =
-      todo match
-        case Nil =>
+    def loop(todo: Vector[Char], id: Int = 0, result: Vector[Block] = Vector.empty): Vector[Block] =
+      todo.runtimeChecked match
+        case Vector() =>
           result
-        case size :: free :: rest =>
+        case size +: free +: rest =>
           loop(rest, id + 1, result ++ Vector.fill(size.asDigit)(Block(id)) ++ Vector.fill(free.asDigit)(Block.free))
-        case size :: Nil =>
-          loop(Nil, id + 1, result ++ Vector.fill(size.asDigit)(Block(id)))
-    loop(input.toList)
+        case size +: Vector() =>
+          loop(Vector.empty, id + 1, result ++ Vector.fill(size.asDigit)(Block(id)))
+    loop(input.toVector)
 
   def compact1(disk: Vector[Block]): Vector[Block] =
     @tailrec
@@ -137,7 +137,8 @@ object Day09 extends AoC:
 
   lazy val answer2Mutable: Long =
     class Mem(var pos: Int, var len: Int):
-      infix def value(id: Int, pointer: Int = pos, result: Long = 0): Long =
+      @tailrec
+      final infix def value(id: Int, pointer: Int = pos, result: Long = 0): Long =
         if pointer > pos + len - 1 then result else value(id, pointer + 1, result + pointer * id)
 
     val (mem: Array[Mem], _) =
@@ -145,20 +146,19 @@ object Day09 extends AoC:
         case ((mem, pos), len) =>
           (mem :+ Mem(pos, len), pos + len)
           
-    for {
+    for
       used <- (input.length - 1 to 0 by -2).map(mem.apply)
       free <- (1 until input.length  by  2).map(mem.apply)
       if free.pos <= used.pos & free.len >= used.len
-    } yield {
+    do
       used.pos  = free.pos
       free.pos += used.len
       free.len -= used.len
-    }
 
     (0 until input.length by 2)
       .map(mem.apply)
       .zipWithIndex
-      .map(_ value _)
+      .map((m,i) => m.value(i))
       .sum
 
   def checksumJP(result: Vector[Int]): Long =
@@ -170,25 +170,27 @@ object Day09 extends AoC:
   val initFilesLeft: Vector[(Int, Int)] =
     inputJP.zipWithIndex.filter((c, i) => i % 2 == 0).map((c, i) => (c.asDigit, i))
     
-  lazy val answer2JP =
-    input.zipWithIndex.foldLeft((Vector.empty[Int], initFilesLeft)) {
-    case ((acc, filesLeft), (c, i)) if i % 2 == 1 || filesLeft.forall((d, j) => j != i) =>
-      @annotation.tailrec
-      def fillWithLastEligible(acc: Vector[Int], toFill: Int, filesLeft: Vector[(Int, Int)]): (Vector[Int], Vector[(Int, Int)]) = {
-        val rightEligible = filesLeft.findLast((d, j) => d <= toFill && i < j)
-        rightEligible match {
-          case None => (acc ++ Vector.fill(toFill)(-1), filesLeft)
-          case Some((d, j)) =>
-            fillWithLastEligible(
-              acc ++ Vector.fill(d)(j / 2),
-              toFill - d,
-              filesLeft.patch(filesLeft.lastIndexOf((d, j)), Nil, 1)
-            )
-        }
-      }
-
-      fillWithLastEligible(acc, c.asDigit, filesLeft)
-    case ((acc, filesLeft), (c, i)) if i % 2 == 0 => (acc ++ Vector.fill(c.asDigit)(i / 2), filesLeft)
-    case _ => ???
-  }
-
+  lazy val answer2JP: (Vector[Int], Vector[(Int, Int)]) =
+    
+    input.zipWithIndex.foldLeft((Vector.empty[Int], initFilesLeft)):
+      
+      case ((acc, filesLeft), (c, i)) if i % 2 == 1 || filesLeft.forall((d, j) => j != i) =>
+        @annotation.tailrec
+        def fillWithLastEligible(acc: Vector[Int], toFill: Int, filesLeft: Vector[(Int, Int)]): (Vector[Int], Vector[(Int, Int)]) =
+          val rightEligible = filesLeft.findLast((d, j) => d <= toFill && i < j)
+          rightEligible match
+            case None =>
+              (acc ++ Vector.fill(toFill)(-1), filesLeft)
+            case Some((d, j)) =>
+              fillWithLastEligible(
+                acc ++ Vector.fill(d)(j / 2),
+                toFill - d,
+                filesLeft.patch(filesLeft.lastIndexOf((d, j)), Nil, 1)
+              )
+        fillWithLastEligible(acc, c.asDigit, filesLeft)
+        
+      case ((acc, filesLeft), (c, i)) if i % 2 == 0 =>
+        (acc ++ Vector.fill(c.asDigit)(i / 2), filesLeft)
+        
+      case _ =>
+        ???
