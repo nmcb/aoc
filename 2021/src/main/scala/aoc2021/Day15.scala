@@ -9,7 +9,7 @@ object Day15 extends AoC:
 
   val grid: Grid[Int] = Grid.fromLines(lines).map(_.asDigit)
 
-  def solve(grid: Grid[Int])(using CanEqual[Pos, Pos]): Int =
+  def solve(grid: Grid[Int]): Int =
     Dijkstra
       .run(grid.minPos, grid.toMap)
       .distanceTo(grid.maxPos)
