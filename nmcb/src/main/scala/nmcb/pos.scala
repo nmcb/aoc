@@ -116,7 +116,7 @@ object pos:
     def adjoint8: Set[Pos] =
       Pos.offset8.map(_ + p)
 
-    infix inline def step(dir: Dir)(using CanEqual[Dir, Dir]): Pos =
+    infix inline def step(dir: Dir): Pos =
       dir match
         case N => (x = p.x, y = p.y - 1)
         case E => (x = p.x + 1, y = p.y)

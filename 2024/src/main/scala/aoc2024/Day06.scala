@@ -19,7 +19,7 @@ object Day06 extends AoC:
         case '.' => walkGuard(next, dir, result + pos)
         case '#' => walkGuard(pos, dir.cw, result)
 
-    def peekWithObstruction(p: Pos, obstruct: Pos)(using CanEqual[Pos, Pos]): Char =
+    def peekWithObstruction(p: Pos, obstruct: Pos): Char =
         if p == obstruct then '#' else g.peekOrElse(p, ' ')
 
     @tailrec
