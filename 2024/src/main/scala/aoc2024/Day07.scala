@@ -8,17 +8,17 @@ import scala.annotation.tailrec
 object  Day07 extends AoC:
 
   type Operator     = Long => Long => Long
-  type Operators    = List[Operator]
-  type Combinations = List[Operators]
+  type Operators    = Vector[Operator]
+  type Combinations = Vector[Operators]
 
   val addition: Operator       = (l: Long) => (r: Long) => l + r
   val multiplication: Operator = (l: Long) => (r: Long) => l * r
   val concatenation: Operator  = (l: Long) => (r: Long) => (l.toString + r.toString).toLong
 
-  val OperatorsPart1 = List(addition, multiplication)
-  val OperatorsPart2 = List(addition, multiplication, concatenation)
+  val OperatorsPart1: Vector[Operator] = Vector(addition, multiplication)
+  val OperatorsPart2: Vector[Operator] = Vector(addition, multiplication, concatenation)
 
-  case class Equation(result: Long, arguments: List[Long]):
+  case class Equation(result: Long, arguments: Vector[Long]):
 
     def valid(operators: Operators): Boolean =
       Equation
@@ -29,44 +29,46 @@ object  Day07 extends AoC:
           computation == result
 
   val equations: Vector[Equation] = lines.map:
-    case s"$result: $arguments" => Equation(result.toLong, arguments.split(' ').map(_.toLong).toList)
+    case s"$result: $arguments" => Equation(result.toLong, arguments.split(' ').map(_.toLong).toVector)
 
   object Equation:
 
     private val cache = memo[(Int, Operators), Combinations]()
+    
     def combinations1(n: Int, operators: Operators): Combinations = cache.memoize(n, operators):
 
       @tailrec
-      def leftPad(todo: Operators, padTo: Combinations, result: Combinations = List.empty): Combinations =
-        todo match
-          case Nil => result
-          case h :: t => leftPad(t, padTo, result ++ padTo.map(h +: _))
+      def leftPad(todo: Operators, padTo: Combinations, result: Combinations = Vector.empty): Combinations =
+        todo.runtimeChecked match
+          case Vector() => result
+          case h +: t   => leftPad(t, padTo, result ++ padTo.map(h +: _))
 
       @tailrec
-      def loop(todo: Int, result: Combinations = List(List.empty)): Combinations =
+      def loop(todo: Int, result: Combinations = Vector(Vector.empty)): Combinations =
         if todo <= 0 then result else loop(todo - 1, leftPad(operators, result))
 
       loop(n)
 
-    def combinations2[A](n: Int, elements: List[A]): Iterator[List[A]] =
+    def combinations2[A](n: Int, elements: Vector[A]): Iterator[Vector[A]] =
       val m = elements.length
       val size = math.pow(m, n).toInt
-      val divs = List.unfold(1)(i => Option.when(i * m <= size)(i, i * m)).reverse
+      val divs = Vector.unfold(1)(i => Option.when(i * m <= size)(i, i * m)).reverse
 
       def generate(row: Int)(idx: Int): A = elements(row / divs(idx) % m)
 
-      def combination(row: Int): List[A] = List.tabulate(n)(generate(row))
+      def combination(row: Int): Vector[A] = Vector.tabulate(n)(generate(row))
 
       Iterator.tabulate(size)(combination)
 
-    def combinations3[A](n: Int, elements: List[A]): Iterator[List[A]] =
+    def combinations3[A](n: Int, elements: Vector[A]): Iterator[Vector[A]] =
       if n > 0 then
-        for {
+        for
           h <- elements.iterator
           t <- combinations3(n - 1, elements)
-        } yield h :: t
+        yield
+          h +: t
       else
-        Iterator.single(List.empty)
+        Iterator.single(Vector.empty)
 
 
   override lazy val answer1: Long = equations.filter(_.valid(OperatorsPart1)).map(_.result).sum
@@ -76,13 +78,13 @@ object  Day07 extends AoC:
   /** https://github.com/stewSquared/advent-of-code/blob/master/src/main/scala/2024/Day07.worksheet.sc */
   def solvable(equation: Equation): Boolean =
 
-    def loop(lhs: Long, rhs: List[Long]): Boolean =
-      rhs match
-        case Nil =>
+    def loop(lhs: Long, rhs: Vector[Long]): Boolean =
+      rhs.runtimeChecked match
+        case Vector() =>
           sys.error(s"empty right hand side")
-        case head :: Nil =>
+        case head +: Vector() =>
           head == lhs
-        case n :: ns =>
+        case n +: ns =>
           /* complement addition       */
           loop(lhs - n, ns)
             /* complement multiplication */
