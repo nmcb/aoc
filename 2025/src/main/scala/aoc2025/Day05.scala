@@ -6,18 +6,12 @@ object Day05 extends AoC:
 
   type Range = (min: Long, max: Long)
 
-  val (ranges: Vector[Range], ingredients: Vector[Long]) =
-    val Array(top, bottom) = input.split("\n\n")
+  val ranges: Vector[Range] =
+    chunks(0).map:
+      case s"$min-$max" => (min = min.toLong, max = max.toLong)
 
-    val rs = top.linesIterator
-      .map:
-        case s"$min-$max" => (min = min.toLong, max = max.toLong)
-      .toVector
-
-    val is = bottom.linesIterator.map(_.toLong).toVector
-
-    (rs, is)
-
+  val ingredients: Vector[Long] =
+    chunks(1).map(_.toLong)
 
   extension (range: Range)
 
