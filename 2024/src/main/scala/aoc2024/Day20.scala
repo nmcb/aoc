@@ -9,6 +9,7 @@ import scala.annotation.*
 object Day20 extends AoC:
 
   def cheats(path: Vector[Pos], timeframe: Long): Long =
+    
     @tailrec
     def trace(trail: Vector[(Pos, Int)], cheated: Long): Long =
       if trail.nonEmpty then

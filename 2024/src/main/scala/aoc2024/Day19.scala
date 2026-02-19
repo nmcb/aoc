@@ -17,7 +17,7 @@ object Day19 extends AoC:
     def loop(remaining: String): Long = cache.memoize(remaining):
       towels
         .filter(remaining.startsWith)
-        .map(t => loop(remaining.drop(t.length)))
+        .map(towel => loop(remaining.drop(towel.length)))
         .sum
     loop(target)
 
