@@ -2,6 +2,7 @@ package aoc2024
 
 import nmcb.*
 import nmcb.pos.*
+import nmcb.predef.*
 
 import scala.annotation.*
 
@@ -27,10 +28,11 @@ object Day14 extends AoC:
       tiles.grouped(sizeX).map(_.map(render).mkString("")).mkString("\n")
 
     def tiles: IndexedSeq[Pos] =
-      for {
+      for
         y <- 0 until sizeY
         x <- 0 until sizeX
-      } yield Pos.of(x, y)
+      yield
+        Pos.of(x, y)
 
     def move(r: Robot): Robot =
       val n = r.p + r.v
@@ -51,39 +53,37 @@ object Day14 extends AoC:
       val robotsInQ2: Vector[Robot] = robotsIn(Pos.of(mid.x + 1, 0), Pos.of(sizeX - 1, mid.y - 1))
       val robotsInQ3: Vector[Robot] = robotsIn(Pos.of(0, mid.y + 1), Pos.of(mid.x - 1, sizeY - 1))
       val robotsInQ4: Vector[Robot] = robotsIn(Pos.of(mid.x + 1, mid.y+1), Pos.of(sizeX - 1, sizeY - 1))
-      List(robotsInQ1, robotsInQ2, robotsInQ3, robotsInQ4).map(_.size.toLong).product
+      Vector(robotsInQ1, robotsInQ2, robotsInQ3, robotsInQ4).map(_.size.toLong).product
 
     def robotClusters: Set[Set[Pos]] =
 
       @tailrec
-      def cluster(todo: List[Pos], inside: Set[Pos], found: Set[Pos] = Set.empty): Set[Pos] =
-        todo match
-          case Nil =>
-            found
-          case p :: rest =>
-            if inside.contains(p) then
-              cluster(rest ++ p.adjoint4, inside - p, found + p)
-            else
-              cluster(rest, inside - p, found)
+      def cluster(todo: Vector[Pos], inside: Set[Pos], found: Set[Pos] = Set.empty): Set[Pos] =
+        todo.runtimeChecked match
+          case Vector()                        => found
+          case p +: rest if inside.contains(p) => cluster(rest ++ p.adjoint4, inside - p, found + p)
+          case p +: rest                       => cluster(rest, inside - p, found)
 
       @tailrec
-      def loop(robots: List[Pos], inside: Set[Pos], clusters: Set[Set[Pos]] = Set.empty): Set[Set[Pos]] =
-        robots match
-          case Nil =>
+      def loop(robots: Vector[Pos], inside: Set[Pos], clusters: Set[Set[Pos]] = Set.empty): Set[Set[Pos]] =
+        robots.runtimeChecked match
+          case Vector() =>
             clusters
-          case robot :: rest =>
-            val c = cluster(List(robot), inside)
+          case robot +: rest =>
+            val c = cluster(Vector(robot), inside)
             loop(rest, inside -- c, clusters + c)
 
-      loop(robotsByPos.keys.toList, robotsByPos.keySet)
+      loop(robotsByPos.keys.toVector, robotsByPos.keySet)
 
   override lazy val answer1: Long =
-    (0 until 100).foldLeft(space)((s,_) => s.next).safetyFactor
+    Iterator
+      .iterate(space)(_.next)
+      .nth(100)
+      .safetyFactor
 
   override lazy val answer2: Int =
-    val (_, iterations) = Iterator
+    Iterator
       .iterate(space)(_.next)
       .zipWithIndex
-      .find((s,t) => s.robotClusters.exists(_.size > 50))
-      .get
-    iterations
+      .findFirst(_.element.robotClusters.exists(_.size > 50))
+      .index
