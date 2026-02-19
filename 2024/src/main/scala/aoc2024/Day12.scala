@@ -9,7 +9,7 @@ import scala.annotation.*
 object Day12 extends AoC:
 
   type Tree   = Char
-  type Fence  = (Pos,Dir)
+  type Fence  = (Pos, Dir)
   type Fences = Set[Fence]
 
   extension (f: Fence)
@@ -30,7 +30,6 @@ object Day12 extends AoC:
 
 
   object Fences:
-
     def around(pos: Pos): Fences =
       Set((pos, N), (pos, E), (pos, S), (pos, W))
 
@@ -46,14 +45,14 @@ object Day12 extends AoC:
 
       def countSides(positions: Set[Int]): Int =
         @tailrec
-        def loop(l: List[Int], last: Option[Int] = None, result: Int = 0): Int =
-          l match
-            case Nil                            => result
-            case h :: t if last.contains(h - 1) => loop(t, Some(h), result)
-            case h :: t                         => loop(t, Some(h), result + 1)
-        loop(positions.toList.sorted)
+        def loop(l: Vector[Int], last: Option[Int] = None, result: Int = 0): Int =
+          l.runtimeChecked match
+            case Vector()                       => result
+            case h +: t if last.contains(h - 1) => loop(t, Some(h), result)
+            case h +: t                         => loop(t, Some(h), result + 1)
+        loop(positions.toVector.sorted)
 
-      def fencePositions(d: Dir, p: Map[Dir,Set[Pos]], g: Pos => Int, f: Pos => Int): Map[Int,Set[Int]] =
+      def fencePositions(d: Dir, p: Map[Dir, Set[Pos]], g: Pos => Int, f: Pos => Int): Map[Int, Set[Int]] =
         p.get(d).map(_.groupMap(g)(f)).getOrElse(sys.error(s"no fence: $d"))
 
       val fence = fences.groupMap(_.right)(_.left)
@@ -80,10 +79,11 @@ object Day12 extends AoC:
       plots.contains(p)
 
 
-  extension (g: Grid[Tree])
+  extension (trees: Grid[Tree])
 
     def regionOf(pos: Pos): Region =
-      val tree = g.peek(pos)
+      val tree = trees.peek(pos)
+
       @tailrec
       def loop(todo: Set[Pos], region: Region): Region =
         if todo.isEmpty then
@@ -91,29 +91,30 @@ object Day12 extends AoC:
         else
           val pos  = todo.head
           val rest = todo.tail
-          if !region.contains(pos) && g.contains(pos, tree) then
-            loop(rest ++ pos.adjWithinGrid(g, (p,_) => !region.contains(p)), region.add(pos))
+          if !region.contains(pos) && trees.contains(pos, tree) then
+            loop(rest ++ pos.adjWithinGrid(trees, (p, _) => !region.contains(p)), region.add(pos))
           else
             loop(rest, region)
 
-      val r = Region(tree, Set(pos), fences = Fences.around(pos))
-      loop(pos.adjWithinGrid(g, _ => true), r)
+      val region = Region(tree, Set(pos), fences = Fences.around(pos))
+      loop(pos.adjWithinGrid(trees, _ => true), region)
 
     def regions: Vector[Region] =
+      
       @tailrec
       def loop(todo: Set[Pos], visited: Set[Pos] = Set.empty, result: Vector[Region] = Vector.empty): Vector[Region] =
         if todo.isEmpty then
           result
         else
-          val p = todo.head
-          val t = todo.tail
-          if visited.contains(p) then
-            loop(t, visited, result)
+          val pos  = todo.head
+          val rest = todo.tail
+          if visited.contains(pos) then
+            loop(rest, visited, result)
           else
-            val r = g.regionOf(p)
-            loop(t, visited = visited ++ r.plots, result :+ r)
+            val region = trees.regionOf(pos)
+            loop(rest, visited = visited ++ region.plots, result :+ region)
 
-      loop(g.positions)
+      loop(trees.positions)
 
   val garden: Grid[Tree] = Grid.fromLines(lines)
 
