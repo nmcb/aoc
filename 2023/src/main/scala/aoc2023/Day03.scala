@@ -2,64 +2,70 @@ package aoc2023
 
 import nmcb.*
 import nmcb.pos.{*, given}
+import nmcb.predef.*
 
 import scala.annotation.*
 
 object Day03 extends AoC:
+  
 
-  case class Page(chars: Vector[Vector[Char]]):
+  case class Page(chars: Grid[Char]):
 
-    def size: Pos =
-      Pos.of(chars.map(_.size).max, chars.size)
+    extension (char: Char)
+      
+      def isGear: Boolean =
+        char == '*'
+      
+      def isSymbol: Boolean =
+        char != '.' && !char.isDigit
 
-    def charAt(p: Pos): Char =
-      chars(p.y)(p.x)
+    extension (pos: Pos)
+      
+      def isDigit: Boolean =
+        chars.peek(pos).isDigit
+  
+      def isSymbol: Boolean =
+        chars.peek(pos).isSymbol
+  
+      def isGear: Boolean =
+        chars.peek(pos).isGear
 
-    def isDigit(p: Pos): Boolean =
-      charAt(p).isDigit
-
-    def isSymbol(p: Pos): Boolean =
-      charAt(p) != '.' && !isDigit(p)
-
-    def isGear(c: Char): Boolean =
-      c == '*'
-
-    def isGear(p: Pos): Boolean =
-      isGear(charAt(p))
-
-    def adjacents(pos: Pos): Set[Pos] =
-      Set(Pos.of(1,-1), Pos.of(1,0), Pos.of(1,1), Pos.of(0,-1), Pos.of(0,0), Pos.of(0,1), Pos.of(-1,-1), Pos.of(-1,0), Pos.of(-1,1))
+    def adjacent(pos: Pos): Set[Pos] =
+      Pos.offset8
         .map(d => pos + d)
-        .filter(p => p.x >= 0 && p.x < size.x && p.y >= 0 && p.y < size.y)
+        .filter(chars.within)
 
-    case class Num(loc: Vector[Pos], value: Int, symbols: Map[Pos,Char])
+    case class Num(loc: Vector[Pos], value: Int, symbols: Map[Pos, Char])
 
     object Num:
+      
       def apply(loc: Vector[Pos]): Num =
-        val number  = loc.map(p => charAt(p)).mkString("").toInt
-        val symbols = loc.flatMap(adjacents).filter(isSymbol).map(p => p -> charAt(p)).toMap
+        val number  = loc.map(p => chars.peek(p)).mkString("").toInt
+        val symbols = loc.flatMap(adjacent).filter(_.isSymbol).map(p => p -> chars.peek(p)).toMap
         Num(loc, number, symbols)
 
-    @tailrec
-    private final def numbers(pos: Pos = Pos.of(0,0), cur: String = "", loc: Vector[Pos] = Vector.empty, acc: Vector[Num] = Vector.empty): Vector[Num] =
-      if pos.y >= size.y then
-        acc
-      else
-        if pos.x >= size.x then
-          numbers(Pos.of(0, pos.y + 1), "", Vector.empty, if cur.nonEmpty then acc :+ Num(loc) else acc)
+    lazy val numbers: Vector[Num] =
+      @tailrec
+      def compute(pos: Pos = Pos.of(0,0), cur: String = "", loc: Vector[Pos] = Vector.empty, acc: Vector[Num] = Vector.empty): Vector[Num] =
+        if pos.y >= chars.sizeY then
+          acc
         else
-          if isDigit(pos) then
-            numbers(Pos.of(pos.x + 1, pos.y), s"$cur${charAt(pos)}", loc :+ pos, acc)
+          if pos.x >= chars.sizeX then
+            compute(Pos.of(0, pos.y + 1), "", Vector.empty, if cur.nonEmpty then acc :+ Num(loc) else acc)
           else
-            numbers(Pos.of(pos.x + 1, pos.y), "", Vector.empty, if cur.nonEmpty then acc :+ Num(loc) else acc)
+            if pos.isDigit then
+              compute(Pos.of(pos.x + 1, pos.y), s"$cur${chars.peek(pos)}", loc :+ pos, acc)
+            else
+              compute(Pos.of(pos.x + 1, pos.y), "", Vector.empty, if cur.nonEmpty then acc :+ Num(loc) else acc)
+      compute()
 
-    lazy val numbersWithAdjacentSymbols: Vector[Num] = numbers().filter(_.symbols.nonEmpty)
+    lazy val numbersWithAdjacentSymbols: Vector[Num] =
+      numbers.filter(_.symbols.nonEmpty)
 
-    lazy val gearsWithAdjacentNumbers: Map[Pos,Set[Num]] =
+    lazy val gearsWithAdjacentNumbers: Map[Pos, Set[Num]] =
       chars
-        .zipWithIndex.flatMap((l, y) => l.zipWithIndex.map((c, x) => Pos.of(x, y)))
-        .filter(isGear)
-        .map(p => p -> numbersWithAdjacentSymbols.filter(_.symbols.exists((g,_) => g == p)).toSet)
+        .filter(_.right.isGear)
+        .map(g => g.left -> numbersWithAdjacentSymbols.filter(_.symbols.exists(_.left == g.left)).toSet)
         .toMap
 
     lazy val gearRatios: Vector[Set[Num]] =
@@ -68,10 +74,11 @@ object Day03 extends AoC:
           (g1, ns1) <- gearsWithAdjacentNumbers
           (g2, ns2) <- gearsWithAdjacentNumbers
           if g1 == g2 && ns1.size == 2 && ns2.size == 2 && (ns1 diff ns2).isEmpty
-        yield ns1
+        yield
+          ns1
       ratios.toVector
 
-  val page: Page = Page(lines.map(_.toVector).toVector)
+  val page: Page = Page(chars = Grid.fromLines(lines))
 
 
   override lazy val answer1: Int = page.numbersWithAdjacentSymbols.map(_.value).sum
