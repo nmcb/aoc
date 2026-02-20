@@ -6,15 +6,22 @@ object Day02 extends AoC:
 
   type Color = String
 
-  case class Hand(cubes: Map[Color,Long]):
+  case class Hand(cubes: Map[Color, Long]):
     val reds: Long   = cubes.getOrElse("red", 0L)
     val greens: Long = cubes.getOrElse("green", 0L)
     val blues: Long  = cubes.getOrElse("blue", 0L)
 
   object Hand:
 
-    def fromString(s: String): Hand =
-      Hand(s.split(',').map(_.trim).map({ case s"$n $c" => c -> n.toLong }).toMap)
+    def fromString(line: String): Hand =
+      Hand(
+        line
+          .split(',')
+          .map(_.trim)
+          .map:
+            case s"$n $c" => c -> n.toLong
+          .toMap
+      )
 
   case class Game(id: Int, hands: Set[Hand]):
 
