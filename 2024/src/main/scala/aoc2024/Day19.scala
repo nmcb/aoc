@@ -5,19 +5,21 @@ import nmcb.predef.*
 
 object Day19 extends AoC:
 
-  val (towels: Vector[String], designs: Vector[String]) =
-    val Array(ts, ds) = input.split("\n\n").map(_.trim)
-    (ts.split(',').map(_.trim).toVector, ds.linesIterator.toVector)
+  val towels: Vector[String] =
+    chunks(0).head.split(", ").toVector
+
+  val designs: Vector[String] =
+    chunks(1)
 
   def count(towels: Vector[String], target: String): Long =
     
     val cache = memo("" -> 1L)
     def loop(remaining: String): Long = cache.memoize(remaining):
-        towels
-          .filter(remaining.startsWith)
-          .map(t => loop(remaining.drop(t.length)))
-          .sum
+      towels
+        .filter(remaining.startsWith)
+        .map(towel => loop(remaining.drop(towel.length)))
+        .sum
     loop(target)
 
-  override lazy val answer1: Long = designs.map(d => count(towels, d)).count(_ > 0)
-  override lazy val answer2: Long = designs.map(d => count(towels, d)).sum
+  override lazy val answer1: Long = designs.map(design => count(towels, design)).count(_ > 0)
+  override lazy val answer2: Long = designs.map(design => count(towels, design)).sum

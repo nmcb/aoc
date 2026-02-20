@@ -7,10 +7,7 @@ object Day25 extends AoC:
   type Schematic = Grid[Char]
 
   val schematics: Vector[Schematic] =
-    input
-      .split("\n\n")
-      .map(_.split("\n").iterator)
-      .map(Grid.fromLines).toVector
+    chunks.map(Grid.fromLines)
 
   extension (schematic: Schematic)
 

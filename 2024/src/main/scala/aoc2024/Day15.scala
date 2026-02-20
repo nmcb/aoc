@@ -23,10 +23,11 @@ object Day15 extends AoC:
 
   type Move = (Pos,Pos)
   
-  extension (m: Move) def from = m._1
-  extension (m: Move) def to   = m._2
+  extension (move: Move)
+    def from: Pos = move._1
+    def to: Pos   = move._2
 
-  case class Grid(grid: Map[Pos,Char]):
+  case class Grid(grid: Map[Pos, Char]):
     lazy val sizeX: Int = grid.keys.maxBy(_.x).x + 1
     lazy val sizeY: Int = grid.keys.maxBy(_.y).y + 1
     lazy val robotPosition: Pos     = grid.find((_, c) => c == '@').map(_.pos).head
@@ -51,8 +52,8 @@ object Day15 extends AoC:
         def widen(c: Set[Pos]): Set[Pos] =
           val pl = c.minBy(_.x)
           val pr = c.maxBy(_.x)
-          val l = if (d == '^' | d == 'v') & grid(pl) == ']' then Set((x = pl.x - 1, y = pl.y)) else Set.empty
-          val r = if (d == '^' | d == 'v') & grid(pr) == '[' then Set((x = pr.x + 1, y = pr.y)) else Set.empty
+          val l = if (d == '^' | d == 'v') && grid(pl) == ']' then Set((x = pl.x - 1, y = pl.y)) else Set.empty
+          val r = if (d == '^' | d == 'v') && grid(pr) == '[' then Set((x = pr.x + 1, y = pr.y)) else Set.empty
           l ++ c ++ r
 
         def unblocked(ms: Set[Pos]): Boolean = ms.forall(isFree)
@@ -84,6 +85,7 @@ object Day15 extends AoC:
         Grid(updatedAndCleaned)
 
     def resize: Grid =
+
       def map(p: Pos, from: Char, to: Char) =
         Map((x = p.x * 2, y = p.y) -> from, (x = (p.x * 2) + 1, y = p.y) -> to)
 
@@ -95,7 +97,6 @@ object Day15 extends AoC:
           case (p,'@') => map(p, '@', '.')
           case (p, c ) => sys.error(s"invalid element: p=$p, c=$c")
       )
-
 
   val (grid: Grid, moves: List[Command]) =
     val Array(top, bottom) = input.split("\n\n").map(_.trim)

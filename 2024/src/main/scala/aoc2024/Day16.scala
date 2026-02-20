@@ -6,98 +6,83 @@ import nmcb.predef.*
 
 object Day16 extends AoC:
 
+  import Dir.*
+  import Option.*
+  import Iterator.*
+
+  type Costs = Map[(Pos, Dir), Long]
+
   case class Tracer(cost: Long, pos: Pos, dir: Dir, path: Set[Pos]):
-    def options: List[Tracer] =
-      List(
+    def options: Vector[Tracer] =
+      Vector(
         Tracer(cost + 1, pos.step(dir), dir, path + pos.step(dir)),
         Tracer(cost + 1000, pos, dir.cw, path),
         Tracer(cost + 1000, pos, dir.ccw, path)
       )
 
-  case class Maze(maze: Vector[Vector[Char]]):
-    val sizeX: Int = maze.head.size
-    val sizeY: Int = maze.size
-
-    override def toString: String =
-      maze.map(_.mkString("")).mkString("\n")
-
-    def within(p: Pos): Boolean =
-      p.x >= 0 & p.y >= 0 & p.x < sizeX & p.y < sizeY
-
-    def peek(p: Pos): Option[Char] =
-      Option.when(within(p))(maze(p.y)(p.x))
-
-    lazy val positions: Vector[(Pos,Char)] =
-      for {
-        (l, y) <- maze.zipWithIndex
-        (c, x) <- l.zipWithIndex
-      } yield (Pos.of(x, y), c)
-
-    def find(f: Char => Boolean): Vector[Pos] =
-      positions.filter((p, c) => f(c)).map((p, _) => p)
-
-    lazy val start: Pos       = find(_ == 'S').head
-    lazy val end: Pos         = find(_ == 'E').head
-    lazy val walls: Set[Pos]  = find(_ == '#').toSet
-    lazy val inside: Set[Pos] = find(_ == '.').toSet
-
-    type Costs = Map[(Pos,Dir),Long]
+  case class Maze(grid: Grid[Char]):
+    lazy val start: Pos       = grid.findOne('S')
+    lazy val end: Pos         = grid.findOne('E')
+    lazy val walls: Set[Pos]  = grid.findAll('#')
+    lazy val inside: Set[Pos] = grid.findAll('.')
 
     def advance(tracer: Tracer, costs: Costs): Boolean =
       val inside = !walls.contains(tracer.pos)
       val better = costs.get(tracer.pos -> tracer.dir).forall(_ >= tracer.cost)
       inside & better
 
-    def solve1: Long =
-      case class State(tracers: Vector[Tracer], costs: Costs = Map.empty):
-        def next: State =
-          tracers.foldLeft(copy(tracers = Vector.empty)): (state, tracer) =>
-            if advance(tracer, state.costs) then
-              val ts = state.tracers ++ tracer.options
-              val cs = state.costs + (tracer.pos -> tracer.dir -> tracer.cost)
-              State(tracers = ts, costs = cs)
-            else
-              state
 
-        def solution: Option[Long] =
-          Option.when(tracers.isEmpty)(cost)
+  def solve1(maze: Maze): Long =
 
-        def cost: Long =
-          Dir.values.flatMap(d => costs.get(end -> d)).min
+    case class State(tracers: Vector[Tracer], costs: Costs = Map.empty):
 
-      val tracer = Tracer(0, start, Dir.E, Set(start))
-      val state  = State(Vector(tracer))
-      Iterator.iterate(state)(_.next).findMap(_.solution)
+      def next: State =
+        tracers.foldLeft(copy(tracers = Vector.empty)): (state, tracer) =>
+          if maze.advance(tracer, state.costs) then
+            val tracers = state.tracers ++ tracer.options
+            val costs   = state.costs + (tracer.pos -> tracer.dir -> tracer.cost)
+            State(tracers = tracers, costs = costs)
+          else
+            state
 
+      def solution: Option[Long] =
+        when(tracers.isEmpty)(cost)
 
-    def solve2: Long =
-      case class Best(cost: Long, path: Set[Pos])
-      case class State(tracers: Vector[Tracer], costs: Costs, best: Best):
+      def cost: Long =
+        values.flatMap(d => costs.get(maze.end -> d)).min
 
-        def update(t: Tracer, cs: Costs, b: Best): Best =
-          if      t.pos != end | t.cost > b.cost then b
-          else if t.cost < b.cost                then Best(t.cost, t.path)
-          else                                        b.copy(path = b.path ++ t.path)
-
-        def next: State =
-          tracers.foldLeft(copy(tracers = Vector.empty[Tracer])):
-            case (state, tracer) =>
-              val b  = update(tracer, state.costs, state.best)
-              val ts = tracer.options.filter(t => advance(t, state.costs))
-              val cs = state.costs ++ ts.map(next => next.pos -> next.dir -> next.cost)
-              State(tracers = state.tracers ++ ts, costs = cs, best = b)
-
-        def solution: Option[Long] =
-          Option.when(tracers.isEmpty)(best.path.size)
-
-      val tracers = Vector(Tracer(0, start, Dir.E, Set(start)))
-      val costs   = Map(start -> Dir.E -> 0L)
-      val best    = Best(Long.MaxValue, Set.empty)
-      val state   = State(tracers, costs, best)
-      Iterator.iterate(state)(_.next).findMap(_.solution)
+    val tracer = Tracer(cost = 0, pos = maze.start, dir = E, path = Set(maze.start))
+    val state  = State(Vector(tracer))
+    iterate(state)(_.next).findMap(_.solution)
 
 
-  val maze: Maze = Maze(lines.map(_.toVector).toVector)
+  def solve2(maze: Maze): Long =
 
-  override lazy val answer1: Long = maze.solve1
-  override lazy val answer2: Long = maze.solve2
+    case class Best(cost: Long, path: Set[Pos])
+    case class State(tracers: Vector[Tracer], costs: Costs, best: Best):
+
+      def update(tracer: Tracer, cost: Costs, best: Best): Best =
+        if      tracer.pos != maze.end || tracer.cost > best.cost then best
+        else if tracer.cost < best.cost                           then Best(tracer.cost, tracer.path)
+        else                                                           best.copy(path = best.path ++ tracer.path)
+
+      def next: State =
+        tracers.foldLeft(copy(tracers = Vector.empty[Tracer])): (state, tracer) =>
+          val best    = update(tracer, state.costs, state.best)
+          val tracers = tracer.options.filter(tracer => maze.advance(tracer, state.costs))
+          val costs   = state.costs ++ tracers.map(next => next.pos -> next.dir -> next.cost)
+          State(tracers = state.tracers ++ tracers, costs = costs, best = best)
+
+      def solution: Option[Long] =
+        when(tracers.isEmpty)(best.path.size)
+
+    val tracers = Vector(Tracer(0, maze.start, Dir.E, Set(maze.start)))
+    val costs   = Map(maze.start -> E -> 0L)
+    val best    = Best(Long.MaxValue, Set.empty)
+    val state   = State(tracers, costs, best)
+    iterate(state)(_.next).findMap(_.solution)
+
+  val maze: Maze = Maze(grid = Grid.fromLines(lines))
+
+  override lazy val answer1: Long = solve1(maze)
+  override lazy val answer2: Long = solve2(maze)

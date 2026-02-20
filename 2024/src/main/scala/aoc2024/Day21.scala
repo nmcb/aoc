@@ -37,7 +37,7 @@ object Day21 extends AoC:
       S -> 'v'
     )
 
-  extension (t: (Pos,Long))
+  extension (t: (Pos, Long))
     def pos: Pos    = t._1
     def count: Long = t._2
 
@@ -50,7 +50,7 @@ object Day21 extends AoC:
     def pointerMovesFor(outputs: Vector[Button], robot: Int): Long =
       val start = keypadBy(robot).findOne(Button.enter)
       outputs
-        .foldLeft[(Pos,Long)](start -> 0L):
+        .foldLeft[(Pos, Long)](start -> 0L):
           case (moves, button) =>
             val to = keypadBy(robot).findOne(button)
             to -> (moves.count + shortestPathMoves(moves.pos, to, robot))
