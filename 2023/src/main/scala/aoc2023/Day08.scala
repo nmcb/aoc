@@ -8,6 +8,7 @@ import scala.annotation.tailrec
 object Day08 extends AoC:
 
   case class Directions(cycle: String):
+    
     def next: (Char, Directions) =
       (cycle.head, Directions(cycle.tail + cycle.head))
 
@@ -37,7 +38,7 @@ object Day08 extends AoC:
     def lcm(a: Long, b: Long): Long =
       (a * b).abs / gcd(a, b)
 
-    def step2: Long =
+    def steps2: Long =
       // note: each start node has a repeating path, ending with a node that ends with a 'Z'
       val starts = nodes.keys.filter(_.endsWith("A")).toSet
       val paths  = starts.map(from => pathTo(_.endsWith("Z"), from, directions))
@@ -45,7 +46,17 @@ object Day08 extends AoC:
 
 
   lazy val network: Network =
-    Network(Directions(lines.head), lines.drop(2).map { case s"$src = ($left, $right)" => src -> (left, right) }.toMap)
+    
+    val directions: Directions =
+      Directions(lines.head)
+    
+    val nodes: Nodes =
+      lines
+        .collect:
+          case s"$src = ($left, $right)" => src -> (left, right)
+        .toMap
+    
+    Network(directions, nodes)
 
-  override lazy val answer1: Int = network.steps1
-  override lazy val answer2: Long = network.step2
+  override lazy val answer1: Int  = network.steps1
+  override lazy val answer2: Long = network.steps2
