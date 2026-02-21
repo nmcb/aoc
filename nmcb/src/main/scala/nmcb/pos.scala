@@ -80,18 +80,18 @@ object pos:
 
   extension (p: Pos)
 
-    def ⋅(that: Pos): Long = p.x.toLong * that.y.toLong - that.x.toLong * p.y.toLong
-
     def unary_- : Pos = (-p.x, -p.y)
 
     infix inline def +(that: Pos): Pos = (x = p.x + that.x, y = p.y + that.y)
     infix inline def -(that: Pos): Pos = (x = p.x - that.x, y = p.y - that.y)
     infix inline def *(i: Int): Pos    = (x = p.x * i , y = p.y * i  )
 
+    infix def determinant(that: Pos): Long = p.x.toLong * that.y.toLong - that.x.toLong * p.y.toLong
+
     infix inline def translate(dx: Int, dy: Int): Pos = (p.x + dx, p.y + dy)
 
-    infix inline def min(that: Pos): Pos = (p.x min that.x, p.y min that.y)
-    infix inline def max(that: Pos): Pos = (p.x max that.x, p.y max that.y)
+    infix inline def minimize(that: Pos): Pos = (p.x min that.x, p.y min that.y)
+    infix inline def maximize(that: Pos): Pos = (p.x max that.x, p.y max that.y)
 
     infix inline def >(that: Pos): Boolean  = p.x > that.x && p.y > that.y
     infix inline def <(that: Pos): Boolean  = p.x < that.x && p.y < that.y

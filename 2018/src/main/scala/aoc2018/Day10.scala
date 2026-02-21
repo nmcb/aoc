@@ -12,7 +12,7 @@ object Day10 extends AoC:
   case class Box(min: Pos, max: Pos):
     
     infix def union(that: Box): Box =
-      Box(min min that.min, max max that.max)
+      Box(min minimize that.min, max maximize that.max)
 
     def area: Long =
       val delta = max - min
