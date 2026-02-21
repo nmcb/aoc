@@ -54,8 +54,8 @@ object Day18 extends AoC:
   /** cubic meter = one point - data driven flood algorithm with some set arithmetic */
   def dig1(operations: Vector[Op]): Long =
     val holes: Set[Pos] = operations.foldLeft(Vector(Pos.origin))((a,o) => a ++ a.last.move1(o)).toSet
-    val min = holes.reduce(_ min _) - Pos.of(1, 1)
-    val max = holes.reduce(_ max _) + Pos.of(1, 1)
+    val min = holes.reduce(_ minimize _) - Pos.of(1, 1)
+    val max = holes.reduce(_ maximize _) + Pos.of(1, 1)
 
     @tailrec
     def flood(todo: List[Pos], visited: Set[Pos] = Set.empty): Set[Pos] =
@@ -76,8 +76,6 @@ object Day18 extends AoC:
     val dug   = grid(min, max).toSet diff outer
     dug.size.toLong
 
-  lazy val operationsPart1: Vector[Op] = lines.map(Op.fromStringPart)
-
   /** one operation = one polygon - geometric driven shoelace formula made discrete with pick's theorem */
   def dig2(operations: Vector[Op]): Long =
 
@@ -86,7 +84,7 @@ object Day18 extends AoC:
       val result =
         (vertices :+ vertices.head)
           .sliding(2)
-          .map(m => m(0) ⋅ m(1))
+          .map(m => m(0) determinant m(1))
           .sum / 2
       result.abs
 
@@ -100,10 +98,12 @@ object Day18 extends AoC:
 
     discreteArea
 
-  assert(answer1 == dig2(operationsPart1)) // 1000x faster
-
+  lazy val operationsPart1: Vector[Op] = lines.map(Op.fromStringPart)
   lazy val operationsPart2: Vector[Op] = lines.map(Op.fromHexPart)
 
 
   override lazy val answer1: Long = dig1(operationsPart1)
   override lazy val answer2: Long = dig2(operationsPart2)
+
+  assert(answer1 == dig2(operationsPart1)) // 1000x faster
+
