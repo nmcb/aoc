@@ -24,22 +24,22 @@ object Day15 extends AoC:
     lazy val remove: Option[String] =
       Option.when(line.contains('-'))(label)
 
-    lazy val update: Option[(String,Int)] =
-      Option.when(line.contains('='))(label, line.split('=')(1).toInt)
+    lazy val update: Option[(String, Int)] =
+      Option.when(line.contains('='))(label, line.split('=').last.toInt)
 
-  case class Boxes(boxes: Map[Int,Vector[(String,Int)]]):
+  case class Boxes(boxes: Map[Int, Vector[(String, Int)]]):
 
     def remove(label: String): Boxes =
       Boxes(boxes.updatedWith(hash(label)):
-        case Some(lenses) => Some(lenses.filterNot((l,f) => l == label))
+        case Some(lenses) => Some(lenses.filterNot((l, f) => l == label))
         case None         => None
       )
 
     def update(label: String, focal: Int): Boxes =
       Boxes(boxes.updatedWith(hash(label)):
-        case Some(lenses) if lenses.exists((l,_) => l == label) =>
+        case Some(lenses) if lenses.exists((l, _) => l == label) =>
           Some(lenses.foldLeft(Vector.empty):
-            case (a,(l,f)) => if l == label then a :+ (l, focal) else a :+ (l, f))
+            case (a, (l, f)) => if l == label then a :+ (l, focal) else a :+ (l, f))
         case Some(lenses) =>
           Some(lenses :+ (label, focal))
         case None =>
