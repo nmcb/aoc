@@ -25,15 +25,12 @@ object Day13 extends AoC:
       column + (100 * row)
 
   object Image:
-    def fromString(ss: Array[String]): Image =
-      Image(ss.map(_.toVector).toVector)
+
+    def fromString(ss: Vector[String]): Image =
+      Image(ss.map(_.toVector))
 
   lazy val images: Vector[Image] =
-    input
-      .split("\n\n")
-      .map(_.split("\n"))
-      .map(Image.fromString)
-      .toVector
+    chunks.map(Image.fromString)
 
   override lazy val answer1: Long = images.map(_.summarize).sum
   override lazy val answer2: Long = images.map(_.smudgeCorrection(true).summarize).sum
