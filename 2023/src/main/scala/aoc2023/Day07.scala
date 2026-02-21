@@ -127,7 +127,7 @@ object Day07 extends AoC:
           Hand(cards.map(Card.apply).toVector, bid.toInt)
 
   inline def score(hand: Hand, index: Int): Int =
-    hand.bid * (index - 1)
+    hand.bid * (index + 1)
   
   override lazy val answer1: Int =
     given Ordering[Card] = orderBy(Game.sortedSet)

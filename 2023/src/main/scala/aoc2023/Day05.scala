@@ -31,22 +31,22 @@ object Day05 extends AoC:
       Option.when(min <= max)(Range(min, max))
 
   case class Dependency(target: Long, source: Long, length: Long):
-    
+
     val sourceRange: Range =
       Range(source, source + length - 1)
-      
+
     infix def mapBy(that: Range): Option[Range] =
       (that intersect sourceRange).map(r => Range(r.min - source + target, r.max - source + target))
 
-  
+
   case class Dependencies(dependencies: Set[Dependency]):
-    
+
     infix def mapBy(that: Range): Set[Range] =
       val mapped   = dependencies.flatMap(_ mapBy that)
       val unmapped = dependencies.foldLeft(Set(that))((acc, dep) => acc.flatMap(_ diff dep.sourceRange))
       mapped ++ unmapped
 
-  
+
   case class Puzzle(seeds: Seq[Long], chain: Vector[Dependencies]):
     
     private def mapDependenciesBy(that: Range): Set[Range] =
@@ -67,22 +67,27 @@ object Day05 extends AoC:
         .map(_.min)
         .min
 
-  
+
   lazy val puzzle: Puzzle =
 
-    def parseDependency(line: String): Dependency =
-      line match
+    def parseDependency(s: String): Dependency =
+      s match
         case s"$target $source $length" => Dependency(target.toLong, source.toLong, length.toLong)
 
-    def parseDependencies(chunk: String): Dependencies =
-      Dependencies(chunk.linesIterator.drop(1).map(parseDependency).toSet)
+    def parseDependencies(s: String): Dependencies =
+      Dependencies(s.linesIterator.drop(1).map(parseDependency).toSet)
 
-    val seeds: Seq[Long] =
-      chunks(0).head match
-        case s"seeds: $seeds" => seeds.split(' ').map(_.toLong).toSeq
+    val lines: Vector[String] =
+      input
+        .split("\n\n")
+        .toVector
+
+    val seeds: Vector[Long] =
+      lines.head match
+        case s"seeds: $seeds" => seeds.split(' ').map(_.toLong).toVector
 
     val dependencies: Vector[Dependencies] =
-      chunks(1).map(parseDependencies).toVector
+      lines.tail.map(parseDependencies)
 
     Puzzle(seeds, dependencies)
 
