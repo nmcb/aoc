@@ -7,17 +7,17 @@ object Day05 extends AoC:
   case class Range(min: Long, max: Long):
     assert(min <= max)
 
-    import Range.optional
+    import Range.make
 
     infix def intersect(that: Range): Option[Range] =
-      val maxmin = min max that.min
-      val minmax = max min that.max
-      optional(min = maxmin, max = minmax)
+      val maxMin = min max that.min
+      val minMax = max min that.max
+      make(min = maxMin, max = minMax)
 
     infix def diff(that: Range): Set[Range] =
       this intersect that match
         case None          => Set(this)
-        case Some(overlap) => Set(optional(min, overlap.min - 1), optional(overlap.max + 1, max)).flatten
+        case Some(overlap) => Set(make(min, overlap.min - 1), make(overlap.max + 1, max)).flatten
 
   object Range:
     def singleton(value: Long): Range =
@@ -27,21 +27,27 @@ object Day05 extends AoC:
       val Seq(start, length) = seq
       Range(start, start + length - 1)
 
-    def optional(min: Long, max: Long): Option[Range] =
+    def make(min: Long, max: Long): Option[Range] =
       Option.when(min <= max)(Range(min, max))
 
   case class Dependency(target: Long, source: Long, length: Long):
-    val sourceRange: Range = Range(source, source + length - 1)
+    
+    val sourceRange: Range =
+      Range(source, source + length - 1)
+      
     infix def mapBy(that: Range): Option[Range] =
       (that intersect sourceRange).map(r => Range(r.min - source + target, r.max - source + target))
 
+  
   case class Dependencies(dependencies: Set[Dependency]):
+    
     infix def mapBy(that: Range): Set[Range] =
       val mapped   = dependencies.flatMap(_ mapBy that)
-      val unmapped = dependencies.foldLeft(Set(that))((acc,dep) => acc.flatMap(_ diff dep.sourceRange))
+      val unmapped = dependencies.foldLeft(Set(that))((acc, dep) => acc.flatMap(_ diff dep.sourceRange))
       mapped ++ unmapped
 
-  case class Puzzle(seeds: Seq[Long], chain: Seq[Dependencies]):
+  
+  case class Puzzle(seeds: Seq[Long], chain: Vector[Dependencies]):
     
     private def mapDependenciesBy(that: Range): Set[Range] =
       chain.foldLeft(Set(that))((rs,ms) => rs.flatMap(ms.mapBy))
@@ -61,26 +67,22 @@ object Day05 extends AoC:
         .map(_.min)
         .min
 
+  
   lazy val puzzle: Puzzle =
 
-    def parseDependency(s: String): Dependency =
-      s match
+    def parseDependency(line: String): Dependency =
+      line match
         case s"$target $source $length" => Dependency(target.toLong, source.toLong, length.toLong)
 
-    def parseDependencies(s: String): Dependencies =
-      Dependencies(s.linesIterator.drop(1).map(parseDependency).toSet)
-
-    val lines: Seq[String] =
-      input
-        .split("\n\n")
-        .toSeq
+    def parseDependencies(chunk: String): Dependencies =
+      Dependencies(chunk.linesIterator.drop(1).map(parseDependency).toSet)
 
     val seeds: Seq[Long] =
-      lines.head match
+      chunks(0).head match
         case s"seeds: $seeds" => seeds.split(' ').map(_.toLong).toSeq
 
-    val dependencies: Seq[Dependencies] =
-      lines.tail.map(parseDependencies)
+    val dependencies: Vector[Dependencies] =
+      chunks(1).map(parseDependencies).toVector
 
     Puzzle(seeds, dependencies)
 

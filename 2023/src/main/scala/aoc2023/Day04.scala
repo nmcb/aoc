@@ -9,13 +9,13 @@ object Day04 extends AoC:
   case class Card(id: Int, winning: Vector[Int], mine: Vector[Int]):
 
     def scratch(score: Int => Int): Int =
-      mine.foldLeft(0)((s,n) => if winning.contains(n) then if s == 0 then 1 else score(s) else s)
+      mine.foldLeft(0)((s, n) => if winning.contains(n) then if s == 0 then 1 else score(s) else s)
 
     def points: Int =
-      scratch(_ * 2)
+      scratch(score = _ * 2)
 
     def matching: Int =
-      scratch(_ + 1)
+      scratch(score = _ + 1)
 
   object Card:
 
@@ -27,9 +27,10 @@ object Day04 extends AoC:
       s.runtimeChecked match
         case s"Card $id: $winning | $mine" => Card(id.trim.toInt, ints(winning), ints(mine))
 
-  val cards: Map[Int,Card] = lines.map(Card.fromString).map(c => c.id -> c).toMap
+  val cards: Map[Int, Card] =
+    lines.map(Card.fromString).map(c => c.id -> c).toMap
 
-  def solve2(cards: Map[Int,Card]): Int =
+  def solve2(cards: Map[Int, Card]): Int =
     val maxId: Int =
       cards.keys.max
 
@@ -37,14 +38,14 @@ object Day04 extends AoC:
       counts.updatedWith(id)(_.map(_ + counts(from)))
 
     @tailrec
-    def scratch(id: Int = 1, counts: Map[Int,Int] = cards.map((i,c) => i -> 1)): Int =
+    def scratch(id: Int = 1, counts: Map[Int, Int] = cards.map((i, c) => i -> 1)): Int =
       if id > maxId then
-        counts.view.values.sum
+        counts.valuesIterator.sum
       else
         val next  = (id + 1 to id + cards(id).matching).foldLeft(counts)(update(id))
         scratch(id + 1, next)
     scratch()
 
 
-  override lazy val answer1: Int = cards.view.values.map(_.points).sum
+  override lazy val answer1: Int = cards.valuesIterator.map(_.points).sum
   override lazy val answer2: Int = solve2(cards)
