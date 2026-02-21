@@ -49,7 +49,7 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
 
   def map[B](f: A => B): Grid[B] =
     Grid(matrix.map(_.map(f)))
-
+    
   def row(y: Int): Vector[A] =
     matrix(y)
 
