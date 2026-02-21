@@ -1,33 +1,36 @@
 package aoc2023
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.collection.*
-import scala.collection.immutable.Seq
 
 object Day12 extends AoC:
 
-  case class Line(mask: String, lengths: List[Int]):
+  case class Line(mask: String, lengths: Vector[Int]):
+
     def unfold: Line =
-      Line(Seq.fill(5)(mask).reduce(_ ++ "?" ++ _), Seq.fill(5)(lengths).reduce(_ ++ _))
+      Line(Vector.fill(5)(mask).reduce(_ ++ "?" ++ _), Vector.fill(5)(lengths).reduce(_ ++ _))
 
   object Line:
+
     def fromString(s: String): Line =
       val Array(mask, groups) = s.split(' ')
-      Line(mask.trim, groups.trim.split(',').map(_.toInt).toList)
+      Line(mask.trim, groups.trim.split(',').map(_.toInt).toVector)
 
-  case class Puzzle(lines: List[Line]):
+  case class Puzzle(lines: Vector[Line]):
 
-    val cache = mutable.Map.empty[(String, List[Int]), Long]
+    val cache: mutable.Map[(String, Vector[Int]), Long] =
+      memo[(String, Vector[Int]), Long]()
 
-    private def solve(mask: String, lengths: List[Int]): Long =
-      cache.getOrElseUpdate((mask, lengths),
+    private def solve(mask: String, lengths: Vector[Int]): Long =
+      cache.memoize((mask, lengths)):
         (mask, lengths).runtimeChecked match
-          case (_, Nil) if mask.contains('#') => 0
-          case (_, Nil)                       => 1
-          case ("", _ :: _)                   => 0
-          case (s".$tail", _)                 => solve(tail, lengths)
-          case (s"#$tail", length :: todo) if mask.length >= length =>
+          case (_, Vector()) if mask.contains('#')                  => 0
+          case (_, Vector())                                        => 1
+          case ("", _ +: _)                                         => 0
+          case (s".$tail", _)                                       => solve(tail, lengths)
+          case (s"#$tail", length +: todo) if mask.length >= length =>
             val (operational, rest) = tail.splitAt(length - 1)
             if operational.contains('.') then
               0
@@ -37,9 +40,8 @@ object Day12 extends AoC:
                 case s".$mt" => solve(mt, todo)
                 case s"?$mt" => solve(mt, todo)
                 case _       => 0
-          case (s"#$tail", _ :: _) => 0
+          case (s"#$tail", _ +: _) => 0
           case (s"?$tail", _)      => solve(s".$tail", lengths) + solve(s"#$tail", lengths)
-      )
 
     lazy val arrangements: Long =
       lines.map(l => solve(l.mask, l.lengths)).sum
@@ -47,7 +49,7 @@ object Day12 extends AoC:
     lazy val unfoldAll: Puzzle =
       Puzzle(lines.map(_.unfold))
 
-  lazy val puzzle: Puzzle = Puzzle(lines.map(Line.fromString).toList)
+  lazy val puzzle: Puzzle = Puzzle(lines.map(Line.fromString))
 
 
   override lazy val answer1: Long = puzzle.arrangements
