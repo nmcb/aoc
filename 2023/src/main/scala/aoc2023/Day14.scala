@@ -6,12 +6,9 @@ import scala.annotation.tailrec
 
 object Day14 extends AoC:
 
-  case class Grid(image: Vector[Vector[Char]]):
+  extension (grid: Grid[Char])
 
-    override def toString: String =
-      image.map(_.mkString).mkString("\n", "\n", "\n")
-
-    private def tiltL(row: Vector[Char]): Vector[Char] =
+    private def tiltLeft(row: Vector[Char]): Vector[Char] =
       @tailrec
       def loop(todo: Vector[Char], acc: Vector[Char] = Vector.empty): Vector[Char] =
         if todo.isEmpty then
@@ -22,36 +19,32 @@ object Day14 extends AoC:
           val section = todo.takeWhile(_ != '#')
           val rounds  = section.count(_ == 'O')
           val empties = section.count(_ == '.')
-          val aligned = section.foldLeft(Seq.empty[Char])((a,p) => Seq.fill(rounds)('O') ++ Seq.fill(empties)('.'))
+          val aligned = section.foldLeft(Seq.empty[Char])((a, p) => Seq.fill(rounds)('O') ++ Seq.fill(empties)('.'))
           loop(todo.drop(section.length), acc ++ aligned)
 
       loop(row)
 
-    lazy val tiltN: Grid =
-      Grid(image.transpose.map(tiltL).transpose)
+    def tiltW: Grid[Char] =
+      Grid(matrix = grid.matrix.map(tiltLeft))
 
-    lazy val tiltE: Grid =
-      Grid(image.map(l => tiltL(l.reverse).reverse))
+    def tiltE: Grid[Char] =
+      grid.flipX.tiltW.flipX
 
-    lazy val tiltS: Grid =
-      Grid(image.transpose.map(l => tiltL(l.reverse).reverse).transpose)
+    def tiltN: Grid[Char] =
+      grid.transpose.tiltW.transpose
 
-    lazy val tiltW: Grid =
-      Grid(image.map(tiltL))
+    def tiltS: Grid[Char] =
+      grid.transpose.flipX.tiltW.flipX.transpose
 
-    lazy val cycle: Grid =
+    def cycle: Grid[Char] =
       tiltN.tiltW.tiltS.tiltE
 
-    lazy val load: Int =
-      image.reverse.zipWithIndex.foldLeft(0):
-        case (a,(r,i)) => a + r.count(_ == 'O') * (i + 1)
-
-    def cycleInvariant: Grid =
-      this
+    def load: Int =
+      grid.matrix.reverse.zipWithIndex.foldLeft(0):
+        case (a, (r, i)) => a + r.count(_ == 'O') * (i + 1)
 
 
-  lazy val grid: Grid = Grid(lines.map(_.toVector))
-  
-  
+  lazy val grid: Grid[Char] = Grid.fromLines(lines)
+
   override lazy val answer1: Long = grid.tiltN.load
-  override lazy val answer2: Long = Cycle.find(grid, _.cycle, _.cycleInvariant).simulate(1_000_000_000L).load
+  override lazy val answer2: Long = Cycle.find(grid, _.cycle).simulate(1_000_000_000L).load
