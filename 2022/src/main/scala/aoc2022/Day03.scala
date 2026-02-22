@@ -6,29 +6,20 @@ import scala.io.*
 
 object Day03 extends AoC:
 
-  val items: List[String] =
-    Source
-      .fromResource(s"$day.txt")
-      .getLines
-      .toList
-
   def priority(c: Char): Int =
     if c.isLower then c.toInt - 96 else c.toInt - 38
 
-  def priority(line: String): Int =
-    assert(line.length % 2 == 0)
-    val left  = line.take(line.length / 2)
-    val right = line.takeRight(line.length / 2)
-    val List(c) = left.toSet.intersect(right.toSet).toList
-    priority(c)
+  def priority1(line: String): Int =
+    val left  = line.take(line.length / 2).toSet
+    val right = line.takeRight(line.length / 2).toSet
+    val char  = (left intersect right).head
+    priority(char)
 
-  def priority(lines: List[String]): Int =
-    assert(lines.length == 3)
-    assert(lines.forall(_.length % 2 == 0))
-    val List(r1, r2, r3) = lines
-    val List(c) = r1.toSet.intersect(r2.toSet).intersect(r3.toSet).toList
-    priority(c)
+  def priority2(lines: Vector[String]): Int =
+    val Vector(r1, r2, r3) = lines.map(_.toSet)
+    val char               = (r1 intersect r2 intersect r3).head
+    priority(char)
 
 
-  override lazy val answer1: Int = items.map(priority).sum
-  override lazy val answer2: Int = items.grouped(3).map(priority).sum
+  override lazy val answer1: Int = lines.map(priority1).sum
+  override lazy val answer2: Int = lines.grouped(3).map(priority2).sum
