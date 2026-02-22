@@ -21,14 +21,13 @@ object Day05 extends AoC:
   val stack: Vector[Vector[Char]] =
     
     val columnSize: Int =
-      
       lines.filter(isLabelLine).runtimeChecked match
         case Vector(cols) => cols.split(' ').last.toInt
         
     def crateExtractor(line: String)(idx: Int): Option[Char] =
       Try(line.charAt(1 + idx * 4)) match
         case Success(c) if c.isUpper => Some(c)
-        case _ => None
+        case _                       => None
         
     def parser(line: String): Vector[Option[Char]] =
       Vector.tabulate(columnSize)(crateExtractor(line))
@@ -48,12 +47,12 @@ object Day05 extends AoC:
     if moves.isEmpty then
       stacks.map(_.head).mkString("")
     else
-      val m  = moves.head
-      val md = stacks(m.from).take(m.size)
-      val mf = stacks(m.from).drop(m.size)
-      val mt = place(md) ++ stacks(m.to)
-      val ns = stacks.updated(m.from, mf).updated(m.to, mt)
-      run(moves.tail, ns, place)
+      val move    = moves.head
+      val crates  = stacks(move.from).take(move.size)
+      val take    = stacks(move.from).drop(move.size)
+      val replace = place(crates) ++ stacks(move.to)
+      val next    = stacks.updated(move.from, take).updated(move.to, replace)
+      run(moves.tail, next, place)
 
 
   override lazy val answer1: String = run(moves, stack, _.reverse)
