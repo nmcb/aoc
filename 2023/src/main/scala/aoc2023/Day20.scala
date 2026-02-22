@@ -7,13 +7,13 @@ import scala.annotation.tailrec
 object Day20 extends AoC:
 
   enum Pulse derives CanEqual:
-    case H
-    case L
+    case High
+    case Low
 
   import Pulse.*
   
   type Name = String
-  type Message = (Name, Name, Pulse)
+  type Message = (from: Name, to: Name, pulse: Pulse)
 
   sealed trait Module:
     def name: Name
@@ -25,18 +25,18 @@ object Day20 extends AoC:
 
     override def receive(from: Name, pulse: Pulse): (Vector[Message], Module) =
       pulse match
-        case H => (Vector.empty, this)
-        case L => (destinations.map((name, _, if on then L else H)), copy(on = !on))
+        case High => (Vector.empty, this)
+        case Low  => (destinations.map((name, _, if on then Low else High)), copy(on = !on))
 
 
-  case class Conjunction(name: Name, destinations: Vector[Name], inputs: Map[Name,Pulse] = Map.empty) extends Module:
+  case class Conjunction(name: Name, destinations: Vector[Name], inputs: Map[Name, Pulse] = Map.empty) extends Module:
 
     def withInputs(modules: Vector[Module]): Conjunction =
-      copy(inputs = modules.map(_.name -> L).toMap)
+      copy(inputs = modules.map(_.name -> Low).toMap)
 
     def receive(from: Name, pulse: Pulse): (Vector[Message], Module) =
       val next = inputs.updated(from, pulse)
-      val sent = if next.view.values.forall(_ == H) then L else H
+      val sent = if next.view.values.forall(_ == High) then Low else High
       (destinations.map((name, _, sent)), copy(inputs = next))
 
 
@@ -48,28 +48,27 @@ object Day20 extends AoC:
 
   case class Machine(modules: Map[Name, Module], sent: Vector[Message] = Vector.empty):
 
-    def sent(from: Name, to: Name, pulse: Pulse): (Vector[Message], Machine) =
-      modules.get(to) match
+    def sent(message: Message): (Vector[Message], Machine) =
+      modules.get(message.to) match
         case Some(module) =>
-          val (schedule, next) = module.receive(from, pulse)
-          (schedule, copy(modules = modules.updated(to, next), sent = sent :+ (from, to, pulse)))
+          val (schedule, next) = module.receive(message.from, message.pulse)
+          (schedule, copy(modules = modules.updated(message.to, next), sent = sent :+ message))
         case None =>
-          (Vector.empty, copy(sent = sent :+ (from , to, pulse)))
+          (Vector.empty, copy(sent = sent :+ message))
 
     def press: Machine =
-      process(Vector(("button", "broadcaster", L)), this)
+      process(Vector(("button", "broadcaster", Low)), this)
 
     @tailrec
     final def process(messages: Vector[Message], state: Machine): Machine =
       if messages.isEmpty then
         state
       else
-        val (from, to, pulse) = messages.head
-        val (schedule, next) = state.sent(from, to, pulse)
+        val (schedule, next)  = state.sent(messages.head)
         process(messages.tail ++ schedule, next)
 
     def result: Long =
-      sent.count(_._3 == L) * sent.count(_._3 == H)
+      sent.count(_.pulse == Low) * sent.count(_.pulse == High)
 
     def gcd(l: Long, r: Long): Long = if r == 0 then l.abs else gcd(r, l % r)
     def lcm(l: Long, r: Long): Long = (l * r).abs / gcd(l, r)
@@ -89,7 +88,7 @@ object Day20 extends AoC:
         machine = machine.press
         pressed += 1
         for
-          case (from, _, H) <- machine.sent
+          case (from, _, High) <- machine.sent
           if todo(from)
         yield
           found(from) = pressed
@@ -116,5 +115,5 @@ object Day20 extends AoC:
 
     Machine(modules)
 
-  override lazy val answer1: Long = (1 to 1000).foldLeft(machine)((m,_) => m.press).result
+  override lazy val answer1: Long = (1 to 1000).foldLeft(machine)((m, _) => m.press).result
   override lazy val answer2: Long = machine.solveRX
