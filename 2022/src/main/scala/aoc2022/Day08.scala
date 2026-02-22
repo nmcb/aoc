@@ -5,20 +5,17 @@ import nmcb.pos.*
 
 object Day08 extends AoC:
 
-  case class Mat(heightOf: Map[Pos,Int]):
+  extension (grid: Grid[Int])
 
-    val maxX: Int = heightOf.keys.map(_.x).max
-    val maxY: Int = heightOf.keys.map(_.y).max
+    def isBorder(p: Pos): Boolean =
+      p.x == 0 || p.x == grid.maxPos.x | p.y == 0 || p.y == grid.maxPos.y
 
-    private def isBorder(p: Pos): Boolean =
-      p.x == 0 || p.x == maxX | p.y == 0 || p.y == maxY
-
-    private def visible(p: Pos): Boolean =
-      def pathL(p: Pos): List[Int] = (0 to p.x).map(x    => heightOf(Pos.of(x, p.y))).toList
-      def pathR(p: Pos): List[Int] = (p.x to maxX).map(x => heightOf(Pos.of(x, p.y))).toList.reverse
-      def pathT(p: Pos): List[Int] = (0 to p.y).map(y    => heightOf(Pos.of(p.x, y))).toList
-      def pathB(p: Pos): List[Int] = (p.y to maxY).map(y => heightOf(Pos.of(p.x, y))).toList.reverse
-      def visible(todo: List[Int]): Boolean = todo.init.max < todo.last
+    def visible(p: Pos): Boolean =
+      def pathL(p: Pos): Vector[Int] = (0 to p.x).map(x             => grid.peek(Pos.of(x, p.y))).toVector
+      def pathR(p: Pos): Vector[Int] = (p.x to grid.maxPos.x).map(x => grid.peek(Pos.of(x, p.y))).toVector.reverse
+      def pathT(p: Pos): Vector[Int] = (0 to p.y).map(y             => grid.peek(Pos.of(p.x, y))).toVector
+      def pathB(p: Pos): Vector[Int] = (p.y to grid.maxPos.y).map(y => grid.peek(Pos.of(p.x, y))).toVector.reverse
+      def visible(todo: Vector[Int]): Boolean = todo.init.max < todo.last
       val vl = visible(pathL(p))
       val vr = visible(pathR(p))
       val vt = visible(pathT(p))
@@ -26,17 +23,17 @@ object Day08 extends AoC:
       vl || vr || vt || vb
 
     def maxVisibleTrees: Int =
-      heightOf.keys.foldLeft(0): (c,p) =>
+      grid.positions.foldLeft(0): (c, p) =>
         if      isBorder(p) then c + 1
         else if visible(p)  then c + 1
         else                     c
 
-    private def scenicScore(p: Pos): Int =
-      def pathL(p: Pos): List[Int] = (0 to p.x).map(x    => heightOf(Pos.of(x, p.y))).toList.reverse
-      def pathR(p: Pos): List[Int] = (p.x to maxX).map(x => heightOf(Pos.of(x, p.y))).toList
-      def pathT(p: Pos): List[Int] = (0 to p.y).map(y    => heightOf(Pos.of(p.x, y))).toList.reverse
-      def pathB(p: Pos): List[Int] = (p.y to maxY).map(y => heightOf(Pos.of(p.x, y))).toList
-      def score(todo: List[Int]): Int =
+    def scenicScore(p: Pos): Int =
+      def pathL(p: Pos): Vector[Int] = (0 to p.x).map(x             => grid.peek(Pos.of(x, p.y))).toVector.reverse
+      def pathR(p: Pos): Vector[Int] = (p.x to grid.maxPos.x).map(x => grid.peek(Pos.of(x, p.y))).toVector
+      def pathT(p: Pos): Vector[Int] = (0 to p.y).map(y             => grid.peek(Pos.of(p.x, y))).toVector.reverse
+      def pathB(p: Pos): Vector[Int] = (p.y to grid.maxPos.y).map(y => grid.peek(Pos.of(p.x, y))).toVector
+      def score(todo: Vector[Int]): Int =
         val index  = todo.tail.indexWhere(_ >= todo.head)
         if index != -1 then index + 1 else todo.tail.length
       val vl = score(pathL(p))
@@ -46,18 +43,9 @@ object Day08 extends AoC:
       vl * vr * vt * vb
 
     def maxScenicScore: Int =
-      heightOf.keys.map(scenicScore).max
+      grid.positions.map(scenicScore).max
 
-  private val grid: Mat =
-    Mat(
-      lines
-        .zipWithIndex
-        .foldLeft(Map.empty[Pos,Int]):
-          case (a,(r,y)) =>
-            r.zipWithIndex.foldLeft(a):
-              case (a,(t,x)) =>
-                a + (Pos.of(x,y) -> t.toString.toInt)
-    )
+  private val grid: Grid[Int] = Grid.fromLines(lines).map(_.asDigit)
 
 
   override lazy val answer1: Long = grid.maxVisibleTrees
