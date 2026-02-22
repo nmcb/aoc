@@ -10,6 +10,7 @@ object Day13 extends AoC:
     case L(l: List[E])
     
   object E:
+
     def L(es: E*): L = L(es.toList)
 
     def n: P[E] = digits.map(N.apply)
@@ -19,7 +20,7 @@ object Day13 extends AoC:
 
     given ordering: Ordering[E] with
       def compare(l: E, r: E): Int =
-        (l,r) match
+        (l, r) match
           case (ln: N, rl: L)             => compare(L(ln), rl)
           case (ll: L, rn: N)             => compare(ll, L(rn))
           case (N(ln), N(rn))             => ln.compare(rn)
@@ -37,25 +38,22 @@ object Day13 extends AoC:
 
   import math.Ordered.orderingToOrdered
 
-  val expressions: List[E] =
-    lines
-      .filterNot(_.isBlank)
-      .map(parse)
-      .toList
+  val expressions: Vector[E] =
+    lines.filterNot(_.isBlank).map(parse)
 
   
   override lazy val answer1: Int =
     expressions
       .grouped(2)
       .zipWithIndex
-      .map((es,idx) => if es(0) <= es(1) then idx + 1 else 0)
+      .map((es, idx) => if es(0) <= es(1) then idx + 1 else 0)
       .sum
 
   override lazy val answer2: Long =
     val divider1: E = L(L(N(2)))
     val divider2: E = L(L(N(6)))
 
-    val ordered = (divider1 :: divider2 :: expressions).sorted
+    val ordered = (divider1 +: divider2 +: expressions).sorted
     val idx1 = ordered.indexWhere(_ == divider1) + 1
     val idx2 = ordered.indexWhere(_ == divider2) + 1
     idx1 * idx2
