@@ -4,8 +4,9 @@ import nmcb.*
 
 object Day02 extends AoC:
 
-  val codes: Vector[(Char,Char)] = lines.map:
-    case s"$p1 $p2" => (p1.head,p2.head)
+  val codes: Vector[(Char,Char)] =
+    lines.collect:
+      case s"$p1 $p2" => (p1.head,p2.head)
 
   def score1(p1: Char, p2: Char): Int =
     (p1, p2).runtimeChecked match
