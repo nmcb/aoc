@@ -45,7 +45,7 @@ object Day17 extends AoC:
   extension (grid: Grid)
 
     def findRobot: (Pos,Pos) =
-      def parseRobotDirection(tile: Char): Option[Pos] =
+      def parseRobotDir(tile: Char): Option[Pos] =
         tile match
           case '>' => Some(Pos.of(1,0))
           case '<' => Some(Pos.of(-1,0))
@@ -57,7 +57,7 @@ object Day17 extends AoC:
         for
           (row, y)  <- grid.view.zipWithIndex
           (tile, x) <- row.view.zipWithIndex
-          direction <- parseRobotDirection(tile)
+          direction <- parseRobotDir(tile)
         yield
           (Pos.of(x,y), direction)
 

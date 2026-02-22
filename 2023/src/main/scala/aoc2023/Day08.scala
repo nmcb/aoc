@@ -7,21 +7,21 @@ import scala.annotation.tailrec
 
 object Day08 extends AoC:
 
-  case class Directions(cycle: String):
+  case class Dirs(cycle: String):
     
-    def next: (Char, Directions) =
-      (cycle.head, Directions(cycle.tail + cycle.head))
+    def next: (Char, Dirs) =
+      (cycle.head, Dirs(cycle.tail + cycle.head))
 
   type Nodes = Map[String, (String, String)]
 
-  case class Network(directions: Directions, nodes: Nodes):
+  case class Network(directions: Dirs, nodes: Nodes):
     def step(from: String, direction: Char): String =
       direction.runtimeChecked match
         case 'L' => nodes.getOrElse(from, sys.error(s"no step left from: $from")).left
         case 'R' => nodes.getOrElse(from, sys.error(s"no step right from: $from")).right
 
     @tailrec
-    final def pathTo(exit: String => Boolean, from: String, directions: Directions, path: String = ""): String =
+    final def pathTo(exit: String => Boolean, from: String, directions: Dirs, path: String = ""): String =
       if exit(from) then
         path
       else
@@ -47,8 +47,8 @@ object Day08 extends AoC:
 
   lazy val network: Network =
     
-    val directions: Directions =
-      Directions(lines.head)
+    val directions: Dirs =
+      Dirs(lines.head)
     
     val nodes: Nodes =
       lines

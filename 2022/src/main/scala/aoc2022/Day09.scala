@@ -1,93 +1,86 @@
 package aoc2022
 
 import nmcb.*
+import nmcb.pos.*
 
 object Day09 extends AoC:
 
-  enum Direction derives CanEqual:
-    case U
-    case D
-    case R
-    case L
+  extension (pos: Pos)
 
-  import Direction.*
-  
-  case class Position(x: Int, y: Int) derives CanEqual:
+    infix def move(dir: Dir): Pos =
+      dir match
+        case N => (x = pos.x, y = pos.y + 1)
+        case S => (x = pos.x, y = pos.y - 1)
+        case W => (x = pos.x - 1, y = pos.y)
+        case E => (x = pos.x + 1, y = pos.y)
 
-    infix def move(d: Direction): Position =
-      d match
-        case U => copy(y = y + 1)
-        case D => copy(y = y - 1)
-        case L => copy(x = x - 1)
-        case R => copy(x = x + 1)
+    def alignment(p: Pos): Vector[Dir] =
+      val hor = pos.x.compare(p.x) match
+        case -1 if p.x - pos.x >= 2 => // x < p.x
+          pos.y.compare(p.y) match
+            case -1 => Vector(E, N)    // y < p.y
+            case  0 => Vector(E)       // y = p.y
+            case  1 => Vector(E, S)    // y > p.y
 
-    private def alignment(p: Position): List[Direction] =
-      val hor = x.compare(p.x) match
-        case -1 if p.x - x >= 2 => // x < p.x
-          y.compare(p.y) match
-            case -1 => List(R,U)   // y < p.y
-            case  0 => List(R)     // y = p.y
-            case  1 => List(R,D)   // y > p.y
+        case 1 if pos.x - p.x >= 2 =>  // x > p.x
+          pos.y.compare(p.y) match
+            case -1 => Vector(W, N)    // y < p.y
+            case  0 => Vector(W)       // y = p.y
+            case  1 => Vector(W, S)    // y > p.y
 
-        case 1 if x - p.x >= 2 =>  // x > p.x
-          y.compare(p.y) match
-            case -1 => List(L,U)   // y < p.y
-            case  0 => List(L)     // y = p.y
-            case  1 => List(L,D)   // y > p.y
+        case _ => Vector()
 
-        case _ => List()
+      val ver = pos.y.compare(p.y) match
+        case -1 if p.y - pos.y >= 2 => // y < p.y
+          pos.x.compare(p.x) match
+            case -1 => Vector(N, E)    // x < p.x
+            case  0 => Vector(N)       // x = p.x
+            case  1 => Vector(N, W)    // x > p.x
 
-      val ver = y.compare(p.y) match
-        case -1 if p.y - y >= 2 => // y < p.y
-          x.compare(p.x) match
-            case -1 => List(U,R)   // x < p.x
-            case  0 => List(U)     // x = p.x
-            case  1 => List(U,L)   // x > p.x
+        case 1 if pos.y - p.y >= 2 =>  // y > p.y
+          pos.x.compare(p.x) match
+            case -1 => Vector(S, E)    // x < p.x
+            case  0 => Vector(S)       // x = p.x
+            case  1 => Vector(S, W)    // x > p.x
 
-        case 1 if y - p.y >= 2 =>  // y > p.y
-          x.compare(p.x) match
-            case -1 => List(D,R)   // x < p.x
-            case  0 => List(D)     // x = p.x
-            case  1 => List(D,L)   // x > p.x
+        case _ => Vector()
 
-        case _ => List()
+      Vector(hor, ver).flatten.distinct
 
-      List(hor,ver).flatten.distinct
+    def follow(h: Pos): Pos =
+      alignment(h).foldLeft(pos)(_ move _)
 
-    def follow(h: Position): Position =
-      alignment(h).foldLeft(this)(_ move _)
+  case class Command(direction: Dir, steps: Int)
 
-  object Position:
-    
-    def of(x: Int, y: Int): Position = Position(x,y)
+  val commands: Vector[Command] = lines.collect:
+    case s"U $s" => Command(N, s.toInt)
+    case s"D $s" => Command(S, s.toInt)
+    case s"L $s" => Command(W, s.toInt)
+    case s"R $s" => Command(E, s.toInt)
 
-  case class Command(direction: Direction, steps: Int)
+  case class Bacterium(strep: Vector[Pos]):
 
-  lazy val commands: Vector[Command] = lines.map:
-      case s"U $s" => Command(U, s.toInt)
-      case s"D $s" => Command(D, s.toInt)
-      case s"L $s" => Command(L, s.toInt)
-      case s"R $s" => Command(R, s.toInt)
+    private def step(dir: Dir, strep: Vector[Pos]): Vector[Pos] =
+      strep
+        .tail
+        .foldLeft(Vector(strep.head.move(dir))): (result, t) =>
+          result :+ t.follow(result.last)
 
-  case class Bacterium(strep: List[Position]):
-
-    private def step(d: Direction, s: List[Position]): List[Position] =
-      val nh = s.head.move(d)
-      s.tail.foldLeft(List(nh))((a,t) => a :+ t.follow(a.last))
-
-    infix def move(cmd: Command): List[Bacterium] =
-      List
+    infix def move(cmd: Command): Vector[Bacterium] =
+      Vector
         .fill(cmd.steps)(cmd.direction)
-        .foldLeft(List(this))((rs,d) => rs :+ Bacterium(step(d, rs.last.strep)))
+        .foldLeft(Vector(this)): (result, dir) =>
+          result :+ Bacterium(step(dir, result.last.strep))
 
   object Bacterium:
 
     def of(size: Int): Bacterium =
-      Bacterium(List.fill(size)(Position.of(0,0)))
+      Bacterium(Vector.fill(size)(Pos.of(0, 0)))
 
     def solve(commands: Vector[Command], size: Int): Int =
       commands
-        .foldLeft(List(Bacterium.of(size)))((p, c) => p ++ p.last.move(c))
+        .foldLeft(Vector(Bacterium.of(size))): (bacteria, command) =>
+          bacteria ++ bacteria.last.move(command)
         .map(_.strep.last)
         .distinct
         .size

@@ -7,23 +7,23 @@ import scala.annotation.tailrec
 
 object Day04 extends AoC:
 
-  type Direction = Pos => Pos
+  type Dir = Pos => Pos
 
-  val N:  Direction = p => Pos.of(p.x, p.y - 1)
-  val E:  Direction = p => Pos.of(p.x + 1, p.y)
-  val S:  Direction = p => Pos.of(p.x, p.y + 1)
-  val W:  Direction = p => Pos.of(p.x - 1, p.y)
-  val NE: Direction = p => Pos.of(p.x + 1, p.y - 1)
-  val SE: Direction = p => Pos.of(p.x + 1, p.y + 1)
-  val NW: Direction = p => Pos.of(p.x - 1, p.y - 1)
-  val SW: Direction = p => Pos.of(p.x - 1, p.y + 1)
+  val N:  Dir = p => Pos.of(p.x, p.y - 1)
+  val E:  Dir = p => Pos.of(p.x + 1, p.y)
+  val S:  Dir = p => Pos.of(p.x, p.y + 1)
+  val W:  Dir = p => Pos.of(p.x - 1, p.y)
+  val NE: Dir = p => Pos.of(p.x + 1, p.y - 1)
+  val SE: Dir = p => Pos.of(p.x + 1, p.y + 1)
+  val NW: Dir = p => Pos.of(p.x - 1, p.y - 1)
+  val SW: Dir = p => Pos.of(p.x - 1, p.y + 1)
 
   val grid: Grid[Char] = Grid.fromLines(lines)
   
   extension (grid: Grid[Char])
 
     @tailrec
-    def read(length: Int, direction: Direction, from: Pos, result: String = ""): String =
+    def read(length: Int, direction: Dir, from: Pos, result: String = ""): String =
       if length == 0 then
         result
       else
