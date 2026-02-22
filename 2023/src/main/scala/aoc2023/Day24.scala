@@ -29,6 +29,7 @@ object Day24 extends AoC:
    *  can iterate through all hailstones one last time to find the position needed on 0 milliseconds.
    */
   object Attempt1:
+    
     def parallelInPlane(plane: Plane): (Stone, Stone) =
       stones
         .combinations(2)
@@ -37,7 +38,7 @@ object Day24 extends AoC:
         .map(parallel => parallel(0) -> parallel(1))
         .getOrElse(sys.error(s"input error"))
 
-    def rockVelocityInPlane(stone1: Stone, stone2: Stone, plane: Plane, unit: Long => Vec): Vec =
+    def rockVelocityInPlane(stone1: Stone, stone2: Stone, plane: Plane, unit: Long => Vec3): Vec3 =
       Iterator
         .from(0)
         .map(_.toLong)
@@ -48,7 +49,7 @@ object Day24 extends AoC:
           relativeToInertRock1.futureIntersect(relativeToInertRock2, plane).isDefined
         .getOrElse(sys.error("input error"))
 
-    def collisionTimeRelativeToRockVelocity(rockVector: Vec): Double =
+    def collisionTimeRelativeToRockVelocity(rockVector: Vec3): Double =
       stones
         .combinations(2)
         .map: combination =>
@@ -61,28 +62,18 @@ object Day24 extends AoC:
 
     def solve(): Long =
       val (parallelXY1, parallelXY2) = parallelInPlane(planeXY)
-      println(s"parallelXY1=$parallelXY1, parallelXY2=$parallelXY2")
-      val rockVelocityZ = rockVelocityInPlane(parallelXY1, parallelXY2, planeXZ, z => Vec(0, 0, z))
-      println(s"rockVelocityZ=$rockVelocityZ")
+      val rockVelocityZ = rockVelocityInPlane(parallelXY1, parallelXY2, planeXZ, z => Vec3(0, 0, z))
 
       val (parallelXZ1, parallelXZ2) = parallelInPlane(planeXZ)
-      println(s"parallelXZ1=$parallelXZ1, parallelXZ2=$parallelXZ2")
-      val rockVelocityY = rockVelocityInPlane(parallelXZ1, parallelXZ2, planeYZ, y => Vec(0, y, 0))
-      println(s"rockVelocityY=$rockVelocityY")
+      val rockVelocityY = rockVelocityInPlane(parallelXZ1, parallelXZ2, planeYZ, y => Vec3(0, y, 0))
 
       val (parallelYZ1, parallelYZ2) = parallelInPlane(planeYZ)
-      println(s"parallelYZ1=$parallelYZ1, parallelYZ2=$parallelYZ2")
-      val rockVelocityX = rockVelocityInPlane(parallelYZ1, parallelYZ2, planeXZ, x => Vec(x, 0, 0))
-      println(s"rockVelocityX=$rockVelocityX")
+      val rockVelocityX = rockVelocityInPlane(parallelYZ1, parallelYZ2, planeXZ, x => Vec3(x, 0, 0))
 
       val rockVelocity = rockVelocityX + rockVelocityY + rockVelocityZ
-      println(s"rockVelocity=$rockVelocity")
 
       val collisionTime = collisionTimeRelativeToRockVelocity(rockVelocity)
-      println(s"collisionTime=$collisionTime")
-
       val rockLocationBeforeCollision = rockVelocity * -collisionTime
-      println(s"rockLocationBeforeCollision=$rockLocationBeforeCollision")
 
       ??? // giving up
 
@@ -92,6 +83,7 @@ object Day24 extends AoC:
    * Brute force for rock velocity, calculate the position for one stone, check whether all hit that spot.
    */
   object Attempt2:
+
     def solve(): Long =
       val stone0 = stones(0)
       val stone1 = stones(1)
@@ -99,7 +91,6 @@ object Day24 extends AoC:
       val rangeX = stones.map(_.velocity.x).min to stones.map(_.velocity.x).max
       val rangeY = stones.map(_.velocity.y).min to stones.map(_.velocity.y).max
       val rangeZ = stones.map(_.velocity.z).min to stones.map(_.velocity.z).max
-      println(s"search space [${rangeZ.size}]")
 
       var vx: Long = rangeX.min
       var vy: Long = rangeY.min
@@ -107,9 +98,6 @@ object Day24 extends AoC:
       var found: Boolean = false
       var result: Option[(Long, Long, Long)] = None
       while !found do
-        // simultaneous linear equation:
-        // x = ab + av*t   y = bb + bv*t
-        // x = cb + cv*u   y = db + dv*u
         val ab = stone0.location.x
         val av = stone0.velocity.x - vx
         val bb = stone0.location.y
@@ -124,7 +112,6 @@ object Day24 extends AoC:
           val x = stone0.location.x + stone0.velocity.x * time - vx * time
           val y = stone0.location.y + stone0.velocity.y * time - vy * time
           val z = stone0.location.z + stone0.location.z * time - vz * time
-          // check if this rock throw will hit all hailstones
           found = stones.forall: stone =>
             val t =
               if      stone.velocity.x != vx then (x - stone.location.x) / (stone.velocity.x - vx)
@@ -146,7 +133,6 @@ object Day24 extends AoC:
         if vy > rangeY.max then
           vy = rangeY.min
           vz += 1
-          println(s"countdown [${rangeZ.max - vz}]")
         if vz > rangeZ.max then
           sys.error("not found")
 
@@ -163,31 +149,30 @@ object Day24 extends AoC:
    * position, and calculate the unframed rock position backwards from its velocity and time.
    */
   object Attempt3:
-    case class Location(x: BigInt, y: BigInt, z: BigInt):
-      def +(rhs: Location): Location = Location(x + rhs.x, y + rhs.y, z + rhs.z)
-      def -(rhs: Location): Location = Location(x - rhs.x, y - rhs.y, z - rhs.z)
-      def *(n: BigInt): Location = Location(x * n, y * n, z * n)
 
-    case class Stone(location: Location, velocity: Location)
+    case class Vec3(x: BigInt, y: BigInt, z: BigInt):
+      def +(rhs: Vec3): Vec3 = Vec3(x + rhs.x, y + rhs.y, z + rhs.z)
+      def -(rhs: Vec3): Vec3 = Vec3(x - rhs.x, y - rhs.y, z - rhs.z)
+      def *(n: BigInt): Vec3 = Vec3(x * n, y * n, z * n)
 
-    def parse(input: String): Seq[Stone] =
+    case class Stone(location: Vec3, velocity: Vec3)
+
+    def parse(input: Vector[String]): Vector[Stone] =
       input
-        .linesIterator
-        .map:
+        .collect:
           case s"$x, $y, $z @ $vx, $vy, $vz" =>
             Stone(
-              location = Location(x = x.trim.toLong, y = y.trim.toLong, z = z.trim.toLong),
-              velocity = Location(x = vx.trim.toLong, y = vy.trim.toLong, z = vz.trim.toLong))
-        .toSeq
+              location = Vec3(x = x.trim.toLong, y = y.trim.toLong, z = z.trim.toLong),
+              velocity = Vec3(x = vx.trim.toLong, y = vy.trim.toLong, z = vz.trim.toLong))
 
     /** straight forward future collide - this function overflows on input doubles thus we use big ints as positions */
     def futureCollide2D(l: Stone, r: Stone): Option[(Double, Double)] =
 
       // take the two lines but define them by two points each
-      val Location(x1, y1, _) = l.location
-      val Location(x2, y2, _) = l.location + l.velocity
-      val Location(x3, y3, _) = r.location
-      val Location(x4, y4, _) = r.location + r.velocity
+      val Vec3(x1, y1, _) = l.location
+      val Vec3(x2, y2, _) = l.location + l.velocity
+      val Vec3(x3, y3, _) = r.location
+      val Vec3(x4, y4, _) = r.location + r.velocity
 
       // inner cross product
       val denominator: BigInt =
@@ -206,17 +191,21 @@ object Day24 extends AoC:
         val futureR = r.velocity.x.sign == (x - x3.doubleValue).sign && r.velocity.y.sign == (y - y3.doubleValue).sign
         Option.when(futureL && futureR)((x, y))
 
-    extension (s: Stone) def reframe(velocity: Location): Stone =
-      s.copy(velocity = s.velocity - velocity)
+    extension (s: Stone)
+      def reframe(velocity: Vec3): Stone =
+        s.copy(velocity = s.velocity - velocity)
 
-    extension (ss: Seq[Stone]) def reframe(velocity: Location): Seq[Stone] =
-      ss.map(_.reframe(velocity))
+    extension (ss: Seq[Stone])
+      def reframe(velocity: Vec3): Seq[Stone] =
+        ss.map(_.reframe(velocity))
 
-    extension (d: Double) def toBigInt: BigInt =
-      BigDecimal(d).setScale(0, BigDecimal.RoundingMode.HALF_UP).toBigInt
+    extension (d: Double)
+      def toBigInt: BigInt =
+        BigDecimal(d).setScale(0, BigDecimal.RoundingMode.HALF_UP).toBigInt
 
-    extension (xy: (Double, Double)) def toBigInt: (BigInt, BigInt) =
-      (xy.left.toBigInt, xy.right.toBigInt)
+    extension (xy: (Double, Double))
+      def toBigInt: (BigInt, BigInt) =
+        (xy.left.toBigInt, xy.right.toBigInt)
 
     def collide(stones: Seq[Stone]): Option[(BigInt, BigInt)] =
       futureCollide2D(stones(0), stones(1))
@@ -250,16 +239,16 @@ object Day24 extends AoC:
 
     def solve() =
 
-      val stones: Seq[Stone] = parse(input)
+      val stones: Seq[Stone] = parse(lines)
 
       val search =
         for
           vx <- stones.map(_.velocity.x).min to stones.map(_.velocity.x).max
           vy <- stones.map(_.velocity.y).min to stones.map(_.velocity.y).max
         yield
-          Location(x = vx, y = vy, z = 0)
+          Vec3(x = vx, y = vy, z = 0)
 
-      val found: Location =
+      val found: Vec3 =
         search
           .flatMap: velocity =>
             val translated = stones.reframe(velocity)
@@ -270,13 +259,13 @@ object Day24 extends AoC:
                 (location, velocity.copy(z = z))
               .map: (location, v) =>
                 val z = calcT(translated(0), location) * (translated(0).velocity.z - v.z) + translated(0).location.z
-                Location(x = location.left, y = location.right, z = z)
+                Vec3(x = location.left, y = location.right, z = z)
           .head
 
       found.x + found.y + found.z
 
 
-  case class Stone(location: Vec, velocity: Vec):
+  case class Stone(location: Vec3, velocity: Vec3):
 
     def parallel(that: Stone, plane: Plane): Boolean =
       val (x1, y1) = plane.select(location)
@@ -325,22 +314,22 @@ object Day24 extends AoC:
       s.runtimeChecked match
         case s"$x, $y, $z @ $vx, $vy, $vz" =>
           Stone(
-            location = Vec( x.trim.toLong,  y.trim.toLong,  z.trim.toLong),
-            velocity = Vec(vx.trim.toLong, vy.trim.toLong, vz.trim.toLong)
+            location = Vec3( x.trim.toLong,  y.trim.toLong,  z.trim.toLong),
+            velocity = Vec3(vx.trim.toLong, vy.trim.toLong, vz.trim.toLong)
           )
 
-  case class Vec(x: Long, y: Long, z: Long):
-    def +(that: Vec): Vec = Vec(x + that.x, y + that.y, z + that.z)
-    def -(that: Vec): Vec = Vec(x - that.x, y - that.y, z - that.z)
-    def *(that: Vec): Vec = Vec(x * that.x, y * that.y, z * that.z)
-    def *(scalar: Long): Vec = Vec(x * scalar, y * scalar, z * scalar)
-    def *(scalar: Double): Vec = Vec(x * scalar.toLong, y * scalar.toLong, z * scalar.toLong)
-    def min(that: Vec): Vec = Vec(x min that.x, y min that.y, z min that.z)
-    def max(that: Vec): Vec = Vec(x max that.x, y max that.y, z max that.z)
-    def unary_- : Vec = Vec(-x, -y, -z)
+  case class Vec3(x: Long, y: Long, z: Long):
+    def +(that: Vec3): Vec3 = Vec3(x + that.x, y + that.y, z + that.z)
+    def -(that: Vec3): Vec3 = Vec3(x - that.x, y - that.y, z - that.z)
+    def *(that: Vec3): Vec3 = Vec3(x * that.x, y * that.y, z * that.z)
+    def *(scalar: Long): Vec3 = Vec3(x * scalar, y * scalar, z * scalar)
+    def *(scalar: Double): Vec3 = Vec3(x * scalar.toLong, y * scalar.toLong, z * scalar.toLong)
+    def min(that: Vec3): Vec3 = Vec3(x min that.x, y min that.y, z min that.z)
+    def max(that: Vec3): Vec3 = Vec3(x max that.x, y max that.y, z max that.z)
+    def unary_- : Vec3 = Vec3(-x, -y, -z)
 
   trait Plane:
-    def select(v: Vec): (Long, Long)
+    def select(v: Vec3): (Long, Long)
 
   lazy val planeXY: Plane = v => (v.x, v.y)
   lazy val planeXZ: Plane = v => (v.x, v.z)
