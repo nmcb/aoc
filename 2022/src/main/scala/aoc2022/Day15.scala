@@ -9,13 +9,12 @@ object Day15 extends AoC:
 
   private case class Lock(sensor: Pos, beacon: Pos):
 
-    def cover(y: Int): Option[Cover] =
-      if y >= sensor.y - sensor.manhattanDistance(beacon) && y <= sensor.y + sensor.manhattanDistance(beacon) then
-        val min = sensor.x + math.abs(y - sensor.y) - sensor.manhattanDistance(beacon)
-        val max = sensor.x - math.abs(y - sensor.y) + sensor.manhattanDistance(beacon)
-        Some(Cover(min, max))
-      else
-        None
+    def coverOption(y: Int): Option[Cover] =
+      val distance = sensor.manhattanDistance(beacon)
+      Option.when(y >= sensor.y - distance && y <= sensor.y + distance):
+        val min = sensor.x + math.abs(y - sensor.y) - distance
+        val max = sensor.x - math.abs(y - sensor.y) + distance
+        Cover(min, max)
 
   private val locks: Vector[Lock] =
     lines.map:
@@ -23,19 +22,21 @@ object Day15 extends AoC:
         Lock((x = sx.toInt, y = sy.toInt), (x = bx.toInt, y = by.toInt))
 
   override lazy val answer1: Int =
-    val covers: Vector[Cover] = locks.flatMap(_.cover(2000000))
-    val maxX: Long = math.max(covers.map(_.max).max, 2000000)
-    val minX: Long = math.min(covers.map(_.min).min, 0)
+    val covers: Vector[Cover] = locks.flatMap(_.coverOption(2000000))
+    val maxX: Long = covers.map(_.max).max max 2000000
+    val minX: Long = covers.map(_.min).min min 0
     (minX to maxX).foldLeft(0): (count, x) =>
       if covers.exists(c => c.min <= x && c.max >= x) then count + 1 else count
 
   override lazy val answer2: Long =
-    var answer: Long = 0
+    var result: Long = 0
     for
       y <- 0 to 4000000
-    yield
-      val lcs = locks.flatMap(_.cover(y)).sortBy(_.min)
-      lcs.foldLeft(0L): (x, cur) =>
-          if cur.min > x then answer = x * 4000000 + y
-          math.max(x + 1, cur.max)
-    answer
+    do
+      locks
+        .flatMap(_.coverOption(y))
+        .sortBy(_.min)
+        .foldLeft(0L): (x, cover) =>
+          if cover.min > x then result = x * 4000000 + y
+          math.max(x + 1, cover.max)
+    result
