@@ -98,7 +98,7 @@ object Day21 extends AoC:
       .flatMap(_.solution)
       .next
 
-  
+
   val garden: Grid[Char] = Grid.fromLines(lines)
 
   override lazy val answer1: Long = solve1(garden, 64)
