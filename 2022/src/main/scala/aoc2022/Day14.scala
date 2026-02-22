@@ -11,12 +11,14 @@ object Day14 extends AoC:
     case Sand
     case Air
     case Rock
+
+  import Tile.*
     
   def parseLine(line: String): Vector[Pos] =
     line.trim
       .split(""" -> """)
       .foldLeft(Vector.empty[Pos]):
-        case (path, s"$x,$y") => path :+ Pos.of(x.toInt,y.toInt)
+        case (path, s"$x,$y") => path :+ Pos.of(x.toInt, y.toInt)
         case (_, e)           => sys.error(s"unable to parse $e")
 
 
@@ -41,7 +43,6 @@ object Day14 extends AoC:
 
 
   case class Cave(view: Vector[Vector[Tile]], minX: Int):
-    import Tile.*
 
     def get(p: Pos): Option[Tile] =
       view.lift(p.y).flatMap(_.lift(p.x - minX))
@@ -65,19 +66,15 @@ object Day14 extends AoC:
     @tailrec
     final def solve1: Int =
       val (p, overflow) = land(Cave.drip)
-      if overflow then count
-      else set(p).solve1
+      if overflow then count else set(p).solve1
 
     @tailrec
     final def solve2: Int =
       val (p, _) = land(Cave.drip)
-      if p == Cave.drip then
-        count + 1
-      else
-        set(p).solve2
+      if p == Cave.drip then count + 1 else set(p).solve2
 
   private object Cave:
-    import Tile.*
+
     def fromRocks1(rocks: Vector[Pos]): Cave =
       val minX: Int = rocks.map(_.x).min
       val maxX: Int = rocks.map(_.x).max
