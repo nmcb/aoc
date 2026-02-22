@@ -1,36 +1,39 @@
 package aoc2022
 
 import nmcb.*
+import nmcb.predef.*
 
+import scala.annotation.tailrec
 import scala.util.*
 
 object Day11 extends AoC:
 
-  lazy val monkeys: List[Monkey] =
-    lines
-      .filterNot(_.isBlank)
-      .grouped(6)
-      .map(_.toList)
-      .map(Monkey.fromStrings)
-      .toList
+  lazy val monkeys: Vector[Monkey] =
+    chunks.map(Monkey.fromStrings)
 
   object Monkey:
-    def fromStrings(ss: List[String]): Monkey =
+    def fromStrings(ss: Vector[String]): Monkey =
+
       def parseMonkey(s: String): Int =
         s match
           case s"Monkey $nr:" => nr.toInt
-      def parseItems(s: String): List[Long] =
+
+      def parseItems(s: String): Vector[Long] =
         s match
-          case s"  Starting items: $is" => is.split(',').map(n => n.trim.toLong).toList
-      def parseOperation(s: String): (String,String) =
+          case s"  Starting items: $is" => is.split(',').map(n => n.trim.toLong).toVector
+
+      def parseOperation(s: String): (String, String) =
         s match
-          case s"  Operation: new = old $op $r" => (op,r)
+          case s"  Operation: new = old $op $r" => (op, r)
+
       def parseTest(s: String): Long =
         s match
           case s"  Test: divisible by $d" => d.toLong
+
       def parseToIfTrue(s: String): Int =
         s match
           case s"    If true: throw to monkey $m" => m.toInt
+
       def parseToIfFalse(s: String): Int =
         s match
           case s"    If false: throw to monkey $m" => m.toInt
@@ -45,57 +48,64 @@ object Day11 extends AoC:
       Monkey(nr, items, op, Try(rhs.toLong).toOption, divisible, tit, tif)
 
 
-  case class Monkey( nr: Int
-                   , items: List[Long]
-                   , op: String
-                   , rhs: Option[Long]
-                   , divisible: Long
-                   , toIfTrue: Int
-                   , toIfFalse: Int
-                   , lowerWorry: Long => Long = identity
-                   , count: Long              = 0
+  case class Monkey(nr: Int
+                    , items: Vector[Long]
+                    , operation: String
+                    , rhs: Option[Long]
+                    , divisible: Long
+                    , throwToIfTrue: Int
+                    , throwToIfFalse: Int
+                    , lowerWorryBy: Long => Long = identity
+                    , worries: Long = 0
   ):
+
     def operation(i: Long): Long =
-      op match
+      operation match
         case "+" => i + rhs.getOrElse(i)
         case "*" => i * rhs.getOrElse(i)
 
-    private def inspect(worry0: Long): (Long,Int) =
-      val worry1 = operation(worry0)
-      val worry2 = lowerWorry(worry1)
-      val nr = if worry2 % divisible == 0 then toIfTrue else toIfFalse
-      (worry2, nr)
+    private def inspectPackage(currentWorry: Long): (Long, Int) =
+      val worry: Long  = (operation andThen lowerWorryBy)(currentWorry)
+      val throwTo: Int = if worry % divisible == 0 then throwToIfTrue else throwToIfFalse
+      (worry, throwTo)
 
-    def inspect: List[(Long,Int)] =
-      items.map(inspect)
+    def inspectPackages: Vector[(Long, Int)] =
+      items.map(inspectPackage)
 
-  def round(ms: List[Monkey]): List[Monkey] =
-    def loop(ms: List[Monkey], acc: List[Monkey]): List[Monkey] =
-      ms match
-        case Nil => acc
-        case m :: t =>
-          val us  = acc(m.nr).inspect
-          val ums = us.foldLeft(acc) { case (s, (i, nr)) =>
-            s.updated(nr, s(nr).copy(items = s(nr).items :+ i))
-          }
-          val nms = ums.updated(m.nr, ums(m.nr).copy(items = List.empty, count = m.count + us.size))
-          loop(t, nms)
-    loop(ms, ms)
+  extension (monkeys: Vector[Monkey])
 
-  def solve(rounds: Int, ms: List[Monkey]): Long =
-    (1 to rounds)
-      .foldLeft(ms)((s,_) => round(s))
-      .map(_.count)
+    def withLowerWorryBy(f: Long => Long): Vector[Monkey] =
+      monkeys.map(_.copy(lowerWorryBy = f))
+
+    def nextRound: Vector[Monkey] =
+      @tailrec
+      def loop(todo: Vector[Monkey], result: Vector[Monkey]): Vector[Monkey] =
+        todo.runtimeChecked match
+          case Vector() => result
+          case monkey +: rest =>
+            val inspections = result(monkey.nr).inspectPackages
+            val throws  = inspections.foldLeft(result):
+              case (acc, (worry, throwTo)) => acc.updated(throwTo, acc(throwTo).copy(items = acc(throwTo).items :+ worry))
+            val next = throws.updated(monkey.nr, throws(monkey.nr).copy(items = Vector.empty, worries = monkey.worries + inspections.size))
+            loop(rest, next)
+      loop(monkeys, monkeys)
+
+  def solve(rounds: Int, monkeys: Vector[Monkey]): Long =
+    Iterator
+      .iterate(monkeys)(_.nextRound)
+      .nth(rounds)
+      .map(_.worries)
       .sorted
       .takeRight(2)
       .product
 
 
   override lazy val answer1: Long =
-    val ms = monkeys.map(_.copy(lowerWorry = _ / 3))
-    solve(20, monkeys.map(_.copy(lowerWorry = _ / 3)))
+    val denominator = 3
+    val monkeys1    = monkeys.withLowerWorryBy(_ / denominator)
+    solve(20, monkeys1)
 
   override lazy val answer2: Long =
-    val productOfDivisible = monkeys.map(_.divisible).product
-    val ms = monkeys.map(_.copy(lowerWorry = _ % productOfDivisible))
-    solve(10000, ms)
+    val denominator = monkeys.map(_.divisible).product
+    val monkeys2    = monkeys.withLowerWorryBy(_ % denominator)
+    solve(10000, monkeys2)
