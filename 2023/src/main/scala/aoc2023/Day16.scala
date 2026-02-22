@@ -14,8 +14,8 @@ object Day16 extends AoC:
     private def tile(p: Pos): Char =
       grid(p.y)(p.x)
 
-    private def advance(p: Pos, d: Dir): List[(Pos,Dir)] =
-      val result: List[(Pos,Dir)] =
+    private def advance(p: Pos, d: Dir): List[(Pos, Dir)] =
+      val result: List[(Pos, Dir)] =
         (tile(p), d).runtimeChecked match
           case ('.', N)  => List(p.step(N) -> N)
           case ('.', E)  => List(p.step(E) -> E)
@@ -44,13 +44,13 @@ object Day16 extends AoC:
 
       result.filter((p,_) => p.x >= 0 && p.y >= 0 && p.x < sizeX && p.y < sizeY)
 
-    private def trace(start: Pos, direction: Dir): Set[(Pos,Dir)] =
+    private def trace(start: Pos, direction: Dir): Set[(Pos, Dir)] =
       @tailrec
-      def loop(todo: List[(Pos,Dir)], acc: Set[(Pos,Dir)] = Set.empty): Set[(Pos,Dir)] =
+      def loop(todo: List[(Pos, Dir)], acc: Set[(Pos, Dir)] = Set.empty): Set[(Pos, Dir)] =
         todo match
-          case Nil                                  => acc
-          case (p,d) :: rest if acc.contains((p,d)) => loop(rest, acc)
-          case (p,d) :: rest                        =>
+          case Nil                                    => acc
+          case (p, d) :: rest if acc.contains((p, d)) => loop(rest, acc)
+          case (p, d) :: rest                         =>
             advance(p, d) match
               case Nil => loop(rest, acc + (p -> d))
               case hs  => loop(hs ++ rest, acc + (p -> d))

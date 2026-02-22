@@ -4,42 +4,12 @@ import nmcb.*
 import nmcb.predef.*
 import nmcb.pos.{*, given}
 
-import scala.collection.mutable
-
 object Day17 extends AoC:
 
-  type Grid[A] = Vector[Vector[A]]
+  type Crucible = (current: Pos, direction: Pos, steps: Int)
 
-  object Grid:
-    extension [A](g: Grid[A]) def sizeX: Int =
-      g.map(_.size).max
+  extension (city: Grid[Int])
 
-    extension[A] (g: Grid[A]) def sizeY: Int =
-      g.size
-
-    extension[A] (g: Grid[A]) def peek(p: Pos): Option[A] =
-      g.lift(p.y).flatMap(_.lift(p.x))
-
-    extension[A] (g: Grid[A]) def apply(p: Pos): A =
-      g.lift(p.y).flatMap(_.lift(p.x)).getOrElse(sys.error(s"out of bounds: p=$p"))
-
-  import Grid.*
-
-  case class Crucible(current: Pos, direction: Pos, steps: Int):
-    def canMove1(dir: Pos): Boolean =
-      steps < 3 || dir != direction
-
-    def canStop1: Boolean =
-      true
-
-    def canMove2(dir: Pos): Boolean =
-      (dir == direction && steps < 10) || (dir != direction && steps >= 4) || direction == Pos.origin
-
-    def canStop2: Boolean =
-      steps >= 4
-
-
-  case class City(grid: Grid[Int]):
     def leastHeatLoss(canMove: Crucible => Pos => Boolean, canStop: Crucible => Boolean): Option[Int] =
 
       def reachable(crucible: Crucible): Set[(Crucible, Int)] =
@@ -47,45 +17,32 @@ object Day17 extends AoC:
           direction <- Pos.offset4.filterNot(_ == -crucible.direction)
           if canMove(crucible)(direction)
           next = crucible.current + direction
-          if grid.peek(next).isDefined
+          if city.within(next)
           steps = if direction == crucible.direction then crucible.steps + 1 else 1
         yield
-          Crucible(next, direction, steps) -> grid(next)
+          (current = next, direction = direction, steps = steps) -> city.peek(next)
 
-      val start = Crucible(Pos.origin, Pos.origin, 0)
-      val target = (n: Crucible) => n.current == Pos.of(grid.sizeX - 1, grid.sizeY - 1) && canStop(n)
+      val start  = (current = Pos.origin, direction = Pos.origin, steps = 0)
+      val target = (n: Crucible) => n.current == Pos.of(city.sizeX - 1, city.sizeY - 1) && canStop(n)
 
-      Dijkstra.traverse[Crucible](start, target, reachable).map((_, loss) => loss)
+      Dijkstra.run(start, target, reachable).map(_.right)
 
-  object Dijkstra:
+  extension (c: Crucible)
 
-    /**
-     * Specialised version of Dijkstra's algorithm that provides for callbacks deciding whether a target has been
-     * reached, and that allows for node weight deltas to be added when reachable edge weights are (re-)computed.
-     * @param start A node to start searching from.
-     * @param target A node callback returning whether given node was a target node.
-     * @param reachable A callback returning reachable nodes and their weight deltas from given node.
-     * @tparam A The type of node.
-     * @return The target node and associated traversal weight if reachable.
-     */
-    def traverse[A](start: A, target: A => Boolean, reachable: A => Set[(A, Int)]): Option[(A, Int)] =
-      val todo    = mutable.PriorityQueue.empty(using Ordering.Int.on[(Int, A)](_.left).reverse)
-      val weights = mutable.Map.empty[A, Int]
+    def canMove1(dir: Pos): Boolean =
+      c.steps < 3 || dir != c.direction
 
-      def enqueue(node: A, weight: Int): Unit =
-        if !weights.contains(node) then todo.enqueue((weight, node))
+    def canStop1: Boolean =
+      true
 
-      enqueue(start, 0)
+    def canMove2(dir: Pos): Boolean =
+      (dir == c.direction && c.steps < 10) || (dir != c.direction && c.steps >= 4) || c.direction == Pos.origin
 
-      while (todo.nonEmpty)
-        val (weight, node) = todo.dequeue
-        if !weights.contains(node) then
-          weights(node) = weight
-          if target(node) then return Some(node -> weight)
-          reachable(node).foreach((reach, delta) => enqueue(reach, weight + delta))
-      None
+    def canStop2: Boolean =
+      c.steps >= 4
 
-  lazy val city: City = City(lines.map(_.map(_.asDigit).toVector))
+
+  lazy val city: Grid[Int] = Grid.fromLines(lines).map(_.asDigit)
   
   override lazy val answer1: Int = city.leastHeatLoss(_.canMove1, _.canStop1).get
   override lazy val answer2: Int = city.leastHeatLoss(_.canMove2, _.canStop2).get
