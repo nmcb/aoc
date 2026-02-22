@@ -22,13 +22,15 @@ object Day23 extends AoC:
       val results = mutable.ListBuffer.empty[(Pos, Int)]
 
       def loop(p: Pos, visited: Set[Pos], length: Int): Unit =
-        if p == to || isEdge(p) && p != from then results.addOne(p -> length)
+        if p == to || isEdge(p) && p != from then
+          results.addOne(p -> length)
         else if !visited.contains(p) then
           for
             d <- Dir.values
             n  = p step d
             if grid.within(n) && grid.peek(n) != '#' && grid.peek(n) != prohibited(d)
-          do loop(n, visited + p, length + 1)
+          do
+            loop(n, visited + p, length + 1)
 
       loop(from, Set.empty, 0)
       results.toVector
