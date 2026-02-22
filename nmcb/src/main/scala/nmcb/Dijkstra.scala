@@ -61,13 +61,13 @@ object Dijkstra:
   import scala.collection.mutable
 
   /** classic dijkstra traverses the shortest found paths first */
-  def run[A](from: A, graph: A => Set[(A,Int)])(using CanEqual[A, A]): Result[A] =
-    val edgeTo: mutable.Map[A,Edge[A]] = mutable.Map.empty
-    val distTo: mutable.Map[A,Int]     = mutable.Map.empty.withDefaultValue(Int.MaxValue)
+  def run[A](from: A, graph: A => Set[(A, Int)])(using CanEqual[A, A]): Result[A] =
+    val edgeTo: mutable.Map[A, Edge[A]] = mutable.Map.empty
+    val distTo: mutable.Map[A, Int]     = mutable.Map.empty.withDefaultValue(Int.MaxValue)
 
     distTo += from -> 0
     val sourceEdge = from -> distTo(from)
-    val queue = mutable.PriorityQueue[(A,Int)](sourceEdge)(using Ordering.by[(A,Int),Int](_.right).reverse)
+    val queue = mutable.PriorityQueue[(A,Int)](sourceEdge)(using Ordering.by[(A, Int), Int](_.right).reverse)
 
     while (queue.nonEmpty)
       val (minDistNode, _) = queue.dequeue()
@@ -81,7 +81,7 @@ object Dijkstra:
 
     Result(edgeTo.toMap, distTo.toMap)
 
-  /** classic dijkstra traverses the shortest found paths first */
+  /** classic dijkstra using the graph abstraction that traverses the shortest found paths first */
   def run[A](from: A, graph: Graph[A])(using CanEqual[A, A]): Result[A] =
     val edgeTo: mutable.Map[A, Edge[A]] = mutable.Map.empty
     val distTo: mutable.Map[A, Int] = mutable.Map.from(graph.neighbours.map((node, _) => node -> Int.MaxValue)).withDefaultValue(Int.MaxValue)
@@ -102,6 +102,24 @@ object Dijkstra:
 
     Result(edgeTo.toMap, distTo.toMap)
 
+  /** specialized dijkstra with target and graph with weights callbacks */
+  def run[A](start: A, isTarget: A => Boolean, graph: A => Set[(A, Int)]): Option[(A, Int)] =
+    val todo = mutable.PriorityQueue.empty(using Ordering.Int.on[(Int, A)](_.left).reverse)
+    val weights = mutable.Map.empty[A, Int]
+
+    def enqueue(node: A, weight: Int): Unit =
+      if !weights.contains(node) then todo.enqueue((weight, node))
+
+    enqueue(start, 0)
+
+    while (todo.nonEmpty)
+      val (weight, node) = todo.dequeue
+      if !weights.contains(node) then
+        weights(node) = weight
+        if isTarget(node) then return Some(node -> weight)
+        graph(node).foreach((reach, delta) => enqueue(reach, weight + delta))
+    None
+
   /** breadth first flooding */
   def reachable[N](start: N, edgesFrom: N => Set[N]): Set[N] =
     val found = mutable.Set.empty[N]
@@ -117,7 +135,7 @@ object Dijkstra:
     found.toSet
 
   /** breadth first search */
-  def breadthFirstSearch[A,B](a: A)(f: A => Either[Set[A],B]): Vector[B] =
+  def breadthFirstSearch[A,B](a: A)(f: A => Either[Set[A], B]): Vector[B] =
     val results = mutable.ArrayBuffer.empty[B]
     val queue   = mutable.Queue(a)
     while queue.nonEmpty do
@@ -125,7 +143,6 @@ object Dijkstra:
         case Right(result)    => results += result
         case Left(neighbours) => queue.enqueueAll(neighbours)
     results.toVector
-
 
   extension [A](path: Vector[Edge[A]])
     def toTrail: Vector[A] =

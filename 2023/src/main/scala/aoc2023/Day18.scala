@@ -100,8 +100,7 @@ object Day18 extends AoC:
 
   lazy val operationsPart1: Vector[Op] = lines.map(Op.fromStringPart)
   lazy val operationsPart2: Vector[Op] = lines.map(Op.fromHexPart)
-
-
+  
   override lazy val answer1: Long = dig1(operationsPart1)
   override lazy val answer2: Long = dig2(operationsPart2)
 
