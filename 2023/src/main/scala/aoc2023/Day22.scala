@@ -9,17 +9,16 @@ object Day22 extends AoC:
 
   case class Stack(stack: Vector[Box]):
 
-    lazy val settled: Vector[Box] =
+    val settled: Vector[Box] =
       stack
         .sortBy(_.min.z)
         .foldLeft(Vector.empty[Box]): (dropped, box) =>
           val height =
             Iterator
               .from(1)
-              .find: h =>
+              .findFirst: h =>
                 val dropping = box.drop(h)
                 dropping.min.z == 0 || dropped.exists(_ intersects dropping)
-              .getOrElse(sys.error("no dropping height found")) - 1
           dropped :+ box.drop(height)
 
     val supportedBy: Map[Box, Set[Box]] =
@@ -32,16 +31,16 @@ object Day22 extends AoC:
         .toMap
 
     def disintegrable: Int =
-      val framework: Set[Box] =
-        settled
-          .map: box =>
-            supportedBy(box).filter(_ intersects box.drop1)
-          .filter(_.size == 1)
-          .map(_.head)
-          .toSet
-      stack.toSet.size - framework.size
+      stack.toSet.size - settled
+        .map: box =>
+          supportedBy(box).filter(_ intersects box.drop1)
+        .filter(_.size == 1)
+        .map(_.head)
+        .toSet
+        .size
 
     def disintegrated: Int =
+
       val supports: Map[Box, Set[Box]] =
         supportedBy
           .toSet
@@ -50,6 +49,7 @@ object Day22 extends AoC:
           .groupMap(_.left)(_.right)
 
       def disintegrate(box: Box): Int =
+
         @tailrec
         def loop(todo: Set[Box], found: Set[Box] = Set.empty): Int =
           if todo.isEmpty then
@@ -61,33 +61,34 @@ object Day22 extends AoC:
             val visited = found + box
             val add     = support.filter(b => (supportedBy(b) -- visited).isEmpty)
             loop(next ++ add, visited)
+
         loop(Set(box))
 
       settled.map(disintegrate).sum
 
-  val stack: Stack = Stack(lines.map(Box.fromString))
 
+  val stack: Stack = Stack(lines.map(Box.fromString))
   
   override lazy val answer1: Int = stack.disintegrable
   override lazy val answer2: Int = stack.disintegrated
 
   // Geometry
 
-  case class Positon(x: Int, y: Int, z: Int):
-    def -(that: Positon): Positon = Positon(x - that.x, y - that.y, z - that.z)
-    def +(that: Positon): Positon = Positon(x + that.x, y + that.y, z + that.z)
-    infix def min(that: Positon): Positon = Positon(x min that.x, y min that.y, z min that.z)
-    infix def max(that: Positon): Positon = Positon(x max that.x, y max that.y, z max that.z)
-    def >=(that: Positon): Boolean = x >= that.x && y >= that.y && z >= that.z
-    def <=(that: Positon): Boolean = x <= that.x && y <= that.y && z <= that.z
+  case class Pos3(x: Int, y: Int, z: Int):
+    def -(that: Pos3): Pos3         = Pos3(x - that.x, y - that.y, z - that.z)
+    def +(that: Pos3): Pos3         = Pos3(x + that.x, y + that.y, z + that.z)
+    infix def min(that: Pos3): Pos3 = Pos3(x min that.x, y min that.y, z min that.z)
+    infix def max(that: Pos3): Pos3 = Pos3(x max that.x, y max that.y, z max that.z)
+    def >=(that: Pos3): Boolean     = x >= that.x && y >= that.y && z >= that.z
+    def <=(that: Pos3): Boolean     = x <= that.x && y <= that.y && z <= that.z
 
-  case class Box(min: Positon, max: Positon) derives CanEqual:
+  case class Box(min: Pos3, max: Pos3) derives CanEqual:
 
     def intersect(that: Box): Option[Box] =
-      val maxmin = min max that.min
-      val minmax = max min that.max
-      if maxmin <= minmax then
-        Some(Box(maxmin, minmax))
+      val maxMin = min max that.min
+      val minMax = max min that.max
+      if maxMin <= minMax then
+        Some(Box(maxMin, minMax))
       else
         None
 
@@ -99,14 +100,14 @@ object Day22 extends AoC:
     def fromString(s: String): Box =
       s match
         case s"$x1,$y1,$z1~$x2,$y2,$z2" =>
-          val p1 = Positon(x1.toInt, y1.toInt, z1.toInt)
-          val p2 = Positon(x2.toInt, y2.toInt, z2.toInt)
+          val p1 = Pos3(x1.toInt, y1.toInt, z1.toInt)
+          val p2 = Pos3(x2.toInt, y2.toInt, z2.toInt)
           Box(p1, p2)
 
   extension (box: Box)
 
     def drop(height: Int): Box =
-      val offset = Positon(0, 0, height)
+      val offset = Pos3(0, 0, height)
       Box(box.min - offset, box.max - offset)
 
     def drop1: Box =
