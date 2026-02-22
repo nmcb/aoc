@@ -9,7 +9,6 @@ object Day25 extends AoC:
 
   type Component = String
 
-  // todo experiment with `##` and `equals` to allow for unordered pairs
   type Connection = (Component, Component)
 
   val connections: Set[Connection] =

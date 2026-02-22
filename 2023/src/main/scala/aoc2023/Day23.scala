@@ -65,6 +65,6 @@ object Day23 extends AoC:
   def solve2(board: Grid[Char]): Int =
     solve1(board.map(c => if c != '#' then '.' else c))
 
-  
+
   override lazy val answer1: Int = solve1(Grid.fromLines(lines))
   override lazy val answer2: Int = solve2(Grid.fromLines(lines))
