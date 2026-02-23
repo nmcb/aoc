@@ -13,7 +13,6 @@ object Day24 extends AoC:
     val fieldSize: Int = sizeX * sizeY
     def isField(p: Pos): Boolean = p.x >= 0 && p.x <= max.x && p.y >= 0 && p.y <= max.y
     def transpose: Bounds = copy(max = Pos.of(max.y, max.x))
-    def end: Pos = Pos.of(max.x, max.y)
 
 
   enum Dir(val char: Char) derives CanEqual:
@@ -50,6 +49,7 @@ object Day24 extends AoC:
   case class Streams(u: Vector[Stream], d: Vector[Stream], l: Vector[Stream], r: Vector[Stream], bounds: Bounds):
     import Field.*
     import bounds.*
+    
     def uAt(x: Int, y: Int): Char = u(x).drop(y).head
     def dAt(x: Int, y: Int): Char = d(x).drop(max.y - y).head
     def lAt(x: Int, y: Int): Char = l(y).drop(x).head
@@ -58,8 +58,8 @@ object Day24 extends AoC:
     def next: Streams =
       copy(u = u.map(_.tail), d = d.map(_.tail), l = l.map(_.tail), r = r.map(_.tail))
 
-    def countBlizzards(streamField: Field[(Char,Char,Char,Char)])(x: Int, y: Int): Int =
-      val (uc,dc,lc,rc) = streamField(y)(x)
+    def countBlizzards(streamField: Field[(Char, Char, Char, Char)])(x: Int, y: Int): Int =
+      val (uc, dc, lc, rc) = streamField(y)(x)
       var c = 0
       if uc == UpChar    then c = c + 1
       if dc == DownChar  then c = c + 1
@@ -67,9 +67,9 @@ object Day24 extends AoC:
       if rc == RightChar then c = c + 1
       c
 
-    def nextBlizzardChar(streamField: Field[(Char,Char,Char,Char)])(x: Int, y: Int): Char =
+    def nextBlizzardChar(streamField: Field[(Char, Char, Char, Char)])(x: Int, y: Int): Char =
       val count = countBlizzards(streamField)(x: Int, y: Int)
-      val (uc,dc,lc,rc) = streamField(y)(x)
+      val (uc, dc, lc, rc) = streamField(y)(x)
       count.runtimeChecked match
         case 0 => OpenChar
         case 1 if uc == UpChar    => UpChar
@@ -81,14 +81,14 @@ object Day24 extends AoC:
         case 4 => '4'
 
     val futureStreamField: Field[(Char, Char, Char, Char)] =
-      (for {
+      (for
         y <- 0 until sizeY
         x <- 0 until sizeX
         uc = uAt(x, y)
         dc = dAt(x, y)
         lc = lAt(x, y)
         rc = rAt(x, y)
-      } yield (uc,dc,lc,rc)).grouped(sizeX).map(_.toVector).toVector
+      yield (uc, dc, lc, rc)).grouped(sizeX).map(_.toVector).toVector
 
     val futureField: Field[Char] =
       val buffer: Array[Array[Char]] = Array.fill(sizeY, sizeX)(Field.OpenChar)
@@ -113,7 +113,6 @@ object Day24 extends AoC:
     import Field.*
     import bounds.*
 
-
     def  free(f: Field[Char])(p: Pos): Boolean =
       if bounds.isField(p) then
         f(p.y)(p.x) match
@@ -126,10 +125,7 @@ object Day24 extends AoC:
       found.flatMap: p =>
           val ms   = p.adjoint4.filter(free(nextField))
           val test = free(nextField)(p) && p.adjoint4.exists(free(streams.futureField)) && bounds.isField(p)
-          if test || p == bounds.end + Pos.of(0,1) || p == Pos.of(0,-1) then
-            ms + p
-          else
-            ms
+          if test || p == bounds.max + Pos.of(0, 1) || p == Pos.of(0, -1) then ms + p else ms
 
     def reachedGoal: Boolean =
       found.contains(target)
@@ -139,14 +135,6 @@ object Day24 extends AoC:
 
     def next: World =
       World(target, nextField, streams.futureField, streams.next, minutes + 1, bounds, paths)
-
-    override def toString: String =
-      val hd = s"minutes=$minutes, target=$target\n"
-      val nw = WallChar.toString + OpenChar.toString + List.fill(sizeX)(WallChar).mkString("")
-      val ls = currentField.map(_.mkString(WallChar.toString, "", WallChar.toString)).mkString("\n","\n","\n")
-      val sw = List.fill(sizeX)(WallChar).mkString("") + OpenChar.toString + WallChar.toString
-      val ps = s"path=${found.toList.sorted.mkString("","","\n")}"
-      "\n" + hd + nw + ls + sw + "\n" + ps + "\n---"
 
   object World:
     import Dir.*
@@ -158,7 +146,6 @@ object Day24 extends AoC:
           .foldLeft(Vector.empty[Vector[Char]])(_ :+ _.toVector)
           .trimBorder
 
-      assert(initField.forall(_.length == initField.map(_.length).max))
       val sizeX = initField.head.size
       val sizeY = initField.size
       val bounds: Bounds = Bounds(Pos.of(sizeX - 1 , sizeY - 1))
@@ -178,7 +165,7 @@ object Day24 extends AoC:
       def right: Vector[LazyList[Char]] = make(Right, initField)
       def streams: Streams = Streams(up, down, left, right, bounds)
 
-      World(bounds.end, initField, streams.futureField, streams.next, 0, bounds, Paths.start)
+      World(bounds.max, initField, streams.futureField, streams.next, 0, bounds, Paths.start)
 
   @tailrec
   def solve1(world: World): Int =
@@ -200,12 +187,12 @@ object Day24 extends AoC:
       nextField    = w1.streams.futureField,
       streams      = w1.streams.next,
       minutes      = m1 + 1,
-      found        = Set(w1.bounds.end + Pos.of(0,1))
+      found        = Set(w1.bounds.max + Pos.of(0, 1))
     )
     val (w3, m3) = loop(w2)
 
     val w4 = w3.copy(
-      target       = w3.bounds.end,
+      target       = w3.bounds.max,
       currentField = w3.nextField,
       nextField    = w3.streams.futureField,
       streams      = w3.streams.next,
