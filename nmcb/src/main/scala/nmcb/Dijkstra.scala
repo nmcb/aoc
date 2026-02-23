@@ -80,6 +80,9 @@ object Dijkstra:
             queue.enqueue((to, distTo(to)))
 
     Result(edgeTo.toMap, distTo.toMap)
+    
+  def runWithUnitDistances[A](from: A, graph: Map[A, Set[A]])(using CanEqual[A, A]): Result[A] =
+    run(from, graph.map((n, ns) => n -> ns.map(n => (n, 1))))
 
   /** classic dijkstra using the graph abstraction that traverses the shortest found paths first */
   def run[A](from: A, graph: Graph[A])(using CanEqual[A, A]): Result[A] =

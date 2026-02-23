@@ -2,42 +2,39 @@ package aoc2022
 
 import nmcb.*
 
-import scala.collection.*
-
 object Day16 extends AoC:
 
   case class Valve(name: String, rate: Int, tunnels: Vector[String], closed: Boolean = true)
 
   val valves: Vector[Valve] =
-    lines.map:
+    lines.collect:
       case s"Valve $name has flow rate=$rate; tunnels lead to valves $tunnels" =>
         Valve(name, rate.toInt, tunnels.trim.split(',').map(_.trim).toVector)
       case s"Valve $name has flow rate=$rate; tunnel leads to valve $tunnel" =>
         Valve(name, rate.toInt, Vector(tunnel))
 
-  val reachability: Map[String,Vector[String]] =
-    valves.map(v => v.name -> v.tunnels).toMap
+  val reachability: Map[String, Set[String]] =
+    valves.map(v => v.name -> v.tunnels.toSet).toMap
 
-  val pressures: Map[String,Int] =
+  val pressures: Map[String, Int] =
     valves.map(v => v.name -> v.rate).toMap
 
   val nonzero: Vector[String] =
     valves.filter(_.rate != 0).map(_.name)
 
-  val distances: Map[(String,String),Int] =
-    import Dijkstra.*
-
-    val graph: Graph[String] =
-      reachability.foldLeft(Graph.empty[String]):
-        case (g, (k, v)) =>
-          v.foldLeft(g)((g, l) => g.add(Edge(k, l, 1)))
-    val map =
+  val distances: Map[(String, String), Int] =
+    val result =
       for
-        k1 <- valves.map(_.name)
-        k2 <- valves.map(_.name)
-        best = Dijkstra.run(k1, graph).distanceTo(k2).getOrElse(sys.error(s"no path from $k1 to $k2"))
-      yield (k1,k2) -> best
-    map.toMap
+        valve1 <- valves.map(_.name)
+        valve2 <- valves.map(_.name)
+        if valve1 != valve2
+      yield
+        (valve1, valve2) -> Dijkstra
+          .runWithUnitDistances(valve1, reachability)
+          .distanceTo(valve2)
+          .getOrElse(sys.error(s"no path from $valve1 to $valve2"))
+
+    result.toMap
 
   def solve1(time: Int, pressure: Int, flow: Int, current: String, remaining: Vector[String], limit: Int): Int =
     remaining.foldLeft(pressure + (limit - time) * flow): (max, v) =>
@@ -54,13 +51,13 @@ object Day16 extends AoC:
       else
         max
 
-  def solve2(): Int =
+  def solve2(time: Int, pressure: Int, flow: Int, current: String, nonzero: Vector[String], limit: Int): Int =
     nonzero.combinations(nonzero.length / 2).foldLeft(0): (max, left) =>
-      val max2a = solve1(0, 0, 0, "AA", left, 26)
+      val max2a = solve1(time, pressure, flow, current, left, limit)
       val right = nonzero.filterNot(v => left.contains(v))
-      val max2b = solve1(0, 0, 0, "AA", right, 26)
+      val max2b = solve1(time, pressure, flow, current, right, limit)
       if max2a + max2b > max then max2a + max2b else max
 
 
   override lazy val answer1: Int = solve1(0, 0, 0, "AA", nonzero, 30)
-  override lazy val answer2: Int = solve2()
+  override lazy val answer2: Int = solve2(0, 0, 0, "AA", nonzero, 26)
