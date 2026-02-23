@@ -27,13 +27,13 @@ object Day03 extends AoC:
 
   def rating(bits: Vector[Bits], commonOf: Bits => Char): Int =
     @tailrec
-    def filter(todo: Vector[Bits], idx: Int = 0): Bits =
+    def filter(todo: Vector[Bits], index: Int = 0): Bits =
       if todo.size == 1 then
         todo.head
       else
-        val common = commonOf(todo.transpose.apply(idx))
-        val next   = todo.filter(bit => bit(idx) == common)
-        filter(next, idx + 1)
+        val common = commonOf(todo.transpose.apply(index))
+        val next   = todo.filter(bit => bit(index) == common)
+        filter(next, index + 1)
     filter(bits).toInt
 
 
@@ -41,6 +41,6 @@ object Day03 extends AoC:
   lazy val epsilon: Int          = diagnostics.transpose.map(_.leastCommon).toInt
   override lazy val answer1: Int = gamma * epsilon
 
-  lazy val oxygenRating: Int       = rating(diagnostics, _.mostCommon)
-  lazy val co2SchrubberRating: Int = rating(diagnostics, _.leastCommon)
-  override lazy val answer2: Int   = oxygenRating * co2SchrubberRating
+  lazy val oxygenRating: Int     = rating(diagnostics, _.mostCommon)
+  lazy val co2Rating: Int        = rating(diagnostics, _.leastCommon)
+  override lazy val answer2: Int = oxygenRating * co2Rating
