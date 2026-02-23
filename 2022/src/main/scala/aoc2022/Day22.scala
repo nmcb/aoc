@@ -1,6 +1,7 @@
 package aoc2022
 
 import nmcb.*
+import nmcb.predef.*
 import nmcb.pos.*
 
 object Day22 extends AoC:
@@ -8,8 +9,14 @@ object Day22 extends AoC:
   val map: Seq[String] = chunks(0)
   val path: String     = chunks(1).head
 
-  val tiles: Array[Array[Char]] = Array.fill(map.length + 2, map.head.length + 2)(' ')
-  map.zipWithIndex.foreach((r,y) => r.zipWithIndex.foreach((t,x) => tiles(y + 1)(x + 1) = t))
+  val tiles: Vector[Vector[Char]] =
+    val result = Array.fill(map.length + 2, map.head.length + 2)(' ')
+    for
+      (row, y)  <- map.zipWithIndex
+      (tile, x) <- row.zipWithIndex
+    do
+      result(y + 1)(x + 1) = tile
+    result.map(_.toVector).toVector
 
   case class Location(x: Int, y: Int, dir: Dir, path: String):
 
