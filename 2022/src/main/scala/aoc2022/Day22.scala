@@ -1,7 +1,6 @@
 package aoc2022
 
 import nmcb.*
-import nmcb.predef.*
 import nmcb.pos.*
 
 object Day22 extends AoC:

@@ -11,13 +11,13 @@ object Day23 extends AoC:
 
     def parse(y: Int, s: String): Set[Pos] =
       s.zipWithIndex.foldLeft(Set.empty):
-        case (a, ('#', x)) => a + Pos.of(x,y)
-        case (a,_)         => a
+        case (a, ('#', x)) => a + Pos.of(x, y)
+        case (a, _)        => a
 
     lines
       .zipWithIndex
       .foldLeft(Set.empty):
-        case (a, (s, y)) => a ++ parse(y,s)
+        case (a, (s, y)) => a ++ parse(y, s)
 
   case class Mat(elves: Set[Pos], dirs: Seq[Dir] = Seq(N, S, W, E)):
 
@@ -58,19 +58,16 @@ object Day23 extends AoC:
       val maxY = elves.map(_.y).max
       val size =
         for
-        x <- minX to maxX
-        y <- minY to maxY
-        if !elves.contains(Pos.of(x,y))
-      yield 1
+          x <- minX to maxX
+          y <- minY to maxY
+          if !elves.contains(Pos.of(x, y))
+        yield 1
       size.sum
 
   @tailrec
   def solve2(m: Mat, c: Int = 1): Int =
     val next = m.next
-    if next.elves == m.elves then
-      c
-    else
-      solve2(next, c + 1)
+    if next.elves == m.elves then c else solve2(next, c + 1)
 
 
   override lazy val answer1: Int = (1 to 10).foldLeft(Mat(positions))((m, _) => m.next).countEmpty
