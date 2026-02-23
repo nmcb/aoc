@@ -16,20 +16,20 @@ object Day04 extends AoC:
 
   val Line: Regex = """\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*""".r
 
-  def boards: Vector[Board[Int]] =
+  val boards: Vector[Board[Int]] =
     lines
       .drop(1)
       .filterNot(_.isBlank)
       .grouped(5)
       .map: lines =>
         lines.foldLeft(Board.empty[Int]):
-          case (board, Line(n0,n1,n2,n3,n4)) =>
-            board.addRow(Vector(n0.toInt,n1.toInt,n2.toInt,n3.toInt,n4.toInt))
-          case (_,line) =>
+          case (board, Line(n0, n1, n2, n3, n4)) =>
+            board.addRow(Vector(n0.toInt, n1.toInt, n2.toInt, n3.toInt, n4.toInt))
+          case (_, line) =>
             sys.error(s"unable to read line=$line")
       .toVector
 
-  case class Board[A](rows: Vector[Vector[A]], draws: Vector[A] = Vector.empty):
+  case class Board[A](rows: Vector[Vector[A]], draws: Vector[A] = Vector.empty) derives CanEqual:
 
     def addRow(row: Vector[A]): Board[A] =
       copy(rows = rows :+ row)
@@ -55,19 +55,17 @@ object Day04 extends AoC:
 
   object Board:
     
-    given [A] => CanEqual[Board[A], Board[A]] = CanEqual.derived
-
     def empty[A]: Board[A] =
       Board[A](Vector.empty)
 
-  def playWhoWinsFirst[A](draws: Vector[A], boards: Vector[Board[A]] = boards): Board[A] =
+  def playWhoWinsFirst[A](draws: Vector[A], boards: Vector[Board[A]]): Board[A] =
     val round = boards.map(_.draw(draws.head))
     round
       .find(_.hasBingo)
       .getOrElse(playWhoWinsFirst(draws.tail, round))
 
   @tailrec
-  def playWhoWinsLast[A](draws: Vector[A], game: Vector[Board[A]] = boards)(using CanEqual[A, A]): Board[A] =
+  def playWhoWinsLast[A](draws: Vector[A], game: Vector[Board[A]])(using CanEqual[A, A]): Board[A] =
     val round = game.map(_.draw(draws.head))
     val todo  = round.filterNot(_.hasBingo)
     if todo.nonEmpty then
@@ -76,8 +74,8 @@ object Day04 extends AoC:
       round.filter(_.lastDraw == draws.head).head
 
 
-  lazy val board1: Board[Int] = playWhoWinsFirst(draws)
-  override lazy val answer1: Int       = board1.unmarked.sum * board1.lastDraw
+  lazy val board1: Board[Int]    = playWhoWinsFirst(draws, boards)
+  override lazy val answer1: Int = board1.unmarked.sum * board1.lastDraw
 
-  lazy val board2: Board[Int] = playWhoWinsLast(draws)
-  override lazy val answer2: Int       = board2.unmarked.sum * board2.lastDraw
+  lazy val board2: Board[Int]    = playWhoWinsLast(draws, boards)
+  override lazy val answer2: Int = board2.unmarked.sum * board2.lastDraw
