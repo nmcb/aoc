@@ -1,7 +1,5 @@
 package nmcb
 
-import scala.CanEqual.derived
-
 object pos:
 
   enum Dir derives CanEqual:
