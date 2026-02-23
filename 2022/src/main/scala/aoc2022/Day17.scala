@@ -50,19 +50,22 @@ object Day17 extends AoC:
       @tailrec
       def drop(pos: Pos, moves: LazyList[Move], trace: List[Move] = List.empty): (List[Move], Pos) =
 
-        val moved = moves.head match
+        val move = moves.head
+        val rest = moves.tail
+
+        val moved = move match
           case L => pos.translate(dx = -1, dy =  0)
           case R => pos.translate(dx =  1, dy =  0)
           case D => pos.translate(dx =  0, dy = -1)
 
         if rocks.head.withOrigin(moved).forall(p => !isOccupied(p)) then
-          if moves.head == L || moves.head == R then
-            drop(moved, D #:: moves.tail, moves.head :: trace)
+          if move == L || move == R then
+            drop(moved, D #:: rest, move :: trace)
           else
-            drop(moved, moves.tail, moves.head :: trace)
+            drop(moved, rest, move :: trace)
         else
-          if moves.head == L || moves.head == R then
-            drop(pos, D #:: moves.tail, moves.head :: trace)
+          if move == L || move == R then
+            drop(pos, D #:: rest, move :: trace)
           else
             (trace, pos)
 
@@ -84,12 +87,8 @@ object Day17 extends AoC:
 
 
   object Chamber:
-
-    val slidingWindow: Int =
-      100
-
-    val width: Int =
-      7
+    val slidingWindow: Int = 100
+    val width: Int         = 7
 
     def empty: Chamber =
       Chamber(Rock.sequence, Move.pattern, Set.empty, 0)
@@ -114,6 +113,7 @@ object Day17 extends AoC:
       Iterator.iterate(cycle.cycleHead)(_.next).nth(tailNr.toInt).height - stemHeight
 
     stemHeight + cycleNr * cycleHeight + tailHeight
+
 
 
   override lazy val answer1: Int  = solve1(nr = 2022)
