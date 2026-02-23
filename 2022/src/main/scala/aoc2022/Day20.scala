@@ -12,7 +12,7 @@ object Day20 extends AoC:
 
     extension (buffer: mutable.Buffer[(Long, Int)])
 
-      infix def mix(element: (Long, Int)): mutable.Buffer[(Long,Int)] =
+      infix def mix(element: (Long, Int)): mutable.Buffer[(Long, Int)] =
         val (steps, _) = element
         val from = buffer.indexOf(element)
         buffer.remove(from)
