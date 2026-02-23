@@ -1,20 +1,21 @@
 package aoc2022
 
 import nmcb.*
+import nmcb.predef.*
 import nmcb.pos.{*, given}
 
 object Day12 extends AoC:
 
   import Dijkstra.*
 
-  lazy val (grid, from, to): (Grid[Char], Pos, Pos) =
-    val puzzle: Grid[Char] = Grid.fromLines(lines)
-    (puzzle, puzzle.findOne('S'), puzzle.findOne('E'))
+  val grid: Grid[Char] = Grid.fromLines(lines)
+  val from: Pos        = grid.findOne('S')
+  val to: Pos          = grid.findOne('E')
 
   def height(c: Char): Int =
-    if c == 'S' then 0
+    if      c == 'S' then 0
     else if c == 'E' then 25
-    else c.toInt - 97
+    else                  c.toInt - 97
 
   def weight(f: Pos, t: Pos): Option[Int] =
     val fh = height(grid.peek(f))
@@ -28,6 +29,7 @@ object Day12 extends AoC:
         Some(th - fh + 2)
 
   extension (grid: Grid[Char])
+
     def toGraph: Graph[Pos] =
       Graph.fromEdges:
         for
@@ -42,6 +44,8 @@ object Day12 extends AoC:
     Option.when(path.nonEmpty)(path.length)
 
 
-  override lazy val answer1: Int = solve(from, to, grid.toGraph).getOrElse(sys.error(s"no path from $from to $to"))
-  override lazy val answer2: Int = grid.filter((_,c) => c == 'a' || c == 'S').flatMap((f,_) => solve(f, to, grid.toGraph)).min
+  val graph: Graph[Pos] = grid.toGraph
+  val starts: Set[Pos]  = grid.filter(p => p.right == 'a' || p.right == 'S').map(_.left)
 
+  override lazy val answer1: Int = solve(from, to, graph).getOrElse(sys.error(s"no path from $from to $to"))
+  override lazy val answer2: Int = starts.flatMap(from => solve(from, to, graph)).min
