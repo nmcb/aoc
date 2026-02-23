@@ -30,42 +30,40 @@ object Day25 extends AoC:
       c.runtimeChecked match
         case '2' | '1' | '0' | '-' | '=' => Digit(c)
 
-  case class Number(digits: List[Digit]):
+  case class Number(digits: Vector[Digit]):
 
     def toLong: Long =
-      digits.reverse.foldLeft((0L,1L)) { case ((a, p), d) =>
-        (a + (p * d.toLong), 5L * p)
-      }.left
-
-    override def toString: String =
-      val l = toLong
-      s"${digits.mkString("")}"
+      digits
+        .reverse
+        .foldLeft((0L, 1L)):
+          case ((a, p), d) => (a + (p * d.toLong), 5L * p)
+        .left
 
   object Number:
 
-    def fromString(s: String): Number =
+    def fromString(string: String): Number =
       @tailrec
-      def loop(s: List[Char], a: List[Digit] = List.empty): Number =
-        s match
-          case Nil    => Number(a)
-          case h :: t => loop(t, a :+ Digit.fromChar(h))
-      loop(s.toList)
+      def loop(chars: Vector[Char], result: Vector[Digit] = Vector.empty): Number =
+        chars.runtimeChecked match
+          case Vector()    => Number(result)
+          case h +: t => loop(t, result :+ Digit.fromChar(h))
+      loop(string.toVector)
 
     @tailrec
-    def fromLong(l: Long, a: List[Digit] = List.empty): Number =
-      val remainder = l % 5
+    def fromLong(long: Long, result: Vector[Digit] = Vector.empty): Number =
+      val remainder = long % 5
 
       val dividend = remainder match
-        case 0 | 1 | 2 => l / 5
-        case 3         => (l + 2) / 5
-        case 4         => (l + 1) / 5
+        case 0 | 1 | 2 => long / 5
+        case 3         => (long + 2) / 5
+        case 4         => (long + 1) / 5
 
-      val acc = remainder match
-        case 0 | 1 | 2 => Digit.fromChar(remainder.toString.head) :: a
-        case 3         => Digit.fromChar('=') :: a
-        case 4         => Digit.fromChar('-') :: a
+      val next = remainder match
+        case 0 | 1 | 2 => Digit.fromChar(remainder.toString.head) +: result
+        case 3         => Digit.fromChar('=') +: result
+        case 4         => Digit.fromChar('-') +: result
 
-      if dividend == 0 then Number(acc) else fromLong(dividend, acc)
+      if dividend == 0 then Number(next) else fromLong(dividend, next)
 
 
   override lazy val answer1: String = Number.fromLong(snafus.map(_.toLong).sum).toString
