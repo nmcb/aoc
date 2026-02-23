@@ -8,10 +8,8 @@ import scala.math.*
 object Day18 extends AoC:
 
   val boxes: Set[Box] =
-    lines
-      .map:
-        case s"$x,$y,$z" => Box(x.toInt, y.toInt, z.toInt)
-      .toSet
+    lines.toSet.collect:
+      case s"$x,$y,$z" => Box(x.toInt, y.toInt, z.toInt)
 
   case class Box(x: Int, y: Int, z: Int):
     infix def -(b: Box): Box = Box(x - b.x, y - b.y, z - b.z)
@@ -33,21 +31,14 @@ object Day18 extends AoC:
     val max = boxes.reduce(_ max _) + Box(1,1,1)
 
     @tailrec
-    def flood(todo: List[Box], visited: Set[Box]): Set[Box] =
-      todo match
-        case Nil =>
-          visited
-        case cur :: rest =>
-          val reached =
-            cur
-              .neighbours
-              .diff(boxes)
-              .diff(visited + cur)
-              .filter(n => n >= min && n <= max)
+    def flood(todo: Vector[Box], visited: Set[Box] = Set.empty): Set[Box] =
+      todo.runtimeChecked match
+        case Vector() => visited
+        case box +: rest =>
+          val reached = box.neighbours.diff(boxes).diff(visited + box).filter(box => box >= min && box <= max)
+          flood(rest ++ reached, visited ++ reached + box)
 
-          flood(rest ++ reached, visited ++ reached + cur)
-
-    val outer = flood(List(min), Set.empty)
+    val outer = flood(todo = Vector(min))
     boxes.toSeq.map(_.neighbours.count(outer.contains)).sum
 
   
