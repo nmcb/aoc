@@ -56,17 +56,14 @@ object Day21 extends AoC:
   type Defer      = Name  => Result
   type Deferrable = Defer => Result
 
-  sealed abstract class Expr(val name: Name, line: String) extends Deferrable:
-
-      override def toString: String =
-        s"$name=$name, line=$line\n"
-
-  case class Val(override val name: Name, result: Long, line: String) extends Expr(name, line):
+  abstract class Expr(val name: Name) extends Deferrable
+  
+  case class Val(override val name: Name, result: Long) extends Expr(name):
 
       def apply(defer: Defer): Result =
         result
 
-  case class Bin(override val name: Name, lhs: Name, rhs: Name, op: String, line: String) extends Expr(name, line):
+  case class Bin(override val name: Name, lhs: Name, rhs: Name, op: String) extends Expr(name):
       import Result.*
 
       def apply(defer: Defer): Result =
@@ -81,8 +78,8 @@ object Day21 extends AoC:
 
     def parseLine(line: String): Expr =
       line match
-        case s"$n: $l $o $r" => Bin(n, l, r, o, s"$n: $l $o $r")
-        case s"$n: $v"       => Val(n, v.toInt, s"$n: $v")
+        case s"$n: $l $o $r" => Bin(n, l, r, o)
+        case s"$n: $v"       => Val(n, v.toInt)
 
   case class SAT(input: Vector[Expr]):
 
@@ -104,11 +101,11 @@ object Day21 extends AoC:
 
   val patch: Vector[Expr] =
     program.flatMap:
-      case Bin("root", lhs, rhs, op, line) => Some(Bin("root", lhs, rhs, "=", line.replace(op.head, '=')))
-      case m if m.name == "humn"           => None
-      case m                               => Some(m)
+      case Bin("root", lhs, rhs, op) => Some(Bin("root", lhs, rhs, "="))
+      case m if m.name == "humn"     => None
+      case m                         => Some(m)
 
 
-  override lazy val answer1: Long = SAT(program).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
-  override lazy val answer2: Long = SAT(patch).solve.getOrElse(sys.error(s"unsolved ${program.foldLeft("\n")(_ + _)}"))
+  override lazy val answer1: Long = SAT(program).solve.get
+  override lazy val answer2: Long = SAT(patch).solve.get
 
