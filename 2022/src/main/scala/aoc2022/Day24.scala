@@ -49,7 +49,7 @@ object Day24 extends AoC:
   case class Streams(u: Vector[Stream], d: Vector[Stream], l: Vector[Stream], r: Vector[Stream], bounds: Bounds):
     import Field.*
     import bounds.*
-    
+
     def uAt(x: Int, y: Int): Char = u(x).drop(y).head
     def dAt(x: Int, y: Int): Char = d(x).drop(max.y - y).head
     def lAt(x: Int, y: Int): Char = l(y).drop(x).head
