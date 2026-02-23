@@ -39,6 +39,9 @@ object Day25 extends AoC:
           case ((a, p), d) => (a + (p * d.toLong), 5L * p)
         .left
 
+    override def toString: String =
+      s"${digits.mkString("")}"
+
   object Number:
 
     def fromString(string: String): Number =
