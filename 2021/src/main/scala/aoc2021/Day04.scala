@@ -18,7 +18,7 @@ object Day04 extends AoC:
 
   val boards: Vector[Board[Int]] =
     lines
-      .drop(1)
+      .tail
       .filterNot(_.isBlank)
       .grouped(5)
       .map: lines =>
@@ -58,11 +58,12 @@ object Day04 extends AoC:
     def empty[A]: Board[A] =
       Board[A](Vector.empty)
 
+  @tailrec
   def playWhoWinsFirst[A](draws: Vector[A], boards: Vector[Board[A]]): Board[A] =
     val round = boards.map(_.draw(draws.head))
-    round
-      .find(_.hasBingo)
-      .getOrElse(playWhoWinsFirst(draws.tail, round))
+    round.find(_.hasBingo) match
+      case Some(board) => board
+      case None        => playWhoWinsFirst(draws.tail, round)
 
   @tailrec
   def playWhoWinsLast[A](draws: Vector[A], game: Vector[Board[A]])(using CanEqual[A, A]): Board[A] =
