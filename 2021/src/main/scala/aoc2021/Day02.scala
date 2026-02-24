@@ -24,15 +24,19 @@ object Day02 extends AoC:
     def move(n: Long): Sub = copy(heading = heading + n)
     def tilt(n: Long): Sub = copy(aim = aim + n)
 
-    def run(is: Vector[Inst], part2: Boolean = false): Sub =
-      is.foldLeft(this): (cur,is) =>
+    def run1(is: Vector[Inst]): Sub =
+      is.foldLeft(this): (cur, is) =>
         is match
-          case Up(d) =>
-            if part2 then cur.tilt(-d) else cur.dive(-d)
-          case Down(d) =>
-            if part2 then cur.tilt(d) else cur.dive(d)
-          case Forward(d) =>
-            if part2 then cur.move(d).dive(cur.aim * d) else cur.move(d)
+          case Up(d)      => cur.dive(-d)
+          case Down(d)    => cur.dive(d)
+          case Forward(d) => cur.move(d)
+
+    def run2(is: Vector[Inst]): Sub =
+      is.foldLeft(this): (cur, is) =>
+        is match
+          case Up(d)      => cur.tilt(-d)
+          case Down(d)    => cur.tilt(d)
+          case Forward(d) => cur.move(d).dive(cur.aim * d)
 
     def solution: Long =
       heading * depth
@@ -42,5 +46,5 @@ object Day02 extends AoC:
 
   val instructions: Vector[Inst] = lines.map(Inst.fromLine)
 
-  override lazy val answer1: Long = Sub.init.run(instructions).solution
-  override lazy val answer2: Long = Sub.init.run(instructions, part2 = true).solution
+  override lazy val answer1: Long = Sub.init.run1(instructions).solution
+  override lazy val answer2: Long = Sub.init.run2(instructions).solution
