@@ -5,10 +5,7 @@ import nmcb.*
 object Day07 extends AoC:
 
   val positions: Vector[Int] =
-    input
-      .split(",")
-      .map(_.toInt)
-      .toVector
+    input.split(",").map(_.toInt).toVector
 
   extension (positions: Vector[Int])
 
