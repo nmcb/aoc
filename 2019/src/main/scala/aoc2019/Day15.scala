@@ -18,8 +18,8 @@ object Day15 extends AoC:
     (pos + delta, next, status)
 
   def dijkstra(cpu: CPU): (Map[Pos, Int], Option[(Pos, CPU)]) =
-    val steps = mutable.Map((0,0) -> 0)
-    val todo  = mutable.PriorityQueue[(Pos, CPU)]((0,0) -> cpu)(using Ordering.by((point, _) => steps(point)))
+    val steps = mutable.Map((0, 0) -> 0)
+    val todo  = mutable.PriorityQueue[(Pos, CPU)]((0, 0) -> cpu)(using Ordering.by((point, _) => steps(point)))
     var target = Option.empty[(Pos,CPU)]
 
     while todo.nonEmpty do

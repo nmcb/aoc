@@ -18,7 +18,7 @@ object Day06 extends AoC:
     val maxY: Int = coordinates.maxBy(_.y).y
 
     val positions: Vector[Pos] =
-      (for x <- minX to maxX ; y <- minY to maxY yield (x,y)).toVector
+      (for x <- minX to maxX ; y <- minY to maxY yield (x, y)).toVector
 
     type UnitDistance = (Pos, Long)
 

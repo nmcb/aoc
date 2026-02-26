@@ -46,7 +46,7 @@ object Day03 extends AoC:
 
     lazy val numbers: Vector[Num] =
       @tailrec
-      def compute(pos: Pos = (0,0), cur: String = "", loc: Vector[Pos] = Vector.empty, acc: Vector[Num] = Vector.empty): Vector[Num] =
+      def compute(pos: Pos = (0, 0), cur: String = "", loc: Vector[Pos] = Vector.empty, acc: Vector[Num] = Vector.empty): Vector[Num] =
         if pos.y >= chars.sizeY then
           acc
         else

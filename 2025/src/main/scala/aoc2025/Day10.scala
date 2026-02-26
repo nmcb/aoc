@@ -110,8 +110,8 @@ object Day10 extends AoC:
 
       /** add goal minimise for x0 + x1 + ... xn */
       val total: ArithExpr[IntSort] =
-        xs.foldLeft[ArithExpr[IntSort]](ctx.mkInt(0)): (x,y) =>
-          ctx.mkAdd(x,y)
+        xs.foldLeft[ArithExpr[IntSort]](ctx.mkInt(0)): (x, y) =>
+          ctx.mkAdd(x, y)
       optimizer.MkMinimize(total)
 
       /** joltage(i) - b(i0) - b(i1) - b(in) = 0 */

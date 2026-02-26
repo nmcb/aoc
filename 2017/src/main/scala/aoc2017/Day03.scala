@@ -32,7 +32,7 @@ object Day03 extends AoC:
         (x, y)
 
     @tailrec
-    def loop(n: Int, squares: Map[Pos,Int] = Map((0,0) -> 1)): Int =
+    def loop(n: Int, squares: Map[Pos,Int] = Map((0, 0) -> 1)): Int =
       val point  = position(n)
       val result = spiralScan.map(_ + point).flatMap(squares.get).sum
       if result > to then

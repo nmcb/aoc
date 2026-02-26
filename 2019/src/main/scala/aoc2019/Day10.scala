@@ -14,7 +14,7 @@ object Day10 extends AoC:
     val sizeX = lines(0).length
     val sizeY = lines.length
     List
-      .tabulate(sizeX, sizeY)((x,y) => if lines(y)(x) == '#' then Some((x,y)) else None)
+      .tabulate(sizeX, sizeY)((x, y) => Option.when(lines(y)(x) == '#')((x, y)))
       .flatten
       .flatten
 

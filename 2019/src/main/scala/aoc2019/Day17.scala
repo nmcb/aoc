@@ -59,7 +59,7 @@ object Day17 extends AoC:
           (tile, x) <- row.view.zipWithIndex
           direction <- parseRobotDir(tile)
         yield
-          ((x,y), direction)
+          ((x, y), direction)
 
       robots.head
 

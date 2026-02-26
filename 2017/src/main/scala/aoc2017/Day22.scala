@@ -75,8 +75,8 @@ object Day22 extends AoC:
           row
             .zipWithIndex
             .collect:
-              case ('#',x) => (x,y) -> Infected
-              case ('.',x) => (x,y) -> Clean
+              case ('#',x) => (x, y) -> Infected
+              case ('.',x) => (x, y) -> Clean
         .toMap
         .withDefaultValue(Clean)
 

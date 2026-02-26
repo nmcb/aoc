@@ -12,7 +12,7 @@ object Day17 extends AoC:
 
   val moves: Vector[Move] = input.toVector
 
-  val origin: Pos = (0,0)
+  val origin: Pos = (0, 0)
 
   type Move = Char
   val L = '<'
@@ -25,11 +25,11 @@ object Day17 extends AoC:
   sealed abstract class Rock(val relative: List[Pos]):
     def withOrigin(o: Pos): List[Pos] = relative.map(p => (p.x + o.x, p.y + o.y))
 
-  case object Min   extends Rock(List((0,0), (1,0), (2,0), (3,0)))
-  case object Plus  extends Rock(List((1,0), (0,1), (1,1), (2,1), (1,2)))
-  case object El    extends Rock(List((0,0), (1,0), (2,0), (2,1), (2,2)))
-  case object Stack extends Rock(List((0,0), (0,1), (0,2), (0,3)))
-  case object Box   extends Rock(List((0,0), (1,0), (0,1), (1,1)))
+  case object Min   extends Rock(List((0, 0), (1, 0), (2, 0), (3, 0)))
+  case object Plus  extends Rock(List((1, 0), (0, 1), (1, 1), (2, 1), (1, 2)))
+  case object El    extends Rock(List((0, 0), (1, 0), (2, 0), (2, 1), (2, 2)))
+  case object Stack extends Rock(List((0, 0), (0, 1), (0, 2), (0, 3)))
+  case object Box   extends Rock(List((0, 0), (1, 0), (0, 1), (1, 1)))
 
   object Rock:
     val sequence: LazyList[Rock] = LazyList(Min, Plus, El, Stack, Box) #::: sequence

@@ -77,7 +77,7 @@ object Day10 extends AoC:
     val positionsSet  = positions.toSet
 
     (min.y to max.y).foldLeft(StringBuffer())((sb,y) => (min.x to max.x).foldLeft(sb)((sb,x) =>
-      if positionsSet.contains((x,y)) then sb.append('#') else sb.append('.')
+      if positionsSet.contains((x, y)) then sb.append('#') else sb.append('.')
     ).append('\n')).toString
 
   val (sky, fastest) =

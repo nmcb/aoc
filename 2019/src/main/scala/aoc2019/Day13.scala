@@ -73,7 +73,7 @@ object Day13 extends AoC:
 
       for y <- 0 to maxY do
         for x <- 0 to maxX do
-          buffer += sprites(display(Location(x,y)))
+          buffer += sprites(display(Location(x, y)))
         buffer += "\n"
       buffer += Reset
 
@@ -90,7 +90,7 @@ object Day13 extends AoC:
       else
         val outputs = executions.flatMap(_.outputOption)
         val frame   = outputs.grouped(3).foldLeft(game):
-          case (result, LazyList(x,y,value)) => result.updated(Location(x,y), value)
+          case (result, LazyList(x,y,value)) => result.updated(Location(x, y), value)
           case (_, _)                        => sys.error("incomplete output")
 
         val ballX   = frame.ball.get.x

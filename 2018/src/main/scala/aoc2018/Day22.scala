@@ -46,7 +46,7 @@ object Day22 extends AoC:
 
   def sumOfRiskLevels(min: Region, max: Region): Int =
     var result = 0
-    for y <- min.y to max.y ; x <- min.x to max.x do result = result + Region(x,y).regionType.riskLevel
+    for y <- min.y to max.y ; x <- min.x to max.x do result = result + Region(x, y).regionType.riskLevel
     result
 
   enum Tool derives CanEqual:

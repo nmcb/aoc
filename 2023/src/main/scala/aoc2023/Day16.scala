@@ -70,5 +70,5 @@ object Day16 extends AoC:
 
   lazy val grid: Grid = Grid(lines.map(_.toVector))
 
-  override lazy val answer1: Long = grid.energized(start = (0,0), direction = E)
+  override lazy val answer1: Long = grid.energized(start = (0, 0), direction = E)
   override lazy val answer2: Long = grid.maxEnergized

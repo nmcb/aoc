@@ -12,12 +12,12 @@ object Day19 extends AoC:
       y <- ys
       x <- xs
     yield
-      CPU(program).withInput(x,y).outputs.last
+      CPU(program).withInput(x, y).outputs.last
 
   def wiggleSouthEast(program: Mem, maxX: Value, maxY: Value): Long =
 
     def isPulled(x: Value, y: Value): Boolean =
-      CPU(program).withInput(x,y).outputs.head == 1
+      CPU(program).withInput(x, y).outputs.head == 1
 
     @tailrec
     def go(x: Value, y: Value): Value =

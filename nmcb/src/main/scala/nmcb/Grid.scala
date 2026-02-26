@@ -85,7 +85,7 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
       if matrix.isEmpty then
         matrix
       else
-        Vector.tabulate(sizeX, sizeY)((x,y) => matrix(sizeX - 1 - y)(x))
+        Vector.tabulate(sizeX, sizeY)((x, y) => matrix(sizeX - 1 - y)(x))
     Grid(rotateMatrixCW(matrix))
 
   inline def toMap[B >: A]: Map[Pos, Set[(Pos, B)]] =

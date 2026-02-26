@@ -182,7 +182,7 @@ object Day24 extends AoC:
     val (w1, m1) = loop(world)
 
     val w2 = w1.copy(
-      target       = (0,0),
+      target       = (0, 0),
       currentField = w1.nextField,
       nextField    = w1.streams.futureField,
       streams      = w1.streams.next,
@@ -197,7 +197,7 @@ object Day24 extends AoC:
       nextField    = w3.streams.futureField,
       streams      = w3.streams.next,
       minutes      = m3 + 1,
-      found        = Set((0,-1))
+      found        = Set((0, -1))
     )
 
     val (_, m5) = loop(w4)

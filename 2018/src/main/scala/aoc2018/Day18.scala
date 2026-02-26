@@ -18,7 +18,7 @@ object Day18 extends AoC:
       for
         y <- 0 until sizeX
         x <- 0 until sizeX
-        p = (x,y)
+        p = (x, y)
       do
         sb.append(area(p))
       sb.toString.grouped(sizeX).mkString("\n","\n","\n")
@@ -44,7 +44,7 @@ object Day18 extends AoC:
       for
         y <- 0 until sizeY
         x <- 0 until sizeX
-        p = (x,y)
+        p = (x, y)
       do
         val c = area(p) match
           case '.' => if surroundedBy(p, '|') >= 3 then '|' else '.'
