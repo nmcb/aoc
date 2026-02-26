@@ -49,13 +49,13 @@ object Day18 extends AoC:
       x <- min.x to max.x
       y <- min.y to max.y
     yield
-      Pos.of(x, y)
+      (x, y)
 
   /** cubic meter = one point - data driven flood algorithm with some set arithmetic */
   def dig1(operations: Vector[Op]): Long =
     val holes: Set[Pos] = operations.foldLeft(Vector(Pos.origin))((a,o) => a ++ a.last.move1(o)).toSet
-    val min = holes.reduce(_ minimize _) - Pos.of(1, 1)
-    val max = holes.reduce(_ maximize _) + Pos.of(1, 1)
+    val min = holes.reduce(_ minimize _) - (1, 1)
+    val max = holes.reduce(_ maximize _) + (1, 1)
 
     @tailrec
     def flood(todo: List[Pos], visited: Set[Pos] = Set.empty): Set[Pos] =

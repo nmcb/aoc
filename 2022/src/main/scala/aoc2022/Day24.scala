@@ -12,7 +12,7 @@ object Day24 extends AoC:
     val sizeY: Int = max.y + 1
     val fieldSize: Int = sizeX * sizeY
     def isField(p: Pos): Boolean = p.x >= 0 && p.x <= max.x && p.y >= 0 && p.y <= max.y
-    def transpose: Bounds = copy(max = Pos.of(max.y, max.x))
+    def transpose: Bounds = copy(max = (max.y, max.x))
 
 
   enum Dir(val char: Char) derives CanEqual:
@@ -99,7 +99,7 @@ object Day24 extends AoC:
   type Paths = Set[Pos]
 
   object Paths:
-    def start: Paths = Set(Pos.of(-1, 0))
+    def start: Paths = Set((-1, 0))
 
   case class World(
     target: Pos,
@@ -125,7 +125,7 @@ object Day24 extends AoC:
       found.flatMap: p =>
           val ms   = p.adjoint4.filter(free(nextField))
           val test = free(nextField)(p) && p.adjoint4.exists(free(streams.futureField)) && bounds.isField(p)
-          if test || p == bounds.max + Pos.of(0, 1) || p == Pos.of(0, -1) then ms + p else ms
+          if test || p == bounds.max + (0, 1) || p == (0, -1) then ms + p else ms
 
     def reachedGoal: Boolean =
       found.contains(target)
@@ -148,7 +148,7 @@ object Day24 extends AoC:
 
       val sizeX = initField.head.size
       val sizeY = initField.size
-      val bounds: Bounds = Bounds(Pos.of(sizeX - 1 , sizeY - 1))
+      val bounds: Bounds = Bounds((sizeX - 1 , sizeY - 1))
 
       def make(dir: Dir, f: Field[Char]): Vector[Stream] =
         def stream(line: Vector[Char]): LazyList[Char] =
@@ -182,12 +182,12 @@ object Day24 extends AoC:
     val (w1, m1) = loop(world)
 
     val w2 = w1.copy(
-      target       = Pos.of(0,0),
+      target       = (0,0),
       currentField = w1.nextField,
       nextField    = w1.streams.futureField,
       streams      = w1.streams.next,
       minutes      = m1 + 1,
-      found        = Set(w1.bounds.max + Pos.of(0, 1))
+      found        = Set(w1.bounds.max + (0, 1))
     )
     val (w3, m3) = loop(w2)
 
@@ -197,7 +197,7 @@ object Day24 extends AoC:
       nextField    = w3.streams.futureField,
       streams      = w3.streams.next,
       minutes      = m3 + 1,
-      found        = Set(Pos.of(0,-1))
+      found        = Set((0,-1))
     )
 
     val (_, m5) = loop(w4)

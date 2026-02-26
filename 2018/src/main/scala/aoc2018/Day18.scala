@@ -18,7 +18,7 @@ object Day18 extends AoC:
       for
         y <- 0 until sizeX
         x <- 0 until sizeX
-        p = Pos.of(x,y)
+        p = (x,y)
       do
         sb.append(area(p))
       sb.toString.grouped(sizeX).mkString("\n","\n","\n")
@@ -44,7 +44,7 @@ object Day18 extends AoC:
       for
         y <- 0 until sizeY
         x <- 0 until sizeX
-        p = Pos.of(x,y)
+        p = (x,y)
       do
         val c = area(p) match
           case '.' => if surroundedBy(p, '|') >= 3 then '|' else '.'
@@ -58,7 +58,7 @@ object Day18 extends AoC:
   val landscape: Landscape =
     val sizeX = lines(0).length
     val sizeY = lines.size
-    val area  = List.tabulate(sizeX, sizeY)((x,y) => Pos.of(x,y) -> lines(y)(x)).flatten.toMap
+    val area  = List.tabulate(sizeX, sizeY)((x, y) => (x = x, y = y) -> lines(y)(x)).flatten.toMap
     Landscape(area, sizeX, sizeY)
 
   override lazy val answer1: Int = Iterator.iterate(landscape)(_.tick).nth(10).resourceValue

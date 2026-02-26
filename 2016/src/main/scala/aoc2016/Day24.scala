@@ -3,17 +3,32 @@ package aoc2016
 import nmcb.*
 import nmcb.pos.{*, given}
 
+import scala.util.control.Breaks._
+
 object Day24 extends AoC:
 
   type Grid      = Set[Pos]
-  type Nodes     = Map[Int,Pos]
-  type Distances = Map[Int,Map[Int,Int]]
+  type Nodes     = Map[Int, Pos]
+  type Distances = Map[Int, Map[Int, Int]]
   type Routes    = Vector[Vector[Int]]
   
-  val(grid: Grid, nodes: Nodes) =
-    val grid  = for y <- lines.indices ; x <- lines.head.indices if lines(y)(x) != '#'  yield Pos.of(x, y)
-    val nodes = for y <- lines.indices ; x <- lines.head.indices if lines(y)(x).isDigit yield lines(y)(x).asDigit -> Pos.of(x, y)
-    (grid.toSet, nodes.toMap)
+  val grid: Grid =
+    val grid =
+      for
+        y <- lines.indices
+        x <- lines.head.indices if lines(y)(x) != '#'
+      yield
+        (x = x, y = y)
+    grid.toSet
+
+  val nodes: Nodes =
+    val nodes =
+      for
+        y <- lines.indices
+        x <- lines.head.indices if lines(y)(x).isDigit
+      yield
+        lines(y)(x).asDigit -> Pos.of(x, y)
+    nodes.toMap
 
   /** breath first search */
   def distance(grid: Grid, start: Pos, end: Pos): Int =
@@ -21,15 +36,22 @@ object Day24 extends AoC:
     val steps = mutable.Map(start -> 0)
     val todo  = mutable.Queue(start)
 
-    while todo.nonEmpty do
-      val current = todo.dequeue
-      if current == end then return steps(current)
-      val update  = steps(current) + 1
-      current.adjoint4.intersect(grid).foreach: next =>
-        if !steps.contains(next) || update < steps(next) then
-          steps(next) = update
-          todo.enqueue(next)
-    sys.error("boom!")
+    var result: Int = 0
+    breakable:
+      while todo.nonEmpty do
+        val current = todo.dequeue
+
+        if current == end then
+          result = steps(current)
+          break()
+
+        val update  = steps(current) + 1
+
+        current.adjoint4.intersect(grid).foreach: next =>
+          if !steps.contains(next) || update < steps(next) then
+            steps(next) = update
+            todo.enqueue(next)
+    result
 
   def distances(grid: Grid, nodes: Nodes): Distances =
     nodes.transform: (_, start) =>

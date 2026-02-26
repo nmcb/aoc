@@ -27,18 +27,18 @@ object Day23 extends AoC:
     def valid(f: Pos, d: Dir): Boolean =
       val offset = Set(-1, 0, 1)
       d match
-        case N => offset.forall(d => !elves.contains(f + Pos.of( d,-1)))
-        case S => offset.forall(d => !elves.contains(f + Pos.of( d, 1)))
-        case W => offset.forall(d => !elves.contains(f + Pos.of(-1, d)))
-        case E => offset.forall(d => !elves.contains(f + Pos.of( 1, d)))
+        case N => offset.forall(d => !elves.contains(f + ( d,-1)))
+        case S => offset.forall(d => !elves.contains(f + ( d, 1)))
+        case W => offset.forall(d => !elves.contains(f + (-1, d)))
+        case E => offset.forall(d => !elves.contains(f + ( 1, d)))
 
     def propose(f: Pos, ds: Seq[Dir]): Option[Pos] =
       def proposal(d: Dir): Pos =
         d match
-          case N => f + Pos.of( 0,-1)
-          case S => f + Pos.of( 0, 1)
-          case W => f + Pos.of(-1, 0)
-          case E => f + Pos.of( 1, 0)
+          case N => f + ( 0,-1)
+          case S => f + ( 0, 1)
+          case W => f + (-1, 0)
+          case E => f + ( 1, 0)
       ds.find(d => valid(f,d)).map(proposal)
 
     val proposals: Map[Pos,Option[Pos]] =
@@ -60,7 +60,7 @@ object Day23 extends AoC:
         for
           x <- minX to maxX
           y <- minY to maxY
-          if !elves.contains(Pos.of(x, y))
+          if !elves.contains((x, y))
         yield 1
       size.sum
 

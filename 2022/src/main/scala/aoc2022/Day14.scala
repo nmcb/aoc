@@ -18,7 +18,7 @@ object Day14 extends AoC:
     line.trim
       .split(""" -> """)
       .foldLeft(Vector.empty[Pos]):
-        case (path, s"$x,$y") => path :+ Pos.of(x.toInt, y.toInt)
+        case (path, s"$x,$y") => path :+ (x.toInt, y.toInt)
         case (_, e)           => sys.error(s"unable to parse $e")
 
 
@@ -27,10 +27,10 @@ object Day14 extends AoC:
     val paths = lines.map(parseLine)
 
     def segment(from: Pos, to: Pos): Vector[Pos] =
-      (if     from.x == to.x && from.y < to.y then (from.y to to.y).map(y => Pos.of(to.x, y))
-      else if from.x == to.x && from.y > to.y then (to.y to from.y).map(y => Pos.of(to.x, y))
-      else if from.y == to.y && from.x < to.x then (from.x to to.x).map(x => Pos.of(x, to.y))
-      else if from.y == to.y && from.x > to.x then (to.x to from.x).map(x => Pos.of(x, to.y))
+      (if     from.x == to.x && from.y < to.y then (from.y to to.y).map(y => (to.x, y))
+      else if from.x == to.x && from.y > to.y then (to.y to from.y).map(y => (to.x, y))
+      else if from.y == to.y && from.x < to.x then (from.x to to.x).map(x => (x, to.y))
+      else if from.y == to.y && from.x > to.x then (to.x to from.x).map(x => (x, to.y))
       else sys.error("boom!")).toVector
 
     @tailrec
@@ -53,7 +53,7 @@ object Day14 extends AoC:
     @tailrec
     private def land(current: Pos): (Pos, Boolean) =
       def find(p: Pos): Option[Pos] =
-        val below: Vector[Pos] = Vector(Pos.of(p.x, p.y + 1), Pos.of(p.x - 1, p.y + 1), Pos.of(p.x + 1, p.y + 1))
+        val below: Vector[Pos] = Vector((p.x, p.y + 1), (p.x - 1, p.y + 1), (p.x + 1, p.y + 1))
         below.find(p => get(p).isEmpty || get(p).contains(Air))
       find(current) match
         case None                      => (current, false)
@@ -94,7 +94,7 @@ object Day14 extends AoC:
           row.updated(p.y, row(p.y).updated(p.x, Rock)) :+ Vector.fill(1000)(Air) :+ Vector.fill(1000)(Rock)
       Cave(view, 0)
 
-    private val drip: Pos = Pos.of(500, 0)
+    private val drip: Pos = (500, 0)
 
 
   override lazy val answer1: Int = Cave.fromRocks1(rocks).solve1

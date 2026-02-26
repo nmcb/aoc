@@ -182,7 +182,7 @@ object Day15 extends AoC:
       for
         (row,y)  <- parseGrid(input).view.zipWithIndex.toList
         (tile,x) <- row.view.zipWithIndex
-        fighter  <- parseFighter(tile, Pos.of(x,y))
+        fighter  <- parseFighter(tile, (x,y))
       yield fighter
 
     val grid: Grid =

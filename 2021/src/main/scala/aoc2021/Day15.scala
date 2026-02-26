@@ -19,7 +19,7 @@ object Day15 extends AoC:
     val matrix = Vector.tabulate(5 * grid.sizeX, 5 * grid.sizeY): (y, x) =>
       val (mx, px) = x /% grid.sizeX
       val (my, py) = y /% grid.sizeY
-      val pv = grid.peek(Pos.of(px, py))
+      val pv = grid.peek((px, py))
       1 + (pv - 1 + mx + my) % 9
     Grid.fromMatrix(matrix)
 

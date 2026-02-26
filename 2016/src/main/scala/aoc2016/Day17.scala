@@ -22,13 +22,13 @@ object Day17 extends AoC:
 
 
   /** hardcoded for 4x4 grid */
-  case class Path(passcode: String, path: String = "", target: Pos = Pos.of(0, 0)):
+  case class Path(passcode: String, path: String = "", target: Pos = (0, 0)):
 
     def withinGrid: Boolean =
       target.x >= 0 && target.x < 4 && target.y >= 0 && target.y < 4
 
     def reachedVault: Boolean =
-      target == Pos.of(3, 3)
+      target == (3, 3)
 
     def openDoors: String =
       md5

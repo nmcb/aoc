@@ -33,14 +33,6 @@ object Day15 extends AoC:
     lazy val robotPosition: Pos     = grid.find((_, c) => c == '@').map(_.pos).head
     lazy val boxPositions: Set[Pos] = grid.filter((_, c) => c == 'O' | c == '[').keySet
 
-    override def toString: String =
-      val representation = for {
-        y <- 0 until sizeY
-        x <- 0 until sizeX
-        p = Pos.of(x, y)
-      } yield grid(p)
-      representation.mkString("").grouped(sizeX).mkString("\n")
-
     def isFree(p: Pos): Boolean = grid(p) == '.'
     def isWall(p: Pos): Boolean = grid(p) == '#'
     def isBox(p: Pos): Boolean  = grid(p) == 'O' | grid(p) == ']' | grid(p) == '['
@@ -103,7 +95,7 @@ object Day15 extends AoC:
     val positions = for {
       (l, y) <- top.split("\n").zipWithIndex
       (c, x) <- l.trim.zipWithIndex
-    } yield Pos.of(x, y) -> c
+    } yield (x, y) -> c
     val moves = bottom.filterNot(_ == '\n').toList
     (Grid(positions.toMap), moves)
 

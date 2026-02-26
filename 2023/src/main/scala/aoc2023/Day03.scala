@@ -46,17 +46,17 @@ object Day03 extends AoC:
 
     lazy val numbers: Vector[Num] =
       @tailrec
-      def compute(pos: Pos = Pos.of(0,0), cur: String = "", loc: Vector[Pos] = Vector.empty, acc: Vector[Num] = Vector.empty): Vector[Num] =
+      def compute(pos: Pos = (0,0), cur: String = "", loc: Vector[Pos] = Vector.empty, acc: Vector[Num] = Vector.empty): Vector[Num] =
         if pos.y >= chars.sizeY then
           acc
         else
           if pos.x >= chars.sizeX then
-            compute(Pos.of(0, pos.y + 1), "", Vector.empty, if cur.nonEmpty then acc :+ Num(loc) else acc)
+            compute((0, pos.y + 1), "", Vector.empty, if cur.nonEmpty then acc :+ Num(loc) else acc)
           else
             if pos.isDigit then
-              compute(Pos.of(pos.x + 1, pos.y), s"$cur${chars.peek(pos)}", loc :+ pos, acc)
+              compute((pos.x + 1, pos.y), s"$cur${chars.peek(pos)}", loc :+ pos, acc)
             else
-              compute(Pos.of(pos.x + 1, pos.y), "", Vector.empty, if cur.nonEmpty then acc :+ Num(loc) else acc)
+              compute((pos.x + 1, pos.y), "", Vector.empty, if cur.nonEmpty then acc :+ Num(loc) else acc)
       compute()
 
     lazy val numbersWithAdjacentSymbols: Vector[Num] =

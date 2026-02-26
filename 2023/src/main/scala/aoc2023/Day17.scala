@@ -23,7 +23,7 @@ object Day17 extends AoC:
           (current = next, direction = direction, steps = steps) -> city.peek(next)
 
       val start  = (current = Pos.origin, direction = Pos.origin, steps = 0)
-      val target = (n: Crucible) => n.current == Pos.of(city.sizeX - 1, city.sizeY - 1) && canStop(n)
+      val target = (n: Crucible) => n.current == (city.sizeX - 1, city.sizeY - 1) && canStop(n)
 
       Dijkstra.run(start, target, reachable).map(_.right)
 

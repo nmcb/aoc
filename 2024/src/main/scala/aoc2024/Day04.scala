@@ -9,14 +9,14 @@ object Day04 extends AoC:
 
   type Dir = Pos => Pos
 
-  val N:  Dir = p => Pos.of(p.x, p.y - 1)
-  val E:  Dir = p => Pos.of(p.x + 1, p.y)
-  val S:  Dir = p => Pos.of(p.x, p.y + 1)
-  val W:  Dir = p => Pos.of(p.x - 1, p.y)
-  val NE: Dir = p => Pos.of(p.x + 1, p.y - 1)
-  val SE: Dir = p => Pos.of(p.x + 1, p.y + 1)
-  val NW: Dir = p => Pos.of(p.x - 1, p.y - 1)
-  val SW: Dir = p => Pos.of(p.x - 1, p.y + 1)
+  val N:  Dir = p => (p.x, p.y - 1)
+  val E:  Dir = p => (p.x + 1, p.y)
+  val S:  Dir = p => (p.x, p.y + 1)
+  val W:  Dir = p => (p.x - 1, p.y)
+  val NE: Dir = p => (p.x + 1, p.y - 1)
+  val SE: Dir = p => (p.x + 1, p.y + 1)
+  val NW: Dir = p => (p.x - 1, p.y - 1)
+  val SW: Dir = p => (p.x - 1, p.y + 1)
 
   val grid: Grid[Char] = Grid.fromLines(lines)
   

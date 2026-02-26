@@ -12,7 +12,7 @@ object Day17 extends AoC:
 
   val moves: Vector[Move] = input.toVector
 
-  val origin: Pos = Pos.of(0,0)
+  val origin: Pos = (0,0)
 
   type Move = Char
   val L = '<'
@@ -23,13 +23,13 @@ object Day17 extends AoC:
     val pattern: LazyList[Move] = moves.to(LazyList) #::: pattern
 
   sealed abstract class Rock(val relative: List[Pos]):
-    def withOrigin(o: Pos): List[Pos] = relative.map(p => Pos.of(p.x + o.x, p.y + o.y))
+    def withOrigin(o: Pos): List[Pos] = relative.map(p => (p.x + o.x, p.y + o.y))
 
-  case object Min   extends Rock(List(Pos.of(0,0), Pos.of(1,0), Pos.of(2,0), Pos.of(3,0)))
-  case object Plus  extends Rock(List(Pos.of(1,0), Pos.of(0,1), Pos.of(1,1), Pos.of(2,1), Pos.of(1,2)))
-  case object El    extends Rock(List(Pos.of(0,0), Pos.of(1,0), Pos.of(2,0), Pos.of(2,1), Pos.of(2,2)))
-  case object Stack extends Rock(List(Pos.of(0,0), Pos.of(0,1), Pos.of(0,2), Pos.of(0,3)))
-  case object Box   extends Rock(List(Pos.of(0,0), Pos.of(1,0), Pos.of(0,1), Pos.of(1,1)))
+  case object Min   extends Rock(List((0,0), (1,0), (2,0), (3,0)))
+  case object Plus  extends Rock(List((1,0), (0,1), (1,1), (2,1), (1,2)))
+  case object El    extends Rock(List((0,0), (1,0), (2,0), (2,1), (2,2)))
+  case object Stack extends Rock(List((0,0), (0,1), (0,2), (0,3)))
+  case object Box   extends Rock(List((0,0), (1,0), (0,1), (1,1)))
 
   object Rock:
     val sequence: LazyList[Rock] = LazyList(Min, Plus, El, Stack, Box) #::: sequence
@@ -83,7 +83,7 @@ object Day17 extends AoC:
       Chamber(rocks = rocks.tail, pattern = consumed, stopped = dropped.filter(_.y >= maxY - slidingWindow), height = maxY)
 
     def cycleInvariant: Set[Pos] =
-      stopped.map(_ - Pos.of(0, height - slidingWindow))
+      stopped.map(_ - (0, height - slidingWindow))
 
 
   object Chamber:

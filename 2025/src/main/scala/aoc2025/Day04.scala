@@ -8,7 +8,7 @@ import scala.annotation.tailrec
 object Day04 extends AoC:
 
   val (minPos, maxPos, rolls) =
-    val ps = for y <- lines.indices ; x <- lines.head.indices yield Pos.of(x, y)
+    val ps = for y <- lines.indices ; x <- lines.head.indices yield (x = x, y = y)
     (ps.min, ps.max, ps.filter(p => lines(p.y)(p.x) == '@').toSet)
 
   extension (p: Pos)

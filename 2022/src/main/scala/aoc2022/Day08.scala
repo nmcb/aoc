@@ -11,10 +11,10 @@ object Day08 extends AoC:
       p.x == 0 || p.x == grid.maxPos.x | p.y == 0 || p.y == grid.maxPos.y
 
     def visible(p: Pos): Boolean =
-      def pathL(p: Pos): Vector[Int] = (0 to p.x).map(x             => grid.peek(Pos.of(x, p.y))).toVector
-      def pathR(p: Pos): Vector[Int] = (p.x to grid.maxPos.x).map(x => grid.peek(Pos.of(x, p.y))).toVector.reverse
-      def pathT(p: Pos): Vector[Int] = (0 to p.y).map(y             => grid.peek(Pos.of(p.x, y))).toVector
-      def pathB(p: Pos): Vector[Int] = (p.y to grid.maxPos.y).map(y => grid.peek(Pos.of(p.x, y))).toVector.reverse
+      def pathL(p: Pos): Vector[Int] = (0 to p.x).map(x             => grid.peek((x, p.y))).toVector
+      def pathR(p: Pos): Vector[Int] = (p.x to grid.maxPos.x).map(x => grid.peek((x, p.y))).toVector.reverse
+      def pathT(p: Pos): Vector[Int] = (0 to p.y).map(y             => grid.peek((p.x, y))).toVector
+      def pathB(p: Pos): Vector[Int] = (p.y to grid.maxPos.y).map(y => grid.peek((p.x, y))).toVector.reverse
       def visible(todo: Vector[Int]): Boolean = todo.init.max < todo.last
       val vl = visible(pathL(p))
       val vr = visible(pathR(p))
@@ -29,10 +29,10 @@ object Day08 extends AoC:
         else                     c
 
     def scenicScore(p: Pos): Int =
-      def pathL(p: Pos): Vector[Int] = (0 to p.x).map(x             => grid.peek(Pos.of(x, p.y))).toVector.reverse
-      def pathR(p: Pos): Vector[Int] = (p.x to grid.maxPos.x).map(x => grid.peek(Pos.of(x, p.y))).toVector
-      def pathT(p: Pos): Vector[Int] = (0 to p.y).map(y             => grid.peek(Pos.of(p.x, y))).toVector.reverse
-      def pathB(p: Pos): Vector[Int] = (p.y to grid.maxPos.y).map(y => grid.peek(Pos.of(p.x, y))).toVector
+      def pathL(p: Pos): Vector[Int] = (0 to p.x).map(x             => grid.peek((x, p.y))).toVector.reverse
+      def pathR(p: Pos): Vector[Int] = (p.x to grid.maxPos.x).map(x => grid.peek((x, p.y))).toVector
+      def pathT(p: Pos): Vector[Int] = (0 to p.y).map(y             => grid.peek((p.x, y))).toVector.reverse
+      def pathB(p: Pos): Vector[Int] = (p.y to grid.maxPos.y).map(y => grid.peek((p.x, y))).toVector
       def score(todo: Vector[Int]): Int =
         val index  = todo.tail.indexWhere(_ >= todo.head)
         if index != -1 then index + 1 else todo.tail.length

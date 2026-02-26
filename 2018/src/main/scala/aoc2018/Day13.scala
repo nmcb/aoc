@@ -68,11 +68,11 @@ object Day13 extends AoC:
         y <- (0 until matrix.sizeY).toVector
         x <- (0 until matrix.sizeX).toVector
       yield
-        matrix.charAt(Pos.of(x,y)) match
-          case Some(c) if c == '^' => Some(Cart(Pos.of(x,y), N))
-          case Some(c) if c == '>' => Some(Cart(Pos.of(x,y), E))
-          case Some(c) if c == 'v' => Some(Cart(Pos.of(x,y), S))
-          case Some(c) if c == '<' => Some(Cart(Pos.of(x,y), W))
+        matrix.charAt((x,y)) match
+          case Some(c) if c == '^' => Some(Cart((x,y), N))
+          case Some(c) if c == '>' => Some(Cart((x,y), E))
+          case Some(c) if c == 'v' => Some(Cart((x,y), S))
+          case Some(c) if c == '<' => Some(Cart((x,y), W))
           case _                   => None
 
     val grid =

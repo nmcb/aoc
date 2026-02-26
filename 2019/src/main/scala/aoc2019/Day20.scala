@@ -19,7 +19,7 @@ object Day20 extends AoC:
     def peek(x: Int, y: Int): Char = lines.lift(y).flatMap(_.lift(x)).getOrElse(' ')
     val sizeX   = lines.maxBy(_.length).length
     val sizeY   = lines.length
-    val maze    = Seq.tabulate(sizeX, sizeY)((x,y) => Pos.of(x,y) -> peek(x,y)).flatten.toMap
+    val maze    = Seq.tabulate(sizeX, sizeY)((x,y) => (x = x, y = y) -> peek(x,y)).flatten.toMap
     val portals = findPortals(sizeX - 3, sizeY - 3, maze)
 
     val routes =
@@ -46,7 +46,7 @@ object Day20 extends AoC:
       y       <- 2 to sizeY
       pattern <- patterns
     yield
-      val pos = Pos.of(x,y)
+      val pos = (x,y)
       val Seq(first,second) = pattern.map(pos.translate).map(maze)
       if maze(pos) == '.' && first.isLetter && second.isLetter then
         val label = s"$first$second"
