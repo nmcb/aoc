@@ -5,21 +5,23 @@ import nmcb.parsing.*
 
 object Day13 extends AoC:
 
-  enum E derives CanEqual:
+  enum Expr derives CanEqual:
     case N(n: Long)
-    case L(l: List[E])
+    case L(l: List[Expr])
     
-  object E:
+  import Expr.*   
+    
+  object Expr:
 
-    def L(es: E*): L = L(es.toList)
+    def L(es: Expr*): L = L(es.toList)
 
-    def n: P[E] = digits.map(N.apply)
-    def l: P[E] = seq('[', ',', ']', e).map(L.apply)
-    def e: P[E] = n | l
-    def parse(s: String): E = e.run(s)
+    def n: P[Expr] = digits.map(N.apply)
+    def l: P[Expr] = seq('[', ',', ']', e).map(L.apply)
+    def e: P[Expr] = n | l
+    def parse(s: String): Expr = e.run(s)
 
-    given ordering: Ordering[E] with
-      def compare(l: E, r: E): Int =
+    given ordering: Ordering[Expr] with
+      def compare(l: Expr, r: Expr): Int =
         (l, r) match
           case (ln: N, rl: L)             => compare(L(ln), rl)
           case (ll: L, rn: N)             => compare(ll, L(rn))
@@ -34,12 +36,9 @@ object Day13 extends AoC:
                case  1 => 1
 
 
-  import E.*
-
   import math.Ordered.orderingToOrdered
 
-  val expressions: Vector[E] =
-    lines.filterNot(_.isBlank).map(parse)
+  val expressions: Vector[Expr] = lines.filterNot(_.isBlank).map(parse)
 
   
   override lazy val answer1: Int =
@@ -50,8 +49,8 @@ object Day13 extends AoC:
       .sum
 
   override lazy val answer2: Long =
-    val divider1: E = L(L(N(2)))
-    val divider2: E = L(L(N(6)))
+    val divider1: Expr = L(L(N(2)))
+    val divider2: Expr = L(L(N(6)))
 
     val ordered = (divider1 +: divider2 +: expressions).sorted
     val idx1 = ordered.indexWhere(_ == divider1) + 1
