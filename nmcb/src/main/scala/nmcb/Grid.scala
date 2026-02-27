@@ -8,6 +8,10 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
   val sizeX: Int = matrix.head.size
   val minPos: Pos = Pos.origin
   val maxPos: Pos = (sizeX - 1, sizeY - 1)
+  val leftUpper: Pos   = minPos
+  val leftBottom: Pos  = (minPos.x, maxPos.y)
+  val rightUpper: Pos  = (maxPos.x, minPos.y)
+  val rightBottom: Pos = maxPos
 
   assert(matrix.forall(row => row.size == sizeX))
 
@@ -52,7 +56,15 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
 
   inline def map[B](f: A => B): Grid[B] =
     Grid(matrix.map(_.map(f)))
-    
+
+  inline def mapElement[B](f: (Pos, A) => B): Grid[B] =
+    Grid(
+      matrix
+        .zipWithIndex.map: (row, y) =>
+          row.zipWithIndex.map: (a, x) =>
+            f((x, y), a)
+    )
+
   inline def row(y: Int): Vector[A] =
     matrix(y)
 
@@ -92,6 +104,9 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
     positions.map(p => p -> p.adjoint4.filter(within).map(n => n -> peek(n))).toMap
 
 object Grid:
+  
+  def empty[A]: Grid[A] =
+    Grid(Vector(Vector.empty[A]))
 
   def fromLines(lines: Iterator[String]): Grid[Char] =
     Grid(lines.map(_.toVector).toVector)
