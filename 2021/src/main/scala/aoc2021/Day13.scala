@@ -44,7 +44,7 @@ object Day13 extends AoC:
     for y <- 0 to dots.map(_.y).max do
       buffer.append('\n')
       for x <- 0 to dots.map(_.x).max do
-        if dots.contains((x,y)) then
+        if dots.contains((x, y)) then
           buffer.append('#')
         else
           buffer.append('.')

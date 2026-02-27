@@ -24,8 +24,8 @@ object Day20 extends AoC:
         case '^' =>
           go(
             todo       = todo.tail,
-            maxDoorsTo = Map(Location(0,0) -> 0),
-            visited    = Set(Location(0,0)),
+            maxDoorsTo = Map(Location(0, 0) -> 0),
+            visited    = Set(Location(0, 0)),
             branches   = Vector.empty
           )
         case '$' =>

@@ -14,7 +14,7 @@ object Day10 extends AoC:
     val sizeX = lines(0).length
     val sizeY = lines.length
     List
-      .tabulate(sizeX, sizeY)((x,y) => if lines(y)(x) == '#' then Some(Pos.of(x,y)) else None)
+      .tabulate(sizeX, sizeY)((x, y) => Option.when(lines(y)(x) == '#')((x, y)))
       .flatten
       .flatten
 
@@ -29,7 +29,7 @@ object Day10 extends AoC:
     val d = gcd(math.abs(x), math.abs(y))
     val nx = x / d
     val ny = y / d
-    (1 until d).exists(m => astroids.contains(Pos.of(a.x + (m * nx), a.y + (m * ny))))
+    (1 until d).exists(m => astroids.contains((a.x + (m * nx), a.y + (m * ny))))
 
   def maxBlockedByCount(astroids: List[Pos]): Int =
 
@@ -72,4 +72,4 @@ object Day10 extends AoC:
       fireAll(nr)(right, done ++ left, count + 1, Option.when (count == nr)(aim.target).orElse(result))
 
   override lazy val answer1: Int = maxBlockedByCount(astroids)
-  override lazy val answer2: Int = fireAll(200)(testLaser(Pos.of(8,16))(astroids)).get.part2
+  override lazy val answer2: Int = fireAll(200)(testLaser((8,16))(astroids)).get.part2

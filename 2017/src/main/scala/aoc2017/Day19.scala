@@ -14,7 +14,7 @@ object Day19 extends AoC:
   extension (g: Grid)
 
     def start: Pos =
-      Pos.of(g.head.indexOf('|'), 0)
+      (g.head.indexOf('|'), 0)
 
     def charAt(p: Pos): Char =
       grid.lift(p.y).flatMap(_.lift(p.x)).getOrElse(' ')
@@ -38,7 +38,7 @@ object Day19 extends AoC:
 
   object Tracer:
     def start(grid: Grid): Tracer =
-      Tracer(grid, grid.start, Pos.of(0,1))
+      Tracer(grid, grid.start, (0,1))
 
   val tracer: Tracer    = Tracer.start(grid)
   val path: Seq[Tracer] = Iterator.iterate(tracer)(_.next).takeWhile(_.isPath).toList

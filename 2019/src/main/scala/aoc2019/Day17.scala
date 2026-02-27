@@ -10,8 +10,8 @@ object Day17 extends AoC:
   val program: Mem = Mem.parse(input)
 
   extension (p: Pos)
-    def left: Pos  = Pos.of(p.y, -p.x)
-    def right: Pos = Pos.of(-p.y, p.x)
+    def left: Pos  = (p.y, -p.x)
+    def right: Pos = (-p.y, p.x)
 
   def solve1(memory: Mem): Int =
     val output = CPU(memory).outputs.map(_.toChar).mkString.split("\n")
@@ -20,9 +20,9 @@ object Day17 extends AoC:
           x <- 0 until output(0).length
           if output(y)(x) == '#'
       yield
-        Pos.of(x, y)
+        (x = x, y = y)
 
-    points.foldLeft(0): (total,next) =>
+    points.foldLeft(0): (total, next) =>
       if Pos.offset4.map(next + _).forall(points.contains) then
         total + (next.x * next.y)
       else total
@@ -47,10 +47,10 @@ object Day17 extends AoC:
     def findRobot: (Pos,Pos) =
       def parseRobotDir(tile: Char): Option[Pos] =
         tile match
-          case '>' => Some(Pos.of(1,0))
-          case '<' => Some(Pos.of(-1,0))
-          case 'v' => Some(Pos.of(0,1))
-          case '^' => Some(Pos.of(0,-1))
+          case '>' => Some((1,0))
+          case '<' => Some((-1,0))
+          case 'v' => Some((0,1))
+          case '^' => Some((0,-1))
           case _   => None
 
       val robots =
@@ -59,7 +59,7 @@ object Day17 extends AoC:
           (tile, x) <- row.view.zipWithIndex
           direction <- parseRobotDir(tile)
         yield
-          (Pos.of(x,y), direction)
+          ((x, y), direction)
 
       robots.head
 

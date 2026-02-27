@@ -61,7 +61,7 @@ object Day18 extends AoC:
       if overlay(y, x) then on else conf(y)(x)
 
     def neighbours(x: Int, y: Int): Vector[Light] =
-      Vector((-1,-1),(0,-1),(1,-1),(-1, 0),(1, 0),(-1,1),(0, 1),(1, 1))
+      Vector((-1, -1), (0, -1), (1, -1), (-1, 0),(1, 0), (-1, 1), (0, 1), (1, 1))
         .map((dx, dy) => (x + dx, y + dy))
         .filter((px, py) => px >= minX && px <= maxX && py >= minY && py <= maxY)
         .map(light)

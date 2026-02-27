@@ -28,9 +28,9 @@ object Day25 extends AoC:
       copy(tiles = southTiles)
 
   val floor: Floor =
-    val sizeX = lines.head.size
-    val sizeY = lines.size
-    val tiles = Vector.tabulate(sizeX, sizeY)((x, y) => Pos.of(x, y) -> lines(y)(x)).flatten.toMap
+    val sizeX = lines.head.length
+    val sizeY = lines.length
+    val tiles = Vector.tabulate(sizeX, sizeY)((x, y) => (x = x, y = y) -> lines(y)(x)).flatten.toMap
     Floor(tiles, sizeX, sizeY)
 
   @tailrec

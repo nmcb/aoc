@@ -75,7 +75,7 @@ object Day09 extends AoC:
   object Bacterium:
 
     def of(size: Int): Bacterium =
-      Bacterium(Vector.fill(size)(Pos.of(0, 0)))
+      Bacterium(Vector.fill(size)((0, 0)))
 
     def solve(commands: Vector[Command], size: Int): Int =
       commands

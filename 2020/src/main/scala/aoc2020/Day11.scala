@@ -16,7 +16,7 @@ object Day11 extends AoC:
       x >= 0 && x < sizeX && y >= 0 && y < sizeY
 
     def seat(x: Int, y: Int): Option[Char] =
-      Option.when(within(x,y))(floor(y)(x)).filter(c => c == 'L' || c == '#')
+      Option.when(within(x, y))(floor(y)(x)).filter(c => c == 'L' || c == '#')
 
     def count1(x: Int, y: Int): Int =
       val N  = seat(x    , y - 1)
@@ -50,10 +50,10 @@ object Day11 extends AoC:
       List(NW,N,NE,E,SE,S,SW,W).flatten.count(_ == '#')
 
     private def nextState(max: Int, count: (Int,Int) => Int)(x: Int, y: Int): Option[Char] =
-      seat(x,y) match
-        case Some('L') if count(x,y) == 0   => Some('#')
-        case Some('#') if count(x,y) >= max => Some('L')
-        case unchanged                      => unchanged
+      seat(x, y) match
+        case Some('L') if count(x, y) == 0   => Some('#')
+        case Some('#') if count(x, y) >= max => Some('L')
+        case unchanged                       => unchanged
 
     def nextState1: (Int,Int) => Option[Char] =
       nextState(max = 4, count = count1)
@@ -62,14 +62,14 @@ object Day11 extends AoC:
       nextState(max = 5, count = count2)
 
     def next(step: (Int, Int) => Option[Char]): Floor =
-      Vector.tabulate(sizeY,sizeX)((y,x) => step(x,y).getOrElse('.')).map(_.mkString)
+      Vector.tabulate(sizeY, sizeX)((y, x) => step(x, y).getOrElse('.')).map(_.mkString)
 
     def totalOccupied: Int =
       var count = 0
       for
         y <- 0 until sizeY
         x <- 0 until sizeX
-        if seat(x,y).contains('#')
+        if seat(x, y).contains('#')
       do
         count += 1
       count

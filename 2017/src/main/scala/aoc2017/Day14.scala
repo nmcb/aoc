@@ -41,7 +41,7 @@ object Day14 extends AoC:
         case (acc,(row, y)) =>
           row.foldLeft(acc):
             case (acc, (square, x)) =>
-              if square == '1' then acc + Pos.of(x,y) else acc
+              if square == '1' then acc + Pos.of(x, y) else acc
 
   def regions(used: Set[Pos]): Set[Set[Pos]] =
     val graph = used.map(square => square -> square.adjacent.intersect(used)).toMap

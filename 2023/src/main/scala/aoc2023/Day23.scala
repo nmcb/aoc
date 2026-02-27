@@ -46,8 +46,8 @@ object Day23 extends AoC:
       result.toMap
 
   def solve1(grid: Grid[Char]): Int =
-    val from  = Pos.of(0, 1)
-    val to    = Pos.of(grid.sizeX - 2, grid.sizeY - 1)
+    val from  = (0, 1)
+    val to    = (grid.sizeX - 2, grid.sizeY - 1)
     val graph = grid.computeGraph(from, to)
     def loop(p: Pos, visited: Set[Pos], length: Int, longest: Int): Int =
       if p == to then

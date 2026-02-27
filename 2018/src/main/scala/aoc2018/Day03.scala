@@ -6,7 +6,7 @@ import nmcb.pos.*
 object Day03 extends AoC:
 
   type Claims   = Vector[Vector[Pos]]
-  type Overlaps = Map[Pos,Int]
+  type Overlaps = Map[Pos, Int]
 
   val (claims: Claims, overlaps: Overlaps) =
     val claims = lines.map:
@@ -15,7 +15,7 @@ object Day03 extends AoC:
         val x1 = w.toInt + x0
         val y0 = y.toInt
         val y1 = h.toInt + y0
-        (for x <- x0 until x1 ; y <- y0 until y1 yield Pos.of(x,y)).toVector
+        (for x <- x0 until x1 ; y <- y0 until y1 yield (x = x, y = y)).toVector
 
     val overlaps = claims.flatten.groupMapReduce(identity)(_ => 1)(_ + _)
     (claims, overlaps)

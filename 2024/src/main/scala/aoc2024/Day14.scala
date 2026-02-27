@@ -12,7 +12,7 @@ object Day14 extends AoC:
 
   val space: Space =
     val robots: Vector[Robot] = lines.map:
-      case s"p=$px,$py v=$vx,$vy" => Robot(Pos.of(px.toInt, py.toInt), Pos.of(vx.toInt, vy.toInt))
+      case s"p=$px,$py v=$vx,$vy" => Robot((px.toInt, py.toInt), (vx.toInt, vy.toInt))
 
     Space(robots, sizeX = 101, sizeY = 103)
 
@@ -32,13 +32,13 @@ object Day14 extends AoC:
         y <- 0 until sizeY
         x <- 0 until sizeX
       yield
-        Pos.of(x, y)
+        (x, y)
 
     def move(r: Robot): Robot =
       val n = r.p + r.v
       val nx = if n.x < 0 then sizeX + n.x else if n.x >= sizeX then n.x - sizeX else n.x
       val ny = if n.y < 0 then sizeY + n.y else if n.y >= sizeY then n.y - sizeY else n.y
-      Robot(Pos.of(nx, ny), r.v)
+      Robot((nx, ny), r.v)
 
     def next: Space =
       copy(robots = robots.map(move))
@@ -48,11 +48,11 @@ object Day14 extends AoC:
       def robotsIn(min: Pos, max: Pos): Vector[Robot] =
         robots.filter(r => r.p.x >= min.x & r.p.x <= max.x & r.p.y >= min.y & r.p.y <= max.y)
 
-      val mid = Pos.of(sizeX / 2, sizeY / 2)
-      val robotsInQ1: Vector[Robot] = robotsIn(Pos.of(0, 0), Pos.of(mid.x - 1, mid.y - 1))
-      val robotsInQ2: Vector[Robot] = robotsIn(Pos.of(mid.x + 1, 0), Pos.of(sizeX - 1, mid.y - 1))
-      val robotsInQ3: Vector[Robot] = robotsIn(Pos.of(0, mid.y + 1), Pos.of(mid.x - 1, sizeY - 1))
-      val robotsInQ4: Vector[Robot] = robotsIn(Pos.of(mid.x + 1, mid.y+1), Pos.of(sizeX - 1, sizeY - 1))
+      val mid = (x = sizeX / 2, y = sizeY / 2)
+      val robotsInQ1: Vector[Robot] = robotsIn((0, 0), (mid.x - 1, mid.y - 1))
+      val robotsInQ2: Vector[Robot] = robotsIn((mid.x + 1, 0), (sizeX - 1, mid.y - 1))
+      val robotsInQ3: Vector[Robot] = robotsIn((0, mid.y + 1), (mid.x - 1, sizeY - 1))
+      val robotsInQ4: Vector[Robot] = robotsIn((mid.x + 1, mid.y+1), (sizeX - 1, sizeY - 1))
       Vector(robotsInQ1, robotsInQ2, robotsInQ3, robotsInQ4).map(_.size.toLong).product
 
     def robotClusters: Set[Set[Pos]] =

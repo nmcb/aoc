@@ -38,10 +38,10 @@ object Day23 extends AoC:
     def step: CPU =
       if running then
         prog(pc) match
-          case SET(x,y) => copy(mem = mem + (x -> y.get), pc = pc + 1)
-          case SUB(x,y) => copy(mem = mem + (x -> (x.get - y.get)), pc = pc + 1)
-          case MUL(x,y) => copy(mem = mem + (x -> (x.get * y.get)), pc = pc + 1, countMUL = countMUL + 1)
-          case JNZ(x,y) => copy(pc = if x.get != 0 then pc + y.get.toInt else pc + 1)
+          case SET(x, y) => copy(mem = mem + (x -> y.get), pc = pc + 1)
+          case SUB(x, y) => copy(mem = mem + (x -> (x.get - y.get)), pc = pc + 1)
+          case MUL(x, y) => copy(mem = mem + (x -> (x.get * y.get)), pc = pc + 1, countMUL = countMUL + 1)
+          case JNZ(x, y) => copy(pc = if x.get != 0 then pc + y.get.toInt else pc + 1)
       else
         this
 

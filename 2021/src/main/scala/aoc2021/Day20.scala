@@ -12,7 +12,7 @@ object Day20 extends AoC:
       dy <- -1 to 1
       dx <- -1 to 1
     yield
-      Pos.of(dx, dy)
+      (dx, dy)
 
   def within(grid: Vector[Vector[Boolean]], pos: Pos): Boolean =
     0 <= pos.x && 0 <= pos.y && pos.y < grid.size && pos.x < grid(pos.y).size
@@ -30,7 +30,7 @@ object Day20 extends AoC:
     val enhanced =
       for ((row, y) <- framed.zipWithIndex) yield
         for ((_, x) <- row.zipWithIndex) yield
-          val pos  = Pos.of(x, y)
+          val pos  = (x, y)
           val area = offsets.map(_ + pos)
           val bin  = area.map(cell => if within(framed, cell) then peek(framed, cell) else canvas)
           algorithm(int(bin.toVector))

@@ -5,17 +5,17 @@ import scala.annotation.tailrec
 
 object Day11 extends AoC:
 
-  type Octo = (Int,Int)
+  type Octo = (Int, Int)
 
   extension (octo: Octo)
     def x = octo._1
     def y = octo._2
 
-  val config: Map[Octo,Int] =
+  val config: Map[Octo, Int] =
     lines
-      .zipWithIndex.flatMap: (row,y) =>
-        row.zipWithIndex.map: (level,x) =>
-          (x,y) -> level.toString.toInt
+      .zipWithIndex.flatMap: (row, y) =>
+        row.zipWithIndex.map: (level, x) =>
+          (x, y) -> level.toString.toInt
       .toMap
 
   object Octopuses:

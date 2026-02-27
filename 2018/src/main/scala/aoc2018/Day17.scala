@@ -38,7 +38,7 @@ object Day17 extends AoC:
         case Stopped =>
           val minX = iterate(p)(_.e).dropWhile(next => go(next.s) == Stopped && !blocked(next.e)).next
           val maxX = iterate(p)(_.w).dropWhile(next => go(next.s) == Stopped && !blocked(next.w)).next
-          val surface = for x <- minX.x to maxX.x yield Pos.of(x, p.y)
+          val surface = for x <- minX.x to maxX.x yield (x, p.y)
           if blocked(minX.e) && blocked(maxX.w) then
             stopped ++= surface
             Stopped
@@ -54,15 +54,15 @@ object Day17 extends AoC:
     val clay =
       lines
         .flatMap:
-          case s"x=$x, y=$start..$end" => (start.toInt to end.toInt).map(y => Pos.of(x.toInt, y))
-          case s"y=$y, x=$start..$end" => (start.toInt to end.toInt).map(x => Pos.of(x, y.toInt))
+          case s"x=$x, y=$start..$end" => (start.toInt to end.toInt).map(y => (x = x.toInt, y = y))
+          case s"y=$y, x=$start..$end" => (start.toInt to end.toInt).map(x => (x = x, y = y.toInt))
         .toSet
 
     Area(
       clay   = clay,
       minY   = clay.map(_.y).min,
       maxY   = clay.map(_.y).max,
-      spring = Pos.of(500,0)
+      spring = (500,0)
     )
   
   def solve1(area: Area): Int =

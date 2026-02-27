@@ -32,7 +32,7 @@ object Day10 extends AoC:
     def fromString(s: String): Point =
       s.trim match
         case s"position=<$x, $y> velocity=<$vx, $vy>" =>
-          Point(Pos.of(x.trim.toInt, y.trim.toInt), Pos.of(vx.trim.toInt, vy.trim.toInt))
+          Point((x.trim.toInt, y.trim.toInt), (vx.trim.toInt, vy.trim.toInt))
 
 
   // returns the range containing the first domain which yields at least `x` as its codomain, starting from `min`.
@@ -77,7 +77,7 @@ object Day10 extends AoC:
     val positionsSet  = positions.toSet
 
     (min.y to max.y).foldLeft(StringBuffer())((sb,y) => (min.x to max.x).foldLeft(sb)((sb,x) =>
-      if positionsSet.contains(Pos.of(x,y)) then sb.append('#') else sb.append('.')
+      if positionsSet.contains((x, y)) then sb.append('#') else sb.append('.')
     ).append('\n')).toString
 
   val (sky, fastest) =

@@ -12,7 +12,7 @@ object Day11 extends AoC:
     lazy val positions: Vector[Pos] =
       galaxies.zipWithIndex.flatMap((l,y) =>
         l.zipWithIndex.flatMap((c,x) =>
-          Option.when(c == '#')(Pos.of(x, y))))
+          Option.when(c == '#')((x, y))))
 
     def empty(gs: Vector[Vector[Char]]): Set[Int] =
       gs.zipWithIndex.flatMap((line,i) => if line.forall(_ == '.') then Some(i) else None).toSet

@@ -43,14 +43,14 @@ object Day10 extends AoC:
         case W if p.x > 0    => Some((x = p.x - 1, y = p.y))
         case _             => None
 
-  lazy val tiles: Map[Pos,Tile] =
+  lazy val tiles: Map[Pos, Tile] =
     lines
       .zipWithIndex
-      .foldLeft(Map.empty[Pos,Tile]):
-        case (a,(l,y)) =>
+      .foldLeft(Map.empty[Pos, Tile]):
+        case (a, (l, y)) =>
           l.zipWithIndex.foldLeft(a):
-            case (a,(c,x)) =>
-              a + (Pos.of(x,y) -> Tile.fromChar(c))
+            case (a, (c, x)) =>
+              a + ((x, y) -> Tile.fromChar(c))
 
   lazy val maxX: Int = tiles.keys.map(_.x).max
   lazy val maxY: Int = tiles.keys.map(_.y).max
@@ -61,9 +61,9 @@ object Day10 extends AoC:
       case tile   => tile.opposite(dir).flatMap(from.move)
 
 
-  def pathsFrom(from: Pos, dir: Dir): Vector[(Pos,Dir)] =
+  def pathsFrom(from: Pos, dir: Dir): Vector[(Pos, Dir)] =
     @tailrec
-    def loop(p: Pos, d: Dir, a: Vector[(Pos,Dir)] = Vector.empty): Vector[(Pos,Dir)] =
+    def loop(p: Pos, d: Dir, a: Vector[(Pos, Dir)] = Vector.empty): Vector[(Pos, Dir)] =
       p.move(d) match
         case None    => a
         case Some(n) =>
@@ -77,10 +77,10 @@ object Day10 extends AoC:
     tiles.find((_,t) => t == Start).map((p,_) => p).getOrElse(sys.error("no start tile"))
 
   /** trial and error on direction - seems we need to go west */
-  lazy val path: Vector[(Pos,Dir)] =
+  lazy val path: Vector[(Pos, Dir)] =
     pathsFrom(start, W)
 
-  def area(path: Vector[(Pos,Dir)]): Set[Pos] =
+  def area(path: Vector[(Pos, Dir)]): Set[Pos] =
 
     val cacheX: Vector[Pos] = path.sortBy((p,_) => p.x).map((p,_) => p)
     val cacheY: Vector[Pos] = path.sortBy((p,_) => p.y).map((p,_) => p)
@@ -90,20 +90,20 @@ object Day10 extends AoC:
       dir match
         case N if pos.y > 0 =>
           val r = cacheY.filter(p => p.x == pos.x && p.y < pos.y)
-          if r.nonEmpty then (r.last.y + 1 until pos.y).map(y => Pos.of(pos.x, y)).toSet else Set.empty
+          if r.nonEmpty then (r.last.y + 1 until pos.y).map(y => (pos.x, y)).toSet else Set.empty
         case E if pos.x < maxX =>
           val r = cacheX.filter(p => p.y == pos.y && p.x > pos.x)
-          if r.nonEmpty then (pos.x + 1 until r.head.x).map(x => Pos.of(x, pos.y)).toSet else Set.empty
+          if r.nonEmpty then (pos.x + 1 until r.head.x).map(x => (x, pos.y)).toSet else Set.empty
         case S if pos.y < maxY =>
           val r = cacheY.filter(p => p.x == pos.x && p.y > pos.y)
-          if r.nonEmpty then (pos.y + 1 until r.head.y).map(y => Pos.of(pos.x, y)).toSet else Set.empty
+          if r.nonEmpty then (pos.y + 1 until r.head.y).map(y => (pos.x, y)).toSet else Set.empty
         case W if pos.x > 0 =>
           val r = cacheX.filter(p => p.y == pos.y && p.x < pos.x)
-          if r.nonEmpty then (r.last.x + 1 until pos.x).map(x => Pos.of(x, pos.y)).toSet else Set.empty
+          if r.nonEmpty then (r.last.x + 1 until pos.x).map(x => (x, pos.y)).toSet else Set.empty
         case _ => Set.empty
 
     @tailrec
-    def loop(todo: Vector[(Pos,Dir)], prev: Dir, acc: Set[Pos]): Set[Pos] =
+    def loop(todo: Vector[(Pos, Dir)], prev: Dir, acc: Set[Pos]): Set[Pos] =
       todo match
         case (p, n) +: rest =>
           tiles(p) match

@@ -16,10 +16,10 @@ object Day03 extends AoC:
     val quadrant = base / size
     val offset = base % size
     quadrant match
-      case 0 => Pos.of(half, offset + 1 - half)
-      case 1 => Pos.of(half - 1 - offset, half)
-      case 2 => Pos.of(-half, half - 1 - offset)
-      case 3 => Pos.of(offset + 1 - half, -half)
+      case 0 => (half, offset + 1 - half)
+      case 1 => (half - 1 - offset, half)
+      case 2 => (-half, half - 1 - offset)
+      case 3 => (offset + 1 - half, -half)
 
   def spiralSquares(to: Int):Int =
 
@@ -29,10 +29,10 @@ object Day03 extends AoC:
         x <- -1 to 1
         if !(x == 0 && y == 0)
       yield
-        Pos.of(x, y)
+        (x, y)
 
     @tailrec
-    def loop(n: Int, squares: Map[Pos,Int] = Map(Pos.of(0,0) -> 1)): Int =
+    def loop(n: Int, squares: Map[Pos,Int] = Map((0, 0) -> 1)): Int =
       val point  = position(n)
       val result = spiralScan.map(_ + point).flatMap(squares.get).sum
       if result > to then
