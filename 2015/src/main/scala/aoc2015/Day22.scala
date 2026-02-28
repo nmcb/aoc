@@ -13,7 +13,7 @@ object Day22 extends AoC:
 
   import Spell.*
   
-  val Spells = Set(MagicMissile, Drain, Shield, Poison, Recharge)
+  val Spells: Set[Spell] = Set(MagicMissile, Drain, Shield, Poison, Recharge)
 
   case class Game(
     player: Int,
@@ -22,17 +22,17 @@ object Day22 extends AoC:
     armor: Int,
     boss: Int,
     damage: Int,
-    current: Map[Spell,Int]
+    current: Map[Spell,Int] = Map.empty
   ):
 
-    extension (active: (Spell,Int))
+    extension (active: (Spell, Int))
       def spell: Spell  = active._1
       def duration: Int = active._2
 
     def next: Game =
       current.foldLeft(copy(armor = 0))(_ run _)
 
-    infix def run(active: (Spell,Int)): Game =
+    infix def run(active: (Spell, Int)): Game =
       val next = effect(active.spell)
       if active.duration == 1 then
         next.copy(current = current.removed(active.spell))
@@ -82,7 +82,15 @@ object Day22 extends AoC:
     turns(game, true)
     result
 
-  val start: Game = Game(50, 500, 0, 0, 71, 10, Map.empty)
+  val start: Game =
+    Game(
+      player = 50,
+      mana   = 500,
+      spent  = 0,
+      armor  = 0,
+      boss   = 71,
+      damage = 10
+    )
 
   override lazy val answer1: Int = solve(start, hard = false)
   override lazy val answer2: Int = solve(start, hard = true)
