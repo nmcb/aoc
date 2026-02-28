@@ -16,28 +16,28 @@ object Day22 extends AoC:
   val Spells: Set[Spell] = Set(MagicMissile, Drain, Shield, Poison, Recharge)
 
   case class Game(
-    player: Int,
-    mana: Int,
-    spent: Int,
-    armor: Int,
-    boss: Int,
-    damage: Int,
-    current: Map[Spell,Int] = Map.empty
+     player: Int,
+     mana:   Int,
+     spent:  Int,
+     armor:  Int,
+     boss:   Int,
+     damage: Int,
+     spells: Map[Spell,Int] = Map.empty
   ):
 
     extension (active: (Spell, Int))
       def spell: Spell  = active._1
       def duration: Int = active._2
 
-    def next: Game =
-      current.foldLeft(copy(armor = 0))(_ run _)
+    def nextGame: Game =
+      spells.foldLeft(copy(armor = 0))(_ runsSpells _)
 
-    infix def run(active: (Spell, Int)): Game =
+    infix def runsSpells(active: (Spell, Int)): Game =
       val next = effect(active.spell)
       if active.duration == 1 then
-        next.copy(current = current.removed(active.spell))
+        next.copy(spells = spells.removed(active.spell))
       else
-        next.copy(current = current.updated(active.spell, active.duration - 1))
+        next.copy(spells = spells.updated(active.spell, active.duration - 1))
 
     def effect(spell: Spell): Game =
       spell match
@@ -51,7 +51,7 @@ object Day22 extends AoC:
       copy(
         mana    = mana - spell.cost,
         spent   = spent + spell.cost,
-        current = current + (spell -> spell.duration)
+        spells  = spells + (spell -> spell.duration)
       )
 
     def bossTurn: Game =
@@ -60,29 +60,29 @@ object Day22 extends AoC:
     def hardMode: Game =
       copy(player = player - 1)
 
-  def solve(game: Game, hard: Boolean): Int =
+    def play(hard: Boolean): Int =
 
-    var result = Int.MaxValue
+      var result = Int.MaxValue
 
-    def turns(game: Game, playersTurn: Boolean): Unit =
-      val before = if hard && playersTurn then game.hardMode else game
-      val after  = before.next
+      def loop(game: Game, playersTurn: Boolean): Unit =
+        val before = if hard && playersTurn then game.hardMode else game
+        val after = before.nextGame
 
-      if before.spent >= result || before.player <= 0 then
-        ()
-      else if after.boss <= 0 then
-        result = result min after.spent
-      else if !playersTurn then
-        turns(after.bossTurn, !playersTurn)
-      else Spells
-        .diff(after.current.keySet)
-        .filter(_.cost <= after.mana)
-        .foreach(spell => turns(after.playerTurn(spell), !playersTurn))
+        if before.spent >= result || before.player <= 0 then ()
+        else if after.boss <= 0 then result = result min after.spent
+        else if !playersTurn then loop(after.bossTurn, !playersTurn)
+        else
+          Spells
+            .diff(after.spells.keySet)
+            .filter(_.cost <= after.mana)
+            .foreach(spell => loop(after.playerTurn(spell), !playersTurn))
 
-    turns(game, true)
-    result
+      loop(this, true)
 
-  val start: Game =
+      result
+
+
+  val game: Game =
     Game(
       player = 50,
       mana   = 500,
@@ -92,5 +92,5 @@ object Day22 extends AoC:
       damage = 10
     )
 
-  override lazy val answer1: Int = solve(start, hard = false)
-  override lazy val answer2: Int = solve(start, hard = true)
+  override lazy val answer1: Int = game.play(hard = false)
+  override lazy val answer2: Int = game.play(hard = true)
