@@ -71,6 +71,5 @@ object Day21 extends AoC:
     yield
       Player.equip(100, weapon, armour, rings)
 
-
   override lazy val answer1: Int = possiblePlayers.filter(_.enterGame.play == Outcome.Won).map(_.gold).min
   override lazy val answer2: Int = possiblePlayers.filter(_.enterGame.play == Outcome.Lost).map(_.gold).max
