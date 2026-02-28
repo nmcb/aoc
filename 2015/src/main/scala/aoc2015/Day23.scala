@@ -61,6 +61,12 @@ object Day23 extends AoC:
     final def run: CPU =
       if terminated then this else step.run
 
+    def valueOfRegister(register: Register): Int =
+      registers.valueOf(register)
 
-  override lazy val answer1: Int = CPU(instructions).run.registers.valueOf("b")
-  override lazy val answer2: Int = CPU(instructions, registers = Map("a" -> 1).withDefaultValue(0)).run.registers.valueOf("b")
+    def withRegister(register: Register, value: Int): CPU =
+      copy(registers = registers.updated(register, value))
+
+
+  override lazy val answer1: Int = CPU(instructions).run.valueOfRegister("b")
+  override lazy val answer2: Int = CPU(instructions).withRegister("a", 1).run.valueOfRegister("b")

@@ -80,8 +80,7 @@ object Day22 extends AoC:
       loop(this, true)
 
       result
-
-
+  
   val game: Game =
     Game(
       player = 50,
