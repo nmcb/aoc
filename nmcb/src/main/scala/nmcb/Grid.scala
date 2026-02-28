@@ -13,12 +13,10 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
   val rightUpper: Pos  = (maxPos.x, minPos.y)
   val rightBottom: Pos = maxPos
 
-  assert(matrix.forall(row => row.size == sizeX))
-
   lazy val positions: Set[Pos] =
     (for {x <- 0 until sizeX; y <- 0 until sizeY} yield (x, y)).toSet
 
-  inline def elements[A1 >: A]: Set[(Pos,A1)] =
+  inline def elements[B >: A]: Set[(Pos, B)] =
     positions.map(p => p -> peek(p))
 
   inline def within(p: Pos): Boolean =
@@ -30,28 +28,28 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
   inline def peek(x: Int, y: Int): A =
     matrix(y)(x)
 
-  inline def contains[A1 >: A](p: Pos, a: A1): Boolean =
+  inline def contains[B >: A](p: Pos, a: B): Boolean =
     peekOption(p).contains(a)
 
   inline def peekOption(p: Pos): Option[A] =
     Option.when(p.withinBounds(minPos, maxPos))(peek(p))
 
-  inline def peekOrElse[A1 >: A](p: Pos, default: => A1): A1 =
+  inline def peekOrElse[B >: A](p: Pos, default: => B): B =
     peekOption(p).getOrElse(default)
 
-  inline def find[A1 >: A](a: A1)(using CanEqual[A, A1]): Option[Pos] =
+  inline def find[B >: A](a: B)(using CanEqual[A, B]): Option[Pos] =
     elements.find(_.element == a).map(_.pos)
 
-  inline def findAll[A1 >: A](a: A1)(using CanEqual[A, A1]): Set[Pos] =
+  inline def findAll[B >: A](a: B)(using CanEqual[A, B]): Set[Pos] =
     elements.filter(_.element == a).map(_.pos)
 
-  inline def findOne[A1 >: A](a: A1, default: => Pos = sys.error(s"not found"))(using CanEqual[A, A1]): Pos =
+  inline def findOne[B >: A](a: B, default: => Pos = sys.error(s"not found"))(using CanEqual[A, B]): Pos =
     find(a).getOrElse(default)
 
-  inline def filter[A1 >: A](f: ((Pos,A1)) => Boolean): Set[(Pos,A1)] =
+  inline def filter[B >: A](f: ((Pos, B)) => Boolean): Set[(Pos, B)] =
     elements.filter(f)
 
-  inline def filterNot[A1 >: A](f: ((Pos,A1)) => Boolean): Set[(Pos,A1)] =
+  inline def filterNot[B >: A](f: ((Pos, B)) => Boolean): Set[(Pos, B)] =
     elements.filterNot(f)
 
   inline def map[B](f: A => B): Grid[B] =
@@ -68,20 +66,20 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
   inline def row(y: Int): Vector[A] =
     matrix(y)
 
-  inline def updated[A1 >: A](p: Pos, a: A1): Grid[A1] =
+  inline def updated[B >: A](p: Pos, a: B): Grid[B] =
     Grid(matrix.updated(p.y, row(p.y).updated(p.x, a)))
 
   inline def asString: String =
     matrix.map(_.mkString("")).mkString("\n")
 
-  inline def extractPath[A1 >: A](from: A1, to: A1, node: A1)(using CanEqual[A, A1]): (Pos, Pos, Grid[A1]) =
+  inline def extractPath[B >: A](from: B, to: B, node: B)(using CanEqual[A, B]): (Pos, Pos, Grid[B]) =
     val fromPos  = findOne(from)
     val toPos    = findOne(to)
     val cleared  = updated(fromPos, node).updated(toPos, node)
     (fromPos, toPos, cleared)
 
   inline def dropRow(y: Int): Grid[A] =
-    Grid(matrix.zipWithIndex.filter((r,i) => i != y).map((r,i) => r))
+    Grid(matrix.zipWithIndex.filter((r, i) => i != y).map((r, i) => r))
 
   inline def transpose: Grid[A] =
     Grid(matrix.transpose)
@@ -126,7 +124,7 @@ object Grid:
   def fill[A](sizeX: Int, sizeY: Int, default: A): Grid[A] =
     Grid(Vector.fill(sizeX, sizeY)(default))
 
-  extension [A](g: (Pos,Pos,Grid[A]))
+  extension [A](g: (Pos, Pos, Grid[A]))
     def from: Pos = g._1
     def to: Pos   = g._2
     def cleared: Grid[A] = g._3

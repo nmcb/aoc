@@ -4,18 +4,16 @@ import nmcb.*
 
 object Day19 extends AoC:
 
+  type Molecule = String
 
-  val molecules: String =
-    lines
-      .filterNot(_.isBlank)
-      .filterNot(_.contains("=>"))
-      .head
+  val molecule: Molecule =
+    lines.filterNot(_.isBlank).filterNot(_.contains("=>")).head
 
-  val replacements: Vector[(String,String)] = lines.collect:
+  val replacements: Vector[(Molecule, Molecule)] = lines.collect:
     case s"$molecule => $replacement" => molecule -> replacement
 
-  override lazy val answer1: Int =
-    var generations = Set.empty[String]
+  def solve1(molecules: Molecule, replacements: Vector[(Molecule, Molecule)]): Int =
+    var generations = Set.empty[Molecule]
     for from -> to <- replacements do
       for index <- 0 until molecules.length do
         if molecules.slice(index, index + from.length) == from then
@@ -24,9 +22,10 @@ object Day19 extends AoC:
           generations += (prefix + to + postfix)
     generations.size
 
+
   /** Luck > Skill : replacements are already in the right order */
-  override lazy val answer2: Int =
-    var target = molecules
+  def solve2(molecule: Molecule, replacements: Vector[(Molecule, Molecule)]): Int =
+    var target = molecule
     var count  = 0
     while target != "e" do
       for from -> to <- replacements do
@@ -34,3 +33,6 @@ object Day19 extends AoC:
           target  = target.replaceFirst(to, from)
           count = count + 1
     count
+
+  override lazy val answer1: Int = solve1(molecule, replacements)
+  override lazy val answer2: Int = solve2(molecule, replacements)
