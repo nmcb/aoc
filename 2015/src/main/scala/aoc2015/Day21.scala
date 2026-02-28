@@ -1,12 +1,18 @@
 package aoc2015
 
+import aoc2015.Day21.Player.boss
 import nmcb.*
 
 object Day21 extends AoC:
 
-  case class Player(points: Int, damage: Int, armor: Int, gold: Int)
+  case class Player(points: Int, damage: Int, armor: Int, gold: Int):
+    def enterGame: Game = Game(this, boss = boss)
 
   object Player:
+
+    val boss: Player =
+      Player(points = 109, damage = 8, armor = 2, gold = -1)
+
     def equip(points: Int, weapon: Weapon, armor: Option[Armor], rings: Seq[Ring]): Player =
       assert(rings.size <= 2, "max 2 rings")
       assert((rings diff rings.distinct).isEmpty, "max one of a kind")
@@ -56,21 +62,16 @@ object Day21 extends AoC:
         val newB = boss.copy(points = newPointsB)
         Game(newP, newB).play
 
-  /** Input */
 
-  object Game:
-    def make(player: Player): Game =
-      Game(player, boss = Player(points = 109, damage = 8, armor = 2, gold = -1))
-
-  val equipped: List[Player] =
+  val possiblePlayers: List[Player] =
     for
-      w  <- Weapon.values.toList
-      a  <- Armor.values.toList.map(Option(_)) :+ Option.empty[Armor]
-      rs <- Ring.values.toList.map(List(_)) ++ Ring.values.toList.combinations(2) ++ List(List.empty[Ring])
-      if (rs diff rs.distinct).isEmpty
+      weapon  <- Weapon.values.toList
+      armour  <- Armor.values.toList.map(Option(_)) :+ Option.empty[Armor]
+      rings   <- Ring.values.toList.map(List(_)) ++ Ring.values.toList.combinations(2) ++ List(List.empty[Ring])
+      if (rings diff rings.distinct).isEmpty
     yield
-      Player.equip(100, w, a, rs)
+      Player.equip(100, weapon, armour, rings)
 
 
-  override lazy val answer1: Int = equipped.filter(Game.make(_).play == Outcome.Won).map(_.gold).min
-  override lazy val answer2: Int = equipped.filter(Game.make(_).play == Outcome.Lost).map(_.gold).max
+  override lazy val answer1: Int = possiblePlayers.filter(_.enterGame.play == Outcome.Won).map(_.gold).min
+  override lazy val answer2: Int = possiblePlayers.filter(_.enterGame.play == Outcome.Lost).map(_.gold).max
