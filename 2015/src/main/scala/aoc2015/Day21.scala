@@ -14,13 +14,12 @@ object Day21 extends AoC:
       Player(points = 109, damage = 8, armor = 2, gold = -1)
 
     def equip(points: Int, weapon: Weapon, armor: Option[Armor], rings: Seq[Ring]): Player =
-      assert(rings.size <= 2, "max 2 rings")
-      assert((rings diff rings.distinct).isEmpty, "max one of a kind")
-      Player( points = points
-            , damage = weapon.damage + rings.map(_.damage).sum
-            , armor  = armor.map(_.armor).getOrElse(0) + rings.map(_.armor).sum
-            , gold   = weapon.cost + armor.map(_.cost).getOrElse(0) + rings.map(_.cost).sum
-            )
+      Player(
+        points = points,
+        damage = weapon.damage + rings.map(_.damage).sum,
+        armor  = armor.map(_.armor).getOrElse(0) + rings.map(_.armor).sum,
+        gold   = weapon.cost + armor.map(_.cost).getOrElse(0) + rings.map(_.cost).sum
+      )
 
   enum Weapon(val cost: Int, val damage: Int):
     case Dagger     extends Weapon(8, 4)
