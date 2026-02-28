@@ -5,34 +5,26 @@ import nmcb.predef.*
 
 object Day20 extends AoC:
 
-  val puzzle: Int = 36000000
-
-  override lazy val answer1: Int =
-    val presents: Array[Int] = Array.fill(puzzle / 10 + 1)(0)
+  def solve1(atLeastPresents: Int): Int =
+    val elfCount = atLeastPresents / 10
+    val presentCount: Array[Int] = Array.fill(elfCount + 1)(0)
     for
-      e <- Range.inclusive(1, puzzle / 10)
-      h <- Range.inclusive(e, puzzle / 10, e)
-    yield
-      presents(h) = presents(h) + e * 10
+      elf   <- Range.inclusive(1, elfCount)
+      house <- Range.inclusive(elf, elfCount, elf)
+    do
+      presentCount(house) = presentCount(house) + elf * 10
+    presentCount.zipWithIndex.find(count => count.element >= atLeastPresents).get.index
 
-    presents
-      .zipWithIndex
-      .find((count,_) => count >= puzzle)
-      .getOrElse(sys.error("not found"))
-      .index
-
-  override lazy val answer2: Int =
-    val size = puzzle / 10 + 1
-    val presents: Array[Int] = Array.fill(size)(0)
+  def solve2(atLeastPresents: Int): Int =
+    val elfCount = atLeastPresents / 10 + 1
+    val presentCount: Array[Int] = Array.fill(elfCount)(0)
     for
-      e <- Range.inclusive(1, size)
-      h <- Range.inclusive(e, e * 50, e)
-      if h < size
+      elf   <- Range.inclusive(1, elfCount)
+      house <- Range.inclusive(elf, elf * 50, elf)
+      if house < elfCount
     yield
-      presents(h) = presents(h) + e * 11
+      presentCount(house) = presentCount(house) + elf * 11
+    presentCount.zipWithIndex.find(count => count.element >= atLeastPresents).get.index
 
-    presents
-      .zipWithIndex
-      .find((count,_) => count >= puzzle)
-      .getOrElse(sys.error("not found"))
-      .index
+  override lazy val answer1: Int = solve1(atLeastPresents = 36_000_000)
+  override lazy val answer2: Int = solve2(atLeastPresents = 36_000_000)
