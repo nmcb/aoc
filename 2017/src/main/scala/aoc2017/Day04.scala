@@ -1,15 +1,14 @@
 package aoc2017
 
 import nmcb.*
-import nmcb.predef.*
-
-import scala.collection.mutable
+import nmcb.memo.*
 
 object Day04 extends AoC:
 
-  val cache: mutable.Map[String, Map[Char, Int]] = memo[String, Map[Char,Int]]()
-  extension (s: String) def charCount: Map[Char,Int] =
-    cache.memoize(s)(s.groupMapReduce(identity)(_ => 1)(_ + _))
+  extension (self: String)
+    def charCount: Map[Char, Int] =
+      memoized(self): (chars, count) =>
+        chars.groupMapReduce(identity)(_ => 1)(_ + _)
 
   extension (l: String) infix def anagram(r: String): Boolean =
     l.charCount == r.charCount
