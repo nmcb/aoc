@@ -9,7 +9,7 @@ object Day04 extends AoC:
   extension (self: String)
     def charCount: Map[Char, Int] =
       memo.memoize(self):
-        self.groupMapReduce(identity)(_ => 1)(_ + _)
+        self.countElements
 
   extension (l: String) infix def anagram(r: String): Boolean =
     l.charCount == r.charCount

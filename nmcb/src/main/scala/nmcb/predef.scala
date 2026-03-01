@@ -1,7 +1,5 @@
 package nmcb
 
-import scala.collection.*
-
 object predef:
 
   val HEX_ARRAY: Array[Char] = "0123456789abcdef".toCharArray
@@ -58,6 +56,9 @@ object predef:
     def findMap[B](f: A => Option[B]): B =
       i.iterator.flatMap(f).next()
 
+    def countElements: Map[A, Int] =
+      i.groupMapReduce(identity)(_ => 1)(_ + _)
+
   
   extension (s: String)
     def leftPadTo(length: Int, char: Char): String =
@@ -73,9 +74,11 @@ object predef:
     def memoize(k: K)(v: => V): V =
       memo.cache.getOrElseUpdate(k, v)
 
-  case class Memo[K, V](cache: mutable.Map[K, V])
+  case class Memo[K, V](cache: collection.mutable.Map[K, V])
 
   object Memo:
+
+    import scala.collection.*
 
     def empty[K, V]: Memo[K, V] =
       Memo(mutable.Map.empty[K, V])
@@ -84,8 +87,7 @@ object predef:
       Memo(mutable.Map.empty[K, V] ++ initial)
 
 
-
-  extension [A,B](p: (A,B))
+  extension [A, B](p: (A, B))
     def left: A  = p._1
     def right: B = p._2
     inline def fold[C](f: (A, B) => C): C                  = f(p.left, p.right)
@@ -97,8 +99,9 @@ object predef:
   extension [A](t: (A, Int))
     def element: A = t._1
     def index: Int = t._2
-    
-    
+    def count: Int = t._2
+
+
   extension (bytes: Array[Byte])
     def toHexString: String =
       val hexChars: Array[Char] = new Array[Char](bytes.length * 2)
