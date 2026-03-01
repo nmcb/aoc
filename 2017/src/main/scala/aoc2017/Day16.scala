@@ -30,7 +30,7 @@ object Day16 extends AoC:
         case s"x$a/$b"   => exchange(a.toInt, b.toInt)
         case s"p$pa/$pb" => partner(pa.head, pb.head)
 
-    infix def dance(ms: Vector[String]): Programs =
+    def dance(ms: Vector[String]): Programs =
       ms.foldLeft(ps)(_ move _)
 
   val moves: Vector[String] = input.split(",").toVector

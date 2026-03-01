@@ -69,13 +69,14 @@ object predef:
 
 
   extension [K, V](memo: Memo[K, V])
+
     def memoize(k: K)(v: => V): V =
       memo.cache.getOrElseUpdate(k, v)
-      
-  case class Memo[K, V](cache: mutable.Map[K, V])     
+
+  case class Memo[K, V](cache: mutable.Map[K, V])
 
   object Memo:
-    
+
     def empty[K, V]: Memo[K, V] =
       Memo(mutable.Map.empty[K, V])
 
