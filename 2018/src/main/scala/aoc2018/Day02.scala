@@ -1,44 +1,40 @@
 package aoc2018
 
 import nmcb.*
+import nmcb.predef.*
 
 object Day02 extends AoC:
 
-  case class Box(identifier: String) derives CanEqual:
+  extension (identifier: String)
 
     private def idLettersWith(count: Int): Int =
-      identifier
-        .groupMapReduce(identity)(_ => 1)(_ + _)
-        .count((_, occurrences) => occurrences == count)
+      identifier.groupMapReduce(identity)(_ => 1)(_ + _).count(_.right == count)
 
-    val twoCharInId: Boolean =
+    def twoCharInId: Boolean =
       idLettersWith(2) >= 1
 
-    val threeCharInId: Boolean =
+    def threeCharInId: Boolean =
       idLettersWith(3) >= 1
 
-  object Box:
-    val IdCharSet: String = "abcdefghijklmnopqrstuvwxyz"
-    def fromString(id: String): Box = Box(id)
+  val IdCharSet: String = "abcdefghijklmnopqrstuvwxyz"
 
-
-  val boxes: Vector[Box] = lines.map(Box.fromString)
-
-  def solve1(boxes: Vector[Box]): Int =
+  def solve1(boxes: Vector[String]): Int =
     boxes.count(_.twoCharInId) * boxes.count(_.threeCharInId)
 
-  def differByOneCharInPlace(id1: String, id2: String): Boolean =
-    id1.zip(id2).count(_ != _) == 1
+  def solve2(boxes: Vector[String]): String =
+    def differByOneCharInPlace(box1: String, box2: String): Boolean =
+      box1.zip(box2).count(_ != _) == 1
 
-  def solve2(boxes: Vector[Box]): String =
     val search =
       for
         a <- boxes
         b <- boxes
-        if a != b && differByOneCharInPlace(a.identifier, b.identifier)
+        if a != b && differByOneCharInPlace(a, b)
       yield
-        a.identifier intersect b.identifier
+        a intersect b
+
     search.headOption.getOrElse(sys.error("unable to find"))
 
-  override lazy val answer1: Int    = solve1(boxes)
-  override lazy val answer2: String = solve2(boxes)
+
+  override lazy val answer1: Int    = solve1(lines)
+  override lazy val answer2: String = solve2(lines)
