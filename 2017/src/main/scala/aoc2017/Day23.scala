@@ -27,10 +27,11 @@ object Day23 extends AoC:
 
   case class CPU(prog: Vector[Inst], mem: Map[String,Long], pc: Int, countMUL: Long = 0):
 
-    extension (v: Value) def get: Long =
-      v match
-        case l: Long   => l
-        case r: String => mem(r)
+    extension (v: Value)
+      private def get: Long =
+        v match
+          case l: Long   => l
+          case r: String => mem(r)
 
     def running: Boolean =
       pc >= 0 && pc < prog.size

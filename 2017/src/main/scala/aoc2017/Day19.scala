@@ -3,8 +3,6 @@ package aoc2017
 import nmcb.*
 import nmcb.pos.*
 
-import scala.annotation.tailrec
-
 object Day19 extends AoC:
 
   type Grid = Vector[Vector[Char]]
@@ -14,7 +12,7 @@ object Day19 extends AoC:
   extension (g: Grid)
 
     def start: Pos =
-      (g.head.indexOf('|'), 0)
+      (x = g.head.indexOf('|'), y = 0)
 
     def charAt(p: Pos): Char =
       grid.lift(p.y).flatMap(_.lift(p.x)).getOrElse(' ')
@@ -25,9 +23,9 @@ object Day19 extends AoC:
       grid.charAt(pos)
 
     def isPath: Boolean =
-      grid.charAt(pos) != ' '
+      char != ' '
 
-    def next: Tracer =
+    private def next: Tracer =
       grid.charAt(pos + dir) match
         case '+' =>
           val turns = Pos.offset4 - dir - (-dir)
@@ -35,13 +33,16 @@ object Day19 extends AoC:
           copy(pos = pos + dir, dir = turn)
         case _ =>
           copy(pos = pos + dir, dir = dir)
+          
+    def tracePath: Vector[Char] =
+      Iterator.iterate(tracer)(_.next).takeWhile(_.isPath).map(_.char).toVector
 
   object Tracer:
-    def start(grid: Grid): Tracer =
-      Tracer(grid, grid.start, (0,1))
 
-  val tracer: Tracer    = Tracer.start(grid)
-  val path: Seq[Tracer] = Iterator.iterate(tracer)(_.next).takeWhile(_.isPath).toList
+    def attachTo(grid: Grid): Tracer =
+      Tracer(grid, grid.start, (0, 1))
 
-  override lazy val answer1: String = path.map(_.char).filter(_.isLetter).mkString("")
-  override lazy val answer2: Int    = path.size
+  val tracer: Tracer       = Tracer.attachTo(grid)
+
+  override lazy val answer1: String = tracer.tracePath.filter(_.isLetter).mkString("")
+  override lazy val answer2: Int    = tracer.tracePath.size

@@ -7,14 +7,17 @@ import nmcb.predef.*
 object Day22 extends AoC:
 
   enum Status derives CanEqual:
-    case Clean, Infected, Weakened, Flagged
+    case Clean
+    case Infected
+    case Weakened
+    case Flagged
 
   import Status.*
   
   case class Carrier(nodes: Map[Pos,Status], current: Pos, dir: Dir, infected: Int = 0):
 
     def wake1: Carrier =
-      nodes(current) match
+      nodes(current).runtimeChecked match
         case Clean =>
           val turn = dir.ccw
           copy(
@@ -30,11 +33,9 @@ object Day22 extends AoC:
             current = current.step(turn),
             dir     = turn
           )
-        case _ =>
-          sys.error(s"invalid state: $current -> ${nodes(current)}")
 
     def wake2: Carrier =
-      nodes(current) match
+      nodes(current).runtimeChecked match
         case Clean =>
           val turn = dir.ccw
           copy(
@@ -63,7 +64,7 @@ object Day22 extends AoC:
             dir     = turn
           )
 
-  private val carrier: Carrier =
+  val carrier: Carrier =
 
     val current: Pos =
       (lines(0).length / 2, lines.length / 2)

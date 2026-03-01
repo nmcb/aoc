@@ -32,9 +32,9 @@ object Day24 extends AoC:
 
   val components: Set[Component] =
     lines
-      .map:
+      .collect:
         case s"$portA/$portB" => Component(portA.toInt, portB.toInt)
       .toSet
 
   override lazy val answer1: Long = bridges(components).map(_.strength).max
-  override lazy val answer2: Int = bridges(components).map(bridge => (bridge.length,bridge.strength)).max.last
+  override lazy val answer2: Int  = bridges(components).map(bridge => (bridge.length, bridge.strength)).max.last

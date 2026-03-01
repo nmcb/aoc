@@ -6,15 +6,16 @@ import nmcb.predef.*
 object Day25 extends AoC:
 
   enum Move derives CanEqual:
-    case L, R
+    case L
+    case R
 
   import Move.*
 
   type State       = String
   type Value       = Int
   type Position    = Int
-  type Tape        = Map[Position,Value]
-  type Transitions = Map[(State,Value),(State,Value,Move)]
+  type Tape        = Map[Position, Value]
+  type Transitions = Map[(State, Value), (State, Value, Move)]
 
   /**
    * Begin in state A.
@@ -103,24 +104,24 @@ object Day25 extends AoC:
     transitions: Transitions,
     state: State,
     cursor: Position = 0,
-    tape: Tape = Map.empty.withDefaultValue(0)
+    tape: Tape       = Map.empty.withDefaultValue(0)
   ):
 
     def step: Turing =
 
-      val (nstate, nvalue, move) =
+      val (nextState, nextValue, move) =
         transitions((state, tape(cursor)))
 
-      val ncursor =
+      val nextCursor =
         move match
           case L => cursor - 1
           case R => cursor + 1
 
-      val ntape =
-        tape + (cursor -> nvalue)
+      val nextTape =
+        tape + (cursor -> nextValue)
 
-      copy(state = nstate, cursor = ncursor, tape = ntape)
+      copy(state = nextState, cursor = nextCursor, tape = nextTape)
 
   def turing: Turing = Turing(transitions, beginState)
 
-  override lazy val answer1: Int    = Iterator.iterate(turing)(_.step).nth(steps).tape.count((s,v) => v == 1)
+  override lazy val answer1: Int = Iterator.iterate(turing)(_.step).nth(steps).tape.count(_.right == 1)
