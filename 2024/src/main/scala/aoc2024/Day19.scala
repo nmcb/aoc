@@ -13,12 +13,13 @@ object Day19 extends AoC:
 
   def count(towels: Vector[String], target: String): Long =
     
-    val cache = memo("" -> 1L)
-    def loop(remaining: String): Long = cache.memoize(remaining):
-      towels
-        .filter(remaining.startsWith)
-        .map(towel => loop(remaining.drop(towel.length)))
-        .sum
+    val memo = Memo.init("" -> 1L)
+    def loop(remaining: String): Long =
+      memo.memoize(remaining):
+        towels
+          .filter(remaining.startsWith)
+          .map(towel => loop(remaining.drop(towel.length)))
+          .sum
     loop(target)
 
   override lazy val answer1: Long = designs.map(design => count(towels, design)).count(_ > 0)

@@ -68,13 +68,20 @@ object predef:
     def toTuple: (A, A) = (s(0), s(1))
 
 
-  def memo[K,V](initial: (K,V )*): mutable.Map[K, V] =
-    mutable.Map.empty[K, V] ++ initial
-
-  
-  extension [K,V](cache: mutable.Map[K,V])
+  extension [K, V](memo: Memo[K, V])
     def memoize(k: K)(v: => V): V =
-      cache.getOrElseUpdate(k, v)
+      memo.cache.getOrElseUpdate(k, v)
+      
+  case class Memo[K, V](cache: mutable.Map[K, V])     
+
+  object Memo:
+    
+    def empty[K, V]: Memo[K, V] =
+      Memo(mutable.Map.empty[K, V])
+
+    def init[K,V](initial: (K, V)*): Memo[K, V] =
+      Memo(mutable.Map.empty[K, V] ++ initial)
+
 
 
   extension [A,B](p: (A,B))

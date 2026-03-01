@@ -3,8 +3,6 @@ package aoc2023
 import nmcb.*
 import nmcb.predef.*
 
-import scala.collection.*
-
 object Day12 extends AoC:
 
   case class Line(mask: String, lengths: Vector[Int]):
@@ -20,11 +18,10 @@ object Day12 extends AoC:
 
   case class Puzzle(lines: Vector[Line]):
 
-    val cache: mutable.Map[(String, Vector[Int]), Long] =
-      memo[(String, Vector[Int]), Long]()
+    private val memo = Memo.empty[(String, Vector[Int]), Long]
 
-    private def solve(mask: String, lengths: Vector[Int]): Long =
-      cache.memoize((mask, lengths)):
+    def solve(mask: String, lengths: Vector[Int]): Long =
+      memo.memoize((mask, lengths)):
         (mask, lengths).runtimeChecked match
           case (_, Vector()) if mask.contains('#')                  => 0
           case (_, Vector())                                        => 1
