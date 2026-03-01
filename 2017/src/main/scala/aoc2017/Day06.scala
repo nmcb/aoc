@@ -46,6 +46,6 @@ object Day06 extends AoC:
     val last = seen.last
     seen.dropWhile(_ != last).size - 1
 
-  
+
   override lazy val answer1: Int = solve1(banks)
   override lazy val answer2: Int = solve2(banks)
