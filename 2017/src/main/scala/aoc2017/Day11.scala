@@ -20,12 +20,12 @@ object Day11 extends AoC:
 
     infix def move(dir: Dir): Hex =
       dir match
-        case N  => Hex(x, y - 1, z + 1)
-        case NE => Hex(x + 1, y - 1, z)
-        case SE => Hex(x + 1, y, z - 1)
-        case S  => Hex(x, y + 1, z - 1)
-        case SW => Hex(x - 1, y + 1, z)
-        case NW => Hex(x - 1, y, z + 1)
+        case N  => Hex(x = x    , y = y - 1, z = z + 1)
+        case NE => Hex(x = x + 1, y = y - 1, z = z    )
+        case SE => Hex(x = x + 1, y = y    , z = z - 1)
+        case S  => Hex(x = x    , y = y + 1, z = z - 1)
+        case SW => Hex(x = x - 1, y = y + 1, z = z    )
+        case NW => Hex(x = x - 1, y = y    , z = z + 1)
 
     infix def manhattanDistance(hex: Hex): Int =
       val dx = (x - hex.x).abs
@@ -37,6 +37,7 @@ object Day11 extends AoC:
     def zero: Hex =
       Hex(0, 0, 0)
 
+  
   val path: Vector[Dir] = input.split(",").map(d => Dir.valueOf(d.toUpperCase)).toVector
 
   override lazy val answer1: Int = path.foldLeft(Hex.zero)(_ move _) manhattanDistance Hex.zero

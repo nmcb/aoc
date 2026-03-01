@@ -52,10 +52,7 @@ object Day10 extends AoC:
       compute(salted, runs)
 
   val lengths: Vector[Int] =
-    input
-      .split(",")
-      .map(_.toInt)
-      .toVector
+    input.split(",").map(_.toInt).toVector
 
   override lazy val answer1: Int    = KnotHash.compute(lengths, runs = 1).productOfFirstTwo
   override lazy val answer2: String = KnotHash.compute(input, runs = 64).toString

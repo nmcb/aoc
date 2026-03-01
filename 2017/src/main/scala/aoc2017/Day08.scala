@@ -5,7 +5,7 @@ import scala.annotation.tailrec
 
 object Day08 extends AoC:
 
-  type Registers = Map[String,Int]
+  type Registers = Map[String, Int]
 
   case class Inst(target: String, operation: Int => Int, condition: Registers => Boolean)
 

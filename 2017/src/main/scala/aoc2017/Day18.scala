@@ -19,18 +19,6 @@ object Day18 extends AoC:
 
   import Inst.*
 
-  val instructions: Vector[Inst] =
-    def parse(s: String): Value = Try(s.toLong).getOrElse(s)
-    lines
-      .map:
-        case s"snd $x"    => SND(parse(x))
-        case s"set $x $y" => SET(x, parse(y))
-        case s"add $x $y" => ADD(x, parse(y))
-        case s"mul $x $y" => MUL(x, parse(y))
-        case s"mod $x $y" => MOD(x, parse(y))
-        case s"rcv $x"    => RCV(x)
-        case s"jgz $x $y" => JGZ(parse(x), parse(y))
-
   case class Assembly(prog: Vector[Inst], pc: Long, mem: Map[String,Long], out: List[Long], in: List[Long]):
 
     def terminated: Boolean =
@@ -42,10 +30,11 @@ object Day18 extends AoC:
     private def instruction: Inst =
       prog(pc.toInt)
 
-    extension (v: Value) def get: Long =
-      v match
-        case l: Long => l
-        case r: String => mem(r)
+    extension (v: Value)
+      def get: Long =
+        v match
+          case l: Long   => l
+          case r: String => mem(r)
 
     private def process(processRCV: String => Assembly => Assembly): Assembly =
       instruction match
@@ -82,10 +71,10 @@ object Day18 extends AoC:
         in   = List.empty
       )
 
-  override lazy val answer1: Long =
+  def solve1(instructions: Vector[Inst]): Long =
     Assembly.load(0, instructions).solve1.in.last
 
-  override lazy val answer2: Int =
+  def solve2(instructions: Vector[Inst]): Int =
     var assembly0 = Assembly.load(0, instructions)
     var assembly1 = Assembly.load(1, instructions)
     var count = 0
@@ -96,3 +85,22 @@ object Day18 extends AoC:
       assembly0 = next0.copy(out = List.empty, in = next1.out ++ next0.in)
       assembly1 = next1.copy(out = List.empty, in = next0.out ++ next1.in)
     count
+
+
+  val instructions: Vector[Inst] =
+
+    def parse(s: String): Value =
+      Try(s.toLong).getOrElse(s)
+
+    lines
+      .map:
+        case s"snd $x"    => SND(parse(x))
+        case s"set $x $y" => SET(x, parse(y))
+        case s"add $x $y" => ADD(x, parse(y))
+        case s"mul $x $y" => MUL(x, parse(y))
+        case s"mod $x $y" => MOD(x, parse(y))
+        case s"rcv $x"    => RCV(x)
+        case s"jgz $x $y" => JGZ(parse(x), parse(y))
+
+  override lazy val answer1: Long = solve1(instructions)
+  override lazy val answer2: Int  = solve2(instructions)
