@@ -24,14 +24,13 @@ object Day02 extends AoC:
     boxes.count(_.hasTwoChars) * boxes.count(_.hasThreeChars)
 
   def solve2(boxes: Vector[String]): String =
-    var found = "<not-found>"
-    for
+    val found = for
       a <- boxes
       b <- boxes
       if a != b && a.differByOneCharInPlace(b)
-    do
-      found = a intersect b
-    found
+    yield
+      a intersect b
+    found.head
 
 
   override lazy val answer1: Int    = solve1(lines)
