@@ -1,6 +1,8 @@
 package aoc2016
 
 import nmcb.*
+import nmcb.predef.*
+
 import scala.annotation.tailrec
 
 object Day04 extends AoC:
@@ -34,7 +36,7 @@ object Day04 extends AoC:
       val common: List[Char] =
         name
           .filterNot(_ == '-')
-          .groupMapReduce(identity)(_ => 1)(_ + _)
+          .countElements
           .toList
           .sorted
           .map(_.char)

@@ -1,6 +1,7 @@
 package aoc2022
 
 import nmcb.*
+import nmcb.predef.*
 import nmcb.pos.{*, given}
 
 import scala.annotation.tailrec
@@ -45,8 +46,8 @@ object Day23 extends AoC:
       elves.map(e => if neighbourCountOf(e) == 0 then e -> None else e -> propose(e, dirs)).toMap
 
     val moves: Set[Pos] =
-      val counts = proposals.view.values.flatten.groupMapReduce(identity)(_ => 1)(_ + _)
-      proposals.map((e,maybe) => maybe.map(move => if counts(move) == 1 then move else e).getOrElse(e)).toSet
+      val counts = proposals.view.values.flatten.countElements
+      proposals.map((e, maybe) => maybe.map(move => if counts(move) == 1 then move else e).getOrElse(e)).toSet
 
     def next: Mat =
       Mat(moves, dirs.tail :+ dirs.head)

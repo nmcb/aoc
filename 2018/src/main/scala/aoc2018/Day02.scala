@@ -5,35 +5,32 @@ import nmcb.predef.*
 
 object Day02 extends AoC:
 
-  extension (identifier: String)
+  extension (box: String)
 
-    private def idLettersWith(count: Int): Int =
-      identifier.groupMapReduce(identity)(_ => 1)(_ + _).count(_.right == count)
+    private def sameLetterCount(nr: Int): Int =
+      box.countElements.count(_.right == nr)
 
-    def twoCharInId: Boolean =
-      idLettersWith(2) >= 1
+    def hasTwoChars: Boolean =
+      sameLetterCount(nr = 2) >= 1
 
-    def threeCharInId: Boolean =
-      idLettersWith(3) >= 1
+    def hasThreeChars: Boolean =
+      sameLetterCount(nr = 3) >= 1
 
-  val IdCharSet: String = "abcdefghijklmnopqrstuvwxyz"
+    def differByOneCharInPlace(that: String): Boolean =
+      box.zip(that).count(_ != _) == 1
+
 
   def solve1(boxes: Vector[String]): Int =
-    boxes.count(_.twoCharInId) * boxes.count(_.threeCharInId)
+    boxes.count(_.hasTwoChars) * boxes.count(_.hasThreeChars)
 
   def solve2(boxes: Vector[String]): String =
-    def differByOneCharInPlace(box1: String, box2: String): Boolean =
-      box1.zip(box2).count(_ != _) == 1
-
-    val search =
-      for
-        a <- boxes
-        b <- boxes
-        if a != b && differByOneCharInPlace(a, b)
-      yield
-        a intersect b
-
-    search.headOption.getOrElse(sys.error("unable to find"))
+    val found = for
+      a <- boxes
+      b <- boxes
+      if a != b && a.differByOneCharInPlace(b)
+    yield
+      a intersect b
+    found.head
 
 
   override lazy val answer1: Int    = solve1(lines)
