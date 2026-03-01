@@ -1,14 +1,15 @@
 package aoc2017
 
 import nmcb.*
-import nmcb.memo.*
+import nmcb.predef.*
 
 object Day04 extends AoC:
 
+  val memo: Memo[String, Map[Char, Int]] = Memo.empty
   extension (self: String)
     def charCount: Map[Char, Int] =
-      memoized(self): (chars, count) =>
-        chars.groupMapReduce(identity)(_ => 1)(_ + _)
+      memo.memoize(self):
+        self.groupMapReduce(identity)(_ => 1)(_ + _)
 
   extension (l: String) infix def anagram(r: String): Boolean =
     l.charCount == r.charCount

@@ -33,21 +33,21 @@ object  Day07 extends AoC:
 
   object Equation:
 
-    private val cache = memo[(Int, Operators), Combinations]()
-    
-    def combinations1(n: Int, operators: Operators): Combinations = cache.memoize(n, operators):
+    private val memo = Memo.empty[(Int, Operators), Combinations]
+    def combinations1(n: Int, operators: Operators): Combinations =
+      memo.memoize(n, operators):
 
-      @tailrec
-      def leftPad(todo: Operators, padTo: Combinations, result: Combinations = Vector.empty): Combinations =
-        todo.runtimeChecked match
-          case Vector() => result
-          case h +: t   => leftPad(t, padTo, result ++ padTo.map(h +: _))
-
-      @tailrec
-      def loop(todo: Int, result: Combinations = Vector(Vector.empty)): Combinations =
-        if todo <= 0 then result else loop(todo - 1, leftPad(operators, result))
-
-      loop(n)
+        @tailrec
+        def leftPad(todo: Operators, padTo: Combinations, result: Combinations = Vector.empty): Combinations =
+          todo.runtimeChecked match
+            case Vector() => result
+            case h +: t   => leftPad(t, padTo, result ++ padTo.map(h +: _))
+  
+        @tailrec
+        def loop(todo: Int, result: Combinations = Vector(Vector.empty)): Combinations =
+          if todo <= 0 then result else loop(todo - 1, leftPad(operators, result))
+  
+        loop(n)
 
     def combinations2[A](n: Int, elements: Vector[A]): Iterator[Vector[A]] =
       val m = elements.length
