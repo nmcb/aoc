@@ -31,7 +31,7 @@ object Day18 extends AoC:
       prog(pc.toInt)
 
     extension (v: Value)
-      def get: Long =
+      private def get: Long =
         v match
           case l: Long   => l
           case r: String => mem(r)
