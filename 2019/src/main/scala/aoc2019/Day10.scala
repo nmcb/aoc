@@ -7,17 +7,6 @@ import scala.annotation.tailrec
 
 object Day10 extends AoC:
 
-  extension (p: Pos)
-    def part2: Int = p.x * 100 + p.y
-
-  val astroids: List[Pos] =
-    val sizeX = lines(0).length
-    val sizeY = lines.length
-    List
-      .tabulate(sizeX, sizeY)((x, y) => Option.when(lines(y)(x) == '#')((x, y)))
-      .flatten
-      .flatten
-
   def blockedBy(astroids: List[Pos], a: Pos, o: Pos): Boolean =
 
     @tailrec
@@ -64,6 +53,18 @@ object Day10 extends AoC:
       val right = rest.dropWhile(a => a.angle == aim.angle)
 
       fireAll(nr)(right, done ++ left, count + 1, Option.when (count == nr)(aim.target).orElse(result))
+
+  extension (p: Pos)
+    def part2: Int = p.x * 100 + p.y
+
+
+  val astroids: List[Pos] =
+    val sizeX = lines(0).length
+    val sizeY = lines.length
+    List
+      .tabulate(sizeX, sizeY)((x, y) => Option.when(lines(y)(x) == '#')((x, y)))
+      .flatten
+      .flatten
 
   override lazy val answer1: Int = maxBlockedByCount(astroids)
   override lazy val answer2: Int = fireAll(200)(testLaser((8,16))(astroids)).get.part2
