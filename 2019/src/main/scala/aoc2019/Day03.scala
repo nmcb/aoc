@@ -5,8 +5,6 @@ import nmcb.pos.*
 
 object Day03 extends AoC:
 
-  val Vector(description1, description2) = lines
-
   def append(wire: Vector[Pos], cmd: String): Vector[Pos] =
 
     val length: Int = cmd.drop(1).toInt
@@ -24,7 +22,7 @@ object Day03 extends AoC:
   def distances(description1: String, description2: String): Vector[Pos] =
     wire(description1).toSet.intersect(wire(description2).toSet).toVector.sorted(using Pos.orderingByManhattanDistance)
   
-  type Crossing = (Pos,Int)
+  type Crossing = (Pos, Int)
 
   extension (crossing: Crossing)
     def pos: Pos   = crossing._1
@@ -48,6 +46,8 @@ object Day03 extends AoC:
     val crossings2 = wire(description2).zipWithIndex
     minCrossingsOnIntersection(crossings1,crossings2).count
 
+
+  val Vector(description1, description2) = lines
 
   override lazy val answer1: Int = solve1(description1, description2)
   override lazy val answer2: Int = solve2(description1, description2)
