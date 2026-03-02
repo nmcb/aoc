@@ -26,37 +26,30 @@ object Day10 extends AoC:
 
     val x = o.x - a.x
     val y = o.y - a.y
-    val d = gcd(math.abs(x), math.abs(y))
+    val d = gcd(x.abs, y.abs)
     val nx = x / d
     val ny = y / d
-    (1 until d).exists(m => astroids.contains((a.x + (m * nx), a.y + (m * ny))))
+
+    (1 until d).exists(n => astroids.contains((x = a.x + (n * nx), y = a.y + (n * ny))))
 
   def maxBlockedByCount(astroids: List[Pos]): Int =
 
       def blockCount(astroid: Pos): Int =
-        astroids
-          .filterNot(other => other != astroid && blockedBy(astroids, astroid,other))
-          .length
+        astroids.filterNot(other => other != astroid && blockedBy(astroids, astroid, other)).length
 
-      astroids
-        .groupMapReduce(identity)(blockCount)(_ max _)
-        .values
-        .max - 1
+      astroids.groupMapReduce(identity)(blockCount)(_ max _).values.max - 1
 
-  type Aim = (Double,Double,Pos)
-
-  extension (aim: Aim)
-    def angle: Double    = aim._1
-    def distance: Double = aim._2
-    def target: Pos      = aim._3
+  type Aim = (angle: Double, distance: Double, target: Pos)
 
   def testLaser(astroid: Pos)(astroids: List[Pos]): List[Aim] =
 
     import Ordering.Double.TotalOrdering
     astroids
-      .filterNot(_ == astroid)
-      .map(other => (astroid.angleDegrees(other), astroid.pythagoreanDistance(other), other))
-      .sortBy(s => (s.angle, s.distance, s.target.x, s.target.y))
+      .filterNot: other =>
+        other == astroid
+      .map: other =>
+        (angle = astroid angleDegrees other, distance = astroid pythagoreanDistance other, target = other)
+      .sorted
 
   @tailrec
   def fireAll(nr: Int)(todo: List[Aim], done: List[Aim] = List.empty, count: Int = 1, result: Option[Pos] = None): Option[Pos] =
@@ -69,6 +62,7 @@ object Day10 extends AoC:
       val rest  = todo.tail
       val left  = rest.takeWhile(a => a.angle == aim.angle)
       val right = rest.dropWhile(a => a.angle == aim.angle)
+
       fireAll(nr)(right, done ++ left, count + 1, Option.when (count == nr)(aim.target).orElse(result))
 
   override lazy val answer1: Int = maxBlockedByCount(astroids)

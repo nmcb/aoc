@@ -96,13 +96,13 @@ object pos:
     infix inline def >=(that: Pos): Boolean = p.x >= that.x && p.y >= that.y
     infix inline def <=(that: Pos): Boolean = p.x <= that.x && p.y <= that.y
 
-    inline def manhattanDistance(that: Pos): Long =
+    infix inline def manhattanDistance(that: Pos): Long =
       math.abs(p.x - that.x) + math.abs(p.y - that.y)
 
-    inline def pythagoreanDistance(that: Pos): Double =
+    infix inline def pythagoreanDistance(that: Pos): Double =
       math.sqrt(math.pow((that.x - p.x).toDouble, 2) + math.pow((that.y - p.y).toDouble, 2))
 
-    def angleDegrees(that: Pos): Double =
+    infix inline def angleDegrees(that: Pos): Double =
       val dx = (that.x - p.x).toDouble
       val dy = (that.y - p.y).toDouble
       val d = 90 - math.atan2(-dy, dx) * 180 / math.Pi
