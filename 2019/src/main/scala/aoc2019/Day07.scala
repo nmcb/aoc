@@ -10,8 +10,8 @@ object Day07 extends AoC:
   def highestSignal(program: Mem, phaseSettings: Range): Value =
     phaseSettings
       .permutations
-      .map(_.foldLeft(0L): (total,setting) =>
-        CPU(program).withInput(setting,total).outputs.last)
+      .map(_.foldLeft(0L): (total, setting) =>
+        CPU(program).withInput(setting, total).outputs.last)
       .max
 
   def highestSignalWithFeedback(program: Mem, phaseSettings: Range): Value =
