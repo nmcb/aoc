@@ -10,12 +10,11 @@ object Day06 extends AoC:
 
   case class Planet(name: Name, center: Name)
 
-  val planets: Vector[Planet] =
-    lines.map:
-      case s"$center)$name" => Planet(name, center)
+  val planets: Vector[Planet] = lines.collect:
+    case s"$center)$name" => Planet(name, center)
 
   def find(p: Planet => Boolean): Planet =
-    planets.find(p).getOrElse(sys.error("boom"))
+    planets.find(p).get
 
   def orbits(p: Planet): Vector[Name] =
     @tailrec
@@ -25,7 +24,6 @@ object Day06 extends AoC:
       else
         val next = find(_.name == p.center)
         loop(next, next.name +: acc)
-
     loop(p)
 
   def pathToCom(n: Name): Vector[Name] =
@@ -40,7 +38,7 @@ object Day06 extends AoC:
 
   @tailrec
   def path(l: Vector[Name], r: Vector[Name]): Vector[Name] =
-    (l,r).runtimeChecked match
+    (l, r).runtimeChecked match
       case (l1 +: l2 +: _ , r1 +: r2 +: _) if l1 == r1 && l2 == r2 => path(l.tail, r.tail)
       case (l1 +: _       , r1 +: _      ) if l1 == r1             => l.reverse ++ r.tail
 

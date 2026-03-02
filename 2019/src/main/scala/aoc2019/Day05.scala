@@ -8,5 +8,5 @@ object Day05 extends AoC:
 
   val program: Mem = Mem.load(input)
 
-  override lazy val answer1: Value = CPU(mem = program, stdin = LazyList(1)).outputs.last
-  override lazy val answer2: Value = CPU(mem = program, stdin = LazyList(5)).outputs.last
+  override lazy val answer1: Value = CPU(program).withInput(1).outputs.last
+  override lazy val answer2: Value = CPU(program).withInput(5).outputs.last
