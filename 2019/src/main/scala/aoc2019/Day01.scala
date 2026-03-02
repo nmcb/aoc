@@ -19,6 +19,7 @@ object Day01 extends AoC:
         go(requirement - 1, total + requirement)
     go(mass)
 
+  
   val masses: Vector[Int] = lines.map(_.toInt)
   
   override lazy val answer1: Int = masses.map(massToFuel).sum

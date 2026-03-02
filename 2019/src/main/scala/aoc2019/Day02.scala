@@ -23,6 +23,7 @@ object Day02 extends AoC:
 
     100 * noun + verb
 
+
   val program: Mem = Mem.parse(input)
 
   override lazy val answer1: Value = CPU(program.set(1, 12).set(2, 2)).execFinal.mem(0)
