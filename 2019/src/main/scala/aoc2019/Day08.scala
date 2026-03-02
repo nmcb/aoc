@@ -29,7 +29,7 @@ object Day08 extends AoC:
     def map[B](f: A => B): Layer[B] =
       Layer(digs.map(_.map(f)))
 
-    def zip[B](that: Layer[B]): Layer[(A,B)] =
+    def zip[B](that: Layer[B]): Layer[(A, B)] =
       Layer(digs.zip(that.digs).map((da, db) => da.zip(db)))
 
   object Layer:
@@ -38,14 +38,6 @@ object Day08 extends AoC:
       Layer((0 to sizeY).toList.map(_ => (0 to sizeX).toList.map(_ => a)))
 
   type Image[A] = List[Layer[A]]
-
-  val image: Image[Dig] =
-    input
-      .toList
-      .map(_.toString.toInt)
-      .grouped(sizeX).toList
-      .grouped(sizeY).toList
-      .map(Layer[Dig].apply)
 
   enum Pix derives CanEqual:
     case Black
@@ -74,11 +66,32 @@ object Day08 extends AoC:
         case 1 => White
         case 2 => Trans
 
-  def stack(top: Layer[Pix], bot: Layer[Pix]): Layer[Pix] =
-    top.zip(bot).map((t,b) => b.stack(t))
+  def solve1(image: Image[Dig]): Int =
+    image
+      .sortWith(_.count0 < _.count0)
+      .headOption
+      .map(l => l.count1 * l.count2)
+      .get
 
-  def render(layer: Layer[Pix]): String =
-    layer.digs.map(line => line.map(_.render).mkString + "\n").mkString
+  def solve2(image: Image[Dig]): String =
 
-  override lazy val answer1: Int    = image.sortWith(_.count0 < _.count0).headOption.map(l => l.count1 * l.count2).get
-  override lazy val answer2: String = render(image.map(l => l.map(_.digitToPix)).foldRight(Layer.fill(Trans))(stack))
+    def stack(top: Layer[Pix], bot: Layer[Pix]): Layer[Pix] =
+      top.zip(bot).map((t, b) => b.stack(t))
+
+    def render(layer: Layer[Pix]): String =
+      layer.digs.map(line => line.map(_.render).mkString + "\n").mkString
+
+    val layer = image.map(l => l.map(_.digitToPix)).foldRight(Layer.fill(Trans))(stack)
+    render(layer)
+
+
+  val image: Image[Dig] =
+    input
+      .toList
+      .map(_.toString.toInt)
+      .grouped(sizeX).toList
+      .grouped(sizeY).toList
+      .map(Layer[Dig].apply)
+
+  override lazy val answer1: Int    = solve1(image)
+  override lazy val answer2: String = solve2(image)
