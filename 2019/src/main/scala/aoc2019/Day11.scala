@@ -8,18 +8,19 @@ object Day11 extends AoC:
 
   import cpu.*
 
-  type Panels = Map[Pos,Long]
+  type Panels = Map[Pos, Long]
 
   object Panels:
     val empty: Panels = Map.empty.withDefaultValue(0L)
 
   case class Robot(cpu: CPU, pos: Pos = (0, 0), dir: Dir = N, panels: Panels = Panels.empty):
+    
     @tailrec
     final def paint: Panels =
       cpu.withInput(panels(pos)).outputStates match
         case LazyList() =>
           panels
-        case LazyList((_,color),(next,turn)) =>
+        case LazyList((_, color), (next, turn)) =>
           val rotate = if turn == 1 then dir.cw else dir.ccw
           Robot(
             cpu    = next,
@@ -39,10 +40,10 @@ object Day11 extends AoC:
 
   extension (panels: Panels)
     def asString: String =
-      val minX = panels.keys.map(_.x).min
-      val maxX = panels.keys.map(_.x).max
-      val minY = panels.keys.map(_.y).min
-      val maxY = panels.keys.map(_.y).max
+      val minX = panels.keys.minBy(_.x).x
+      val maxX = panels.keys.maxBy(_.x).x
+      val minY = panels.keys.minBy(_.y).y
+      val maxY = panels.keys.maxBy(_.y).y
 
       val sb = StringBuffer()
       for y <- minY to maxY do
