@@ -39,9 +39,9 @@ object Day06 extends AoC:
       case (l1 +: l2 +: _ , r1 +: r2 +: _) if l1 == r1 && l2 == r2 => path(l.tail, r.tail)
       case (l1 +: _       , r1 +: _      ) if l1 == r1             => l.reverse ++ r.tail
 
+  
   val planets: Vector[Planet] = lines.collect:
     case s"$center)$name" => Planet(name, center)
-
-
+  
   override lazy val answer1: Int = planets.orbits.map(_.right.length).sum
   override lazy val answer2: Int = path(planets.pathToCom("YOU"), planets.pathToCom("SAN")).length
