@@ -35,7 +35,7 @@ object Day21 extends AoC:
     val input = script.map(_ + "\n").mkString.map(_.toLong)
     CPU(program).withInput(input *).outputs.last
 
-  val program: Mem = Mem.parse(input)
+  val program: Mem = Mem.load(input)
 
   override lazy val answer1: Long = survey(program, script = walk :+ "WALK")
   override lazy val answer2: Long = survey(program, script = run :+ "RUN")

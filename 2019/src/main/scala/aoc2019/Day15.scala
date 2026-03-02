@@ -44,7 +44,7 @@ object Day15 extends AoC:
     val (second, _) = dijkstra(computer)
     second.values.max
   
-  val program: Mem = Mem.parse(input)
+  val program: Mem = Mem.load(input)
 
   override lazy val answer1: Int = solve1(program)
   override lazy val answer2: Int = solve2(program)

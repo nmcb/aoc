@@ -28,7 +28,7 @@ object Day13 extends AoC:
         case (result, LazyList(x, y, id)) => result + (Location(x, y) -> Tile.fromId(id))
         case output                       => sys.error(s"invalid output: $output")
 
-  val program: Mem = Mem.parse(input)
+  val program: Mem = Mem.load(input)
 
   type Pixel = (Location, Tile)
 

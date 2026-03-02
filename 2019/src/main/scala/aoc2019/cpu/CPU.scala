@@ -9,7 +9,7 @@ extension (pv: PointerValue)
   def value: Value     = pv._2
 
 case class Mem(underlying: Map[Pointer, Value]):
-  def apply(p: Pointer): Value       = underlying(p)
+  def get(p: Pointer): Value         = underlying(p)
   def set(p: Pointer, v: Value): Mem = Mem(underlying.updated(p, v))
   def +(pv: PointerValue): Mem       = set(pv.pointer, pv.value)
 
@@ -18,7 +18,7 @@ object Mem:
   def apply(values: Value*): Mem =
     Mem(values.view.zipWithIndex.map((v, i) => i -> v).toMap.withDefaultValue(0L))
 
-  def parse(s: String): Mem =
+  def load(s: String): Mem =
     Mem(s.split(',').map(_.toLong).toSeq *)
 
 type State = (CPU,Option[Value])
@@ -29,18 +29,18 @@ extension (state: State)
 
 case class CPU(mem: Mem, stdin: LazyList[Value] = LazyList.empty, ip: Pointer = 0, base: Pointer = 0):
 
-  def value(offset: Int): Value   = mem(ip + offset)
-  def opcode: Int                 = (value(0) % 100).toInt
-  def param(offset: Int): Value   = value(offset + 1)
-  def paramMode(offset: Int): Int = ((value(0) / math.pow(10, 2 + offset).toInt) % 10).toInt
+  private def value(offset: Int): Value   = mem.get(ip + offset)
+  private def opcode: Int                 = (value(0) % 100).toInt
+  private def param(offset: Int): Value   = value(offset + 1)
+  private def paramMode(offset: Int): Int = ((value(0) / math.pow(10, 2 + offset).toInt) % 10).toInt
 
-  def read(offset: Int): Value =
+  private def read(offset: Int): Value =
     paramMode(offset).runtimeChecked match
-      case 0 => mem(param(offset).toInt)
+      case 0 => mem.get(param(offset).toInt)
       case 1 => param(offset)
-      case 2 => mem((base + param(offset)).toInt)
+      case 2 => mem.get((base + param(offset)).toInt)
 
-  def write(offset: Int, value: Value): Mem =
+  private def write(offset: Int, value: Value): Mem =
     paramMode(offset).runtimeChecked match
       case 0 => mem.set(param(offset).toInt, value)
       case 2 => mem.set((base + param(offset)).toInt, value)
@@ -70,8 +70,8 @@ case class CPU(mem: Mem, stdin: LazyList[Value] = LazyList.empty, ip: Pointer = 
   def executeAll: LazyList[State] =
     LazyList.unfold(this)(state => state.executeOne.map(next => (next,next.cpu)))
 
-  def outputStates: LazyList[(CPU,Value)] =
-    executeAll.flatMap((state,output) => output.map((state,_)))
+  def outputStates: LazyList[(CPU, Value)] =
+    executeAll.flatMap((state, output) => output.map((state, _)))
 
   def execFinal: CPU =
     executeAll.last.cpu

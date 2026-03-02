@@ -5,7 +5,7 @@ object Day07 extends AoC:
 
   import cpu.*
 
-  val program: Mem = Mem.parse(input)
+  val program: Mem = Mem.load(input)
 
   def highestSignal(program: Mem, phaseSettings: Range): Value =
     phaseSettings
