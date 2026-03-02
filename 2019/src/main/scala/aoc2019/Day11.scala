@@ -29,7 +29,7 @@ object Day11 extends AoC:
           ).paint
 
   val robot: Robot =
-    val program: Mem = Mem.parse(input)
+    val program: Mem = Mem.load(input)
     Robot(
       cpu    = CPU(program),
       pos    = (0, 0),

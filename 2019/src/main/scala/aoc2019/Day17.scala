@@ -7,7 +7,7 @@ object Day17 extends AoC:
 
   import cpu.*
 
-  val program: Mem = Mem.parse(input)
+  val program: Mem = Mem.load(input)
 
   extension (p: Pos)
     def left: Pos  = (p.y, -p.x)

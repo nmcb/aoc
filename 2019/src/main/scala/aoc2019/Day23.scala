@@ -72,7 +72,7 @@ object Day23 extends AoC:
     val network = Seq.tabulate(50)(i => State(CPU(memory), Seq(i), Seq.empty))
     go(network, Seq.empty, 0, None)
 
-  val program: Mem = Mem.parse(input)
+  val program: Mem = Mem.load(input)
 
   override lazy val answer1: Value = solve1(program)
   override lazy val answer2: Value = solve2(program)

@@ -33,7 +33,7 @@ object Day19 extends AoC:
 
     go(maxX, maxY)
 
-  val program: Mem = Mem.parse(input)
+  val program: Mem = Mem.load(input)
 
   override lazy val answer1: Int  = pulls(program, 0 until 50, 0 until 50).count(_ == 1)
   override lazy val answer2: Long = wiggleSouthEast(program, maxX = 99, maxY = 99)

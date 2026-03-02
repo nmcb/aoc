@@ -18,13 +18,13 @@ object Day02 extends AoC:
       permutations
         .dropWhile: (noun, verb) =>
           val patch = program.set(1, noun).set(2, verb)
-          CPU(patch).execFinal.mem(0) != 19690720
+          CPU(patch).execFinal.mem.get(0) != 19690720
         .head
 
     100 * noun + verb
 
 
-  val program: Mem = Mem.parse(input)
+  val program: Mem = Mem.load(input)
 
-  override lazy val answer1: Value = CPU(program.set(1, 12).set(2, 2)).execFinal.mem(0)
+  override lazy val answer1: Value = CPU(program.set(1, 12).set(2, 2)).execFinal.mem.get(0)
   override lazy val answer2: Value = experiment(program)
