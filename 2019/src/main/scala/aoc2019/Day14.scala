@@ -7,8 +7,8 @@ object Day14 extends AoC:
 
   type Molecule  = String
   type Amount    = Long
-  type Molecules = Map[Molecule,Amount]
-  type Dose      = (Molecule,Amount)
+  type Molecules = Map[Molecule, Amount]
+  type Dose      = (Molecule, Amount)
 
   extension (amount: Amount)
     infix def /^(that: Amount): Long =
@@ -29,7 +29,7 @@ object Day14 extends AoC:
 
   case class Reaction(from: Molecules, amount: Amount)
 
-  type Reactions = Map[Molecule,Reaction]
+  type Reactions = Map[Molecule, Reaction]
 
   extension (molecules: Molecules)
 
@@ -46,8 +46,7 @@ object Day14 extends AoC:
         else
           val additional = amount - current(molecule)
           val multiplier = additional /^ reactions(molecule).amount
-          reactions(molecule)
-            .from
+          reactions(molecule).from
             .foldLeft(current):
               case (current,(molecule,amount)) => make(molecule, amount * multiplier, current)
             .modify(molecule, multiplier * reactions(molecule).amount - amount)
@@ -56,6 +55,7 @@ object Day14 extends AoC:
       -result("ORE")
 
     def makeMaxFuel(oreThreshold: Amount): Amount =
+
       @tailrec
       def binarySearch(start: Amount, end: Amount): Amount =
         if start >= end then
@@ -63,19 +63,17 @@ object Day14 extends AoC:
         else
           val middle = (start + end) / 2
           val cost   = reactions.makeFuel(middle)
-          if cost > oreThreshold then
-            binarySearch(start, middle - 1)
-          else if cost < oreThreshold then
-            binarySearch(middle + 1, end)
-          else
-            middle
+          cost.compare(oreThreshold).runtimeChecked match
+            case  1 => binarySearch(start, middle - 1)
+            case -1 => binarySearch(middle + 1, end)
+            case  0 => middle
 
       binarySearch (1, oreThreshold)
 
 
   val reactions: Reactions =
     lines
-      .map:
+      .collect:
         case s"$from => $to" =>
           val (molecule, amount) = Dose.fromString(to)
           molecule -> Reaction(from = Molecules.fromString(from), amount = amount)
