@@ -24,6 +24,7 @@ object Day13 extends AoC:
   case class Pos(x: Long, y: Long)
 
   extension (outputs: LazyList[Value])
+    
     def render: Map[Pos,Tile] =
       outputs.grouped(3).foldLeft(Map.empty[Pos,Tile]):
         case (result, LazyList(x, y, id)) => result + (Pos(x, y) -> Tile.fromId(id))
@@ -79,7 +80,7 @@ object Day13 extends AoC:
       buffer += Reset
 
       println(buffer.mkString)
-      Thread.sleep(20)
+      Thread.sleep(25)
 
 
   def play(program: Mem, onScreen: Boolean): Value =
