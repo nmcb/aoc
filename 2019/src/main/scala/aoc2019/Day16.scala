@@ -8,7 +8,6 @@ object Day16 extends AoC:
   import Iterator.*
 
   def solve1(signal: Seq[Int]): String =
-
     def phase(signal: Seq[Int]): Seq[Int] =
       signal.indices.map: digit =>
         val raw = signal.zipWithIndex.map: (next, index) =>
@@ -17,10 +16,9 @@ object Day16 extends AoC:
             case 1     => next
             case 3     => -next
         (raw.sum % 10).abs
-    iterate(signal)(phase).drop(100).next.take(8).mkString
+    iterate(signal)(phase).nth(100).take(8).mkString
 
   def solve2(signal: String): String =
-    
     def phase(signal: Seq[Int]): Seq[Int] =
       signal.scanRight(0)(_ + _).map(_ % 10)
 
