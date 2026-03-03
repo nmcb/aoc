@@ -1,6 +1,7 @@
 package aoc2019
 
 import nmcb.*
+import nmcb.predef.*
 import nmcb.pos.{*, given}
 
 import scala.annotation.tailrec
@@ -9,13 +10,9 @@ object Day10 extends AoC:
 
   def blockedBy(astroids: List[Pos], a: Pos, o: Pos): Boolean =
 
-    @tailrec
-    def gcd(a: Int, b: Int): Int =
-      if b == 0 then a else gcd(b, a % b)
-
     val x = o.x - a.x
     val y = o.y - a.y
-    val d = gcd(x.abs, y.abs)
+    val d = x.abs gcd y.abs
     val nx = x / d
     val ny = y / d
 

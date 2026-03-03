@@ -1,6 +1,7 @@
 package aoc2023
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.annotation.tailrec
 
@@ -70,9 +71,7 @@ object Day20 extends AoC:
     def result: Long =
       sent.count(_.pulse == Low) * sent.count(_.pulse == High)
 
-    def gcd(l: Long, r: Long): Long = if r == 0 then l.abs else gcd(r, l % r)
-    def lcm(l: Long, r: Long): Long = (l * r).abs / gcd(l, r)
-    def lcm(ls: Iterable[Long]): Long = ls.reduce(lcm)
+    def lcm(ls: Iterable[Long]): Long = ls.reduce(_ lcm _)
 
     /** the specification shows one '&' outputting to 'rx', we solve for the cycles of its inputs being raised to 'H' */
     def solveRX: Long =

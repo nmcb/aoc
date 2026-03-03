@@ -41,16 +41,6 @@ object Day12 extends AoC:
    * repeat "relatively quickly" (e.g. fast enough to brute force).  And (3) since each state
    * has a unique parent, the first repeat must be a repeat of the initial state.
    */
-
-  extension (a: Long)
-
-    @tailrec
-    infix def gcd(b: Long): Long =
-      if a % b == 0 then b else b gcd (a % b)
-
-    infix def lcm(b: Long): Long =
-      a * b / (a gcd b)
-
   extension (moons: Vector[Moon])
 
     def periodOf(axis: Vec => Int): Long =
