@@ -51,3 +51,12 @@ object SecurityExercise:
   lazy val (clusters: Set[Cluster], cuts: Vector[Route]) = routes.minCut(3)
   lazy val cluster0: Int = clusters.head.size
   lazy val cluster1: Int = clusters.last.size
+
+  def main(args: Array[String]): Unit =
+    given Random = Random(seed = 4) // tweaked for test performance
+    val (clusters: Set[Cluster], cuts: Vector[Route]) = routes.minCut(3)
+    val cluster1: Int = clusters.head.size
+    val cluster2: Int = clusters.last.size
+    println(s"cuts: ${cuts.mkString(", ")}")
+    println(s"size cluster 1: $cluster1")
+    println(s"size cluster 2: $cluster2")
