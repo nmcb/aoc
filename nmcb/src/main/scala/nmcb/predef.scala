@@ -65,10 +65,6 @@ object predef:
       List.fill(length - s.length)(char).mkString + s
 
 
-  extension [A](s: Seq[A])
-    def toTuple: (A, A) = (s(0), s(1))
-
-
   extension [K, V](memo: Memo[K, V])
 
     def memoize(k: K)(v: => V): V =
