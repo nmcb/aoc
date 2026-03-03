@@ -10,10 +10,10 @@ object Day15 extends AoC:
 
   import cpu.*
 
-  val neighbours: Vector[(Pos,Int)] =
+  val neighbours: Vector[(Pos, Int)] =
     Vector((0, -1) -> 1, (0, 1) -> 2, (-1, 0) -> 3, (1, 0) -> 4)
 
-  def move(pos: Pos, cpu: CPU)(delta: Pos, command: Int): (Pos,CPU,Long) =
+  def move(pos: Pos, cpu: CPU)(delta: Pos, command: Int): (Pos, CPU, Long) =
     val (next, status) = cpu.withInput(command).outputStates.last
     (pos + delta, next, status)
 
