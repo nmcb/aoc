@@ -32,17 +32,11 @@ object Day08 extends AoC:
     def steps1: Int =
       pathTo(_ == "ZZZ", "AAA", directions).length
 
-    def gcd(a: Long, b: Long): Long =
-      if (b == 0) a.abs else gcd(b, a % b)
-
-    def lcm(a: Long, b: Long): Long =
-      (a * b).abs / gcd(a, b)
-
     def steps2: Long =
       // note: each start node has a repeating path, ending with a node that ends with a 'Z'
       val starts = nodes.keys.filter(_.endsWith("A")).toSet
       val paths  = starts.map(from => pathTo(_.endsWith("Z"), from, directions))
-      paths.map(_.length.toLong).fold(1L)(lcm)
+      paths.map(_.length.toLong).fold(1L)(_ lcm _)
 
 
   lazy val network: Network =

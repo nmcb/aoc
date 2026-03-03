@@ -1,5 +1,7 @@
 package nmcb
 
+import scala.annotation.tailrec
+
 object predef:
 
   val HEX_ARRAY: Array[Char] = "0123456789abcdef".toCharArray
@@ -106,3 +108,18 @@ object predef:
         hexChars(j * 2) = HEX_ARRAY(v >>> 4)
         hexChars(j * 2 + 1) = HEX_ARRAY(v & 0x0F)
       String(hexChars)
+
+  extension (a: Int)
+
+    @tailrec
+    infix def gcd(b: Int): Int =
+      if b == 0 then a else b gcd(a % b)
+
+  extension (a: Long)
+  
+    @tailrec
+    infix def gcd(b: Long): Long =
+      if a % b == 0 then b else b gcd (a % b)
+  
+    infix def lcm(b: Long): Long =
+      a * b / (a gcd b)

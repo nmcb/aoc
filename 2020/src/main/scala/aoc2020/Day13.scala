@@ -1,6 +1,7 @@
 package aoc2020
 
 import nmcb.*
+
 import scala.annotation.*
 import scala.util.*
 
@@ -42,23 +43,22 @@ object Day13 extends AoC:
     val prod = n.product
 
     @tailrec
-    def go(n: List[Long], a: List[Long], sm: Long): Long =
+    def loop(n: List[Long], a: List[Long], sm: Long): Long =
+
       def gcd(a: Long, b: Long): Long =
         @tailrec
-        def loop(a: Long, b: Long, x0: Long, x1: Long): Long =
-          if (a > 1) loop(b, a % b, x1 - (a / b) * x0, x0) else x1
+        def loop(a: Long, b: Long, nominator: Long, denominator: Long): Long =
+          if a > 1 then loop(b, a % b, denominator - (a / b) * nominator, nominator) else denominator
 
-        if b == 1 then
-          1
-        else
-          val x1 = loop(a, b, 0, 1)
-          if x1 < 0 then x1 + b else x1
+        if b == 1 then 1 else
+          val result = loop(a, b, 0, 1)
+          if result < 0 then result + b else result
 
       if n.isEmpty then sm else
         val p = prod / n.head
-        go(n.tail, a.tail, sm + a.head * gcd(p, n.head) * p)
+        loop(n.tail, a.tail, sm + a.head * gcd(p, n.head) * p)
  
-    Try(go(n, a, 0) % prod) match
+    Try(loop(n, a, 0) % prod) match
       case Success(v) => Some(v)
       case _          => None
 
