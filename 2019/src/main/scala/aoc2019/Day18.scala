@@ -13,7 +13,7 @@ object Day18 extends AoC:
     def isKey: Boolean   = 'a' <= c && c <= 'z'
     def isDoor: Boolean  = 'A' <= c && c <= 'Z'
 
-  def dijkstra(tunnels: Map[Pos,Char], start: Pos): Vector[Move] =
+  def dijkstra(tunnels: Map[Pos, Char], start: Pos): Vector[Move] =
     val cost = collection.mutable.Map(start -> 0)
     val keys = collection.mutable.Map(start -> Set.empty[Char])
     val todo = collection.mutable.PriorityQueue(start)(using Ordering.by(cost))
@@ -36,14 +36,14 @@ object Day18 extends AoC:
     def pos: Pos     = tile._1
     def symbol: Char = tile._2
 
-  def explore(tunnels: Map[Pos,Char], keys: Set[Pos], robots: Set[Pos]): Int =
+  def explore(tunnels: Map[Pos, Char], keys: Set[Pos], robots: Set[Pos]): Int =
 
     val routes = (keys ++ robots)
       .flatMap(pos => dijkstra(tunnels, pos))
       .map(move => (move.from, move.to) -> move)
       .toMap
 
-    val cache = collection.mutable.Map.empty[(Set[Pos],Set[Char]), Int]
+    val cache = collection.mutable.Map.empty[(Set[Pos], Set[Char]), Int]
     def go(todo: Set[Pos], robots: Set[Pos], found: Set[Char], total: Int, result: Int): Int =
       if total >= result || total >= cache.getOrElse((robots,found), Int.MaxValue) then
         result
@@ -75,7 +75,7 @@ object Day18 extends AoC:
       result = Int.MaxValue
     )
 
-  def parse(lines: Vector[String]): (tunnels: Map[Pos,Char], keys: Set[Pos], robots: Set[Pos]) =
+  def parse(lines: Vector[String]): (tunnels: Map[Pos, Char], keys: Set[Pos], robots: Set[Pos]) =
     val tunnels = for y <- lines.indices; x <- lines(0).indices yield (x, y) -> lines(y)(x)
     val keys    = tunnels.filter(_.symbol.isKey).map(_.pos)
     val robots  = tunnels.filter(_.symbol.isRobot).map(_.pos)

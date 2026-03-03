@@ -1,6 +1,7 @@
 package aoc2019
 
 import nmcb.*
+import nmcb.predef.*
 import nmcb.pos.*
 
 object Day17 extends AoC:
@@ -16,20 +17,21 @@ object Day17 extends AoC:
   def solve1(memory: Mem): Int =
     val output = CPU(memory).outputs.map(_.toChar).mkString.split("\n")
     val points =
-      for y <- 0 until output.length
-          x <- 0 until output(0).length
-          if output(y)(x) == '#'
+      for
+        y <- 0 until output.length
+        x <- 0 until output(0).length
+        if output(y)(x) == '#'
       yield
         (x = x, y = y)
 
     points.foldLeft(0): (total, next) =>
       if Pos.offset4.map(next + _).forall(points.contains) then
         total + (next.x * next.y)
-      else total
+      else
+        total
 
 
   /** @see Credits - https://github.com/sim642 */
-
   enum Move(override val toString: String):
     case Left            extends Move("L")
     case Right           extends Move("R")
@@ -44,7 +46,7 @@ object Day17 extends AoC:
 
   extension (grid: Grid)
 
-    def findRobot: (Pos,Pos) =
+    def findRobot: (Pos, Pos) =
       def parseRobotDir(tile: Char): Option[Pos] =
         tile match
           case '>' => Some((1,0))
