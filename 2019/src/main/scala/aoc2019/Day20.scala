@@ -5,7 +5,7 @@ import nmcb.pos.*
 
 object Day20 extends AoC:
 
-  case class State(path: Seq[(Portal,Int)], total: Int) derives CanEqual
+  case class State(path: Seq[(Portal, Int)], total: Int) derives CanEqual
 
   enum Portal derives CanEqual:
     case Start
@@ -15,7 +15,7 @@ object Day20 extends AoC:
 
   import Portal.*
   
-  def portalToPortalRoutes(lines: Seq[String]): Map[Portal,Set[(Portal,Int)]] =
+  def portalToPortalRoutes(lines: Seq[String]): Map[Portal, Set[(Portal, Int)]] =
     def peek(x: Int, y: Int): Char = lines.lift(y).flatMap(_.lift(x)).getOrElse(' ')
     val sizeX   = lines.maxBy(_.length).length
     val sizeY   = lines.length
@@ -27,19 +27,19 @@ object Day20 extends AoC:
         (start,portal) <- portals
       yield
         val steps      = bfs(start, maze)
-        val candidates = steps.keySet.intersect(portals.keySet) - start
+        val candidates = (steps.keySet intersect portals.keySet) - start
         portal -> candidates.map(point => portals(point) -> steps(point))
 
     routes.map: (portal,routes) =>
       val linkedRoutes = routes.map:
-        case (Outer(label),steps) => (Inner(label), steps + 1)
-        case (Inner(label),steps) => (Outer(label), steps + 1)
-        case other                => other
+        case (Outer(label), steps) => (Inner(label), steps + 1)
+        case (Inner(label), steps) => (Outer(label), steps + 1)
+        case other                 => other
       portal -> linkedRoutes
 
-  def findPortals(sizeX: Int, sizeY: Int, maze: Map[Pos,Char]): Map[Pos,Portal] =
+  def findPortals(sizeX: Int, sizeY: Int, maze: Map[Pos, Char]): Map[Pos, Portal] =
     val patterns =
-      Seq(Seq((-2,0), (-1,0)), Seq((1,0), (2,0)), Seq((0,-2), (0,-1)), Seq((0,1), (0,2)))
+      Seq(Seq((-2, 0), (-1, 0)), Seq((1, 0), (2, 0)), Seq((0, -2), (0, -1)), Seq((0, 1), (0, 2)))
 
     val portals = for
       x       <- 2 to sizeX
@@ -64,7 +64,7 @@ object Day20 extends AoC:
         None
     portals.flatten.toMap
 
-  def bfs(start: Pos, maze: Map[Pos,Char]): Map[Pos,Int] =
+  def bfs(start: Pos, maze: Map[Pos, Char]): Map[Pos, Int] =
     val cost = collection.mutable.Map(start -> 0)
     val todo = collection.mutable.Queue(start)
     while todo.nonEmpty do
