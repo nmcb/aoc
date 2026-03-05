@@ -7,7 +7,7 @@ object Day21 extends AoC:
   import cpu.*
 
   /** ((A | -(B & C)) & D) */
-  val walk =
+  val walk: Seq[String] =
     Seq(
       "OR A J",
       "AND B J",
@@ -17,7 +17,7 @@ object Day21 extends AoC:
     )
 
   /** (-A | -C | -B) & D & (E | H) */
-  val run =
+  val run: Seq[String] =
     Seq(
       "NOT A J",
       "NOT C T",
