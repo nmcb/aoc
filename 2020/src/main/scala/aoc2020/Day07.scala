@@ -14,11 +14,10 @@ object Day07 extends AoC:
   type Bags  = Vector[Bag]
   case class Bag(from: Color, to: Option[Color], count: Int)
 
-  val bags: Bags =
-    lines.flatMap:
-        case Line(from1, from2, contains) => contains.split(',').map(_.trim).map:
-          case Bags(count, to1, to2) => Bag(from1 + from2, Some(to1 + to2), count.toInt)
-          case _                     => Bag(from1 + from2, None, 0)
+  val bags: Bags = lines.flatMap:
+    case Line(from1, from2, contains) => contains.split(',').map(_.trim).collect:
+      case Bags(count, to1, to2) => Bag(from1 + from2, Some(to1 + to2), count.toInt)
+      case _                     => Bag(from1 + from2, None, 0)
 
   extension (bags: Bags)
 
