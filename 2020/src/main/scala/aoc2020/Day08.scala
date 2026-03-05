@@ -33,7 +33,11 @@ object Day08 extends AoC:
 
   import State.*
 
-  case class VM(program: Program, state: State = Running(pc = 0, accumulator = 0), trace: Vector[Int] = Vector.empty):
+  case class VM(
+      program: Program,
+      state: State       = Running(pc = 0, accumulator = 0),
+      trace: Vector[Int] = Vector.empty
+    ):
 
     def run(debug: Boolean): VM =
       if debug && trace.contains(state.pc) then
@@ -44,11 +48,11 @@ object Day08 extends AoC:
           .map(instruction => copy(state = exec(instruction), trace = trace :+ state.pc).run(debug))
           .getOrElse(copy(state = state.setTerminated()))
 
-    private def exec(inst: Instruction): State =
-      inst.code match
+    private def exec(instruction: Instruction): State =
+      instruction.code match
         case "nop" => Running(state.pc + 1, state.accumulator)
-        case "acc" => Running(state.pc + 1, state.accumulator + inst.arg)
-        case "jmp" => Running(state.pc + inst.arg, state.accumulator)
+        case "acc" => Running(state.pc + 1, state.accumulator + instruction.arg)
+        case "jmp" => Running(state.pc + instruction.arg, state.accumulator)
 
   def patch(program: Program): Program =
 
@@ -60,11 +64,12 @@ object Day08 extends AoC:
     VM(program).run(debug = true)
       .trace
       .filter(line => program(line).code == "nop" || program(line).code == "jmp")
-      .foldLeft(Set.empty[Program])((patches,line) => patches + patchLine(line))
+      .foldLeft(Set.empty[Program])((patches, line) => patches + patchLine(line))
       .find(patch => VM(patch).run(debug = true).state.isTerminated)
       .get
 
   val program: Program = lines.map(Instruction.fromLine)
+  val patched: Program = patch(program)
 
-  override lazy val answer1: Int = VM(program).run(debug = true).state.accumulator
-  override lazy val answer2: Int = VM(patch(program)).run(debug = false).state.accumulator
+  override lazy val answer1: Int = VM(program).run(debug =  true).state.accumulator
+  override lazy val answer2: Int = VM(patched).run(debug = false).state.accumulator
