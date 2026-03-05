@@ -2,14 +2,16 @@ package aoc2020
 
 import nmcb.*
 
+import scala.util.matching.Regex
+
 object Day02 extends AoC:
 
   type Predicate = Int => Int => Char => String => Boolean
 
-  val Line = "(\\d+)-(\\d+)\\s(.):\\s(.+)".r
+  val Line: Regex = "(\\d+)-(\\d+)\\s(.):\\s(.+)".r
 
-  def answer(pred: Predicate): Int = lines.count:
-    case s"$x-$y $char: $password" => pred(x.toInt)(y.toInt)(char.head)(password)
+  def answer(predicate: Predicate): Int = lines.count:
+    case s"$x-$y $char: $password" => predicate(x.toInt)(y.toInt)(char.head)(password)
 
   def check1: Predicate = min => max => char => passwd =>
     val count = passwd.count(_ == char)
