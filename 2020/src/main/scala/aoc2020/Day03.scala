@@ -1,6 +1,8 @@
 package aoc2020
 
 import nmcb.*
+
+import scala.Option.when
 import scala.annotation.tailrec
 
 
@@ -11,7 +13,7 @@ object Day03 extends AoC:
     val sizeY: Int = tile.size
 
     def sample(x: Int, y: Int): Option[Char] =
-      Option.when(y < sizeY)(tile(y)(x % sizeX))
+      when(y < sizeY)(tile(y)(x % sizeX))
 
     def walk(dx: Int, dy: Int): Long =
       @tailrec
