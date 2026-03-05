@@ -81,7 +81,7 @@ object Day25 extends AoC:
           val itemsSet = if items == null then Set.empty[String] else ListItem.findAllMatchIn(items).map(_.group(1)).toSet
           Droid(room, doorsSet, itemsSet, Set.empty, Option(password2).map(_.toInt))(next)
 
-  val badItems =
+  val badItems: Set[String] =
     Set(
       "escape pod",
       "infinite loop",
@@ -90,7 +90,7 @@ object Day25 extends AoC:
       "molten lava",
     )
 
-  val opposite =
+  val opposite: Map[String, String] =
     Map(
       "north" -> "south",
       "south" -> "north",
@@ -98,7 +98,7 @@ object Day25 extends AoC:
       "west"  -> "east",
     )
 
-  val securityRoom =
+  val securityRoom: String =
     "Security Checkpoint"
 
   def collectItems(droid: Droid, excludeDoor: Option[String] = None): Droid =
@@ -157,7 +157,7 @@ object Day25 extends AoC:
 
     password
 
+  
   val program: Mem = Mem.load(input)
-
 
   override lazy val answer1: Int    = findPassword(program)
