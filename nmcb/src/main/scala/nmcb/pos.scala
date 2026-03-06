@@ -48,22 +48,22 @@ object pos:
 
     val offset4: Set[Pos] =
       Set(
-        of(0, -1),
-        of(0, 1),
-        of(-1, 0),
-        of(1, 0)
+        of( 0, -1),
+        of( 0,  1),
+        of(-1,  0),
+        of( 1,  0)
       )
 
     val offset8: Set[Pos] =
       Set(
         of(-1, -1),
-        of(-1, 0),
-        of(-1, 1),
-        of(0, -1),
-        of(0, 1),
-        of(1, -1),
-        of(1, 0),
-        of(1, 1),
+        of(-1,  0),
+        of(-1,  1),
+        of( 0, -1),
+        of( 0,  1),
+        of( 1, -1),
+        of( 1,  0),
+        of( 1,  1),
       )
 
     inline def of(x: Int, y: Int): Pos =
