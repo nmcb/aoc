@@ -3,7 +3,7 @@ package nmcb
 object BronKerbosch:
 
   /** Computes the maximum clique, i.e. the largest group of neighbouring nodes. */
-  def run[A](neighbours: Map[A,Set[A]]): Set[A] =
+  def run[A](neighbours: Map[A, Set[A]]): Set[A] =
     var maximum: Set[A] = Set.empty
 
     def loop(r: Set[A], p: Set[A], x: Set[A]): Unit =
