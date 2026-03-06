@@ -118,7 +118,7 @@ object predef:
     infix def gcd(b: Int): Int =
       if b == 0 then a else b gcd(a % b)
 
-  
+
   extension (a: Long)
   
     @tailrec
