@@ -4,7 +4,8 @@ import scala.annotation.tailrec
 
 object predef:
 
-  val HEX_ARRAY: Array[Char] = "0123456789abcdef".toCharArray
+  val HEX_ARRAY: Array[Char] =
+    "0123456789abcdef".toCharArray
 
   extension [A](i: Iterator[A])
 
@@ -72,6 +73,7 @@ object predef:
     def memoize(k: K)(v: => V): V =
       memo.cache.getOrElseUpdate(k, v)
 
+
   case class Memo[K, V](cache: collection.mutable.Map[K, V])
 
   object Memo:
@@ -109,12 +111,14 @@ object predef:
         hexChars(j * 2 + 1) = HEX_ARRAY(v & 0x0F)
       String(hexChars)
 
+
   extension (a: Int)
 
     @tailrec
     infix def gcd(b: Int): Int =
       if b == 0 then a else b gcd(a % b)
 
+  
   extension (a: Long)
   
     @tailrec
