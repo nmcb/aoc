@@ -14,7 +14,7 @@ object Dijkstra:
     def unit[A](from: A, to: A): Edge[A] =
       Edge(from, to, 1)
 
-  final case class Graph[A](neighbours: Map[A,Vector[Edge[A]]] = Map.empty):
+  final case class Graph[A](neighbours: Map[A, Vector[Edge[A]]] = Map.empty):
 
     def add(edge: Edge[A]): Graph[A] =
       Graph(neighbours.updated(edge.from, neighbours.getOrElse(edge.from, Vector.empty) :+ edge))
@@ -30,7 +30,7 @@ object Dijkstra:
     def fromEdges[A](edges: Vector[Edge[A]]): Graph[A] =
       Graph(edges.groupMap(_.from)(identity))
 
-    def fromGrid[A](grid: Grid[A], node: A, dist: (Pos,Pos) => Int = (_,_) => 1)(using CanEqual[A, A]): Graph[Pos] =
+    def fromGrid[A](grid: Grid[A], node: A, dist: (Pos, Pos) => Int = (_, _) => 1)(using CanEqual[A, A]): Graph[Pos] =
       grid.elements
         .filter(_.element == node)
         .foldLeft(Graph.empty): (graph,from) =>
@@ -41,7 +41,7 @@ object Dijkstra:
               graph.add(Edge(from.pos, to, dist(from.pos, to)))
 
 
-  case class Result[A](edgeTo: Map[A,Edge[A]], distancesTo: Map[A,Int]):
+  case class Result[A](edgeTo: Map[A, Edge[A]], distancesTo: Map[A, Int]):
 
     def pathTo(node: A): Vector[Edge[A]] =
       @tailrec
