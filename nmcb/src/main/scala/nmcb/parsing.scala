@@ -1,8 +1,10 @@
 package nmcb
 
+import scala.annotation.tailrec
+
 object parsing:
 
-  case class P[A](parse: String => Option[(A,String)]):
+  case class P[A](parse: String => Option[(A, String)]):
 
     def run(s: String): A =
       parse(s) match
@@ -22,7 +24,7 @@ object parsing:
         case None      => None
       )
 
-    def |[A1 >: A](that: => P[A1]): P[A1] =
+    def |[B >: A](that: => P[B]): P[B] =
       P(s => parse(s) match
         case None        => that.parse(s)
         case res@Some(_) => res
@@ -31,6 +33,7 @@ object parsing:
     def ~[B](that: P[B]): P[B] =
       for { _ <- this ; b <- that } yield b
 
+    @tailrec
     private def loop(s: String, acc: List[A] = List.empty): (List[A], String) =
       parse(s) match
         case None         => (acc.reverse, s)
@@ -40,13 +43,13 @@ object parsing:
       P(s => Some(loop(s)))
 
     def oneOrMore: P[List[A]] =
-      P(s => parse(s).flatMap((a,ss) => Some(loop(ss, List(a)))))
+      P(s => parse(s).flatMap((a, ss) => Some(loop(ss, List(a)))))
 
     def opt: P[Option[A]] =
-      P(s => parse(s).map((a,ss) => (Some(a), ss)).orElse(Some(None,s)))
+      P(s => parse(s).map((a, ss) => (Some(a), ss)).orElse(Some(None, s)))
 
     def iff[B](p: A => Boolean)(t: P[B])(f: => P[B]): P[B] =
-      P(s => parse(s).flatMap((a,ss) => if (p(a)) t.parse(ss) else f.parse(ss)))
+      P(s => parse(s).flatMap((a, ss) => if (p(a)) t.parse(ss) else f.parse(ss)))
 
     def chainLeftAssoc[B >: A](opp: P[B => A => A]): P[B] =
       def rest(lhs: B): P[B] =
@@ -65,7 +68,7 @@ object parsing:
     P(s => Some(a, s))
 
   def take: P[Char] =
-    P(s => if (s.nonEmpty) then Some(s.head, s.tail) else None)
+    P(s => if s.nonEmpty then Some(s.head, s.tail) else None)
 
   def fail[A]: P[A] =
     P(_ => None)
