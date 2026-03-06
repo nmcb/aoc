@@ -27,7 +27,7 @@ object Day20 extends AoC:
 
     trace(path.zipWithIndex, 0L)
 
-  val path: Vector[Pos] = Grid.fromLines(lines).extractPath('S', 'E', '.').shortest
+  val path: Vector[Pos] = Grid.fromLines(lines).extractPath('S', 'E', '.').shortestPath
 
   override lazy val answer1: Long = cheats(path, 2)
   override lazy val answer2: Long = cheats(path, 20)

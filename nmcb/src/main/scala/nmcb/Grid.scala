@@ -129,7 +129,7 @@ object Grid:
     def to: Pos   = g._2
     def cleared: Grid[A] = g._3
 
-    def shortest: Vector[Pos] =
+    def shortestPath: Vector[Pos] =
       import Pos.given
       given CanEqual[A, A] = CanEqual.derived
       Dijkstra
