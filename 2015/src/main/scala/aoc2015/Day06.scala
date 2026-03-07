@@ -1,18 +1,28 @@
 package aoc2015
 
 import nmcb.*
+import nmcb.pos.*
 
 object Day06 extends AoC:
 
-  /** Modeling */
+  case class Task(inst: String, minPos: Pos, maxPos: Pos):
 
-  case class Task(inst: String, x0: Int, y0: Int, x1: Int, y1: Int)
+    def influences(p: Pos): Boolean =
+      p.withinBounds(minPos, maxPos)
 
   object Task:
-    def apply(cmd: String, p0x: String, p0y: String, p1x: String, p1y: String): Task =
-      Task(cmd, p0x.toInt, p0y.toInt, p1x.toInt, p1y.toInt)
 
-  abstract class Lights[A](tasks: List[Task]):
+    def make(cmd: String, p0x: String, p0y: String, p1x: String, p1y: String): Task =
+      Task(cmd, (x = p0x.toInt, y = p0y.toInt), (x = p1x.toInt, y = p1y.toInt))
+
+    def fromLine(s: String): Task =
+      s match
+        case s"toggle $p0x,$p0y through $p1x,$p1y" => Task.make("toggle", p0x, p0y, p1x, p1y)
+        case s"turn on $p0x,$p0y through $p1x,$p1y" => Task.make("on", p0x, p0y, p1x, p1y)
+        case s"turn off $p0x,$p0y through $p1x,$p1y" => Task.make("off", p0x, p0y, p1x, p1y)
+
+
+  abstract class Lights[A](tasks: Vector[Task]):
     val zero:   A
     val toggle: A => A
     val on:     A => A
@@ -24,39 +34,26 @@ object Day06 extends AoC:
         case "on"     => on(a)
         case "off"    => off(a)
 
-    def affects(x: Int, y: Int)(t: Task): Boolean =
-      x >= t.x0 && x <= t.x1 && y >= t.y0 && y <= t.y1
+    def runLight(p: Pos): A =
+      tasks.filter(_.influences(p)).foldLeft(zero)(instruction)
 
-    def exec(x: Int, y: Int): A =
-      tasks.filter(affects(x, y)).foldLeft(zero)(instruction)
+    def runAllLights: Vector[A] =
+      Vector.tabulate(1000, 1000)((x, y) => runLight(x, y)).flatten
 
-    def run: List[A] =
-      List.tabulate(1000, 1000)(exec).flatten
+  class BooleanLights(val tasks: Vector[Task]) extends Lights[Boolean](tasks):
+    val zero: Boolean              = false
+    val toggle: Boolean => Boolean = v => !v
+    val on: Boolean => Boolean     = _ => true
+    val off: Boolean => Boolean    = _ => false
 
-  val tasks: List[Task] =
-    def parser(s: String): Task =
-      s match
-        case s"toggle $p0x,$p0y through $p1x,$p1y"   => Task("toggle", p0x, p0y, p1x, p1y)
-        case s"turn on $p0x,$p0y through $p1x,$p1y"  => Task("on"    , p0x, p0y, p1x, p1y)
-        case s"turn off $p0x,$p0y through $p1x,$p1y" => Task("off"   , p0x, p0y, p1x, p1y)
+  class IntLights(val tasks: Vector[Task]) extends Lights[Int](tasks):
+    val zero: Int   = 0
+    val toggle: Int => Int = v => v + 2
+    val on: Int => Int     = v => v + 1
+    val off: Int => Int    = v => if v <= 0 then 0 else v - 1
 
-    lines.map(parser).toList
 
-  /** Part 1 */
+  val tasks: Vector[Task] = lines.map(Task.fromLine)
 
-  object BooleanLights extends Lights[Boolean](tasks):
-    val zero   = false
-    val toggle = v => !v
-    val on     = _ => true
-    val off    = _ => false
-
-  /** Part 2 */
-
-  object IntLights extends Lights[Int](tasks):
-    val zero   = 0
-    val toggle = v => v + 2
-    val on     = v => v + 1
-    val off    = v => if v <= 0 then 0 else v - 1
-
-  override lazy val answer1: Int = BooleanLights.run.count(identity)
-  override lazy val answer2: Int = IntLights.run.sum
+  override lazy val answer1: Int = BooleanLights(tasks).runAllLights.count(_ == true)
+  override lazy val answer2: Int = IntLights(tasks).runAllLights.sum

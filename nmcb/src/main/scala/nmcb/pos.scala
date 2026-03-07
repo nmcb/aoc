@@ -66,7 +66,7 @@ object pos:
         of( 1,  1),
       )
 
-    inline def of(x: Int, y: Int): Pos =
+    def of(x: Int, y: Int): Pos =
       (x = x, y = y)
 
     extension [A](it: Array[A])
