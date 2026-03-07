@@ -5,48 +5,45 @@ import nmcb.pos.*
 
 object Day03 extends AoC:
 
-  val commands: List[Char] = input.toList
+  type Deliveries = Map[Pos, Int]
 
-  case class Area(start: Pos = Pos.origin, deliveries: Area.Deliveries = Area.Deliveries.init):
+  extension (d: Deliveries) def add(pos: Pos): Deliveries =
+    d.updatedWith(pos)(_.orElse(Some(0)).map(_ + 1))
+
+  object Deliveries:
+
+    def init: Deliveries =
+      Map().add(Pos.origin)
+
+  type Command = Char
+
+  case class Area(start: Pos = Pos.origin, deliveries: Deliveries = Deliveries.init):
 
     private def moveToAndDeliver(loc: Pos): Area =
-      import Area.*
       copy(start = loc, deliveries = deliveries.add(loc))
 
-    infix def next(cmd: Area.Command): Area =
-      cmd match
+    infix def next(command: Command): Area =
+      command match
         case '>' => moveToAndDeliver((x = start.x + 1, y = start.y))
         case '<' => moveToAndDeliver((x = start.x - 1, y = start.y))
         case '^' => moveToAndDeliver((x = start.x, y = start.y + 1))
         case 'v' => moveToAndDeliver((x = start.x, y = start.y - 1))
 
+
   object Area:
 
-    type Deliveries = Map[Pos,Int]
-
-    object Deliveries:
-
-      def empty: Deliveries =
-        Map.empty
-
-      def init: Deliveries =
-        empty.add(Pos.origin)
-
-    extension (d: Deliveries) def add(loc: Pos): Deliveries =
-      d.updatedWith(loc)(_.orElse(Some(0)).map(_ + 1))
-
-    type Command = Char
-
     def init: Area =
-      Area(start = Pos.origin, deliveries = Area.Deliveries.init)
+      Area(start = Pos.origin, deliveries = Deliveries.init)
+
+  def solve1(commands: Vector[Command]): Int =
+    commands.foldLeft(Area.init)(_ next _).deliveries.values.size
+
+  def solve2(commands: Vector[Command]): Int =
+    val (robot, santa) = commands.zipWithIndex.foldLeft((Area.init, Area.init)):
+      case ((robot, santa), (command, index)) =>
+        if (index % 2 != 0) (robot next command, santa) else (robot, santa next command)
+    (robot.deliveries ++ santa.deliveries).values.size
 
 
-  val (robot, santa) =
-    commands
-      .zipWithIndex
-      .foldLeft((Area.init, Area.init)):
-        case ((robot, santa), (command, index)) =>
-          if (index % 2 != 0) (robot next command, santa) else (robot, santa next command)
-
-  override lazy val answer1: Int = commands.foldLeft(Area.init)(_ next _).deliveries.values.size
-  override lazy val answer2: Int = (robot.deliveries ++ santa.deliveries).values.size
+  override lazy val answer1: Int = solve1(input.toVector)
+  override lazy val answer2: Int = solve2(input.toVector)
