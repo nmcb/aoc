@@ -4,21 +4,22 @@ import nmcb.*
 
 object Day02 extends AoC:
 
-  case class Box(l: Int, h: Int, w: Int):
+  case class Box(length: Int, height: Int, width: Int):
+
     def area: Int =
-      2*l*w + 2*w*h + 2*h*l
+      2 * length * width + 2 * width * height + 2 * height * length
 
     def slack: Int =
-      List(l*w, w*h, h*l).min
+      List(length * width, width * height, height * length).min
 
     def wrap: Int =
-      List(2*l + 2*h, 2*l + 2*w, 2*h + 2*w).min
+      List(2 * length + 2 * height, 2 * length + 2 * width, 2 * height + 2 * width).min
 
     def volume: Int =
-      l*h*w      
+      length * height * width
 
   val boxes: Vector[Box] = lines.collect:
-    case s"${l}x${h}x${w}" => Box(l.toInt, h.toInt, w.toInt)
+    case s"${length}x${height}x${width}" => Box(length.toInt, height.toInt, width.toInt)
 
   override lazy val answer1: Int = boxes.map(b => b.area + b.slack).sum
   override lazy val answer2: Int = boxes.map(b => b.volume + b.wrap).sum
