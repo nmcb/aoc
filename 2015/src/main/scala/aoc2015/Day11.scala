@@ -1,11 +1,10 @@
 package aoc2015
 
 import nmcb.*
+
 import scala.annotation.*
 
 object Day11 extends AoC:
-
-  val puzzle: String = "hxbxwxba"
 
   case class Dig(value: Char = 'a'):
     import Dig.*
@@ -14,16 +13,15 @@ object Day11 extends AoC:
     override def toString: String =
       value.toString
 
-    def inc: Option[Dig] =
-      val (n, c) = inc(Zero)
+    def increment: Option[Dig] =
+      val (n, c) = increment(Zero)
       if c == Zero then Some(n) else None
 
-    def inc(carry: Carry = Zero): (Dig, Carry) =
-      assert(carry == Zero || carry == One)
-      val n = value + One.value + carry.value
-      ( if n <= MaxValue then copy(value = n.toChar) else copy(value = (n - ValueRange).toChar)
-      , if n <= MaxValue then Zero                   else One
-      )
+    def increment(carry: Carry = Zero): (Dig, Carry) =
+      val added = value + One.value + carry.value
+      val nextDigit = if added <= MaxValue then copy(value = added.toChar) else copy(value = (added - DigRange).toChar)
+      val nextCarry = if added <= MaxValue then Zero else One
+      (nextDigit, nextCarry)
 
   object Dig:
 
@@ -31,9 +29,9 @@ object Day11 extends AoC:
       case Zero extends Carry(0x00)
       case One  extends Carry(value = 0x01)
 
-    val MinValue: Char   = 'a'
-    val MaxValue: Char   = 'z'
-    val ValueRange: Char = (MaxValue - MinValue + 1).toChar
+    val MinValue: Char = 'a'
+    val MaxValue: Char = 'z'
+    val DigRange: Char = (MaxValue - MinValue + 1).toChar
 
     extension (c: Char)
       
@@ -41,38 +39,38 @@ object Day11 extends AoC:
         Dig(c)
 
 
-  case class Password(num: Array[Dig]):
+  case class Password(number: Array[Dig]):
     import Dig.*
     import Carry.*
     import Password.*
 
-    assert(num.length == 8)
-
     override def toString: String =
-      num.mkString
+      number.mkString
 
-    @tailrec final def next: Password =
-      @tailrec def inc(todo: Array[Dig], carry: Carry = Zero, acc: Array[Dig] = Array.empty): (Array[Dig], Carry) =
+    @tailrec
+    final def next: Password =
+      @tailrec
+      def increment(todo: Array[Dig], carry: Carry, acc: Array[Dig]): (Array[Dig], Carry) =
         if todo.isEmpty then
           (acc, carry)
         else
-          val (n, c) = todo.last.inc(carry)
+          val (n, c) = todo.last.increment(carry)
           if c == Zero then
             (todo.init ++: n +: acc, Zero)
           else
-            inc(todo.init, Zero, n +: acc)
+            increment(todo.init, Zero, n +: acc)
 
-      val (n, c) = inc(num)
+      val (n, c) = increment(number, Zero, Array.empty)
       val result = if c == Zero then Password(n) else Password.empty
       if result.valid then result else result.next
 
     def includesIncreasingStraight: Boolean =
-      num
+      number
         .sliding(3)
-        .exists(ds => ds(0).inc.contains(ds(1)) && ds(1).inc.contains(ds(2)))
+        .exists(ds => ds(0).increment.contains(ds(1)) && ds(1).increment.contains(ds(2)))
 
     def includesLegalCharacters: Boolean =
-      num.forall(d => d.value != 'i' && d.value != 'o' && d.value != 'l')
+      number.forall(d => d.value != 'i' && d.value != 'o' && d.value != 'l')
 
     def includesNonOverlappingPair: Boolean =
       @tailrec
@@ -82,8 +80,7 @@ object Day11 extends AoC:
           case c0 :: c1 :: t if c0 == c1               => hasNonOverlappingPair(t.mkString, true)
           case  _ :: rest                              => hasNonOverlappingPair(rest.mkString, foundFirst)
           case Nil                                     => false
-
-      hasNonOverlappingPair(num.show)
+      hasNonOverlappingPair(number.show)
 
     def valid: Boolean =
       includesIncreasingStraight && includesLegalCharacters && includesNonOverlappingPair
@@ -96,13 +93,14 @@ object Day11 extends AoC:
       Password.fromString("aaaaaaaa")
 
     def fromString(string: String): Password =
-      assert(string.length == 8)
-      assert(string.forall(('a' to 'z').contains))
       Password(string.foldLeft(Array.empty[Dig])(_ :+ _.toDig))
 
-    extension (num: Array[Dig]) def show: String =
-      num.mkString
+    extension (number: Array[Dig])
+      def show: String =
+        number.mkString
 
 
-  override lazy val answer1: String = Password.fromString(puzzle).next.toString
+  override lazy val input: String = "hxbxwxba"
+
+  override lazy val answer1: String = Password.fromString(input).next.toString
   override lazy val answer2: String = Password.fromString(answer1).next.toString
