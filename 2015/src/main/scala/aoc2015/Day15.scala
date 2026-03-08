@@ -53,6 +53,6 @@ object Day15 extends AoC:
       .map(_.groupBy(identity).view.mapValues(_.size).toMap)
       .map(Recipe.apply)
       .toVector
-  
+
   override lazy val answer1: Int = recipes.map(_.score).max
   override lazy val answer2: Int = recipes.filter(_.calories == 500).map(_.score).max
