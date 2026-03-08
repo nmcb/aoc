@@ -8,8 +8,8 @@ object Day14 extends AoC:
   case class Deer(name: String, velocity: Int, flyTime: Int, restTime: Int)
 
   object Deer:
-    def fromString(s: String): Deer =
-      s match
+    def fromString(line: String): Deer =
+      line match
         case s"$name can fly $speed km/s for $fly seconds, but then must rest for $rest seconds." =>
           Deer(name, speed.toInt, fly.toInt, rest.toInt)
 
@@ -56,6 +56,7 @@ object Day14 extends AoC:
         scores   = Map.empty
       )
 
+  
   val deer: Vector[Deer] = lines.map(Deer.fromString)
 
   override lazy val answer1: Int = Iterator.iterate(Race.start(deer))(_.race).nth(2503).maxDistance
