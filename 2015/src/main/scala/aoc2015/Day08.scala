@@ -1,42 +1,39 @@
 package aoc2015
 
 import nmcb.*
+
+import java.lang.Integer.parseInt
 import scala.annotation.*
 
 object Day08 extends AoC:
 
   extension (quoted: String)
 
-    def unquoted: String =
-      quoted.drop(1).dropRight(1)
+    def unquote: String =
+      quoted match
+        case s"\"$unquoted\"" => unquoted
+        case _                => quoted
 
     def unescaped: String =
       @tailrec
-      def loop(todo: List[Char], ret: String = ""): String =
-        todo match
-          case Nil =>
-            ret
-          case '\\' :: '\\' :: rest =>
-            loop(rest, ret + '\\')
-          case '\\' :: '\"' :: rest =>
-            loop(rest, ret + '\"')
-          case '\\' ::  'x' :: h1 :: h2 :: rest =>
-            loop(rest, ret + Integer.parseInt(s"$h1$h2", 16).toChar)
-          case c1 :: rest =>
-            loop(rest, ret + c1)
-
-      loop(unquoted.toList)
+      def loop(todo: Vector[Char], result: String = ""): String =
+        todo.runtimeChecked match
+          case Vector()                         => result
+          case '\\' +: '\\' +: rest             => loop(rest, result + '\\')
+          case '\\' +: '\"' +: rest             => loop(rest, result + '\"')
+          case '\\' +:  'x' +: h1 +: h2 +: rest => loop(rest, result + parseInt(s"$h1$h2", 16).toChar)
+          case c1 +: rest                       => loop(rest, result + c1)
+      loop(unquote.toVector)
 
     def escaped: String =
       @tailrec
-      def loop(todo: List[Char], ret: String = ""): String =
-        todo match
-          case Nil          => "\"" + ret + "\""
-          case '\"' :: rest => loop(rest, ret + "\\\"")
-          case '\\' :: rest => loop(rest, ret + "\\\\")
-          case   c1 :: rest => loop(rest, ret + c1)
+      def loop(todo: Vector[Char], result: String = ""): String =
+        todo.runtimeChecked match
+          case Vector()     => "\"" + result + "\""
+          case '\"' +: rest => loop(rest, result + "\\\"")
+          case '\\' +: rest => loop(rest, result + "\\\\")
+          case   c1 +: rest => loop(rest, result + c1)
+      loop(quoted.toVector)
 
-      loop(quoted.toList)
-
-  override lazy val answer1: Int = lines.map(str => str.length - str.unescaped.length).sum
-  override lazy val answer2: Int = lines.map(str => str.escaped.length - str.length).sum
+  override lazy val answer1: Int = lines.map(line => line.length - line.unescaped.length).sum
+  override lazy val answer2: Int = lines.map(line => line.escaped.length - line.length).sum
