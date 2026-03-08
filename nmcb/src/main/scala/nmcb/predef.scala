@@ -28,7 +28,7 @@ object predef:
   
   
   extension [A](i: Iterable[A])
-
+    
     def slidingPairs: Iterable[(A, A)] =
       if i.isEmpty then Nil else i.zip(i.tail)
 
