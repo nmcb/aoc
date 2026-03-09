@@ -14,12 +14,12 @@ object Day01 extends AoC:
       Try(Cmd(s.trim.head, s.trim.tail.toInt))
         .getOrElse(sys.error(s"unable to parse: $s"))
 
-  case class Ikke(x: Int, y: Int, dir: Dir):
+  case class Me(x: Int, y: Int, dir: Dir):
 
     def manhattan: Int =
       x.abs + y.abs
 
-    infix def process(cmd: Cmd): Vector[Ikke] =
+    infix def process(cmd: Cmd): Vector[Me] =
       (dir, cmd.turn).runtimeChecked match
         case (N, 'L') => (1 to cmd.dist).map(dist => copy(x = x - dist, dir = W)).toVector
         case (E, 'L') => (1 to cmd.dist).map(dist => copy(y = y + dist, dir = N)).toVector
@@ -30,18 +30,18 @@ object Day01 extends AoC:
         case (S, 'R') => (1 to cmd.dist).map(dist => copy(x = x - dist, dir = W)).toVector
         case (W, 'R') => (1 to cmd.dist).map(dist => copy(y = y + dist, dir = N)).toVector
 
-  object Ikke:
+  object Me:
 
-    def airDrop: Ikke =
-      Ikke(0, 0, N)
+    def airDrop: Me =
+      Me(0, 0, N)
 
   val commands: Vector[Cmd] = input.mkString.split(',').map(Cmd.fromString).toVector
 
   @tailrec
-  def solve(commands: Vector[Cmd], path: Vector[Ikke]): Ikke =
+  def solve(commands: Vector[Cmd], path: Vector[Me]): Me =
 
     @tailrec
-    def twice(test: Vector[Ikke], visited: Vector[Ikke]): Option[Ikke] =
+    def twice(test: Vector[Me], visited: Vector[Me]): Option[Me] =
       test.runtimeChecked match
         case Vector()                                                         => None
         case h +: t if visited.exists(ikke => ikke.x == h.x && ikke.y == h.y) => Some(h)
@@ -50,5 +50,5 @@ object Day01 extends AoC:
     val next = path.last.process(commands.head)
     if twice(next, path).nonEmpty then twice(next, path).get else solve(commands.tail :+ commands.head, path :++ next)
 
-  override lazy val answer1: Int = commands.foldLeft(Vector(Ikke.airDrop))(_.last process _).last.manhattan
-  override lazy val answer2: Int = solve(commands, Vector(Ikke.airDrop)).manhattan
+  override lazy val answer1: Int = commands.foldLeft(Vector(Me.airDrop))(_.last process _).last.manhattan
+  override lazy val answer2: Int = solve(commands, Vector(Me.airDrop)).manhattan
