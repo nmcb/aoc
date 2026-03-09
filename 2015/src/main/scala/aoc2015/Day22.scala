@@ -22,7 +22,7 @@ object Day22 extends AoC:
      armor:  Int,
      boss:   Int,
      damage: Int,
-     spells: Map[Spell,Int] = Map.empty
+     spells: Map[Spell, Int] = Map.empty
   ):
 
     extension (active: (Spell, Int))
@@ -70,7 +70,7 @@ object Day22 extends AoC:
 
         if before.spent >= result || before.player <= 0 then ()
         else if after.boss <= 0 then result = result min after.spent
-        else if !playersTurn then loop(after.bossTurn, !playersTurn)
+        else if !playersTurn    then loop(after.bossTurn, !playersTurn)
         else
           Spells
             .diff(after.spells.keySet)
