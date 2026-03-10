@@ -86,7 +86,7 @@ object pos:
 
     infix def determinant(that: Pos): Long = p.x.toLong * that.y.toLong - that.x.toLong * p.y.toLong
 
-    infix inline def translate(dx: Int, dy: Int): Pos = (p.x + dx, p.y + dy)
+    infix inline def translate(dx: Int = 0, dy: Int = 0): Pos = (p.x + dx, p.y + dy)
 
     infix inline def minimize(that: Pos): Pos = (p.x min that.x, p.y min that.y)
     infix inline def maximize(that: Pos): Pos = (p.x max that.x, p.y max that.y)
