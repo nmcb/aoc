@@ -43,9 +43,9 @@ object Day01 extends AoC:
     @tailrec
     def twice(test: Vector[Me], visited: Vector[Me]): Option[Me] =
       test.runtimeChecked match
-        case Vector()                                                         => None
-        case h +: t if visited.exists(ikke => ikke.x == h.x && ikke.y == h.y) => Some(h)
-        case _ +: t                                                           => twice(t, visited)
+        case Vector()                                                   => None
+        case h +: t if visited.exists(me => me.x == h.x && me.y == h.y) => Some(h)
+        case _ +: t                                                     => twice(t, visited)
 
     val next = path.last.process(commands.head)
     if twice(next, path).nonEmpty then twice(next, path).get else solve(commands.tail :+ commands.head, path :++ next)
