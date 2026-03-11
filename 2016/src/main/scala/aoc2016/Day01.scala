@@ -1,54 +1,53 @@
 package aoc2016
 
 import nmcb.*
-import nmcb.pos.*
+import nmcb.pos.{*, given}
+
 import scala.annotation.tailrec
 import scala.util.Try
 
 object Day01 extends AoC:
 
-  case class Cmd(turn: Char, dist: Int)
+  case class Command(turn: Char, dist: Int)
 
-  object Cmd:
-    def fromString(s: String): Cmd =
-      Try(Cmd(s.trim.head, s.trim.tail.toInt))
+  object Command:
+    def fromString(s: String): Command =
+      Try(Command(s.trim.head, s.trim.tail.toInt))
         .getOrElse(sys.error(s"unable to parse: $s"))
 
-  case class Me(x: Int, y: Int, dir: Dir):
+  case class Me(pos: Pos, dir: Dir):
 
-    def manhattan: Int =
-      x.abs + y.abs
-
-    infix def process(cmd: Cmd): Vector[Me] =
+    infix def process(cmd: Command): Vector[Me] =
       (dir, cmd.turn).runtimeChecked match
-        case (N, 'L') => (1 to cmd.dist).map(dist => copy(x = x - dist, dir = W)).toVector
-        case (E, 'L') => (1 to cmd.dist).map(dist => copy(y = y + dist, dir = N)).toVector
-        case (S, 'L') => (1 to cmd.dist).map(dist => copy(x = x + dist, dir = E)).toVector
-        case (W, 'L') => (1 to cmd.dist).map(dist => copy(y = y - dist, dir = S)).toVector
-        case (N, 'R') => (1 to cmd.dist).map(dist => copy(x = x + dist, dir = E)).toVector
-        case (E, 'R') => (1 to cmd.dist).map(dist => copy(y = y - dist, dir = S)).toVector
-        case (S, 'R') => (1 to cmd.dist).map(dist => copy(x = x - dist, dir = W)).toVector
-        case (W, 'R') => (1 to cmd.dist).map(dist => copy(y = y + dist, dir = N)).toVector
+        case (N, 'L') | (S, 'R') => (1 to cmd.dist).map(dist => copy(pos.translate(dx = -dist), W)).toVector
+        case (E, 'L') | (W, 'R') => (1 to cmd.dist).map(dist => copy(pos.translate(dy = +dist), N)).toVector
+        case (S, 'L') | (N, 'R') => (1 to cmd.dist).map(dist => copy(pos.translate(dx = +dist), E)).toVector
+        case (W, 'L') | (E, 'R') => (1 to cmd.dist).map(dist => copy(pos.translate(dy = -dist), S)).toVector
 
   object Me:
+    val airDrop: Me = Me(pos = Pos.origin, dir = N)
 
-    def airDrop: Me =
-      Me(0, 0, N)
+  def solve1(commands: Vector[Command], start: Me): Long =
+    commands.foldLeft(Vector(start))(_.last process _).last.pos.manhattanDistance(Pos.origin)
 
-  val commands: Vector[Cmd] = input.mkString.split(',').map(Cmd.fromString).toVector
-
-  @tailrec
-  def solve(commands: Vector[Cmd], path: Vector[Me]): Me =
-
+  def solve2(commands: Vector[Command], start: Me): Long =
     @tailrec
-    def twice(test: Vector[Me], visited: Vector[Me]): Option[Me] =
-      test.runtimeChecked match
-        case Vector()                                                   => None
-        case h +: t if visited.exists(me => me.x == h.x && me.y == h.y) => Some(h)
-        case _ +: t                                                     => twice(t, visited)
+    def solve(commands: Vector[Command], path: Vector[Me]): Me =
+      @tailrec
+      def twice(test: Vector[Me], visited: Vector[Me]): Option[Me] =
+        test.runtimeChecked match
+          case Vector()                                        => None
+          case h +: t if visited.exists(me => me.pos == h.pos) => Some(h)
+          case _ +: t                                          => twice(t, visited)
 
-    val next = path.last.process(commands.head)
-    if twice(next, path).nonEmpty then twice(next, path).get else solve(commands.tail :+ commands.head, path :++ next)
+      val h +: t = commands: @unchecked
+      val next   = path.last.process(h)
+      if twice(next, path).nonEmpty then twice(next, path).get else solve(t :+ h, path :++ next)
 
-  override lazy val answer1: Int = commands.foldLeft(Vector(Me.airDrop))(_.last process _).last.manhattan
-  override lazy val answer2: Int = solve(commands, Vector(Me.airDrop)).manhattan
+    solve(commands, Vector(start)).pos.manhattanDistance(Pos.origin)
+
+
+  val commands: Vector[Command] = input.mkString.split(',').map(Command.fromString).toVector
+
+  override lazy val answer1: Long = solve1(commands, Me.airDrop)
+  override lazy val answer2: Long = solve2(commands, Me.airDrop)

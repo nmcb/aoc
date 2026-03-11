@@ -10,7 +10,7 @@ object Day02 extends AoC:
     def fromString(s: String): Line =
       Line(s.toVector)
 
-  val puzzle: Vector[Line] = lines.map(Line.fromString)
+  val instructionLine: Vector[Line] = lines.map(Line.fromString)
 
   case class Pad(pad: Vector[String], x: Int, y: Int):
 
@@ -59,8 +59,8 @@ object Day02 extends AoC:
         x = 1,
         y = 3)
 
-  def solve(pad: Pad, lines: Vector[Line]): String =
-    lines.scanLeft(pad)(_ process _).map(_.current).tail.mkString
+  def solve(pad: Pad, instructionLine: Vector[Line]): String =
+    instructionLine.scanLeft(pad)(_ process _).map(_.current).tail.mkString
 
-  override lazy val answer1: String = solve(Pad.pad1, puzzle)
-  override lazy val answer2: String = solve(Pad.pad2, puzzle)
+  override lazy val answer1: String = solve(Pad.pad1, instructionLine)
+  override lazy val answer2: String = solve(Pad.pad2, instructionLine)

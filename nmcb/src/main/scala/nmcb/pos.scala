@@ -86,7 +86,7 @@ object pos:
 
     infix def determinant(that: Pos): Long = p.x.toLong * that.y.toLong - that.x.toLong * p.y.toLong
 
-    infix inline def translate(dx: Int, dy: Int): Pos = (p.x + dx, p.y + dy)
+    infix inline def translate(dx: Int = 0, dy: Int = 0): Pos = (p.x + dx, p.y + dy)
 
     infix inline def minimize(that: Pos): Pos = (p.x min that.x, p.y min that.y)
     infix inline def maximize(that: Pos): Pos = (p.x max that.x, p.y max that.y)
@@ -121,6 +121,14 @@ object pos:
         case S => (x = p.x, y = p.y + 1)
         case W => (x = p.x - 1, y = p.y)
 
+    inline def stepBounded[A](dir: Dir, grid: Grid[A]): Pos =
+      val result = dir match
+        case N => (x = p.x, y = p.y - 1)
+        case E => (x = p.x + 1, y = p.y)
+        case S => (x = p.x, y = p.y + 1)
+        case W => (x = p.x - 1, y = p.y)
+      if grid.within(result) then result else p
+
     def directionTo(that: Pos): Vector[Dir] =
       val ew = if p.x != that.x then Vector(if that.x < p.x then W else E) else Vector.empty
       val ns = if p.y != that.y then Vector(if that.y < p.y then N else S) else Vector.empty
@@ -134,8 +142,10 @@ object pos:
 
     def withinBounds(min: Pos, max: Pos): Boolean =
       p.x >= min.x & p.x <= max.x & p.y >= min.y & p.y <= max.y
-  
-  
+
+    def withinBounds[A](grid: Grid[A]): Boolean =
+      grid.within(p)
+
   extension [A](t: (Pos, A))
     def pos: Pos = t._1
     def element: A = t._2
