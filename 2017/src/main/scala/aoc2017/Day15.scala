@@ -4,10 +4,10 @@ import nmcb.*
 
 object Day15 extends AoC:
 
-  def next(factor: Long): Long => Long =
+  inline def next(factor: Long): Long => Long =
     (current: Long) => current * factor % 2147483647L
 
-  def same(a: Long, b: Long): Boolean =
+  inline def same(a: Long, b: Long): Boolean =
     (a & 0xffff) == (b & 0xffff)
 
   def generatorA: Iterator[Long] = Iterator.iterate(591L)(next(16807)).drop(1)
