@@ -1,6 +1,7 @@
 package aoc2017
 
 import nmcb.*
+
 import scala.annotation.tailrec
 import scala.util.Try
 
@@ -19,7 +20,7 @@ object Day18 extends AoC:
 
   import Inst.*
 
-  case class Assembly(prog: Vector[Inst], pc: Long, mem: Map[String,Long], out: List[Long], in: List[Long]):
+  case class Assembly(prog: Vector[Inst], pc: Long, mem: Map[String, Long], out: List[Long], in: List[Long]):
 
     def terminated: Boolean =
       pc < 0 || pc >= prog.size
