@@ -5,7 +5,7 @@ import pos.*
 
 case class Grid[+A](matrix: Vector[Vector[A]]):
   val sizeY: Int = matrix.size
-  val sizeX: Int = matrix.head.size
+  val sizeX: Int = matrix.maxBy(_.size).size
   val minPos: Pos = Pos.origin
   val maxPos: Pos = (sizeX - 1, sizeY - 1)
   val leftUpper: Pos   = minPos
@@ -32,7 +32,7 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
     peekOption(p).contains(a)
 
   inline def peekOption(p: Pos): Option[A] =
-    Option.when(p.withinBounds(minPos, maxPos))(peek(p))
+    matrix.lift(p.y).flatMap(_.lift(p.x))
 
   inline def peekOrElse[B >: A](p: Pos, default: => B): B =
     peekOption(p).getOrElse(default)

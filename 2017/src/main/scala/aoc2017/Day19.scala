@@ -5,44 +5,37 @@ import nmcb.pos.*
 
 object Day19 extends AoC:
 
-  type Grid = Vector[Vector[Char]]
-
-  val grid: Grid = lines.map(_.toVector)
-
-  extension (g: Grid)
-
-    def start: Pos =
-      (x = g.head.indexOf('|'), y = 0)
-
-    def charAt(p: Pos): Char =
-      grid.lift(p.y).flatMap(_.lift(p.x)).getOrElse(' ')
-
-  case class Tracer(grid: Grid, pos: Pos, dir: Pos):
+  case class Tracer(grid: Grid[Char], pos: Pos, dir: Pos):
 
     def char: Char =
-      grid.charAt(pos)
+      grid.peekOrElse(pos, ' ')
 
     def isPath: Boolean =
       char != ' '
 
-    private def next: Tracer =
-      grid.charAt(pos + dir) match
+    def next: Tracer =
+      grid.peekOrElse(pos + dir, ' ') match
         case '+' =>
           val turns = Pos.offset4 - dir - (-dir)
-          val turn  = turns.find(d => grid.charAt(pos + dir + d) != ' ').get
+          val turn  = turns.find(turn => grid.peekOrElse(pos + dir + turn, ' ') != ' ').get
           copy(pos = pos + dir, dir = turn)
         case _ =>
           copy(pos = pos + dir, dir = dir)
-          
+
     def tracePath: Vector[Char] =
-      Iterator.iterate(tracer)(_.next).takeWhile(_.isPath).map(_.char).toVector
+      Iterator.iterate(this)(_.next).takeWhile(_.isPath).map(_.char).toVector
 
   object Tracer:
 
-    def attachTo(grid: Grid): Tracer =
-      Tracer(grid, grid.start, (0, 1))
+    def attachTo(grid: Grid[Char]): Tracer =
+      Tracer(
+        grid = grid,
+        pos  = (x = grid.row(0).indexOf('|'), y = 0),
+        dir  = (x = 0, y = 1)
+      )
 
-  val tracer: Tracer       = Tracer.attachTo(grid)
 
-  override lazy val answer1: String = tracer.tracePath.filter(_.isLetter).mkString("")
-  override lazy val answer2: Int    = tracer.tracePath.size
+  val grid: Grid[Char] = Grid.fromLines(lines)
+
+  override lazy val answer1: String = Tracer.attachTo(grid).tracePath.filter(_.isLetter).mkString("")
+  override lazy val answer2: Int    = Tracer.attachTo(grid).tracePath.size
