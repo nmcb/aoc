@@ -76,9 +76,12 @@ object pos:
 
   export Pos.given
 
+  import Pos.*
+  import math.*
+
   extension (p: Pos)
 
-    def unary_- : Pos = (-p.x, -p.y)
+    def unary_- : Pos = (x = -p.x, y = -p.y)
 
     infix inline def +(that: Pos): Pos = (x = p.x + that.x, y = p.y + that.y)
     infix inline def -(that: Pos): Pos = (x = p.x - that.x, y = p.y - that.y)
@@ -86,10 +89,10 @@ object pos:
 
     infix def determinant(that: Pos): Long = p.x.toLong * that.y.toLong - that.x.toLong * p.y.toLong
 
-    infix inline def translate(dx: Int = 0, dy: Int = 0): Pos = (p.x + dx, p.y + dy)
+    infix inline def translate(dx: Int = 0, dy: Int = 0): Pos = (x = p.x + dx, y = p.y + dy)
 
-    infix inline def minimize(that: Pos): Pos = (p.x min that.x, p.y min that.y)
-    infix inline def maximize(that: Pos): Pos = (p.x max that.x, p.y max that.y)
+    infix inline def minimize(that: Pos): Pos = (x = p.x min that.x, y = p.y min that.y)
+    infix inline def maximize(that: Pos): Pos = (x = p.x max that.x, y = p.y max that.y)
 
     infix inline def >(that: Pos): Boolean  = p.x > that.x && p.y > that.y
     infix inline def <(that: Pos): Boolean  = p.x < that.x && p.y < that.y
@@ -97,22 +100,19 @@ object pos:
     infix inline def <=(that: Pos): Boolean = p.x <= that.x && p.y <= that.y
 
     infix inline def manhattanDistance(that: Pos): Long =
-      math.abs(p.x - that.x) + math.abs(p.y - that.y)
+      (p.x - that.x).abs + (p.y - that.y).abs
 
     infix inline def pythagoreanDistance(that: Pos): Double =
-      math.sqrt(math.pow((that.x - p.x).toDouble, 2) + math.pow((that.y - p.y).toDouble, 2))
+      sqrt(pow((that.x - p.x).toDouble, 2) + pow((that.y - p.y).toDouble, 2))
 
     infix inline def angleDegrees(that: Pos): Double =
       val dx = (that.x - p.x).toDouble
       val dy = (that.y - p.y).toDouble
-      val d = 90 - math.atan2(-dy, dx) * 180 / math.Pi
+      val d = 90 - atan2(-dy, dx) * 180 / Pi
       if d >= 0 then d else d + 360
 
-    def adjoint4: Set[Pos] =
-      Pos.offset4.map(_ + p)
-
-    def adjoint8: Set[Pos] =
-      Pos.offset8.map(_ + p)
+    def adjoint4: Set[Pos] = offset4.map(_ + p)
+    def adjoint8: Set[Pos] = offset8.map(_ + p)
 
     infix inline def step(dir: Dir): Pos =
       dir match
@@ -122,11 +122,7 @@ object pos:
         case W => (x = p.x - 1, y = p.y)
 
     inline def stepBounded[A](dir: Dir, grid: Grid[A]): Pos =
-      val result = dir match
-        case N => (x = p.x, y = p.y - 1)
-        case E => (x = p.x + 1, y = p.y)
-        case S => (x = p.x, y = p.y + 1)
-        case W => (x = p.x - 1, y = p.y)
+      val result = step(dir)
       if grid.within(result) then result else p
 
     def directionTo(that: Pos): Vector[Dir] =
@@ -149,4 +145,3 @@ object pos:
   extension [A](t: (Pos, A))
     def pos: Pos = t._1
     def element: A = t._2
-  
