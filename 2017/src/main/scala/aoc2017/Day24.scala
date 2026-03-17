@@ -15,20 +15,22 @@ object Day24 extends AoC:
     def strength: Int =
       portA + portB
 
-  type Bridge = List[Component]
+  type Bridge = Vector[Component]
 
-  extension (bridge: Bridge) def strength: Int =
-    bridge.map(_.strength).sum
+  extension (bridge: Bridge)
+    
+    def strength: Int =
+      bridge.map(_.strength).sum
 
   def bridges(components: Set[Component]): Iterator[Bridge] =
-    def go(components: Set[Component], port: Int): Iterator[Bridge] =
+    def loop(components: Set[Component], port: Int): Iterator[Bridge] =
       for
         component <- components.filter(_.contains(port)).iterator
         other      = component.reverse(port)
-        bridge    <- Iterator.single(Nil) ++ go(components - component, other)
+        bridge    <- Iterator.single(Vector.empty) ++ loop(components - component, other)
       yield
-        component :: bridge
-    go(components, 0)
+        component +: bridge
+    loop(components, 0)
 
   val components: Set[Component] =
     lines

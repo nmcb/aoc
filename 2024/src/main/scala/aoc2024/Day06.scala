@@ -17,7 +17,7 @@ object Day06 extends AoC:
       g.peekOrElse(next, ' ') match
         case ' ' => result + pos
         case '.' => walkGuard(next, dir, result + pos)
-        case '#' => walkGuard(pos, dir.cw, result)
+        case '#' => walkGuard(pos, dir.clockWise, result)
 
     def peekWithObstruction(p: Pos, obstruct: Pos): Char =
         if p == obstruct then '#' else g.peekOrElse(p, ' ')
@@ -31,7 +31,7 @@ object Day06 extends AoC:
         g.peekWithObstruction(next, obstruct) match
           case ' ' => false
           case '.' => walkCircular(next, dir, obstruct, visited + (pos -> dir))
-          case '#' => walkCircular(pos, dir.cw, obstruct, visited)
+          case '#' => walkCircular(pos, dir.clockWise, obstruct, visited)
 
 
   lazy val start: Pos          = grid.findOne('^')

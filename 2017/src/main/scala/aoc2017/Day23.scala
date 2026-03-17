@@ -25,9 +25,10 @@ object Day23 extends AoC:
         case s"mul $x $y" => MUL(x, parse(y))
         case s"jnz $x $y" => JNZ(parse(x), parse(y))
 
-  case class CPU(prog: Vector[Inst], mem: Map[String,Long], pc: Int, countMUL: Long = 0):
+  case class CPU(prog: Vector[Inst], mem: Map[String, Long], pc: Int, countMUL: Long = 0):
 
     extension (v: Value)
+
       private def get: Long =
         v match
           case l: Long   => l

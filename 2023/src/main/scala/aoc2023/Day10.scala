@@ -119,7 +119,7 @@ object Day10 extends AoC:
         case _ => acc
 
     val (p, d) = path.head
-    loop(path.tail, d, scan(p, d.cw))
+    loop(path.tail, d, scan(p, d.clockWise))
 
 
   override lazy val answer1: Int = path.length / 2
