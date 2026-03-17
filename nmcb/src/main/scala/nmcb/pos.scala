@@ -8,14 +8,14 @@ object pos:
     case S
     case W
 
-    def cw: Dir =
+    def clockWise: Dir =
       this match
         case N => E
         case S => W
         case E => S
         case W => N
 
-    def ccw: Dir =
+    def counterClockWise: Dir =
       this match
         case N => W
         case S => E

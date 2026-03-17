@@ -16,8 +16,8 @@ object Day16 extends AoC:
     def options: Vector[Tracer] =
       Vector(
         Tracer(cost + 1, pos.step(dir), dir, path + pos.step(dir)),
-        Tracer(cost + 1000, pos, dir.cw, path),
-        Tracer(cost + 1000, pos, dir.ccw, path)
+        Tracer(cost + 1000, pos, dir.clockWise, path),
+        Tracer(cost + 1000, pos, dir.counterClockWise, path)
       )
 
   case class Maze(grid: Grid[Char]):

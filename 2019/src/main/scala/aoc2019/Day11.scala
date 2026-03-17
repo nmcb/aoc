@@ -21,7 +21,7 @@ object Day11 extends AoC:
         case LazyList() =>
           panels
         case LazyList((_, color), (next, turn)) =>
-          val rotate = if turn == 1 then dir.cw else dir.ccw
+          val rotate = if turn == 1 then dir.clockWise else dir.counterClockWise
           Robot(
             cpu    = next,
             pos    = pos step rotate,

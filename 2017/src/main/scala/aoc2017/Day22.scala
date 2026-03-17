@@ -14,12 +14,12 @@ object Day22 extends AoC:
 
   import Status.*
   
-  case class Carrier(nodes: Map[Pos,Status], current: Pos, dir: Dir, infected: Int = 0):
+  case class Carrier(nodes: Map[Pos, Status], current: Pos, dir: Dir, infected: Int = 0):
 
     def wake1: Carrier =
       nodes(current).runtimeChecked match
         case Clean =>
-          val turn = dir.ccw
+          val turn = dir.counterClockWise
           copy(
             nodes    = nodes + (current -> Infected),
             current  = current.step(turn),
@@ -27,7 +27,7 @@ object Day22 extends AoC:
             infected = infected + 1
           )
         case Infected =>
-          val turn = dir.cw
+          val turn = dir.clockWise
           copy(
             nodes   = nodes + (current -> Clean),
             current = current.step(turn),
@@ -37,7 +37,7 @@ object Day22 extends AoC:
     def wake2: Carrier =
       nodes(current).runtimeChecked match
         case Clean =>
-          val turn = dir.ccw
+          val turn = dir.counterClockWise
           copy(
             nodes   = nodes + (current -> Weakened),
             current = current.step(turn),
@@ -50,7 +50,7 @@ object Day22 extends AoC:
             infected = infected + 1
           )
         case Infected =>
-          val turn = dir.cw
+          val turn = dir.clockWise
           copy(
             nodes   = nodes + (current -> Flagged),
             current = current.step(turn),
