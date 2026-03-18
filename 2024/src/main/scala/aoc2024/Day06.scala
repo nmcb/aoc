@@ -23,7 +23,7 @@ object Day06 extends AoC:
         if p == obstruct then '#' else g.peekOrElse(p, ' ')
 
     @tailrec
-    def walkCircular(pos: Pos, dir: Dir, obstruct: Pos, visited: Set[(Pos,Dir)] = Set.empty): Boolean =
+    def walkCircular(pos: Pos, dir: Dir, obstruct: Pos, visited: Set[(Pos, Dir)] = Set.empty): Boolean =
       if visited.contains((pos, dir)) then
         true
       else
