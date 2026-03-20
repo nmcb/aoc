@@ -29,9 +29,7 @@ object Day12 extends AoC:
         amounts = numbers.split(" ").map(_.toInt).toVector,
       )
 
-  lazy val presents: Vector[Present] =
-    chunks.init.collect: lines =>
+  lazy val presents: Vector[Present] = chunks.init.collect: lines =>
       Present(lines.tail.map(_.toVector))
-
 
   override lazy val answer1: Int    = solve1(regions, presents)
