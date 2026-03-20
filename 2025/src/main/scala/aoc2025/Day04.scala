@@ -32,4 +32,4 @@ object Day04 extends AoC:
     if remove.isEmpty then rolls else clearAll(rolls -- remove, minPos, maxPos)
 
   override lazy val answer1: Int = accessible(rolls, minPos, maxPos).size
-  override lazy val answer2: Int = (accessible(rolls, minPos, maxPos) -- clearAll(rolls, minPos, maxPos)).size
+  override lazy val answer2: Int = (rolls -- clearAll(rolls, minPos, maxPos)).size
