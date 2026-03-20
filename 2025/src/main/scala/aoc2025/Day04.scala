@@ -7,27 +7,29 @@ import scala.annotation.tailrec
 
 object Day04 extends AoC:
 
-  val (minPos, maxPos, rolls) =
+  val rolls: Set[Pos] =
     val ps = for y <- lines.indices ; x <- lines.head.indices yield (x = x, y = y)
-    (ps.min, ps.max, ps.filter(p => lines(p.y)(p.x) == '@').toSet)
+    ps.filter(p => lines(p.y)(p.x) == '@').toSet
 
-  extension (p: Pos)
+  val minPos: Pos =
+    rolls.min
 
-    def neighbours: Set[Pos] =
-      Pos.offset8.map(_ + p).filter(p => p >= minPos && p <= maxPos)
+  val maxPos: Pos =
+    rolls.max
 
-  extension (rolls: Set[Pos])
+  def neighbours(p: Pos, minPos: Pos, maxPos: Pos): Set[Pos] =
+    Pos.offset8.map(_ + p).filter(p => p >= minPos && p <= maxPos)
 
-    def neighbouring(p: Pos): Set[Pos] =
-      p.neighbours.intersect(rolls)
+  def neighbouring(rolls: Set[Pos], p: Pos, minPos: Pos, maxPos: Pos): Set[Pos] =
+    neighbours(p, minPos, maxPos).intersect(rolls)
 
-    def accessible: Set[Pos] =
-      rolls.filter(p => rolls.neighbouring(p).size < 4)
+  def accessible(rolls: Set[Pos], minPos: Pos, maxPos: Pos): Set[Pos] =
+    rolls.filter(p => neighbouring(rolls, p, minPos, maxPos).size < 4)
 
-    @tailrec
-    def clearAll: Set[Pos] =
-      val remove = accessible
-      if remove.isEmpty then rolls else (rolls -- remove).clearAll
+  @tailrec
+  def clearAll(rolls: Set[Pos], minPos: Pos, maxPos: Pos): Set[Pos] =
+    val remove = accessible(rolls, minPos, maxPos)
+    if remove.isEmpty then rolls else clearAll(rolls -- remove, minPos, maxPos)
 
-  override lazy val answer1: Int = rolls.accessible.size
-  override lazy val answer2: Int = (rolls -- rolls.clearAll).size
+  override lazy val answer1: Int = accessible(rolls, minPos, maxPos).size
+  override lazy val answer2: Int = (accessible(rolls, minPos, maxPos) -- clearAll(rolls, minPos, maxPos)).size
