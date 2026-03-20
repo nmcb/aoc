@@ -145,7 +145,3 @@ object pos:
   extension [A](t: (Pos, A))
     def pos: Pos = t._1
     def element: A = t._2
-
-  extension (i: Set[Pos])
-    def withinBounds(minPos: Pos, maxPos: Pos): Set[Pos] =
-      i.filter(p => p >= minPos && p <= maxPos)
