@@ -4,25 +4,25 @@ import nmcb.*
 
 object Day02 extends AoC:
 
-  private case class Report(levels: Vector[Int]):
+  case class Report(levels: Vector[Int]):
 
-    private lazy val differences: Vector[Int] =
+    lazy val differences: Vector[Int] =
       levels
         .sliding(2)
         .collect:
           case Vector(l, r) => r - l
         .toVector
 
-    private lazy val isIncreasing: Boolean =
+    lazy val isIncreasing: Boolean =
       differences.forall(d => d >= 0)
 
-    private lazy val isDecreasing: Boolean =
+    lazy val isDecreasing: Boolean =
       differences.forall(d => d <= 0)
 
-    private lazy val isBounded: Boolean =
+    lazy val isBounded: Boolean =
       differences.forall(d => d.abs >= 1 && d.abs <= 3)
 
-    private lazy val withOneLevelRemoved: Seq[Report] =
+    lazy val withOneLevelRemoved: Seq[Report] =
       levels.indices.map(i => Report(levels.take(i) ++ levels.drop(i + 1)))
 
     lazy val isSafe: Boolean =
