@@ -2,7 +2,7 @@ ThisBuild / scalaVersion := "3.8.2"
 ThisBuild / version      := "0.1.0"
 
 ThisBuild / libraryDependencies ++= Seq(
-  "org.scalatest"  %% "scalatest"  % "3.2.19" % "test",
+  "org.scalatest"  %% "scalatest"  % "3.2.20" % "test",
 
   // 2025
   "tools.aqua" % "z3-turnkey" % "4.14.1",
