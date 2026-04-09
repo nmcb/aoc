@@ -120,7 +120,7 @@ object Day25 extends AoC:
       var found = Option.empty[Droid]
 
       while todo.nonEmpty && found.isEmpty do
-        val current = todo.dequeue
+        val current = todo.dequeue()
         current
           .doors
           .iterator
@@ -149,11 +149,11 @@ object Day25 extends AoC:
     val password =
       security
         .inventory
-        .subsets
+        .subsets()
         .map: dropped =>
           dropped.foldLeft(security)(_ drop _).move(pressure)
         .flatMap(_.password)
-        .next
+        .next()
 
     password
 

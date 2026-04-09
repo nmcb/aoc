@@ -39,7 +39,7 @@ object Day24 extends AoC:
     var result: Int = 0
     breakable:
       while todo.nonEmpty do
-        val current = todo.dequeue
+        val current = todo.dequeue()
 
         if current == end then
           result = steps(current)

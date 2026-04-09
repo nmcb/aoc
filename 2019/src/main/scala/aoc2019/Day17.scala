@@ -134,8 +134,8 @@ object Day17 extends AoC:
 
   def dustCollected(program: Mem, grid: Grid): Int =
     val path      = getPath(grid)
-    val pathParts = factorPathParts(Seq(path)).next
-    val mainPath  = reconstructMainPaths(path, pathParts).next
+    val pathParts = factorPathParts(Seq(path)).next()
+    val mainPath  = reconstructMainPaths(path, pathParts).next()
 
     val newProgram      = program + (0 -> 2L)
     val mainPathString  = mainPathToString(mainPath)

@@ -50,12 +50,12 @@ object Day17 extends AoC:
     /** breadth first search - return first reached */
     def solve1: Option[Path] =
       val todo    = mutable.Queue(this)
-      var current = todo.dequeue
+      var current = todo.dequeue()
 
       while !current.reachedVault do
         current.candidates.foreach(todo.enqueue)
         if todo.isEmpty then return None
-        current = todo.dequeue
+        current = todo.dequeue()
 
       Some(current)
 
@@ -65,7 +65,7 @@ object Day17 extends AoC:
       var result = Option.empty[Path]
 
       while todo.nonEmpty do
-        val current = todo.dequeue
+        val current = todo.dequeue()
         if current.reachedVault then
           result = Some(current)
         else

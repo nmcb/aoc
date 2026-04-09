@@ -23,7 +23,7 @@ object Day15 extends AoC:
     var target = Option.empty[(Pos,CPU)]
 
     while todo.nonEmpty do
-      val (from, cpu) = todo.dequeue
+      val (from, cpu) = todo.dequeue()
       neighbours
         .map(move(from, cpu))
         .filter((next,_,_) => !steps.contains(next) || steps(from) + 1 < steps(next))

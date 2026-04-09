@@ -11,7 +11,7 @@ object Day17 extends AoC:
     containers
       .zipWithIndex
       .toSet
-      .subsets
+      .subsets()
       .map(_.toVector.map(_.element))
       .filter(_.sum == 150)
       .toVector

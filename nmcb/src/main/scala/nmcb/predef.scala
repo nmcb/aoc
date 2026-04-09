@@ -22,8 +22,8 @@ object predef:
       i.flatMap(f).next()
 
     def drain: A =
-      var a: A = i.next
-      while i.hasNext do a = i.next
+      var a: A = i.next()
+      while i.hasNext do a = i.next()
       a
   
   

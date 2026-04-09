@@ -27,7 +27,7 @@ object Day16 extends AoC:
       val definite = sets.filter(_.size == 1).flatten
       sets.map(set => if set.size == 1 then set else set -- definite)
 
-    val found = Iterator.iterate(sets)(refine).dropWhile(_.exists(_.size > 1)).next.map(_.head)
+    val found = Iterator.iterate(sets)(refine).dropWhile(_.exists(_.size > 1)).next().map(_.head)
     val departures = found.zip(mine).filter((rule,field) => rule.pattern.startsWith("departure"))
     departures.map((_,field) => field.toLong).product
 

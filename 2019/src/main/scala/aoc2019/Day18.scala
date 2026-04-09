@@ -19,7 +19,7 @@ object Day18 extends AoC:
     val todo = collection.mutable.PriorityQueue(start)(using Ordering.by(cost))
 
     while todo.nonEmpty do
-      val pos = todo.dequeue
+      val pos = todo.dequeue()
       pos.adjoint4
         .filter(next => !tunnels(next).isWall)
         .filter(next => !cost.contains(next) || cost(pos) + 1 < cost(next))

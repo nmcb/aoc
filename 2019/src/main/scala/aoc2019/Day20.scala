@@ -68,7 +68,7 @@ object Day20 extends AoC:
     val cost = collection.mutable.Map(start -> 0)
     val todo = collection.mutable.Queue(start)
     while todo.nonEmpty do
-      val point = todo.dequeue
+      val point = todo.dequeue()
       Pos.offset4
         .map(point + _)
         .filter(next => maze(next) == '.')
@@ -85,7 +85,7 @@ object Day20 extends AoC:
     var result = Int.MaxValue
 
     while todo.nonEmpty do
-      val State(path, total) = todo.dequeue
+      val State(path, total) = todo.dequeue()
       val (current, depth)   = path.last
 
       if total >= result then

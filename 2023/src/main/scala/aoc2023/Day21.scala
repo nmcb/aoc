@@ -96,7 +96,7 @@ object Day21 extends AoC:
       .iterate(InfiniteGarden.from(garden))(_.next)
       .scanLeft(Collector.from(garden, steps))(_ add _)
       .flatMap(_.solution)
-      .next
+      .next()
 
 
   val garden: Grid[Char] = Grid.fromLines(lines)

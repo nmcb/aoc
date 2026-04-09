@@ -43,7 +43,7 @@ object Day19 extends AoC:
         if transposed.map(position + _).count(beacons) >= 10
       yield (transposed.map(position + _), position)
     
-    result.nextOption
+    result.nextOption()
   
   def solve(scanners: Vector[Scanner]): (Set[Vec3], Set[Vec3]) =
 

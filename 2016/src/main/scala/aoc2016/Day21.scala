@@ -33,7 +33,7 @@ object Day21 extends AoC:
         s.takeRight(n) + s.dropRight(n)
 
       def rotateByPositionLeft(a: Char): String =
-        Iterator.iterate(s)(_.rotateLeft(1)).dropWhile(_.rotateByPositionRight(a) != s).next
+        Iterator.iterate(s)(_.rotateLeft(1)).dropWhile(_.rotateByPositionRight(a) != s).next()
 
       def reverseByPosition(x: Int, y: Int): String =
         s.patch(x, s.slice(x, y + 1).reverse, y + 1 - x)
