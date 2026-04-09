@@ -15,7 +15,7 @@ object Day24 extends AoC:
           .combinations(configuration)  // for that configuration and filter out
           .filter(_.sum == balance)     // combinations that sum to balance assuming
           .map(_.product)               // all other groups can be balanced, finally
-      .next                             // we calculate the quantum entanglement.
+      .next()                           // we calculate the quantum entanglement.
 
   override lazy val answer1: Long = solve(weights, 3)
   override lazy val answer2: Long = solve(weights, 4)

@@ -5,7 +5,7 @@ import nmcb.predef.*
 
 object Day08 extends AoC:
 
-  type Box  = (x: Int, y: Int, z: Int)
+  type Box = (x: Int, y: Int, z: Int)
 
   extension (pair: (Box, Box))
 

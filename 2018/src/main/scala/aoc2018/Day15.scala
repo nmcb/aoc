@@ -156,7 +156,7 @@ object Day15 extends AoC:
         .iterate(Search.init)(_.next)
         .zipWithIndex
         .dropWhile(_.notFound)
-        .next
+        .next()
 
     (indexedSearch.index - 1, indexedSearch.search.result)
 

@@ -29,11 +29,11 @@ object Day09 extends AoC:
     corners.zip(corners.tail :+ corners.head).flatMap(line).toSet
 
   def isValid(p: Position, q: Position, perimeter: Set[Position]): Boolean =
-    val xMin = p.x min q.x
-    val xMax = p.x max q.x
-    val yMin = p.y min q.y
-    val yMax = p.y max q.y
-    !perimeter.exists(r => xMin < r.x && r.x < xMax && yMin < r.y && r.y < yMax)
+    val minX = p.x min q.x
+    val maxX = p.x max q.x
+    val minY = p.y min q.y
+    val maxY = p.y max q.y
+    !perimeter.exists(r => minX < r.x && r.x < maxX && minY < r.y && r.y < maxY)
 
   val perimeter: Set[Position] = perimeter(corners)
   

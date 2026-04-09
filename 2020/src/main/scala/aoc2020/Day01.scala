@@ -10,7 +10,7 @@ object Day01 extends AoC:
       .combinations(numberOfArgs)
       .filter(_.sum == sumEquals)
       .map(_.product)
-      .next
+      .next()
 
 
   override lazy val answer1: Int = answer(numberOfArgs = 2, sumEquals = 2020)

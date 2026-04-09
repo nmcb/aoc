@@ -116,7 +116,7 @@ object Dijkstra:
     enqueue(start, 0)
 
     while (todo.nonEmpty)
-      val (weight, node) = todo.dequeue
+      val (weight, node) = todo.dequeue()
       if !weights.contains(node) then
         weights(node) = weight
         if isTarget(node) then return Some(node -> weight)
@@ -129,7 +129,7 @@ object Dijkstra:
     val todo  = mutable.Queue.empty[N]
     todo.enqueue(start)
     while todo.nonEmpty do
-      val from = todo.dequeue
+      val from = todo.dequeue()
       if !found.contains(from) then
         found += from
         edgesFrom(from).iterator.foreach: to =>
@@ -142,7 +142,7 @@ object Dijkstra:
     val results = mutable.ArrayBuffer.empty[B]
     val queue   = mutable.Queue(a)
     while queue.nonEmpty do
-      f(queue.dequeue) match
+      f(queue.dequeue()) match
         case Right(result)    => results += result
         case Left(neighbours) => queue.enqueueAll(neighbours)
     results.toVector

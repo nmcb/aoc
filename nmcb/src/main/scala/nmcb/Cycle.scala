@@ -30,8 +30,8 @@ object Cycle:
         override def hasNext: Boolean =
           i.hasNext
 
-        override def next: (A,Option[A]) =
-          val current  = i.next
+        override def next(): (A, Option[A]) =
+          val current  = i.next()
           val previous = last
           last = Some(current)
           (current, previous)

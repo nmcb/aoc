@@ -111,7 +111,7 @@ object Day23 extends AoC:
   def instructions(patched: Boolean = false): Vector[Option[Instruction]] =
     Source
       .fromResource(if patched then s"$day-patched.txt" else s"$day.txt")
-      .getLines
+      .getLines()
       .map(line => Some(Instruction.line(line)))
       .toVector
 

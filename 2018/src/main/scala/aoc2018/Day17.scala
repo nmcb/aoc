@@ -36,8 +36,8 @@ object Day17 extends AoC:
           flowing += p
           Flowing
         case Stopped =>
-          val minX = iterate(p)(_.e).dropWhile(next => go(next.s) == Stopped && !blocked(next.e)).next
-          val maxX = iterate(p)(_.w).dropWhile(next => go(next.s) == Stopped && !blocked(next.w)).next
+          val minX = iterate(p)(_.e).dropWhile(next => go(next.s) == Stopped && !blocked(next.e)).next()
+          val maxX = iterate(p)(_.w).dropWhile(next => go(next.s) == Stopped && !blocked(next.w)).next()
           val surface = for x <- minX.x to maxX.x yield (x, p.y)
           if blocked(minX.e) && blocked(maxX.w) then
             stopped ++= surface

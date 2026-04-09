@@ -7,7 +7,7 @@ object Day05 extends AoC:
   type Range = (min: Long, max: Long)
 
   val ranges: Vector[Range] =
-    chunks(0).map:
+    chunks(0).collect:
       case s"$min-$max" => (min = min.toLong, max = max.toLong)
 
   val ingredients: Vector[Long] =

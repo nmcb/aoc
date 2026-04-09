@@ -27,7 +27,7 @@ object Day23 extends AoC:
         val c = b.next
         val picked = Set(cup.value, a.value, b.value, c.value)
         def next(n: Int) = if n == 1 then digits.size else n - 1
-        val target = iterate(cup.value)(next).dropWhile(picked.contains).next
+        val target = iterate(cup.value)(next).dropWhile(picked.contains).next()
 
         cup.next = c.next
         c.next   = cups(target).next

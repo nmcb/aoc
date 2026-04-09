@@ -25,7 +25,7 @@ object Day13 extends AoC:
   def solve1(start: Pos, target: Pos): Int =
     val todo    = mutable.Queue(start)
     val cache   = mutable.Map(start -> 0)
-    var current = todo.dequeue
+    var current = todo.dequeue()
 
     while current != target do
       val steps = cache(current) + 1
@@ -33,7 +33,7 @@ object Day13 extends AoC:
         if !cache.contains(next) || steps < cache(next) then
           cache(next) = steps
           todo.enqueue(next)
-      current = todo.dequeue
+      current = todo.dequeue()
 
     cache(target)
 
@@ -43,7 +43,7 @@ object Day13 extends AoC:
     val cache = mutable.Map(start -> 0)
 
     while todo.nonEmpty do
-      val current = todo.dequeue
+      val current = todo.dequeue()
       val cost = cache(current) + 1
       current.candidates.filter(_.isOpen).foreach: next =>
         if (!cache.contains(next) || cost < cache(next)) && cost <= 50 then

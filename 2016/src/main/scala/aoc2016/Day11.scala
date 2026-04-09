@@ -47,7 +47,7 @@ object Day11 extends AoC:
     val cache = mutable.Map(start -> 0)
 
     while todo.nonEmpty do
-      val current = todo.dequeue
+      val current = todo.dequeue()
       val cost    = cache(current) + 1
       current.candidates.filter(_.valid).foreach: next =>
         if !cache.contains(next) || cost < cache(next) then

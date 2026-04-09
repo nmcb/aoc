@@ -21,7 +21,7 @@ object SecurityExercise:
   val routes: Vector[Route] =
     Source
       .fromResource(s"route-report.txt")
-      .getLines
+      .getLines()
       .flatMap(Route.fromString)
       .toVector
 
