@@ -3,8 +3,11 @@ package aoc2025
 import nmcb.*
 
 object Day06 extends AoC:
+  
+  type Operands  = Vector[Vector[Long]]
+  type Operators = Vector[Char] 
 
-  def calculate(operators: Vector[Char], operands: Vector[Vector[Long]]): Vector[Long] =
+  def calculate(operators: Operators, operands: Operands): Vector[Long] =
     operators.zip(operands).collect:
       case ('+', operands) => operands.sum
       case ('*', operands) => operands.product

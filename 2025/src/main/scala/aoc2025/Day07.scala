@@ -29,7 +29,7 @@ object Day07 extends AoC:
         case (result, (key, count)) =>
           result.updatedWith(key):
             case None          => Some(count)
-            case Some(current) => if current + count != 0 then Some(current + count) else None
+            case Some(current) => Option.when(current + count != 0)(current + count)
 
 
   def solve2(manifold: Vector[String]): Long =
