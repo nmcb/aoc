@@ -2,7 +2,6 @@ package aoc2016
 
 import nmcb.*
 
-import scala.CanEqual.derived
 import scala.collection.mutable
 
 object Day10 extends AoC:

@@ -42,16 +42,16 @@ object Day15 extends AoC:
     yield
       pos
 
-  type Distance = (Pos,Int)
+  type Distance = (Pos, Int)
 
   extension (distance: Distance)
     def target: Pos   = distance._1
     def distance: Int = distance._2
 
   /** breadth first search */
-  def distances(from: Pos, to: Set[Pos])(using Grid, List[Fighter]): Map[Pos,Int] =
+  def distances(from: Pos, to: Set[Pos])(using Grid, List[Fighter]): Map[Pos, Int] =
     @tailrec
-    def go(visited: Map[Pos,Int], todo: Map[Pos,Int]): Map[Pos,Int] =
+    def go(visited: Map[Pos, Int], todo: Map[Pos, Int]): Map[Pos, Int] =
       val found = visited ++ todo
       todo.find((pos, _) => to.contains(pos)) match
         case Some(_) =>
@@ -67,10 +67,10 @@ object Day15 extends AoC:
           if next.isEmpty then found else go(found, next)
     go(Map.empty, Map(from -> 0)).view.filterKeys(to).toMap
 
-  def reachableBy(fighter: Fighter, inRange: Set[Pos])(using Grid, List[Fighter]): Map[Pos,Int] =
+  def reachableBy(fighter: Fighter, inRange: Set[Pos])(using Grid, List[Fighter]): Map[Pos, Int] =
     distances(fighter.pos, inRange)
 
-  def nearestBy(reachable: Map[Pos,Int]): Set[Pos] =
+  def nearestBy(reachable: Map[Pos, Int]): Set[Pos] =
     val min = reachable.values.min
     reachable.filter(_.distance == min).keySet
 
@@ -85,14 +85,14 @@ object Day15 extends AoC:
 
   class ElfDeathException extends RuntimeException
 
-  def combat(grid: Grid, fighters: List[Fighter], elfDeath: Boolean = false): (Int,List[Fighter]) =
+  def combat(grid: Grid, fighters: List[Fighter], elfDeath: Boolean = false): (Int, List[Fighter]) =
 
     def round(fighters: List[Fighter]): (List[Fighter], Boolean) =
       @tailrec
-      def turn(todo: List[Fighter], done: List[Fighter], breakout: Boolean): (List[Fighter],Boolean) =
+      def turn(todo: List[Fighter], done: List[Fighter], breakout: Boolean): (List[Fighter], Boolean) =
         done match
           case Nil =>
-            (todo,breakout)
+            (todo, breakout)
           case fighter :: rest =>
             given otherUnits: List[Fighter] = todo ++ rest
             given Grid                      = grid
@@ -132,7 +132,7 @@ object Day15 extends AoC:
 
       turn(Nil, fighters.sorted, breakout = false)
 
-    type Search = (List[Fighter],Boolean)
+    type Search = (List[Fighter], Boolean)
 
     object Search:
       val init: Search = (fighters, false)
