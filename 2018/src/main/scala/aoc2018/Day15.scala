@@ -201,8 +201,8 @@ object Day15 extends AoC:
         .map: (rounds, fighters) =>
           rounds * fighters.map(_.hitPoints).sum
 
-    (4 to 200)
-      .groupMapReduce(e => math.ceil(200.0 / e).toInt)(identity)(_ min _)
+    (4 to 50)
+      .groupMapReduce(e => math.ceil(50.0 / e).toInt)(identity)(_ min _)
       .values.toList.sorted
       .flatMap(withElfAttackPower)
       .head
