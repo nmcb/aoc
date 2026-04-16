@@ -30,17 +30,11 @@ object Day15 extends AoC:
   def targetsOf(fighter: Fighter)(using fighters: List[Fighter]): Set[Fighter] =
     fighters.filter(_.fighterType == fighter.fighterType.target).toSet
 
-  def isFree(pos: Pos)(using grid: Grid, fighters: List[Fighter]): Boolean =
+  def isFreeTile(pos: Pos)(using grid: Grid, fighters: List[Fighter]): Boolean =
     grid(pos) == '.' && !fighters.exists(_.pos == pos)
 
-  def getInRange(targets: Set[Fighter])(using Grid, List[Fighter]): Set[Pos] =
-    for
-      target <- targets
-      offset <- Pos.offset4
-      pos     = target.pos + offset
-      if isFree(pos)
-    yield
-      pos
+  def inRangeOf(targets: Set[Fighter])(using Grid, List[Fighter]): Set[Pos] =
+    targets.flatMap(_.pos.adjoint4.filter(isFreeTile))
 
   type Distance = (Pos, Int)
 
@@ -49,7 +43,7 @@ object Day15 extends AoC:
     def distance: Int = distance._2
 
   /** breadth first search */
-  def distances(from: Pos, to: Set[Pos])(using Grid, List[Fighter]): Map[Pos, Int] =
+  def distancesTo(from: Pos, to: Set[Pos])(using Grid, List[Fighter]): Map[Pos, Int] =
     @tailrec
     def go(visited: Map[Pos, Int], todo: Map[Pos, Int]): Map[Pos, Int] =
       val found = visited ++ todo
@@ -60,7 +54,7 @@ object Day15 extends AoC:
           val next =
             for
               (pos, dist) <- todo
-              neighbour   <- pos.adjoint4.filter(isFree).iterator
+              neighbour   <- pos.adjoint4.filter(isFreeTile).iterator
               if !visited.contains(neighbour)
             yield
               neighbour -> (dist + 1)
@@ -68,7 +62,7 @@ object Day15 extends AoC:
     go(Map.empty, Map(from -> 0)).view.filterKeys(to).toMap
 
   def reachableBy(fighter: Fighter, inRange: Set[Pos])(using Grid, List[Fighter]): Map[Pos, Int] =
-    distances(fighter.pos, inRange)
+    distancesTo(fighter.pos, inRange)
 
   def nearestBy(reachable: Map[Pos, Int]): Set[Pos] =
     val min = reachable.values.min
@@ -79,9 +73,9 @@ object Day15 extends AoC:
 
   def stepBy(chosen: Pos, fighter: Fighter)(using Grid, List[Fighter]): Pos =
     val neighbours = fighter.pos.adjoint4
-    val dists      = distances(chosen, neighbours)
-    val min        = dists.values.min
-    dists.filter(_.distance == min).keys.min
+    val distances  = distancesTo(chosen, neighbours)
+    val min        = distances.values.min
+    distances.filter(_.distance == min).keys.min
 
   class ElfDeathException extends RuntimeException
 
@@ -99,7 +93,7 @@ object Day15 extends AoC:
 
             val targets = targetsOf(fighter)
             val ready   = breakout || targets.isEmpty
-            val inRange = getInRange(targets)
+            val inRange = inRangeOf(targets)
 
             var moved = fighter
 
@@ -143,7 +137,7 @@ object Day15 extends AoC:
       def found: Boolean        = search._2
       def next: Search          = round(result)
 
-    type IndexedSearch = (Search,Int)
+    type IndexedSearch = (Search, Int)
 
     extension (indexedSearch: IndexedSearch)
       def search: Search    = indexedSearch._1
@@ -180,9 +174,9 @@ object Day15 extends AoC:
 
     val fighters: List[Fighter] =
       for
-        (row,y)  <- parseGrid(input).view.zipWithIndex.toList
-        (tile,x) <- row.view.zipWithIndex
-        fighter  <- parseFighter(tile, (x, y))
+        (row, y)  <- parseGrid(input).view.zipWithIndex.toList
+        (tile, x) <- row.view.zipWithIndex
+        fighter   <- parseFighter(tile, (x, y))
       yield fighter
 
     val grid: Grid =
@@ -197,9 +191,8 @@ object Day15 extends AoC:
         case elf @ Fighter(Elf, _, _, _) => elf.copy(attackPower = elfAttackPower)
         case fighter                     => fighter
 
-      Try(combat(grid, updated, elfDeath = true)).toOption
-        .map: (rounds, fighters) =>
-          rounds * fighters.map(_.hitPoints).sum
+      Try(combat(grid, updated, elfDeath = true)).toOption.map: (rounds, fighters) =>
+        rounds * fighters.map(_.hitPoints).sum
 
     (4 to 50)
       .groupMapReduce(e => math.ceil(50.0 / e).toInt)(identity)(_ min _)
