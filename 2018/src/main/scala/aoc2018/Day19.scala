@@ -27,22 +27,22 @@ object Day19 extends AoC:
 
     def execute(mem: Mem): Mem =
       this match
-        case ADDR(a, b, c) => mem.setRR(a, b, c, (a: Int) => (b: Int) => a + b)
-        case ADDI(a, b, c) => mem.setRI(a, b, c, (a: Int) => (b: Int) => a + b)
-        case MULR(a, b, c) => mem.setRR(a, b, c, (a: Int) => (b: Int) => a * b)
-        case MULI(a, b, c) => mem.setRI(a, b, c, (a: Int) => (b: Int) => a * b)
-        case BANR(a, b, c) => mem.setRR(a, b, c, (a: Int) => (b: Int) => a & b)
-        case BANI(a, b, c) => mem.setRI(a, b, c, (a: Int) => (b: Int) => a & b)
-        case BORR(a, b, c) => mem.setRR(a, b, c, (a: Int) => (b: Int) => a | b)
-        case BORI(a, b, c) => mem.setRI(a, b, c, (a: Int) => (b: Int) => a | b)
+        case ADDR(a, b, c) => mem.setRR(a, b, c, _ + _)
+        case ADDI(a, b, c) => mem.setRI(a, b, c, _ + _)
+        case MULR(a, b, c) => mem.setRR(a, b, c, _ * _)
+        case MULI(a, b, c) => mem.setRI(a, b, c, _ * _)
+        case BANR(a, b, c) => mem.setRR(a, b, c, _ & _)
+        case BANI(a, b, c) => mem.setRI(a, b, c, _ & _)
+        case BORR(a, b, c) => mem.setRR(a, b, c, _ | _)
+        case BORI(a, b, c) => mem.setRI(a, b, c, _ | _)
         case SETR(a, c)    => mem.setRN(a, c)
         case SETI(a, c)    => mem.setIN(a, c)
-        case GTIR(a, b, c) => mem.setIR(a, b, c, (a: Int) => (b: Int) => if a  > b then 1 else 0)
-        case GTRI(a, b, c) => mem.setRI(a, b, c, (a: Int) => (b: Int) => if a  > b then 1 else 0)
-        case GTRR(a, b, c) => mem.setRR(a, b, c, (a: Int) => (b: Int) => if a  > b then 1 else 0)
-        case EQIR(a, b, c) => mem.setIR(a, b, c, (a: Int) => (b: Int) => if a == b then 1 else 0)
-        case EQRI(a, b, c) => mem.setRI(a, b, c, (a: Int) => (b: Int) => if a == b then 1 else 0)
-        case EQRR(a, b, c) => mem.setRR(a, b, c, (a: Int) => (b: Int) => if a == b then 1 else 0)
+        case GTIR(a, b, c) => mem.setIR(a, b, c, (a, b) => if a  > b then 1 else 0)
+        case GTRI(a, b, c) => mem.setRI(a, b, c, (a, b) => if a  > b then 1 else 0)
+        case GTRR(a, b, c) => mem.setRR(a, b, c, (a, b) => if a  > b then 1 else 0)
+        case EQIR(a, b, c) => mem.setIR(a, b, c, (a, b) => if a == b then 1 else 0)
+        case EQRI(a, b, c) => mem.setRI(a, b, c, (a, b) => if a == b then 1 else 0)
+        case EQRR(a, b, c) => mem.setRR(a, b, c, (a, b) => if a == b then 1 else 0)
 
   case class CPU(pragma: Int, program: Vector[Inst], pc: Int = 0, mem: Mem = Map.empty):
 
