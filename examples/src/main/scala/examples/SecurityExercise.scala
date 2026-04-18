@@ -15,8 +15,8 @@ object SecurityExercise:
   object Route:
     def fromString(s: String): Set[Route] =
       s match
-        case s"$from: $tos" =>
-          tos.split(" ").map(to => (from, to)).toSet
+        case s"$from: $tos" => tos.split(" ").map(to => (from, to)).toSet
+        case _                                       => Set.empty
 
   val routes: Vector[Route] =
     Source

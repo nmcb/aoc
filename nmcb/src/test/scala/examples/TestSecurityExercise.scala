@@ -1,6 +1,5 @@
 package examples
 
-import examples.SecurityExercise
 import org.scalatest.funsuite.AnyFunSuite
 
 class TestSecurityExercise extends AnyFunSuite:

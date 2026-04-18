@@ -1,1 +1,2 @@
 input/** filter=git-crypt diff=git-crypt
+2015/src/main/resources/** filter=git-crypt diff=git-crypt

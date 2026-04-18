@@ -5,11 +5,10 @@ import nmcb.pos.*
 import nmcb.predef.*
 
 import scala.collection.*
-import scala.collection.immutable.{Map, Set}
 
 object Day18 extends AoC:
 
-  type Area = Map[Pos,Char]
+  type Area = Map[Pos, Char]
 
   case class Landscape(area: Area, sizeX: Int, sizeY: Int):
 
