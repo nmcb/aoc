@@ -10,14 +10,13 @@ object Day19 extends AoC:
 
   val scanners: Vector[Scanner] =
     lines
-      .foldLeft(Vector.empty[Vector[Vec3]])((a,l) =>
+      .foldLeft(Vector.empty[Vector[Vec3]]): (a, l) =>
         if l.startsWith("--- scanner") then
           Vector.empty[Vec3] +: a
         else if l.isEmpty then
           a
         else
           (Vec3.parse(l) +: a.head) +: a.tail
-      )
       .reverse
       .zipWithIndex
       .map((report,index) => Scanner(index, report.toSet))
@@ -25,12 +24,12 @@ object Day19 extends AoC:
   def orientations(pos: Vec3): Vector[Vec3] =
     val Vec3(x, y, z) = pos
     Vector(
-         Vec3(+x,+y,+z), Vec3(-y,+x,+z), Vec3(-x,-y,+z), Vec3(+y,-x,+z)
-       , Vec3(-x,+y,-z), Vec3(+y,+x,-z), Vec3(+x,-y,-z), Vec3(-y,-x,-z)
-       , Vec3(-z,+y,+x), Vec3(-z,+x,-y), Vec3(-z,-y,-x), Vec3(-z,-x,+y)
-       , Vec3(+z,+y,-x), Vec3(+z,+x,+y), Vec3(+z,-y,+x), Vec3(+z,-x,-y)
-       , Vec3(+x,-z,+y), Vec3(-y,-z,+x), Vec3(-x,-z,-y), Vec3(+y,-z,-x)
-       , Vec3(+x,+z,-y), Vec3(-y,+z,-x), Vec3(-x,+z,+y), Vec3(+y,+z,+x)
+         Vec3(+x , +y, +z), Vec3(-y, +x, +z), Vec3(-x, -y, +z), Vec3(+y, -x, +z)
+       , Vec3(-x , +y, -z), Vec3(+y, +x, -z), Vec3(+x, -y, -z), Vec3(-y, -x, -z)
+       , Vec3(-z , +y, +x), Vec3(-z, +x, -y), Vec3(-z, -y, -x), Vec3(-z, -x, +y)
+       , Vec3(+z , +y, -x), Vec3(+z, +x, +y), Vec3(+z, -y, +x), Vec3(+z, -x, -y)
+       , Vec3(+x , -z, +y), Vec3(-y, -z, +x), Vec3(-x, -z, -y), Vec3(+y, -z, -x)
+       , Vec3(+x , +z, -y), Vec3(-y, +z, -x), Vec3(-x, +z, +y), Vec3(+y, +z, +x)
        )
 
   def find(beacons: Set[Vec3], scanner: Scanner): Option[(Set[Vec3], Vec3)] =
@@ -41,14 +40,15 @@ object Day19 extends AoC:
         remote     <- transposed
         position = remote - local
         if transposed.map(position + _).count(beacons) >= 10
-      yield (transposed.map(position + _), position)
+      yield
+        (transposed.map(position + _), position)
     
     result.nextOption()
   
-  def solve(scanners: Vector[Scanner]): (Set[Vec3], Set[Vec3]) =
+  def solve(scanners: Vector[Scanner]): (beacons: Set[Vec3], positions: Set[Vec3]) =
 
     @tailrec
-    def go(todo: Vector[Scanner], known: Set[Vec3], found: Set[Vec3], scanners: Set[Vec3]): (Set[Vec3], Set[Vec3]) =
+    def go(todo: Vector[Scanner], known: Set[Vec3], found: Set[Vec3], scanners: Set[Vec3]): (beacons: Set[Vec3], positions: Set[Vec3]) =
       val beacons = known ++ found
       if todo.isEmpty then
         (beacons, scanners)
@@ -57,10 +57,11 @@ object Day19 extends AoC:
           for
             scanner                 <- todo
             (transposed, positions) <- find(found, scanner)
-          yield (scanner, transposed, positions)
-        val matched   = result.map(_._1)
-        val oriented  = result.map(_._2)
-        val positions = result.map(_._3)
+          yield
+            (matched = scanner, oriented = transposed, positions = positions)
+        val matched   = result.map(_.matched)
+        val oriented  = result.map(_.oriented)
+        val positions = result.map(_.positions)
           
         val next = todo.filterNot(matched.contains)
         val pack = if oriented.nonEmpty then oriented.reduce(_ ++ _) else Set.empty
@@ -68,8 +69,8 @@ object Day19 extends AoC:
 
     go(scanners.tail, Set.empty, scanners.head.report, Set(Vec3.origin))
 
-  val (beacons: Set[Vec3], positions: Set[Vec3]) = solve(scanners)
+  lazy val (beacons: Set[Vec3], positions: Set[Vec3]) = solve(scanners)
 
 
   override lazy val answer1: Int = beacons.size
-  override lazy val answer2: Int = (for a <- positions; b <- positions yield Vec3.distance(b, a)).max
+  override lazy val answer2: Int = positions.flatMap(a => positions.map(b => Vec3.distance(b, a))).max
