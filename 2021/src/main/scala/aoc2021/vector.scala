@@ -1,77 +1,82 @@
 package aoc2021
 
-  case class Vec(x: Int, y: Int):
-    import Vec.*
+import scala.util.matching.Regex
 
-    def +(that: Vec): Vec =
-      add(this, that)
+case class Vec(x: Int, y: Int):
+  import Vec.*
 
-    def -(that: Vec): Vec =
-      substract(this, that)
+  def +(that: Vec): Vec =
+    add(this, that)
 
-    def within(min: Vec, max: Vec): Boolean =
-      min.x <= x && min.y <= y && x <= max.x && y <= max.y
+  def -(that: Vec): Vec =
+    subtract(this, that)
+
+  def within(min: Vec, max: Vec): Boolean =
+    min.x <= x && min.y <= y && x <= max.x && y <= max.y
 
 
-  object Vec:
+object Vec:
 
-    val VecLit =
-      """([-+]?\d+),([-+]?\d+),([-+]?\d+)""".r
+  val VecLit: Regex =
+    """([-+]?\d+),([-+]?\d+),([-+]?\d+)""".r
 
-    def apply(x: String, y: String): Vec =
-      Vec(x.toInt, y.toInt)
+  def apply(x: String, y: String): Vec =
+    Vec(x.toInt, y.toInt)
 
-    def apply(x: Char, y: Char): Vec =
-      Vec(x.toString, y.toString)
+  def apply(x: Char, y: Char): Vec =
+    Vec(x.toString, y.toString)
 
-    def parse(s: String): Vec =
-      s.runtimeChecked match
-        case VecLit(x, y) => Vec(x, y)
+  def parse(s: String): Vec =
+    s.runtimeChecked match
+      case VecLit(x, y) => Vec(x, y)
 
-    val origin: Vec =
-      Vec(0, 0)
+  val origin: Vec =
+    Vec(0, 0)
 
-    def add(a: Vec, b: Vec): Vec =
-      Vec(a.x + b.x, a.y + b.y)
+  def add(a: Vec, b: Vec): Vec =
+    Vec(a.x + b.x, a.y + b.y)
 
-    def substract(a: Vec, b: Vec): Vec =
-      Vec(b.x - a.x, b.y - a.y)
+  def subtract(a: Vec, b: Vec): Vec =
+    Vec(b.x - a.x, b.y - a.y)
 
-    def distance(a: Vec, b: Vec): Int =
-      (b.x - a.x).abs + (b.y - a.y).abs
+  def manhattanDistance(a: Vec, b: Vec): Int =
+    (b.x - a.x).abs + (b.y - a.y).abs
 
-  case class Vec3(x: Int, y: Int, z: Int):
-    import Vec3.*
+case class Vec3(x: Int, y: Int, z: Int):
+  import Vec3.*
 
-    def +(that: Vec3): Vec3 =
-      add(this, that)
+  def +(that: Vec3): Vec3 =
+    add(this, that)
 
-    def -(that: Vec3): Vec3 =
-      substract(this, that)
+  def -(that: Vec3): Vec3 =
+    subtract(this, that)
 
-  object Vec3:
+  def manhattanDistance(that: Vec3): Int =
+    Vec3.manhattanDistance(this, that)
 
-    val Vec3Lit =
-      """([-+]?\d+),([-+]?\d+),([-+]?\d+)""".r
+object Vec3:
 
-    def apply(x: String, y: String, z: String): Vec3 =
-      Vec3(x.toInt, y.toInt, z.toInt)
+  val Vec3Lit: Regex =
+    """([-+]?\d+),([-+]?\d+),([-+]?\d+)""".r
 
-    def apply(x: Char, y: Char, z: Char): Vec3 =
-      Vec3(x.toString, y.toString, z.toString)
+  def apply(x: String, y: String, z: String): Vec3 =
+    Vec3(x.toInt, y.toInt, z.toInt)
 
-    def parse(s: String): Vec3 =
-      s.runtimeChecked match
-        case Vec3Lit(x, y, z) => Vec3(x, y, z)
+  def apply(x: Char, y: Char, z: Char): Vec3 =
+    Vec3(x.toString, y.toString, z.toString)
 
-    val origin: Vec3 =
-      Vec3(0, 0, 0)
+  def parse(s: String): Vec3 =
+    s.runtimeChecked match
+      case Vec3Lit(x, y, z) => Vec3(x, y, z)
 
-    def add(a: Vec3, b: Vec3): Vec3 =
-      Vec3(a.x + b.x, a.y + b.y, a.z + b.z)
+  val origin: Vec3 =
+    Vec3(0, 0, 0)
 
-    def substract(a: Vec3, b: Vec3): Vec3 =
-      Vec3(b.x - a.x, b.y - a.y, b.z - a.z)
+  def add(a: Vec3, b: Vec3): Vec3 =
+    Vec3(a.x + b.x, a.y + b.y, a.z + b.z)
 
-    def distance(a: Vec3, b: Vec3): Int =
-      (b.x - a.x).abs + (b.y - a.y).abs + (b.z - a.z).abs
+  def subtract(a: Vec3, b: Vec3): Vec3 =
+    Vec3(b.x - a.x, b.y - a.y, b.z - a.z)
+
+  def manhattanDistance(a: Vec3, b: Vec3): Int =
+    (b.x - a.x).abs + (b.y - a.y).abs + (b.z - a.z).abs
