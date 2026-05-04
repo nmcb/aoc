@@ -1,13 +1,15 @@
 package aoc2021
 
-  case class Vec(x: Int, y: Int):
+import scala.util.matching.Regex
+
+case class Vec(x: Int, y: Int):
     import Vec.*
 
     def +(that: Vec): Vec =
       add(this, that)
 
     def -(that: Vec): Vec =
-      substract(this, that)
+      subtract(this, that)
 
     def within(min: Vec, max: Vec): Boolean =
       min.x <= x && min.y <= y && x <= max.x && y <= max.y
@@ -15,7 +17,7 @@ package aoc2021
 
   object Vec:
 
-    val VecLit =
+    val VecLit: Regex =
       """([-+]?\d+),([-+]?\d+),([-+]?\d+)""".r
 
     def apply(x: String, y: String): Vec =
@@ -34,10 +36,10 @@ package aoc2021
     def add(a: Vec, b: Vec): Vec =
       Vec(a.x + b.x, a.y + b.y)
 
-    def substract(a: Vec, b: Vec): Vec =
+    def subtract(a: Vec, b: Vec): Vec =
       Vec(b.x - a.x, b.y - a.y)
 
-    def distance(a: Vec, b: Vec): Int =
+    def manhattanDistance(a: Vec, b: Vec): Int =
       (b.x - a.x).abs + (b.y - a.y).abs
 
   case class Vec3(x: Int, y: Int, z: Int):
@@ -47,11 +49,14 @@ package aoc2021
       add(this, that)
 
     def -(that: Vec3): Vec3 =
-      substract(this, that)
+      subtract(this, that)
+      
+    def manhattanDistance(that: Vec3): Int =
+      Vec3.manhattanDistance(this, that)
 
   object Vec3:
 
-    val Vec3Lit =
+    val Vec3Lit: Regex =
       """([-+]?\d+),([-+]?\d+),([-+]?\d+)""".r
 
     def apply(x: String, y: String, z: String): Vec3 =
@@ -70,8 +75,8 @@ package aoc2021
     def add(a: Vec3, b: Vec3): Vec3 =
       Vec3(a.x + b.x, a.y + b.y, a.z + b.z)
 
-    def substract(a: Vec3, b: Vec3): Vec3 =
+    def subtract(a: Vec3, b: Vec3): Vec3 =
       Vec3(b.x - a.x, b.y - a.y, b.z - a.z)
 
-    def distance(a: Vec3, b: Vec3): Int =
+    def manhattanDistance(a: Vec3, b: Vec3): Int =
       (b.x - a.x).abs + (b.y - a.y).abs + (b.z - a.z).abs

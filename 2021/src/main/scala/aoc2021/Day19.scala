@@ -1,6 +1,7 @@
 package aoc2021
 
 import nmcb.*
+import predef.*
 
 import scala.annotation.tailrec
 
@@ -73,4 +74,4 @@ object Day19 extends AoC:
 
 
   override lazy val answer1: Int = beacons.size
-  override lazy val answer2: Int = positions.flatMap(a => positions.map(b => Vec3.distance(b, a))).max
+  override lazy val answer2: Int = positions.pairs().map(Vec3.manhattanDistance).max
