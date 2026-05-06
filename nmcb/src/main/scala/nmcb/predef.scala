@@ -32,21 +32,14 @@ object predef:
     def slidingPairs: Iterable[(A, A)] =
       if i.isEmpty then Nil else i.zip(i.tail)
 
-    def allPairs: Seq[(A, A)] =
-      i.tails.toSeq.tail.flatMap(i.zip)
-
-    def pairs[B](): Iterator[(A, A)] =
+    def pairs(): Iterator[(A, A)] =
       i.tails
-        .toVector
-        .tail
+        .drop(1)
         .flatMap(i.zip)
-        .iterator
 
-    def pairs[B](using Ordering[(A,A)]): Iterator[(A, A)] =
-      i.tails
+    def pairs(using Ordering[(A, A)]): Iterator[(A, A)] =
+      pairs()
         .toVector
-        .tail
-        .flatMap(i.zip)
         .sorted
         .iterator
 
