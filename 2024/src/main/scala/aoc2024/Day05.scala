@@ -33,11 +33,13 @@ object Day05 extends AoC:
     def sorted(using ordering: Ordering[Int]): Update =
       Update(order.sorted)
 
-  val rules: Vector[Rule] = chunks(0).collect:
-    case s"$b|$a" => Rule(b.toInt, a.toInt)
+  val rules: Vector[Rule] =
+    chunks(0).collect:
+      case s"$b|$a" => Rule(b.toInt, a.toInt)
 
-  val updates: Vector[Update] = chunks(1).collect: line =>
-    Update(line.split(',').map(_.toInt).toVector)
+  val updates: Vector[Update] =
+    chunks(1).collect: line =>
+      Update(line.split(',').map(_.toInt).toVector)
 
   given ruleBasedOrdering: Ordering[Int] =
     (x: Int, y: Int) =>
