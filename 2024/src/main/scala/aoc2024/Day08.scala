@@ -14,11 +14,11 @@ object Day08 extends AoC:
 
 
   extension (g: Grid[Char])
-    def pairs: Set[(Char, Set[(Pos, Pos)])] =
+    def pairs: Set[Set[(Pos, Pos)]] =
       g.elements
         .filter(_.element != '.')
         .groupMap(_.element)(_.pos)
-        .map((c, ps) => c -> ps.pairAll)
+        .map(_.right.pairAll)
         .toSet
 
     def createTwice(a: Pos, b: Pos): Set[Pos] =
@@ -34,5 +34,5 @@ object Day08 extends AoC:
 
   val grid: Grid[Char] = Grid.fromLines(lines)
 
-  override lazy val answer1: Long = grid.pairs.flatMap((c,ps) => ps.flatMap(grid.createTwice)).size
-  override lazy val answer2: Long = grid.pairs.flatMap((c,ps) => ps.flatMap(grid.createInline)).size
+  override lazy val answer1: Long = grid.pairs.flatMap(_.flatMap(grid.createTwice)).size
+  override lazy val answer2: Long = grid.pairs.flatMap(_.flatMap(grid.createInline)).size
