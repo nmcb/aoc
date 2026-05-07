@@ -21,7 +21,7 @@ object Day15 extends AoC:
     def coordinate: Int =
       100 * p.y + p.x
 
-  type Move = (Pos,Pos)
+  type Move = (Pos, Pos)
   
   extension (move: Move)
     def from: Pos = move._1
@@ -44,8 +44,8 @@ object Day15 extends AoC:
         def widen(c: Set[Pos]): Set[Pos] =
           val pl = c.minBy(_.x)
           val pr = c.maxBy(_.x)
-          val l = if (d == '^' | d == 'v') && grid(pl) == ']' then Set((x = pl.x - 1, y = pl.y)) else Set.empty
-          val r = if (d == '^' | d == 'v') && grid(pr) == '[' then Set((x = pr.x + 1, y = pr.y)) else Set.empty
+          val l = if (d == '^' || d == 'v') && grid(pl) == ']' then Set((x = pl.x - 1, y = pl.y)) else Set.empty
+          val r = if (d == '^' || d == 'v') && grid(pr) == '[' then Set((x = pr.x + 1, y = pr.y)) else Set.empty
           l ++ c ++ r
 
         def unblocked(ms: Set[Pos]): Boolean = ms.forall(isFree)
@@ -70,9 +70,9 @@ object Day15 extends AoC:
             case (g,(f,t)) => g.updated(t, grid(f))
 
         val updatedAndCleaned: Map[Pos,Char] =
-          val froms = updates.map(_.from)
-          val tos   = updates.map(_.to)
-          froms.diff(tos).foldLeft(updated)((g, p) => g.updated(p, '.'))
+          val from = updates.map(_.from)
+          val to   = updates.map(_.to)
+          from.diff(to).foldLeft(updated)((g, p) => g.updated(p, '.'))
 
         Grid(updatedAndCleaned)
 
@@ -83,19 +83,22 @@ object Day15 extends AoC:
 
       Grid(
         grid.flatMap:
-          case (p,'#') => map(p, '#', '#')
-          case (p,'.') => map(p, '.', '.')
-          case (p,'O') => map(p, '[', ']')
-          case (p,'@') => map(p, '@', '.')
-          case (p, c ) => sys.error(s"invalid element: p=$p, c=$c")
+          case (p, '#') => map(p, '#', '#')
+          case (p, '.') => map(p, '.', '.')
+          case (p, 'O') => map(p, '[', ']')
+          case (p, '@') => map(p, '@', '.')
+          case (p,  c ) => sys.error(s"invalid element: p=$p, c=$c")
       )
 
   val (grid: Grid, moves: List[Command]) =
     val Array(top, bottom) = input.split("\n\n").map(_.trim)
-    val positions = for {
-      (l, y) <- top.split("\n").zipWithIndex
-      (c, x) <- l.trim.zipWithIndex
-    } yield (x, y) -> c
+    val positions =
+      for
+        (l, y) <- chunks(0).zipWithIndex
+        (c, x) <- l.trim.zipWithIndex
+      yield
+        (x, y) -> c
+
     val moves = bottom.filterNot(_ == '\n').toList
     (Grid(positions.toMap), moves)
 
