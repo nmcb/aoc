@@ -1,6 +1,7 @@
 package aoc2024
 
 import nmcb.*
+import nmcb.predef.*
 
 object Day02 extends AoC:
 
@@ -8,9 +9,8 @@ object Day02 extends AoC:
 
     lazy val differences: Vector[Int] =
       levels
-        .sliding(2)
-        .collect:
-          case Vector(l, r) => r - l
+        .slidingPairs
+        .map((l, r) => l - r)
         .toVector
 
     lazy val isIncreasing: Boolean =
