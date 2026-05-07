@@ -21,12 +21,6 @@ object Day14 extends AoC:
     lazy val robotsByPos: Map[Pos,Vector[Robot]] =
       robots.groupMap(_.p)(identity)
 
-    def render(p: Pos): String =
-      robotsByPos.get(p).map(_.size.toString).getOrElse(".")
-
-    override def toString: String =
-      tiles.grouped(sizeX).map(_.map(render).mkString("")).mkString("\n")
-
     def tiles: IndexedSeq[Pos] =
       for
         y <- 0 until sizeY
