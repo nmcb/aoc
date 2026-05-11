@@ -28,18 +28,20 @@ object Day24 extends AoC:
   case class XOR(lhs: Wire, rhs: Wire, out: Wire) extends Gate:
     override def isXOR: Boolean = true
 
-  @tailrec
   def solve(gates: Vector[Gate], wires: Map[Wire, Boolean]): Map[Wire, Boolean] =
-    if gates.nonEmpty then
-      val o = gates.head
-      val r = gates.tail
-      val v = o match
-        case AND(l, r, _) => wires(l) && wires(r)
-        case OR (l, r, _) => wires(l) || wires(r)
-        case XOR(l, r, _) => wires(l) != wires(r)
-      solve(r, wires + (o.out -> v))
-    else
-      wires
+    @tailrec
+    def loop(gates: Vector[Gate], wires: Map[Wire, Boolean]): Map[Wire, Boolean] =
+      if gates.nonEmpty then
+        val o = gates.head
+        val r = gates.tail
+        val v = o match
+          case AND(l, r, _) => wires(l) && wires(r)
+          case OR (l, r, _) => wires(l) || wires(r)
+          case XOR(l, r, _) => wires(l) != wires(r)
+        loop(r, wires + (o.out -> v))
+      else
+        wires
+    loop(sort(gates, wires), wires)
 
   extension (results: Map[Wire, Boolean])
     def output: Long =
@@ -66,14 +68,14 @@ object Day24 extends AoC:
     @tailrec
     def loop(todo: Vector[Gate], result: Vector[Gate], resolved: Set[String]): Vector[Gate] =
       if todo.nonEmpty then
-        val g = todo.head
-        val r = todo.tail
-        if resolved.contains(g.out) then
-          loop(r, result, resolved)
-        else if resolved.contains(g.lhs) && resolved.contains(g.rhs) then
-          loop(r, result :+ g, resolved + g.out)
+        val gate = todo.head
+        val rest = todo.tail
+        if resolved.contains(gate.out) then
+          loop(rest, result, resolved)
+        else if resolved.contains(gate.lhs) && resolved.contains(gate.rhs) then
+          loop(rest, result :+ gate, resolved + gate.out)
         else
-          val dependencies = todo.filter(op => op.out == g.lhs || op.out == g.rhs)
+          val dependencies = todo.filter(op => op.out == gate.lhs || op.out == gate.rhs)
           loop(dependencies ++ todo, result, resolved)
       else
         result
@@ -100,25 +102,23 @@ object Day24 extends AoC:
   def debugXOR(gates: Vector[Gate]): Vector[Wire] =
     gates
       .filter: op =>
-        (op.lhs.startsWith("x") || op.rhs.startsWith("x")) && op.isXOR && op.lhs.asNumber != "00"
+        op.isXOR && op.lhs.asNumber != "00" && (op.lhs.startsWith("x") || op.rhs.startsWith("x"))
       .flatMap: op =>
         gates.find(g => (g.lhs == op.out || g.rhs == op.out) && g.isXOR) match
           case Some(xor) => if xor.out == s"z${op.lhs.asNumber}" then None else Some(xor.out)
           case None      => Some(op.out)
 
-  val (initial, gates) =
-    val initial =
-      lines.collect:
+  val initial: Map[String, Boolean]=
+    lines
+      .collect:
         case s"$w: $v" => w -> (v == "1")
       .toMap
 
-    val operations =
-      lines.collect[Gate]:
-        case s"$t1 XOR $t2 -> $out" => XOR(t1, t2, out)
-        case s"$t1 OR $t2 -> $out"  => OR(t1, t2, out)
-        case s"$t1 AND $t2 -> $out" => AND(t1, t2, out)
+  val gates: Vector[Gate] =
+    lines.collect[Gate]:
+      case s"$t1 XOR $t2 -> $out" => XOR(t1, t2, out)
+      case s"$t1 OR $t2 -> $out"  => OR(t1, t2, out)
+      case s"$t1 AND $t2 -> $out" => AND(t1, t2, out)
 
-    (initial, operations)
-
-  override lazy val answer1: Long = solve(sort(gates, initial), initial).output
+  override lazy val answer1: Long = solve(gates, initial).output
   override lazy val answer2: String = (debugOUT(gates) ++ debugAND(gates) ++ debugXOR(gates)).toVector.sorted.mkString(",")
