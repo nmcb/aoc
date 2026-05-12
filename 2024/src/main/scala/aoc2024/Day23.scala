@@ -6,19 +6,19 @@ import nmcb.predef.*
 /** @see Credits - https://github.com/sim642 */
 object Day23 extends AoC:
 
-  type N = String
+  type Node = String
 
-  lazy val edges: Set[(N, N)] =
+  lazy val edges: Set[(Node, Node)] =
 
     val directed = lines.toSet.map:
-      case s"$a-$b" => (a,b)
+      case s"$a-$b" => (a, b)
 
     directed ++ directed.map(_.swap)
 
-  lazy val neighbours: Map[N, Set[N]] =
+  lazy val neighbours: Map[Node, Set[Node]] =
     edges.groupMap(_.left)(_.right)
 
-  lazy val solve1: Set[Set[N]] =
+  lazy val solve1: Set[Set[Node]] =
     for
       (a, b) <- edges
       c      <- neighbours(a) intersect neighbours(b)
