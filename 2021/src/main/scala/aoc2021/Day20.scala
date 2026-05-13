@@ -24,7 +24,7 @@ object Day20 extends AoC:
     val framed   = Grid.fromMatrix(frame +: pixels.matrix.map(canvas +: _ :+ canvas) :+ frame)
     val enhanced = framed.mapElement: (pos, cell) =>
       val area = offsets.map(_ + pos)
-      val bin = area.map(cell => if framed.within(cell) then framed.peek(cell) else canvas)
+      val bin  = area.map(cell => if framed.within(cell) then framed.peek(cell) else canvas)
       algorithm(int(bin.toVector))
 
     val Int9x0 = 0
