@@ -51,6 +51,9 @@ case class Grid[+A](matrix: Vector[Vector[A]]):
 
   inline def filterNot[B >: A](f: ((Pos, B)) => Boolean): Set[(Pos, B)] =
     elements.filterNot(f)
+    
+  inline def count(f: A => Boolean): Int =
+    matrix.map(_.count(f)).sum
 
   inline def map[B](f: A => B): Grid[B] =
     Grid(matrix.map(_.map(f)))
