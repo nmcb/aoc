@@ -19,39 +19,30 @@ object Day21 extends AoC:
 
     case class Player(name: String, start: Int, rolled: Seq[Int] = Seq.empty, score: Int = 0)
 
-    case class Game(player1: Player, player2: Player, pawn1: Int, pawn2: Int, dice: Dice, goal: Int)
+    case class Game(player1: Player, player2: Player, pawn1: Int, pawn2: Int, dice: Dice, goal: Int):
 
-    @tailrec
-    def solve(game: Game): Int =
+      @tailrec
+      final def solve: Int =
 
-      def won(player: Player): Boolean =
-        player.score >= game.goal
+        def won(player: Player): Boolean =
+          player.score >= goal
 
-      if won(game.player2) then
-        game.dice.rolled * game.player1.score
-      else
-        val throw1 = game.dice.roll
-        val throw2 = throw1.roll
-        val throw3 = throw2.roll
+        if won(player2) then
+          dice.rolled * player1.score
+        else
+          val throw1 = dice.roll
+          val throw2 = throw1.roll
+          val throw3 = throw2.roll
 
-        val position = 1 + ((game.pawn1 - 1 + throw1.face + throw2.face + throw3.face) % 10)
-        val played   = game.player1.copy(score = game.player1.score + position)
-        solve(
-          game.copy(
-            player1 = game.player2,
+          val position = 1 + ((pawn1 - 1 + throw1.face + throw2.face + throw3.face) % 10)
+          val played   = player1.copy(score = player1.score + position)
+          copy(
+            player1 = player2,
             player2 = played,
-            dice = throw3,
-            pawn1 = game.pawn2,
-            pawn2 = position
-          )
-        )
-
-    val player1 = Player(name = "#1", start = 7)
-    val player2 = Player(name = "#2", start = 9)
-    val game1 = Game(player1, player2, player1.start, player2.start, Dice(1, 100), 1000)
-
-    lazy val answer: Int = solve(game1)
-
+            dice    = throw3,
+            pawn1   = pawn2,
+            pawn2   = position
+          ).solve
 
   object Part2:
 
@@ -85,7 +76,7 @@ object Day21 extends AoC:
         player1.score >= n || player2.score >= n
 
     @tailrec
-    def countDiracWins(games: Vector[(Game, Long)], scores: (Long, Long) = (0L ,0L)): (Long, Long) =
+    def countDiracWins(games: Vector[(Game, Long)], scores: (Long, Long) = (0L, 0L)): (Long, Long) =
       if games.isEmpty then
         scores
       else
@@ -99,12 +90,14 @@ object Day21 extends AoC:
           val copies = rollDiracDice.map((roll, freq) => game.next(roll) -> (frequency * freq))
           countDiracWins(copies :++ games.tail, scores)
 
-    val player1 = Player(pos = 7)
-    val player2 = Player(pos = 9)
-    val game = Game(player1, player2)
-    lazy val (score1, score2) = countDiracWins(Vector(game -> 1L))
-    lazy val answer: Long = score1 max score2
+  val player11 = Part1.Player(name = "#1", start = 7)
+  val player12 = Part1.Player(name = "#2", start = 9)
+  val game1 = Part1.Game(player11, player12, player11.start, player12.start, Part1.Dice(1, 100), 1000)
 
+  val player21 = Part2.Player(pos = 7)
+  val player22 = Part2.Player(pos = 9)
+  val game2 = Part2.Game(player21, player22)
+  lazy val (score21, score22) = Part2.countDiracWins(Vector(game2 -> 1L))
 
-  override lazy val answer1: Long = Part1.answer
-  override lazy val answer2: Long = Part2.answer
+  override lazy val answer1: Long = game1.solve
+  override lazy val answer2: Long = score21 max score22
