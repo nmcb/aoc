@@ -13,15 +13,14 @@ object Day22 extends AoC:
     """(on|off) x=([-+]?\d+)..([-+]?\d+),y=([-+]?\d+)..([-+]?\d+),z=([-+]?\d+)..([-+]?\d+)""".r
 
   val cuboidSteps: Vector[CuboidStep] =
-    lines
-      .map:
-        case StepLit(set, x0, x1, y0, y1, z0, z1) =>
-          import math.*
-          val xr = min(x0.toInt, x1.toInt) to max(x0.toInt, x1.toInt)
-          val yr = min(y0.toInt, y1.toInt) to max(y0.toInt, y1.toInt)
-          val zr = min(z0.toInt, z1.toInt) to max(z0.toInt, z1.toInt)
-          val on = set == "on" 
-          CuboidStep(on, xr, yr, zr)
+    lines.collect:
+      case StepLit(set, x0, x1, y0, y1, z0, z1) =>
+        import math.*
+        val xr = min(x0.toInt, x1.toInt) to max(x0.toInt, x1.toInt)
+        val yr = min(y0.toInt, y1.toInt) to max(y0.toInt, y1.toInt)
+        val zr = min(z0.toInt, z1.toInt) to max(z0.toInt, z1.toInt)
+        val on = set == "on"
+        CuboidStep(on, xr, yr, zr)
 
   case class Position(x: Int, y: Int, z: Int) derives CanEqual:
 
