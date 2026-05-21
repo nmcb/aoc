@@ -5,15 +5,10 @@ import nmcb.*
 /** @see Credits - https://github.com/maneatingape */
 object Day23 extends AoC:
 
-  val spaceCost = Map('A' -> 1, 'B' -> 10, 'C' -> 100, 'D' -> 1000)
-  val roomIndex = Map('A' -> 2, 'B' -> 4, 'C' -> 6, 'D' -> 8)
+  val spaceCost: Map[Char, Int] = Map('A' -> 1, 'B' -> 10, 'C' -> 100, 'D' -> 1000)
+  val roomIndex: Map[Char, Int] = Map('A' -> 2, 'B' ->  4, 'C' ->   6, 'D' ->    8)
 
-  case class Estate(
-    roomMax: Int,
-    cost: Int,
-    hallway: Vector[Char],
-    rooms: Map[Char, Vector[Char]]
-  ):
+  case class Estate(roomMax: Int, cost: Int, hallway: Vector[Char], rooms: Map[Char, Vector[Char]]):
 
     def finished: Boolean =
       rooms.forall((kind, room) => room.size == roomMax && room.forall(_ == kind))
@@ -67,13 +62,13 @@ object Day23 extends AoC:
   def hallwayToRoom(current: Estate)(amphipod: Char, start: Int): Option[Estate] =
 
     val end   = roomIndex(amphipod)
-    val range = if start < end then (start + 1) to end else end to (start - 1)
+    val range = if start < end then (start + 1) to end else end until start
 
     if current.rooms(amphipod).forall(_ == amphipod) && range.forall(n => current.hallway(n) == '.') then
-      val nhallway = current.hallway.updated(start, '.')
-      val nrooms   = current.rooms.updated(amphipod, current.rooms(amphipod).prepended(amphipod))
-      val ncost    = current.cost + (range.size + current.roomMax - current.rooms(amphipod).size) * spaceCost(amphipod)
-      Some(Estate(current.roomMax, ncost, nhallway, nrooms))
+      val hallway = current.hallway.updated(start, '.')
+      val rooms   = current.rooms.updated(amphipod, current.rooms(amphipod).prepended(amphipod))
+      val cost    = current.cost + (range.size + current.roomMax - current.rooms(amphipod).size) * spaceCost(amphipod)
+      Some(Estate(current.roomMax, cost, hallway, rooms))
     else None
 
   def roomToRoom(current: Estate)(key: Char, room: Vector[Char]): Vector[Estate] =
@@ -84,11 +79,11 @@ object Day23 extends AoC:
     val range = if start < end then start to end else end to start
 
     if current.rooms(room.head).forall(_ == room.head) && range.forall(n => current.hallway(n) == '.') then
-      val nrooms = current.rooms
+      val rooms = current.rooms
         .updated(key, room.tail)
         .updated(room.head, current.rooms(room.head).prepended(room.head))
-      val ncost = current.cost + (range.size + current.roomMax - current.rooms(key).size + current.roomMax - current.rooms(room.head).size) * spaceCost(room.head)
-      Vector(Estate(current.roomMax, ncost, current.hallway, nrooms))
+      val cost = current.cost + (range.size + current.roomMax - current.rooms(key).size + current.roomMax - current.rooms(room.head).size) * spaceCost(room.head)
+      Vector(Estate(current.roomMax, cost, current.hallway, rooms))
     else Vector.empty
 
   def roomToHallway(current: Estate)(key: Char, room: Vector[Char]): Vector[Estate] =
@@ -101,12 +96,12 @@ object Day23 extends AoC:
 
     (left.reverse ++ right)
       .map: pos =>
-        val nhallway = current.hallway.updated(pos, room.head)
-        val nrooms   = current.rooms.updated(key, room.tail)
-        val ncost    = current.cost + ((pos - index).abs + 1 + current.roomMax - room.size) * spaceCost(room.head)
-        Estate(current.roomMax, ncost, nhallway, nrooms)
+        val hallway = current.hallway.updated(pos, room.head)
+        val rooms   = current.rooms.updated(key, room.tail)
+        val cost    = current.cost + ((pos - index).abs + 1 + current.roomMax - room.size) * spaceCost(room.head)
+        Estate(current.roomMax, cost, hallway, rooms)
 
-  def shuffle(burrow: Estate): Option[Int] =
+  def shuffle(burrow: Estate): Int =
 
     def move(current: Estate, energy: Option[Int]): Option[Int] =
       if current.finished then
@@ -116,8 +111,8 @@ object Day23 extends AoC:
       else
         paths(current).flatMap(move(_,energy)).minOption
 
-    move(burrow, None)
+    move(burrow, None).getOrElse(sys.error(s"not found"))
 
 
-  override lazy val answer1: Int = shuffle(parsePart1(lines)).get
-  override lazy val answer2: Int = shuffle(parsePart2(lines)).get
+  override lazy val answer1: Int = shuffle(parsePart1(lines))
+  override lazy val answer2: Int = shuffle(parsePart2(lines))
