@@ -7,7 +7,7 @@ import scala.annotation.tailrec
 
 object Day25 extends AoC:
 
-  case class Floor(tiles: Map[Pos,Char], sizeX: Int, sizeY: Int) derives CanEqual:
+  case class Floor(tiles: Map[Pos, Char], sizeX: Int, sizeY: Int) derives CanEqual:
 
     def eastOf(p: Pos): Pos =
       if p.x < sizeX - 1 then p step E else (x = 0, y = p.y)
@@ -16,14 +16,14 @@ object Day25 extends AoC:
       if p.y < sizeY - 1 then p step S else (x = p.x, y = 0)
 
     def turn: Floor =
-      val (eastMove, eastRemoved) = tiles.partition((_,c) => c == '>')
+      val (eastMove, eastRemoved) = tiles.partition((_, c) => c == '>')
       val eastMoved   = eastMove.map((p,c)    => if tiles(eastOf(p)) == '.' then p -> '.' else p -> c)
       val eastUpdated = eastMove.filter((p,c) => tiles(eastOf(p)) == '.').map((p,c) => eastOf(p) -> c)
       val eastTiles   = eastRemoved ++ eastUpdated ++ eastMoved
 
       val (southMove, southRemoved) = eastTiles.partition((_,c) => c == 'v')
-      val southMoved   = southMove.map((p,c)    => if eastTiles(southOf(p)) == '.' then p -> '.' else p -> c)
-      val southUpdated = southMove.filter((p,c) => eastTiles(southOf(p)) == '.').map((p,c) => southOf(p) -> c)
+      val southMoved   = southMove.map((p, c)    => if eastTiles(southOf(p)) == '.' then p -> '.' else p -> c)
+      val southUpdated = southMove.filter((p, c) => eastTiles(southOf(p)) == '.').map((p, c) => southOf(p) -> c)
       val southTiles   = southRemoved ++ southUpdated ++ southMoved
       copy(tiles = southTiles)
 
