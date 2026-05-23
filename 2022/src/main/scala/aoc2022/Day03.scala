@@ -2,8 +2,6 @@ package aoc2022
 
 import nmcb.*
 
-import scala.io.*
-
 object Day03 extends AoC:
 
   def priority(c: Char): Int =
