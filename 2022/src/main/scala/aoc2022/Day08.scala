@@ -10,28 +10,28 @@ object Day08 extends AoC:
     def isBorder(p: Pos): Boolean =
       p.x == 0 || p.x == grid.maxPos.x | p.y == 0 || p.y == grid.maxPos.y
 
-    def visible(p: Pos): Boolean =
-      def pathL(p: Pos): Vector[Int] = (0 to p.x).map(x             => grid.peek((x, p.y))).toVector
+    def hasVisibleTrees(p: Pos): Boolean =
+      def pathL(p: Pos): Vector[Int] = (0 to p.x).map(            x => grid.peek((x, p.y))).toVector
       def pathR(p: Pos): Vector[Int] = (p.x to grid.maxPos.x).map(x => grid.peek((x, p.y))).toVector.reverse
-      def pathT(p: Pos): Vector[Int] = (0 to p.y).map(y             => grid.peek((p.x, y))).toVector
+      def pathT(p: Pos): Vector[Int] = (0 to p.y).map(            y => grid.peek((p.x, y))).toVector
       def pathB(p: Pos): Vector[Int] = (p.y to grid.maxPos.y).map(y => grid.peek((p.x, y))).toVector.reverse
-      def visible(todo: Vector[Int]): Boolean = todo.init.max < todo.last
-      val vl = visible(pathL(p))
-      val vr = visible(pathR(p))
-      val vt = visible(pathT(p))
-      val vb = visible(pathB(p))
+      def patHasVisibleTrees(todo: Vector[Int]): Boolean = todo.init.max < todo.last
+      val vl = patHasVisibleTrees(pathL(p))
+      val vr = patHasVisibleTrees(pathR(p))
+      val vt = patHasVisibleTrees(pathT(p))
+      val vb = patHasVisibleTrees(pathB(p))
       vl || vr || vt || vb
 
     def maxVisibleTrees: Int =
       grid.positions.foldLeft(0): (c, p) =>
-        if      isBorder(p) then c + 1
-        else if visible(p)  then c + 1
-        else                     c
+        if      isBorder(p)         then c + 1
+        else if hasVisibleTrees(p)  then c + 1
+        else                             c
 
     def scenicScore(p: Pos): Int =
-      def pathL(p: Pos): Vector[Int] = (0 to p.x).map(x             => grid.peek((x, p.y))).toVector.reverse
+      def pathL(p: Pos): Vector[Int] = (0 to p.x).map(            x => grid.peek((x, p.y))).toVector.reverse
       def pathR(p: Pos): Vector[Int] = (p.x to grid.maxPos.x).map(x => grid.peek((x, p.y))).toVector
-      def pathT(p: Pos): Vector[Int] = (0 to p.y).map(y             => grid.peek((p.x, y))).toVector.reverse
+      def pathT(p: Pos): Vector[Int] = (0 to p.y).map(            y => grid.peek((p.x, y))).toVector.reverse
       def pathB(p: Pos): Vector[Int] = (p.y to grid.maxPos.y).map(y => grid.peek((p.x, y))).toVector
       def score(todo: Vector[Int]): Int =
         val index  = todo.tail.indexWhere(_ >= todo.head)
