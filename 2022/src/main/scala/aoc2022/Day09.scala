@@ -14,7 +14,7 @@ object Day09 extends AoC:
         case W => (x = pos.x - 1, y = pos.y)
         case E => (x = pos.x + 1, y = pos.y)
 
-    def alignment(p: Pos): Vector[Dir] =
+    def directionOf(p: Pos): Vector[Dir] =
       val hor = pos.x.compare(p.x) match
         case -1 if p.x - pos.x >= 2 => // x < p.x
           pos.y.compare(p.y) match
@@ -47,8 +47,8 @@ object Day09 extends AoC:
 
       Vector(hor, ver).flatten.distinct
 
-    def follow(h: Pos): Pos =
-      alignment(h).foldLeft(pos)(_ move _)
+    infix def follow(h: Pos): Pos =
+      directionOf(h).foldLeft(pos)(_ move _)
 
   case class Command(direction: Dir, steps: Int)
 
@@ -63,8 +63,8 @@ object Day09 extends AoC:
     private def step(dir: Dir, strep: Vector[Pos]): Vector[Pos] =
       strep
         .tail
-        .foldLeft(Vector(strep.head.move(dir))): (result, t) =>
-          result :+ t.follow(result.last)
+        .foldLeft(Vector(strep.head move dir)): (result, tail) =>
+          result :+ (tail follow result.last)
 
     infix def move(cmd: Command): Vector[Bacterium] =
       Vector
