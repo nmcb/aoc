@@ -26,9 +26,9 @@ object Day10 extends AoC:
 
     def nextCycle: CPU =
       instructions.runtimeChecked match
-        case Nop       +: rest => CPU(            rest, cycle + 1, x    )
-        case Add(v, 2) +: rest => CPU(Add(v,1) +: rest, cycle + 1, x    )
-        case Add(v, 1) +: rest => CPU(            rest, cycle + 1, x + v)
+        case Nop       +: rest => CPU(             rest, cycle + 1, x    )
+        case Add(v, 2) +: rest => CPU(Add(v, 1) +: rest, cycle + 1, x    )
+        case Add(v, 1) +: rest => CPU(             rest, cycle + 1, x + v)
 
     val signalStrength: Int =
       x * (cycle + 1)
