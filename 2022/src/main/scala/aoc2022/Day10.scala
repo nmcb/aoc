@@ -21,9 +21,6 @@ object Day10 extends AoC:
 
   case class CPU(instructions: Vector[Inst], cycle: Int = 0, x: Int = 1):
 
-    val sync: Vector[Int] =
-      Vector(20, 60, 100, 140, 180, 220).map(_ - 1)
-
     def nextCycle: CPU =
       instructions.runtimeChecked match
         case Nop       +: rest => CPU(             rest, cycle + 1, x    )
@@ -39,15 +36,27 @@ object Day10 extends AoC:
     val draw: Char =
       if sprite.contains(cycle % 40) then '#' else '.'
 
+  object CPU:
+
+    val sync: Vector[Int] =
+      Vector(20, 60, 100, 140, 180, 220).map(_ - 1)
+
+    val maxSync: Int =
+      sync.max
+
+
   def solve1(cpu: CPU): Int =
+
+    import CPU.*
+
     @tailrec
-    def loop(current: CPU, acc: Int = 0): Int =
-      if current.cycle > current.sync.max then
-        acc
-      else if current.sync.contains(current.cycle) then
-        loop(current.nextCycle, acc + current.signalStrength)
+    def loop(current: CPU, result: Int = 0): Int =
+      if current.cycle > maxSync then
+        result
+      else if sync.contains(current.cycle) then
+        loop(current.nextCycle, result + current.signalStrength)
       else
-        loop(current.nextCycle, acc)
+        loop(current.nextCycle, result)
     loop(cpu)
 
   def solve2(cpu: CPU): String =
