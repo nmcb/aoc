@@ -39,13 +39,12 @@ object Day12 extends AoC:
         yield
           Edge(from, to, weight)
 
-  def solve(from: Pos, to: Pos, graph: Graph[Pos]): Option[Int] =
-    val path = Dijkstra.run(from, graph).pathTo(to)
-    Option.when(path.nonEmpty)(path.length)
+  def solve(from: Pos, to: Pos, graph: Graph[Pos]): Int =
+    Dijkstra.run(from, graph).pathTo(to).length
 
 
   val graph: Graph[Pos] = grid.toGraph
   val starts: Set[Pos]  = grid.filter(p => p.right == 'a' || p.right == 'S').map(_.left)
 
-  override lazy val answer1: Int = solve(from, to, graph).getOrElse(sys.error(s"no path from $from to $to"))
-  override lazy val answer2: Int = starts.flatMap(from => solve(from, to, graph)).min
+  override lazy val answer1: Int = solve(from, to, graph)
+  override lazy val answer2: Int = starts.map(from => solve(from, to, graph)).min
