@@ -25,24 +25,24 @@ object Day19 extends AoC:
   def orientations(pos: Vec3): Vector[Vec3] =
     val Vec3(x, y, z) = pos
     Vector(
-         Vec3(+x , +y, +z), Vec3(-y, +x, +z), Vec3(-x, -y, +z), Vec3(+y, -x, +z)
-       , Vec3(-x , +y, -z), Vec3(+y, +x, -z), Vec3(+x, -y, -z), Vec3(-y, -x, -z)
-       , Vec3(-z , +y, +x), Vec3(-z, +x, -y), Vec3(-z, -y, -x), Vec3(-z, -x, +y)
-       , Vec3(+z , +y, -x), Vec3(+z, +x, +y), Vec3(+z, -y, +x), Vec3(+z, -x, -y)
-       , Vec3(+x , -z, +y), Vec3(-y, -z, +x), Vec3(-x, -z, -y), Vec3(+y, -z, -x)
-       , Vec3(+x , +z, -y), Vec3(-y, +z, -x), Vec3(-x, +z, +y), Vec3(+y, +z, +x)
-       )
+       Vec3(+x , +y, +z), Vec3(-y, +x, +z), Vec3(-x, -y, +z), Vec3(+y, -x, +z),
+       Vec3(-x , +y, -z), Vec3(+y, +x, -z), Vec3(+x, -y, -z), Vec3(-y, -x, -z),
+       Vec3(-z , +y, +x), Vec3(-z, +x, -y), Vec3(-z, -y, -x), Vec3(-z, -x, +y),
+       Vec3(+z , +y, -x), Vec3(+z, +x, +y), Vec3(+z, -y, +x), Vec3(+z, -x, -y),
+       Vec3(+x , -z, +y), Vec3(-y, -z, +x), Vec3(-x, -z, -y), Vec3(+y, -z, -x),
+       Vec3(+x , +z, -y), Vec3(-y, +z, -x), Vec3(-x, +z, +y), Vec3(+y, +z, +x),
+     )
 
-  def find(beacons: Set[Vec3], scanner: Scanner): Option[(Set[Vec3], Vec3)] =
+  def find(beacons: Set[Vec3], scanner: Scanner): Option[(transposed: Set[Vec3], position: Vec3)] =
     val result =
       for
         transposed <- scanner.report.map(orientations).transpose.map(_.toSet).iterator
         local      <- beacons
         remote     <- transposed
-        position = remote - local
-        if transposed.map(position + _).count(beacons) >= 10
+        position    = remote - local
+        if transposed.map(_ + position).count(beacons) >= 10
       yield
-        (transposed.map(position + _), position)
+        (transposed = transposed.map(_ + position), position = position)
     
     result.nextOption()
   
@@ -65,13 +65,13 @@ object Day19 extends AoC:
         val positions = result.map(_.positions)
           
         val next = todo.filterNot(matched.contains)
-        val pack = if oriented.nonEmpty then oriented.reduce(_ ++ _) else Set.empty
+        val pack = oriented.reduce(_ ++ _)
         go(next, beacons, pack, scanners ++ positions)
 
     go(scanners.tail, Set.empty, scanners.head.report, Set(Vec3.origin))
 
+  import Vec3.manhattanDistance
+
   lazy val (beacons: Set[Vec3], positions: Set[Vec3]) = solve(scanners)
-
-
   override lazy val answer1: Int = beacons.size
-  override lazy val answer2: Int = positions.pairs().map(Vec3.manhattanDistance).max
+  override lazy val answer2: Int = positions.pairs().map(manhattanDistance).max
