@@ -32,10 +32,9 @@ object Day07 extends AoC:
         loop(next, time + 1, working, done :++ processed)
 
     val dependencies: SortedMap[A, Set[A]] =
-      edges.
-        foldLeft(SortedMap[A, Set[A]]()): (ds, e) =>
-          val (a, b) = e
-          ds + (a -> ds.getOrElse(a, Set())) + (b -> (ds.getOrElse(b, Set()) + a))
+      edges.foldLeft(SortedMap[A, Set[A]]()): (ds, e) =>
+        val (a, b) = e
+        ds + (a -> ds.getOrElse(a, Set())) + (b -> (ds.getOrElse(b, Set()) + a))
 
     loop(dependencies)
 
