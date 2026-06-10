@@ -10,7 +10,7 @@ object Day11 extends AoC:
   type Cell = Pos
 
   extension (cell: Cell)
-    
+
     def rackId: Int = cell.x + 10
 
     def powerLevel: Int =
@@ -40,26 +40,26 @@ object Day11 extends AoC:
     for y <- 1 to 300 ; x <- 1 to 300 yield (x, y)
 
   /** power level value table, i.e. the i(x, y) value table for named cells */
-  val grid: Map[Cell,Int] =
+  val grid: Map[Cell, Int] =
     cells.map(c => c -> c.powerLevel).toMap
 
   /** summed power level table, i.e. the summed area table I(x, y) for named grid */
-  val table: Map[Cell,Int] =
+  val table: Map[Cell, Int] =
     cells.foldLeft(immutable.Map.empty[Cell,Int].withDefaultValue(0)): (result, cell) =>
       result + (cell -> (grid(cell) + result(cell + (-1, 0)) + result(cell + (0, -1)) - result(cell + (-1, -1))))
   
   /** the area sizes, cells and total power levels for named summed power level table and given area size */
-  def area(size: Int): Iterator[(Int,Cell,Int)] =
+  def area(size: Int): Iterator[(size: Int, cell: Cell, level: Int)] =
     for
       y <- (size to 300).iterator
       x <- (size to 300).iterator
     yield
       val cell  = (x, y)
       val total = table(cell) + table(cell + (-size,-size)) - table(cell + (-size,0)) - table(cell + (0,-size))
-      (size, cell, total)
+      (size = size, cell = cell, level = total)
 
-  extension (result: (Int,Cell,Int))
-    def total: Int = result._3
+  extension (result: (size: Int, cell: Cell, level: Int))
+    def total: Int = result.level
 
   def solve1(): String =
     val (size, cell, total) = area(3).maxBy(_.total)
