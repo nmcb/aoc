@@ -10,6 +10,7 @@ object Day11 extends AoC:
   type Cell = Pos
 
   extension (cell: Cell)
+    
     def rackId: Int = cell.x + 10
 
     def powerLevel: Int =
