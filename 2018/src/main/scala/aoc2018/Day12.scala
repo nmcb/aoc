@@ -12,20 +12,16 @@ object Day12 extends AoC:
   type Rules    = Set[Pattern]
   type Plants   = Set[PotIndex]
 
-  val (rules: Rules, plants: Plants) =
+  /** note that we only collect pot indices that contain a plant */
+  val plants: Plants = lines.toSet
+    .collect:
+      case s"initial state: $pots" => pots.zipWithIndex.filter(_.element == '#').map(_.index).toSet
+    .flatten
 
-    /** note that we only collect pot indices that contain a plant */
-    val plants = lines.toSet
-      .collect:
-        case s"initial state: $pots" => pots.zipWithIndex.filter(_.element == '#').map(_.index).toSet
-      .flatten
-
-    /** note that we only collect rules that yield a plant */
-    val rules = lines.toSet
-      .collect:
-        case s"$pattern => $output" if output == "#" => pattern
-
-    (rules, plants)
+  /** note that we only collect rules that yield a plant */
+  val rules: Rules = lines.toSet
+    .collect:
+      case s"$pattern => $output" if output == "#" => pattern
 
   extension (plants: Set[Int])
 
@@ -41,6 +37,7 @@ object Day12 extends AoC:
     def next(rules: Rules): Set[Int] =
       pots.flatMap(pot => Option.when(rules.contains(pattern(pot)))(pot)).toSet
 
+  
   def solve(plants: Plants, rules: Rules, generations: Long): Long =
 
     /** utilizes the observation that the problem converses linearly from generation 102 and on */

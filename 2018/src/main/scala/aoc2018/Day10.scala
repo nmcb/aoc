@@ -72,17 +72,14 @@ object Day10 extends AoC:
 
   val points: Vector[Point] = lines.map(Point.fromString)
 
-  extension (points: Vector[Point])
-    def asString: String =
-      val positions     = points.map(_.position)
-      val Box(min, max) = bounding(points.map(_.position))
-      val positionsSet  = positions.toSet
-  
-      (min.y to max.y).foldLeft(StringBuffer()): (sb,y) =>
-          (min.x to max.x).foldLeft(sb): (sb,x) =>
-            if positionsSet.contains((x, y)) then sb.append('#') else sb.append('.')
-        .append('\n')
-        .toString
+  extension (points: Vector[Point]) def asString: String =
+    val positions     = points.map(_.position)
+    val Box(min, max) = Box.bounding(points.map(_.position))
+    val positionsSet  = positions.toSet
+
+    (min.y to max.y).foldLeft(StringBuffer())((sb,y) => (min.x to max.x).foldLeft(sb)((sb,x) =>
+      if positionsSet.contains((x, y)) then sb.append('#') else sb.append('.')
+    ).append('\n')).toString
 
   val (sky: Vector[Point], fastest: Int) =
 
