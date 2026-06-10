@@ -1,5 +1,6 @@
 package aoc2018
 
+import aoc2018.Day10.Box.bounding
 import nmcb.*
 import nmcb.pos.*
 
@@ -67,20 +68,23 @@ object Day10 extends AoC:
 
 
   def boundingArea(points: Vector[Point]): Int => Long =
-    t => Box.bounding(points.map(_.step(t).position)).area
+    t => bounding(points.map(_.step(t).position)).area
 
   val points: Vector[Point] = lines.map(Point.fromString)
 
-  extension (points: Vector[Point]) def asString: String =
-    val positions     = points.map(_.position)
-    val Box(min, max) = Box.bounding(points.map(_.position))
-    val positionsSet  = positions.toSet
+  extension (points: Vector[Point])
+    def asString: String =
+      val positions     = points.map(_.position)
+      val Box(min, max) = bounding(points.map(_.position))
+      val positionsSet  = positions.toSet
+  
+      (min.y to max.y).foldLeft(StringBuffer()): (sb,y) =>
+          (min.x to max.x).foldLeft(sb): (sb,x) =>
+            if positionsSet.contains((x, y)) then sb.append('#') else sb.append('.')
+        .append('\n')
+        .toString
 
-    (min.y to max.y).foldLeft(StringBuffer())((sb,y) => (min.x to max.x).foldLeft(sb)((sb,x) =>
-      if positionsSet.contains((x, y)) then sb.append('#') else sb.append('.')
-    ).append('\n')).toString
-
-  val (sky, fastest) =
+  val (sky: Vector[Point], fastest: Int) =
 
     def slope(t: Int): Long =
       boundingArea(points)(t + 1) - boundingArea(points)(t)

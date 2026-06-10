@@ -34,26 +34,27 @@ object Day09 extends AoC:
         case Nil      => (current, Circle(init.tail, init.head, tail))
 
   object Circle:
+    
     def apply[A](elem: A): Circle[A] =
       Circle(Nil, elem, Nil)
 
 
   def play(players: Int, last: Int): Long =
     @tailrec
-    def go(marbles: Circle[Int], marble: Int, player: Int, scores: Map[Int, Long]): Map[Int, Long] =
+    def loop(marbles: Circle[Int], marble: Int, player: Int, scores: Map[Int, Long]): Map[Int, Long] =
 
-      val p: Int = player % players + 1
+      val current: Int = player % players + 1
 
       if marble > last then
         scores
       else if marble % 23 != 0 then
-        go(marbles.rotate(2).insert(marble), marble + 1, p, scores)
+        loop(marbles.rotate(2).insert(marble), marble + 1, current, scores)
       else
         val (r, next) = marbles.rotate(-7).removed
         val s = scores.updated(player, scores(player) + marble + r)
-        go(next, marble + 1, p, s)
+        loop(next, marble + 1, current, s)
 
-    go(Circle(0), 1, 1, Map.empty.withDefaultValue(0)).values.max
+    loop(Circle(0), 1, 1, Map.empty.withDefaultValue(0)).values.max
 
   def solve(players: Int, last: Int, multiplier: Int = 1): Long =
     play(players, last * multiplier)

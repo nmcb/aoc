@@ -14,9 +14,9 @@ object Day08 extends AoC:
 
     def parseTree(s: String): Node =
 
-      def loop(input: Vector[Int], todoChildren: Int, todoMeta: Int, children: Vector[Node] = Vector.empty): (Node, Vector[Int]) =
+      def loop(input: Vector[Int], todoChildren: Int, todoMeta: Int, children: Vector[Node] = Vector.empty): (node: Node, children: Vector[Int]) =
         if todoChildren == 0 then
-          (Node(children, input.take(todoMeta)), input.drop(todoMeta))
+          (node = Node(children, input.take(todoMeta)), children = input.drop(todoMeta))
         else
           // parse children
           val todoChildChildren = input.head
