@@ -1,7 +1,6 @@
 package aoc2020
 
 import nmcb.*
-import scala.io.*
 
 object Day04 extends AoC:
 
