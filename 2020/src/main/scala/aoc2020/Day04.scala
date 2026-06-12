@@ -23,23 +23,23 @@ object Day04 extends AoC:
   def valYear(key: String, min: Int, max: Int)(p: Passport): Boolean =
     p.get(key).exists(year => year.toInt >= min && year.toInt <= max)
 
-  def valHgt(p: Passport): Boolean =
+  def valHeight(p: Passport): Boolean =
     p.get("hgt").exists: height =>
       val value = height.takeWhile(_.isDigit).toInt
       if      height.endsWith("cm") then value >= 150 && value <= 193
       else if height.endsWith("in") then value >=  59 && value <=  76
       else false
 
-  def valHcl(p: Passport): Boolean =
+  def valHairColor(p: Passport): Boolean =
     val chars = "0123456789abcdef"
-    p.get("hcl").exists: hc =>
-      hc.startsWith("#") && hc.drop(1).count(chars.contains) == 6
+    p.get("hcl").exists: hairColor =>
+      hairColor.startsWith("#") && hairColor.drop(1).count(chars.contains) == 6
 
-  def valEcl(p: Passport): Boolean =
+  def valEyeColor(p: Passport): Boolean =
     val colors = List("amb", "blu", "brn", "gry", "grn", "hzl", "oth")
     p.get("ecl").exists(colors.contains)
 
-  def valPid(p: Passport): Boolean =
+  def valPID(p: Passport): Boolean =
     val digits = "0123456789"
     p.get("pid").exists(_.count(digits.contains) == 9)
 
@@ -52,10 +52,10 @@ object Day04 extends AoC:
       .filter(valYear("byr", 1920, 2020))
       .filter(valYear("iyr", 2010, 2020))
       .filter(valYear("eyr", 2020, 2030))
-      .filter(valHgt)
-      .filter(valHcl)
-      .filter(valEcl)
-      .filter(valPid)
+      .filter(valHeight)
+      .filter(valHairColor)
+      .filter(valEyeColor)
+      .filter(valPID)
 
   override lazy val answer1: Int = solve1(passports).size
   override lazy val answer2: Int = solve2(passports).size
