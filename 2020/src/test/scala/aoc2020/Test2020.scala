@@ -4,39 +4,39 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class Test2020 extends AnyFunSuite:
 
-  test("Day 1: Report Repair"):
+  test("Day 01: Report Repair"):
     assertResult(719796)(Day01.answer1)
     assertResult(144554112)(Day01.answer2)
 
-  test("Day 2: Password Philosophy"):
+  test("Day 02: Password Philosophy"):
     assertResult(528)(Day02.answer1)
     assertResult(497)(Day02.answer2)
 
-  test("Day 3: Toboggan Trajectory"):
+  test("Day 03: Toboggan Trajectory"):
     assertResult(242)(Day03.answer1)
     assertResult(2265549792L)(Day03.answer2)
 
-  test("Day 4: Passport Processing"):
+  test("Day 04: Passport Processing"):
     assertResult(245)(Day04.answer1)
     assertResult(133)(Day04.answer2)
 
-  test("Day 5: Binary Boarding"):
+  test("Day 05: Binary Boarding"):
     assertResult(806)(Day05.answer1)
     assertResult(562)(Day05.answer2)
 
-  test("Day 6: Custom Customs"):
+  test("Day 06: Custom Customs"):
     assertResult(6680)(Day06.answer1)
     assertResult(3117)(Day06.answer2)
 
-  test("Day 7: Handy Haversacks"):
+  test("Day 07: Handy Haversacks"):
     assertResult(208)(Day07.answer1)
     assertResult(1664)(Day07.answer2)
 
-  test("Day 8: Handheld Halting"):
+  test("Day 08: Handheld Halting"):
     assertResult(1818)(Day08.answer1)
     assertResult(631)(Day08.answer2)
 
-  test("Day 9: Encoding Error"):
+  test("Day 09: Encoding Error"):
     assertResult(373803594L)(Day09.answer1)
     assertResult(51152360L)(Day09.answer2)
 

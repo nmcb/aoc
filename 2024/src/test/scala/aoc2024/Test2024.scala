@@ -5,32 +5,32 @@ import nmcb.pos.{*, given}
 import org.scalatest.funsuite.AnyFunSuite
 
 class Test2024 extends AnyFunSuite:
-  test("Day 1: Historian Hysteria"):
+  test("Day 01: Historian Hysteria"):
     assertResult(2057374)(Day01.answer1)
     assertResult(23177084)(Day01.answer2)
-  test("Day 2: Red-Nosed Reports"):
+  test("Day 02: Red-Nosed Reports"):
     assertResult(486)(Day02.answer1)
     assertResult(540)(Day02.answer2)
-  test("Day 3: Mull It Over"):
+  test("Day 03: Mull It Over"):
     assertResult(179834255)(Day03.answer1)
     assertResult(80570939)(Day03.answer2)
-  test("Day 4: Ceres Search"):
+  test("Day 04: Ceres Search"):
     assertResult(2618)(Day04.answer1)
     assertResult(2011)(Day04.answer2)
-  test("Day 5: Print Queue"):
+  test("Day 05: Print Queue"):
     assertResult(4766)(Day05.answer1)
     assertResult(6257)(Day05.answer2)
-  test("Day 6: Guard Gallivant"):
+  test("Day 06: Guard Gallivant"):
     assertResult(4663)(Day06.answer1)
     assertResult(1530)(Day06.answer2)
-  test("Day 7: Bridge Repair"):
+  test("Day 07: Bridge Repair"):
     assertResult(21572148763543L)(Day07.answer1)
     assertResult(581941094529163L)(Day07.answer2)
     assertResult(581941094529163L)(Day07.answer2Stewart)
-  test("Day 8: Resonant Collinearity"):
+  test("Day 08: Resonant Collinearity"):
     assertResult(327)(Day08.answer1)
     assertResult(1233)(Day08.answer2)
-  test("Day 9: Disk Fragmenter"):
+  test("Day 09: Disk Fragmenter"):
     assertResult(6259790630969L)(Day09.answer1)
     assertResult(6289564433984L)(Day09.answer2)
     assertResult(6289564433984L)(Day09.answer2Mutable)

@@ -4,39 +4,39 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class Test2018 extends AnyFunSuite:
 
-  test("Day 1: Chronal Calibration"):
+  test("Day 01: Chronal Calibration"):
     assertResult(477)(Day01.answer1)
     assertResult(390)(Day01.answer2)
 
-  test("Day 2: Inventory Management System"):
+  test("Day 02: Inventory Management System"):
     assertResult(5368)(Day02.answer1)
     assertResult("cvgywxqubnuaefmsldjrpfzyi")(Day02.answer2)
 
-  test("Day 3: No Matter How You Slice It"):
+  test("Day 03: No Matter How You Slice It"):
     assertResult(107043)(Day03.answer1)
     assertResult(346)(Day03.answer2)
 
-  test("Day 4: Repose Record"):
+  test("Day 04: Repose Record"):
     assertResult(103720)(Day04.answer1)
     assertResult(110913)(Day04.answer2)
 
-  test("Day 5: Alchemical Reduction"):
+  test("Day 05: Alchemical Reduction"):
     assertResult(11310)(Day05.answer1)
     assertResult(6020)(Day05.answer2)
 
-  test("Day 6: Chronal Coordinates"):
+  test("Day 06: Chronal Coordinates"):
     assertResult(2906)(Day06.answer1)
     assertResult(50530)(Day06.answer2)
 
-  test("Day 7: The Sum of Its Parts"):
+  test("Day 07: The Sum of Its Parts"):
     assertResult("FHICMRTXYDBOAJNPWQGVZUEKLS")(Day07.answer1)
     assertResult(946)(Day07.answer2)
 
-  test("Day 8: Memory Maneuver"):
+  test("Day 08: Memory Maneuver"):
     assertResult(47244)(Day08.answer1)
     assertResult(17267)(Day08.answer2)
 
-  test("Day 9: Marble Mania"):
+  test("Day 09: Marble Mania"):
     assertResult(412117)(Day09.answer1)
     assertResult(3444129546L)(Day09.answer2)
 
