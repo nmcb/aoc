@@ -1,13 +1,13 @@
 package examples
 
-import scala.collection.mutable.ArrayBuffer
+import scala.math.sqrt
 
 object SieveOfEratosthenes:
 
   def sieve(n: Int): Seq[Int] =
-    val primes = ArrayBuffer.fill(n + 1)(true)
+    val primes = Array.fill(n + 1)(true)
     for
-      i <- 2 to Math.sqrt(n).toInt
+      i <- 2 to sqrt(n).toInt
       if primes(i)
     do
       for
@@ -22,7 +22,7 @@ object SieveOfEratosthenes:
       m
 
   def main(args: Array[String]): Unit =
-    val max: Int         = 1000000
+    val max: Int         = 10000000
     val start: Long      = System.currentTimeMillis
     val result: Seq[Int] = sieve(max)
 
