@@ -4,35 +4,35 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class Test2019 extends AnyFunSuite:
 
-  test("Day 1: The Tyranny of the Rocket Equation"):
+  test("Day 01: The Tyranny of the Rocket Equation"):
     assertResult(3331849)(Day01.answer1)
     assertResult(4994530)(Day01.answer2)
 
-  test("Day 2: 1202 Program Alarm"):
+  test("Day 02: 1202 Program Alarm"):
     assertResult(4576384)(Day02.answer1)
     assertResult(5398)(Day02.answer2)
 
-  test("Day 3: Crossed Wires"):
+  test("Day 03: Crossed Wires"):
     assertResult(308)(Day03.answer1)
     assertResult(12934)(Day03.answer2)
 
-  test("Day 4: Secure Container"):
+  test("Day 04: Secure Container"):
     assertResult(1178)(Day04.answer1)
     assertResult(763)(Day04.answer2)
 
-  test("Day 5: Sunny with a Chance of Asteroids"):
+  test("Day 05: Sunny with a Chance of Asteroids"):
     assertResult(15386262)(Day05.answer1)
     assertResult(10376124)(Day05.answer2)
 
-  test("Day 6: Universal Orbit Map"):
+  test("Day 06: Universal Orbit Map"):
     assertResult(162439)(Day06.answer1)
     assertResult(368)(Day06.answer2)
 
-  test("Day 7: Amplification Circuit"):
+  test("Day 07: Amplification Circuit"):
     assertResult(21760)(Day07.answer1)
     assertResult(69816958)(Day07.answer2)
 
-  test("Day 8: Space Image Format"):
+  test("Day 08: Space Image Format"):
     assertResult(1920)(Day08.answer1)
     assertResult(
       """███░░░██░░█░░█░█░░░░░██░░
@@ -43,7 +43,7 @@ class Test2019 extends AnyFunSuite:
         |█░░░░░██░░░██░░████░█░░█░
         |""".stripMargin)(Day08.answer2)
 
-  test("Day 9: Sensor Boost"):
+  test("Day 09: Sensor Boost"):
     assertResult(2399197539L)(Day09.answer1)
     assertResult(35106)(Day09.answer2)
 

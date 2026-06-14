@@ -4,39 +4,39 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class Test2022 extends AnyFunSuite:
 
-  test("Day 1: Calorie Counting"):
+  test("Day 01: Calorie Counting"):
     assertResult(69501)(Day01.answer1)
     assertResult(202346)(Day01.answer2)
 
-  test("Day 2: Rock Paper Scissors"):
+  test("Day 02: Rock Paper Scissors"):
     assertResult(11449)(Day02.answer1)
     assertResult(13187)(Day02.answer2)
 
-  test("Day 3: Rucksack Reorganization"):
+  test("Day 03: Rucksack Reorganization"):
     assertResult(8139)(Day03.answer1)
     assertResult(2668)(Day03.answer2)
 
-  test("Day 4: Camp Cleanup"):
+  test("Day 04: Camp Cleanup"):
     assertResult(651)(Day04.answer1)
     assertResult(956)(Day04.answer2)
 
-  test("Day 5: Supply Stacks"):
+  test("Day 05: Supply Stacks"):
     assertResult("WHTLRMZRC")(Day05.answer1)
     assertResult("GMPMLWNMG")(Day05.answer2)
 
-  test("Day 6: Tuning Trouble"):
+  test("Day 06: Tuning Trouble"):
     assertResult(1093)(Day06.answer1)
     assertResult(3534)(Day06.answer2)
 
-  test("Day 7: No Space Left On Device"):
+  test("Day 07: No Space Left On Device"):
     assertResult(1915606)(Day07.answer1)
     assertResult(5025657)(Day07.answer2)
 
-  test("Day 8: Treetop Tree House"):
+  test("Day 08: Treetop Tree House"):
     assertResult(1818)(Day08.answer1)
     assertResult(368368)(Day08.answer2)
 
-  test("Day 9: Rope Bridge"):
+  test("Day 09: Rope Bridge"):
     assertResult(6376)(Day09.answer1)
     assertResult(2607)(Day09.answer2)
 

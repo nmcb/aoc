@@ -6,39 +6,39 @@ class Test2017 extends AnyFunSuite:
 
   given CanEqual[Any, Any] = CanEqual.derived
   
-  test("Day 1: Inverse Captcha"):
+  test("Day 01: Inverse Captcha"):
     assertResult(1069)(Day01.answer1)
     assertResult(1268)(Day01.answer2)
 
-  test("Day 2: Corruption Checksum"):
+  test("Day 02: Corruption Checksum"):
     assertResult(45158)(Day02.answer1)
     assertResult(294)(Day02.answer2)
 
-  test("Day 3: Spiral Memory"):
+  test("Day 03: Spiral Memory"):
     assertResult(475)(Day03.answer1)
     assertResult(279138)(Day03.answer2)
 
-  test("Day 4: High-Entropy Passphrases"):
+  test("Day 04: High-Entropy Passphrases"):
     assertResult(337)(Day04.answer1)
     assertResult(231)(Day04.answer2)
 
-  test("Day 5: A Maze of Twisty Trampolines, All Alike"):
+  test("Day 05: A Maze of Twisty Trampolines, All Alike"):
     assertResult(372671)(Day05.answer1)
     assertResult(25608480)(Day05.answer2)
 
-  test("Day 6: Memory Reallocation"):
+  test("Day 06: Memory Reallocation"):
     assertResult(12841)(Day06.answer1)
     assertResult(8038)(Day06.answer2)
 
-  test("Day 7: Recursive Circus"):
+  test("Day 07: Recursive Circus"):
     assertResult("eqgvf")(Day07.answer1)
     assertResult(757)(Day07.answer2)
 
-  test("Day 8: I Heard You Like Registers"):
+  test("Day 08: I Heard You Like Registers"):
     assertResult(4416)(Day08.answer1)
     assertResult(5199)(Day08.answer2)
 
-  test("Day 9: Stream Processing"):
+  test("Day 09: Stream Processing"):
     assertResult(8337)(Day09.answer1)
     assertResult(4330)(Day09.answer2)
 
