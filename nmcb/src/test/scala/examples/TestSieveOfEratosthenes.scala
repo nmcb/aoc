@@ -1,6 +1,5 @@
 package examples
 
-import examples.SecurityExercise
 import org.scalatest.funsuite.AnyFunSuite
 
 class TestSieveOfEratosthenes extends AnyFunSuite:

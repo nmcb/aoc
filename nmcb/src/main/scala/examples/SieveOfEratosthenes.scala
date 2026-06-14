@@ -22,7 +22,10 @@ object SieveOfEratosthenes:
       m
 
   def main(args: Array[String]): Unit =
-    val max: Int = 100
+    val max: Int         = 1000000
+    val start: Long      = System.currentTimeMillis
     val result: Seq[Int] = sieve(max)
-    println(s"primes up to $max: $result")
 
+    println(s"primes up to $max:")
+    result.foreach(println)
+    println(s"took ${System.currentTimeMillis - start} ms")
