@@ -22,7 +22,7 @@ object SieveOfEratosthenes:
       m
 
   def main(args: Array[String]): Unit =
-    val max: Int = 1000000
+    val max: Int = 100
     val result: Seq[Int] = sieve(max)
     println(s"primes up to $max: $result")
 
