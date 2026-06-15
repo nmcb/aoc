@@ -6,39 +6,39 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class Test2015 extends AnyFunSuite:
 
-  test("Day 1: Not Quite Lisp"):
+  test("Day 01: Not Quite Lisp"):
     assertResult(138)(Day01.answer1)
     assertResult(1771)(Day01.answer2)
 
-  test("Day 2: I Was Told There Would Be No Math"):
+  test("Day 02: I Was Told There Would Be No Math"):
     assertResult(1606483)(Day02.answer1)
     assertResult(3842356)(Day02.answer2)
 
-  test("Day 3: Perfectly Spherical Houses in a Vacuum"):
+  test("Day 03: Perfectly Spherical Houses in a Vacuum"):
     assertResult(2572)(Day03.answer1)
     assertResult(2631)(Day03.answer2)
 
-  test("Day 4: The Ideal Stocking Stuffer"):
+  test("Day 04: The Ideal Stocking Stuffer"):
     assertResult(282749)(Day04.answer1)
     assertResult(9962624)(Day04.answer2)
 
-  test("Day 5: Doesn't He Have Intern-Elves For This?"):
+  test("Day 05: Doesn't He Have Intern-Elves For This?"):
     assertResult(258)(Day05.answer1)
     assertResult(53)(Day05.answer2)
 
-  test("Day 6: Probably a Fire Hazard"):
+  test("Day 06: Probably a Fire Hazard"):
     assertResult(569999)(Day06.answer1)
     assertResult(17836115)(Day06.answer2)
 
-  test("Day 7: Some Assembly Required"):
+  test("Day 07: Some Assembly Required"):
     assertResult(956)(Day07.answer1)
     assertResult(40149)(Day07.answer2)
 
-  test("Day 8: Matchsticks"):
+  test("Day 08: Matchsticks"):
     assertResult(1333)(Day08.answer1)
     assertResult(2046)(Day08.answer2)
 
-  test("Day 9: All in a Single Night"):
+  test("Day 09: All in a Single Night"):
     assertResult(207)(Day09.answer1)
     assertResult(804)(Day09.answer2)
 

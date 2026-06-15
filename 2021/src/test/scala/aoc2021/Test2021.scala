@@ -6,39 +6,39 @@ class Test2021 extends AnyFunSuite:
   
   given CanEqual[Any, Any] = CanEqual.derived
 
-  test("Day 1: Sonar Sweep"):
+  test("Day 01: Sonar Sweep"):
     assertResult(1602)(Day01.answer1)
     assertResult(1633)(Day01.answer2)
 
-  test("Day 2: Dive!"):
+  test("Day 02: Dive!"):
     assertResult(2322630)(Day02.answer1)
     assertResult(2105273490)(Day02.answer2)
 
-  test("Day 3: Binary Diagnostic"):
+  test("Day 03: Binary Diagnostic"):
     assertResult(2648450)(Day03.answer1)
     assertResult(2845944)(Day03.answer2)
 
-  test("Day 4: Giant Squid"):
+  test("Day 04: Giant Squid"):
     assertResult(21607)(Day04.answer1)
     assertResult(19012)(Day04.answer2)
 
-  test("Day 5: Hydrothermal Venture"):
+  test("Day 05: Hydrothermal Venture"):
     assertResult(7085)(Day05.answer1)
     assertResult(20271)(Day05.answer2)
 
-  test("Day 6: Lanternfish"):
+  test("Day 06: Lanternfish"):
     assertResult(380612)(Day06.answer1)
     assertResult(1710166656900L)(Day06.answer2)
 
-  test("Day 7: The Treachery of Whales"):
+  test("Day 07: The Treachery of Whales"):
     assertResult(328187)(Day07.answer1)
     assertResult(91257582)(Day07.answer2)
 
-  test("Day 8: Seven Segment Search"):
+  test("Day 08: Seven Segment Search"):
     assertResult(521)(Day08.answer1)
     assertResult(1016804)(Day08.answer2)
 
-  test("Day 9: Smoke Basin"):
+  test("Day 09: Smoke Basin"):
     assertResult(502)(Day09.answer1)
     assertResult(1330560)(Day09.answer2)
 

@@ -3,39 +3,39 @@ package aoc2023
 import org.scalatest.funsuite.AnyFunSuite
 
 class Test2023 extends AnyFunSuite:
-  test("Day 1: Trebuchet?!"):
+  test("Day 01: Trebuchet?!"):
     assertResult(54916)(Day01.answer1)
     assertResult(54728)(Day01.answer2)
 
-  test("Day 2: Cube Conundrum"):
+  test("Day 02: Cube Conundrum"):
     assertResult(2600)(Day02.answer1)
     assertResult(86036)(Day02.answer2)
 
-  test("Day 3: Gear Ratios"):
+  test("Day 03: Gear Ratios"):
     assertResult(498559)(Day03.answer1)
     assertResult(72246648)(Day03.answer2)
 
-  test("Day 4: Scratchcards"):
+  test("Day 04: Scratchcards"):
     assertResult(24175)(Day04.answer1)
     assertResult(18846301)(Day04.answer2)
 
-  test("Day 5: If You Give A Seed A Fertilizer"):
+  test("Day 05: If You Give A Seed A Fertilizer"):
     assertResult(51580674)(Day05.answer1)
     assertResult(99751240)(Day05.answer2)
 
-  test("Day 6: Wait For It"):
+  test("Day 06: Wait For It"):
     assertResult(1413720)(Day06.answer1)
     assertResult(30565288)(Day06.answer2)
 
-  test("Day 7: Camel Cards"):
+  test("Day 07: Camel Cards"):
     assertResult(250347426)(Day07.answer1)
     assertResult(251224870)(Day07.answer2)
 
-  test("Day 8: Haunted Wasteland"):
+  test("Day 08: Haunted Wasteland"):
     assertResult(18673)(Day08.answer1)
     assertResult(17972669116327L)(Day08.answer2)
 
-  test("Day 9: Mirage Maintenance"):
+  test("Day 09: Mirage Maintenance"):
     assertResult(1798691765)(Day09.answer1)
     assertResult(1104)(Day09.answer2)
 
