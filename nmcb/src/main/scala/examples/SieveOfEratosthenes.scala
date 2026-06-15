@@ -1,6 +1,7 @@
 package examples
 
 import scala.math.sqrt
+import scala.util.Try
 
 object SieveOfEratosthenes:
 
@@ -22,7 +23,7 @@ object SieveOfEratosthenes:
       m
 
   def main(args: Array[String]): Unit =
-    val max: Int         = 10000000
+    val max: Int         = Try(args(0).toInt).getOrElse(1000)
     val start: Long      = System.currentTimeMillis
     val result: Seq[Int] = sieve(max)
 
