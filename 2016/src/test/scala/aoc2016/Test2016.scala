@@ -4,35 +4,35 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class Test2016 extends AnyFunSuite:
 
-  test("Day 1: No Time for a Taxicab"):
+  test("Day 01: No Time for a Taxicab"):
     assertResult(288)(Day01.answer1)
     assertResult(111)(Day01.answer2)
 
-  test("Day 2: Bathroom Security"):
+  test("Day 02: Bathroom Security"):
     assertResult("38961")(Day02.answer1)
     assertResult("46C92")(Day02.answer2)
 
-  test("Day 3: Squares With Three Sides"):
+  test("Day 03: Squares With Three Sides"):
     assertResult( 869)(Day03.answer1)
     assertResult(1544)(Day03.answer2)
 
-  test("Day 4: Security Through Obscurity"):
+  test("Day 04: Security Through Obscurity"):
     assertResult(185371)(Day04.answer1)
     assertResult(   984)(Day04.answer2)
 
-  test("Day 5: How About a Nice Game of Chess?"):
+  test("Day 05: How About a Nice Game of Chess?"):
     assertResult("c6697b55")(Day05.answer1)
     assertResult("8c35d1ab")(Day05.answer2)
 
-  test("Day 6: Signals and Noise"):
+  test("Day 06: Signals and Noise"):
     assertResult("afwlyyyq")(Day06.answer1)
     assertResult("bhkzekao")(Day06.answer2)
 
-  test("Day 7: Internet Protocol Version 7"):
+  test("Day 07: Internet Protocol Version 7"):
     assertResult(118)(Day07.answer1)
     assertResult(260)(Day07.answer2)
 
-  test("Day 8: Two-Factor Authentication"):
+  test("Day 08: Two-Factor Authentication"):
     assertResult(110)(Day08.answer1)
     assertResult("""####...##.#..#.###..#..#..##..###..#....#...#..##.
                    |...#....#.#..#.#..#.#.#..#..#.#..#.#....#...#...#.
@@ -42,7 +42,7 @@ class Test2016 extends AnyFunSuite:
                    |####..##..#..#.#..#.#..#..##..#....####...#...##.."""
                    .stripMargin)(Day08.answer2)
 
-  test("Day 9: Explosives in Cyberspace"):
+  test("Day 09: Explosives in Cyberspace"):
     assertResult(112830)(Day09.answer1)
     assertResult(10931789799L)(Day09.answer2)
 
