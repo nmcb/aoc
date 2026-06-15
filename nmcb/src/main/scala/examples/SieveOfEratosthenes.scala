@@ -1,0 +1,31 @@
+package examples
+
+import scala.math.sqrt
+
+object SieveOfEratosthenes:
+
+  def sieve(n: Int): Seq[Int] =
+    val primes = Array.fill(n + 1)(true)
+    for
+      i <- 2 to sqrt(n).toInt
+      if primes(i)
+    do
+      for
+        j <- (i * i) to n by i
+      do
+        primes(j) = false
+
+    for
+      m <- primes.indices.drop(2)
+      if primes(m)
+    yield
+      m
+
+  def main(args: Array[String]): Unit =
+    val max: Int         = 10000000
+    val start: Long      = System.currentTimeMillis
+    val result: Seq[Int] = sieve(max)
+
+    println(s"primes up to $max:")
+    result.foreach(println)
+    println(s"took ${System.currentTimeMillis - start} ms")
