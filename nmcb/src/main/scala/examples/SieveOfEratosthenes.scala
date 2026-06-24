@@ -17,10 +17,10 @@ object SieveOfEratosthenes:
         primes(j) = false
 
     for
-      m <- primes.indices.drop(2)
-      if primes(m)
+      p <- primes.indices.drop(2)
+      if primes(p)
     yield
-      m
+      p
 
   def main(args: Array[String]): Unit =
     val max: Int         = Try(args(0).toInt).getOrElse(1000)
@@ -28,5 +28,5 @@ object SieveOfEratosthenes:
     val result: Seq[Int] = sieve(max)
 
     println(s"primes up to $max:")
-    result.foreach(println)
+    println(result.mkString(", "))
     println(s"took ${System.currentTimeMillis - start} ms")
