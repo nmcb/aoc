@@ -1,5 +1,6 @@
 package examples
 
+import java.lang.System.currentTimeMillis
 import scala.math.sqrt
 import scala.util.Try
 
@@ -24,9 +25,9 @@ object SieveOfEratosthenes:
 
   def main(args: Array[String]): Unit =
     val max: Int         = Try(args(0).toInt).getOrElse(1000)
-    val start: Long      = System.currentTimeMillis
+    val start: Long      = currentTimeMillis
     val result: Seq[Int] = sieve(max)
 
     println(s"primes up to $max:")
     println(result.mkString(", "))
-    println(s"took ${System.currentTimeMillis - start} ms")
+    println(s"took ${currentTimeMillis - start} ms")
