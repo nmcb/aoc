@@ -1,7 +1,6 @@
 package aoc2024
 
 import nmcb.pos.{*, given}
-
 import org.scalatest.funsuite.AnyFunSuite
 
 class Test2024 extends AnyFunSuite:
