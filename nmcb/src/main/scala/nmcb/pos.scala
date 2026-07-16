@@ -34,6 +34,7 @@ object pos:
   type Pos = (x: Int, y: Int)
 
   object Pos:
+
     given CanEqual[Pos, Pos] = CanEqual.derived
     given Ordering[Pos] = Ordering.by(_.toTuple)
 
