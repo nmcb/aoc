@@ -119,8 +119,8 @@ object FriedmanNumber:
     val digits: Vector[Int] = number.toString.toVector.map(_.asDigit)
     possibleOperations(digits.length - 1).exists: operations =>
         possibleDigitSequences(digits).exists: sequence =>
-          possibleComputationOrders(operations.size + sequence.size).exists: computationOrder =>
-            computationOrder.bind(operations, sequence).compute.contains(number)
+          possibleComputationOrders(operations.size + sequence.size).exists: order =>
+            order.bind(operations, sequence).compute.contains(number)
 
   def sieve(max: Int): Seq[Int] =
     (0 to max).filter(isFriedmanNumber)
