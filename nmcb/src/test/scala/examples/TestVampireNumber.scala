@@ -6,7 +6,6 @@ class TestVampireNumber extends AnyFunSuite:
 
   /** [OEIS-A014575](https://oeis.org/A014575) */
   test("VampireNumber") {
-    println(VampireNumber.sieve(135837))
     assertResult(
       Vector(
         1260, 1395, 1435, 1530, 1827, 2187, 6880, 102510, 104260, 105210, 105264, 105750, 108135,
