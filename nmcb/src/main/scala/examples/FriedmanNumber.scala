@@ -35,7 +35,7 @@ object FriedmanNumber:
 
   case object Concatenation extends Operation:
     def run(l: Int, r: Int): Option[Int] =
-      sys.error(s"unimplemented, special handling in computation")
+      sys.error(s"unimplemented, marker operation only which has special handling in computation order")
 
   object Operation:
     val all: Vector[Operation] =
@@ -53,15 +53,15 @@ object FriedmanNumber:
 
     def isConcat: Boolean =
       this match
-        case BinaryOperation(l, r, Some(Concatenation)) => l.isConcat && r.isConcat
-        case Value(v)                                   => true
-        case _                                          => false
+        case BinaryOperation(l, r, Concatenation) => l.isConcat && r.isConcat
+        case Value(v)                             => true
+        case _                                    => false
 
     def compute: Option[Int] =
       this.runtimeChecked match
-        case Value(Some(v))                             => Some(v)
-        case BinaryOperation(l, r, Some(Concatenation)) => when(l.isConcat && r.isConcat)(s"${l.compute.get}${r.compute.get}".toInt)
-        case BinaryOperation(l, r, Some(o))             => l.compute.flatMap(lr => r.compute.flatMap(rr => o.run(lr, rr)))
+        case Value(v)                             => Some(v)
+        case BinaryOperation(l, r, Concatenation) => when(l.isConcat && r.isConcat)(s"${l.compute.get}${r.compute.get}".toInt)
+        case BinaryOperation(l, r, o)             => l.compute.flatMap(lr => r.compute.flatMap(rr => o.run(lr, rr)))
 
     def bind(operations: Vector[Operation], arguments: Vector[Int]): ComputationOrder =
       val (result, _, _) = bindRecursively(operations, arguments)
@@ -70,14 +70,14 @@ object FriedmanNumber:
     private def bindRecursively(operations: Vector[Operation], arguments: Vector[Int]): (ComputationOrder, Vector[Operation], Vector[Int]) =
       this match
         case Value(v) =>
-          (Value(Some(arguments.head)), operations, arguments.tail)
+          (Value(arguments.head), operations, arguments.tail)
         case BinaryOperation(l, r, v) =>
           val (fl, ol, al) = l.bindRecursively(operations.tail, arguments)
           val (fr, or, ar) = r.bindRecursively(ol, al)
-          (BinaryOperation(fl, fr, Some(operations.head)), or, ar)
+          (BinaryOperation(fl, fr, operations.head), or, ar)
 
-  case class Value(v: Option[Int] = None)                                                           extends ComputationOrder
-  case class BinaryOperation(l: ComputationOrder, r: ComputationOrder, o: Option[Operation] = None) extends ComputationOrder
+  case class Value(v: Int = 0)                                                              extends ComputationOrder
+  case class BinaryOperation(l: ComputationOrder, r: ComputationOrder, o: Operation = null) extends ComputationOrder
 
 
   private val possibleOperationsMemo = Memo.empty[Int, Vector[Vector[Operation]]]
