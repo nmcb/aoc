@@ -7,17 +7,12 @@ import scala.collection.Iterator.iterate
 
 object Day25 extends AoC:
 
-  enum Move derives CanEqual:
-    case L
-    case R
-
-  import Move.*
-
   type State       = Char
   type Value       = Int
+  type Move        = Int
   type Position    = Int
   type Tape        = Map[Position, Value]
-  type Transitions = Map[(State, Value), (State, Value, Move)]
+  type Transitions = Map[(from: State, read: Value), (write: Value, move: Move, to: State)]
 
   /**
    * Begin in state A.
@@ -87,18 +82,18 @@ object Day25 extends AoC:
   val beginState: State = 'A'
   val transitions: Transitions =
     Map(
-      ('A', 0) -> ('B', 1, R),
-      ('A', 1) -> ('D', 0, L),
-      ('B', 0) -> ('C', 1, R),
-      ('B', 1) -> ('F', 0, R),
-      ('C', 0) -> ('C', 1, L),
-      ('C', 1) -> ('A', 1, L),
-      ('D', 0) -> ('E', 0, L),
-      ('D', 1) -> ('A', 1, R),
-      ('E', 0) -> ('A', 1, L),
-      ('E', 1) -> ('B', 0, R),
-      ('F', 0) -> ('C', 0, R),
-      ('F', 1) -> ('E', 0, R),
+      (from = 'A', read = 0) -> (write = 1, move = +1, to = 'B'),
+      (from = 'A', read = 1) -> (write = 0, move = -1, to = 'D'),
+      (from = 'B', read = 0) -> (write = 1, move = +1, to = 'C'),
+      (from = 'B', read = 1) -> (write = 0, move = +1, to = 'F'),
+      (from = 'C', read = 0) -> (write = 1, move = -1, to = 'C'),
+      (from = 'C', read = 1) -> (write = 1, move = -1, to = 'A'),
+      (from = 'D', read = 0) -> (write = 0, move = -1, to = 'E'),
+      (from = 'D', read = 1) -> (write = 1, move = +1, to = 'A'),
+      (from = 'E', read = 0) -> (write = 1, move = -1, to = 'A'),
+      (from = 'E', read = 1) -> (write = 0, move = +1, to = 'B'),
+      (from = 'F', read = 0) -> (write = 0, move = +1, to = 'C'),
+      (from = 'F', read = 1) -> (write = 0, move = +1, to = 'E'),
     )
 
   case class Turing(
@@ -109,19 +104,8 @@ object Day25 extends AoC:
   ):
 
     def step: Turing =
-
-      val (nextState, nextValue, move) =
-        transitions((state, tape(cursor)))
-
-      val nextCursor =
-        move match
-          case L => cursor - 1
-          case R => cursor + 1
-
-      val nextTape =
-        tape + (cursor -> nextValue)
-
-      copy(state = nextState, cursor = nextCursor, tape = nextTape)
+      val transition = transitions((from = state, read = tape(cursor)))
+      copy(state = transition.to, cursor = cursor + transition.move, tape = tape.updated(cursor, transition.write))
 
   def turing: Turing = Turing(transitions, beginState)
 
