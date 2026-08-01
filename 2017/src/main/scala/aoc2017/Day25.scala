@@ -3,6 +3,8 @@ package aoc2017
 import nmcb.*
 import nmcb.predef.*
 
+import scala.collection.Iterator.iterate
+
 object Day25 extends AoC:
 
   enum Move derives CanEqual:
@@ -11,7 +13,7 @@ object Day25 extends AoC:
 
   import Move.*
 
-  type State       = String
+  type State       = Char
   type Value       = Int
   type Position    = Int
   type Tape        = Map[Position, Value]
@@ -82,22 +84,21 @@ object Day25 extends AoC:
    *     - Continue with state E.
    *
    */
-  val beginState: State = "A"
-  val steps: Int = 12317297
+  val beginState: State = 'A'
   val transitions: Transitions =
     Map(
-      ("A", 0) -> ("B", 1, R),
-      ("A", 1) -> ("D", 0, L),
-      ("B", 0) -> ("C", 1, R),
-      ("B", 1) -> ("F", 0, R),
-      ("C", 0) -> ("C", 1, L),
-      ("C", 1) -> ("A", 1, L),
-      ("D", 0) -> ("E", 0, L),
-      ("D", 1) -> ("A", 1, R),
-      ("E", 0) -> ("A", 1, L),
-      ("E", 1) -> ("B", 0, R),
-      ("F", 0) -> ("C", 0, R),
-      ("F", 1) -> ("E", 0, R),
+      ('A', 0) -> ('B', 1, R),
+      ('A', 1) -> ('D', 0, L),
+      ('B', 0) -> ('C', 1, R),
+      ('B', 1) -> ('F', 0, R),
+      ('C', 0) -> ('C', 1, L),
+      ('C', 1) -> ('A', 1, L),
+      ('D', 0) -> ('E', 0, L),
+      ('D', 1) -> ('A', 1, R),
+      ('E', 0) -> ('A', 1, L),
+      ('E', 1) -> ('B', 0, R),
+      ('F', 0) -> ('C', 0, R),
+      ('F', 1) -> ('E', 0, R),
     )
 
   case class Turing(
@@ -124,4 +125,4 @@ object Day25 extends AoC:
 
   def turing: Turing = Turing(transitions, beginState)
 
-  override lazy val answer1: Int = Iterator.iterate(turing)(_.step).nth(steps).tape.count(_.right == 1)
+  override lazy val answer1: Int = iterate(turing)(_.step).nth(12317297).tape.count(_.right == 1)
