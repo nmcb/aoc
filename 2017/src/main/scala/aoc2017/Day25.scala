@@ -7,12 +7,6 @@ import scala.collection.Iterator.iterate
 
 object Day25 extends AoC:
 
-  enum Move derives CanEqual:
-    case L
-    case R
-
-object Day25 extends AoC:
-
   type State       = Char
   type Value       = Int
   type Move        = Int
