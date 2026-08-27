@@ -23,7 +23,7 @@ object Day06 extends AoC:
       counter.toVector.maxBy(_.count).char
 
     def minChar: Char =
-      counter.toList.minBy(_.count).char
+      counter.toVector.minBy(_.count).char
 
   def counted(input: Vector[String]): Vector[Counter] =
     input
