@@ -5,14 +5,12 @@ import nmcb.predef.*
 
 object Day06 extends AoC:
 
-  type CharCount = (char: Char, count: Int)
-
-  def solve(input: Vector[String], selector: Vector[CharCount] => Char): String =
+  def solve(input: Vector[String], selector: Vector[(Char, Int)] => Char): String =
     input
       .transpose
-      .map(_.countElements.toVector)
+      .map(_.elementCount)
       .map(selector)
       .mkString
 
-  override lazy val answer1: String = solve(lines, _.maxBy(_.count).char)
-  override lazy val answer2: String = solve(lines, _.minBy(_.count).char)
+  override lazy val answer1: String = solve(lines, _.maxBy(_.count).element)
+  override lazy val answer2: String = solve(lines, _.minBy(_.count).element)
