@@ -7,6 +7,7 @@ object predef:
   val HEX_ARRAY: Array[Char] =
     "0123456789abcdef".toCharArray
 
+
   extension [A](i: Iterator[A])
 
     def nth(n: Int): A =
@@ -25,6 +26,7 @@ object predef:
       var a: A = i.next()
       while i.hasNext do a = i.next()
       a
+
 
   extension [A](i: Iterable[A])
     
