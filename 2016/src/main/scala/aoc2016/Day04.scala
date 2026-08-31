@@ -21,7 +21,7 @@ object Day04 extends AoC:
 
     def isValid: Boolean =
 
-      type Chars = (Char,Int)
+      type Chars = (Char, Int)
 
       extension (chars: Chars)
         def char: Char = chars._1
@@ -29,9 +29,9 @@ object Day04 extends AoC:
 
       given ordering: Ordering[Chars] =
         Ordering
-          .by[Chars,Int](_.index)
+          .by[Chars, Int](_.index)
           .reverse
-          .orElse(Ordering.by[Chars,Int](_.char))
+          .orElse(Ordering.by[Chars, Int](_.char))
 
       val common: Vector[Char] =
         name
