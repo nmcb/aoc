@@ -7,6 +7,7 @@ object predef:
   val HEX_ARRAY: Array[Char] =
     "0123456789abcdef".toCharArray
 
+
   extension [A](i: Iterator[A])
 
     def nth(n: Int): A =
@@ -25,8 +26,8 @@ object predef:
       var a: A = i.next()
       while i.hasNext do a = i.next()
       a
-  
-  
+
+
   extension [A](i: Iterable[A])
     
     def slidingPairs: Iterable[(A, A)] =
@@ -54,6 +55,9 @@ object predef:
 
     def countElements: Map[A, Int] =
       i.groupMapReduce(identity)(_ => 1)(_ + _)
+
+    def elementCount: Vector[(A, Int)] =
+      countElements.toVector
 
   
   extension (s: String)
@@ -88,7 +92,7 @@ object predef:
     inline def rightMap[C](fb: B => C): (A, C)             = (p.left, fb(p.right))
     inline def bimap[C, D](fa: A => C, fb: B => D): (C, D) = (fa(p.left), fb(p.right))
 
-  
+
   extension [A](t: (A, Int))
     def element: A = t._1
     def index: Int = t._2

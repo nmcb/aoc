@@ -101,7 +101,7 @@ object Day07 extends AoC:
               case ThreeOfAKind +: _ => loop(rest, FullHouse +: found.tail)
           case (d, 1) +: rest => loop(rest, High +: found)
 
-      val countedCards = hand.countElements.toVector.sortBy(_.count).reverse
+      val countedCards = hand.elementCount.sortBy(_.count).reverse
       loop(countedCards).reverse
 
   def orderBy(sortedSet: Cards): Ordering[Card] =

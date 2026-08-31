@@ -33,11 +33,10 @@ object Day04 extends AoC:
           .reverse
           .orElse(Ordering.by[Chars,Int](_.char))
 
-      val common: List[Char] =
+      val common: Vector[Char] =
         name
           .filterNot(_ == '-')
-          .countElements
-          .toList
+          .elementCount
           .sorted
           .map(_.char)
           .take(5)
