@@ -1,11 +1,6 @@
 package examples
 
-import scala.util.matching.Regex
-
 object LIX:
-
-  val WORDS: Regex     = """\b[a-zA-Z]+(?:-[a-zA-Z]+)*\b""".r
-  val SENTENCES: Regex = "[A-Z]\\.:".r
 
   def calculate(text: String): Double =
     if text.trim.isEmpty then
