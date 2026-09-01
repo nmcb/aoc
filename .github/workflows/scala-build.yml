@@ -24,6 +24,8 @@ jobs:
       with:
         java-version: '23'
         distribution: 'temurin'
+        fetch-depth: 0
+        persist-credentials: true
         cache: sbt
     - uses: sbt/setup-sbt@v1
     - name: sbt-test
