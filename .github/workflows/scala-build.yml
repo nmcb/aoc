@@ -20,10 +20,12 @@ jobs:
       env:
         GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
     - name: setup-java
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v6
       with:
         java-version: '23'
         distribution: 'temurin'
+        fetch-depth: 0
+        persist-credentials: true
         cache: sbt
     - uses: sbt/setup-sbt@v1
     - name: sbt-test
