@@ -74,4 +74,4 @@ object Day19 extends AoC:
 
   lazy val (beacons: Set[Vec3], positions: Set[Vec3]) = solve(scanners)
   override lazy val answer1: Int = beacons.size
-  override lazy val answer2: Int = positions.pairs().map(manhattanDistance).max
+  override lazy val answer2: Int = positions.allPairs.map(manhattanDistance).max
