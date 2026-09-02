@@ -42,7 +42,7 @@ object Vec:
   def manhattanDistance(a: Vec, b: Vec): Int =
     (b.x - a.x).abs + (b.y - a.y).abs
 
-case class Vec3(x: Int, y: Int, z: Int):
+case class Vec3(x: Int, y: Int, z: Int) derives CanEqual:
   import Vec3.*
 
   def +(that: Vec3): Vec3 =
@@ -55,6 +55,8 @@ case class Vec3(x: Int, y: Int, z: Int):
     Vec3.manhattanDistance(this, that)
 
 object Vec3:
+
+  given Ordering[Vec3] = Ordering.by(Tuple.fromProductTyped)
 
   val Vec3Lit: Regex =
     """([-+]?\d+),([-+]?\d+),([-+]?\d+)""".r

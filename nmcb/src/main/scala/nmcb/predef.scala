@@ -31,15 +31,13 @@ object predef:
   extension [A](i: Iterable[A])
     
     def slidingPairs: Iterable[(A, A)] =
-      if i.isEmpty then Nil else i.zip(i.tail)
+      if i.isEmpty then Iterable.empty else i.zip(i.tail)
+    
 
-    def pairs(): Iterator[(A, A)] =
+    def allPairs(using Ordering[(A, A)]): Iterator[(A, A)] =
       i.tails
         .drop(1)
         .flatMap(i.zip)
-
-    def pairs(using Ordering[(A, A)]): Iterator[(A, A)] =
-      pairs()
         .toVector
         .sorted
         .iterator
