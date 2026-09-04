@@ -43,11 +43,10 @@ object Day24 extends AoC:
         .from(0)
         .map(_.toLong)
         .map(unit)
-        .find: offset =>
+        .findFirst: offset =>
           val relativeToInertRock1 = stone1.copy(velocity = stone1.velocity - offset)
           val relativeToInertRock2 = stone2.copy(velocity = stone2.velocity - offset)
           relativeToInertRock1.futureIntersect(relativeToInertRock2, plane).isDefined
-        .getOrElse(sys.error("input error"))
 
     def collisionTimeRelativeToRockVelocity(rockVector: Vec3): Double =
       stones
@@ -56,9 +55,8 @@ object Day24 extends AoC:
           val relativeToInertRock1 = combination(0).copy(velocity = combination(0).velocity - rockVector)
           val relativeToInertRock2 = combination(1).copy(velocity = combination(1).velocity - rockVector)
           relativeToInertRock1.futureIntersect(relativeToInertRock2, planeXY).map((x, y, time) => time) // or plane XZ, or plane YZ
-        .find(_.isDefined)
-        .flatten
-        .getOrElse(sys.error("logic error"))
+        .findFirst(_.isDefined)
+        .get
 
     def solve(): Long =
       val (parallelXY1, parallelXY2) = parallelInPlane(planeXY)

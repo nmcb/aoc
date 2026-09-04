@@ -1,6 +1,7 @@
 package aoc2017
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.annotation.tailrec
 
@@ -41,7 +42,7 @@ object Day21 extends AoC:
       grid.size % 2 == 0
 
     def apply(rules: Vector[Rule]): Grid =
-      rules.find(_.applies(grid)).map(_.output).getOrElse(sys.error(s"no rule applies: $grid"))
+      rules.findFirst(_.applies(grid)).output
 
   object Grid:
 

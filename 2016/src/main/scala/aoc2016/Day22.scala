@@ -2,6 +2,7 @@ package aoc2016
 
 import nmcb.*
 import nmcb.pos.{*, given}
+import nmcb.predef.*
 
 object Day22 extends AoC:
 
@@ -102,7 +103,7 @@ object Day22 extends AoC:
 
   val source: Pos  = (nodes.maxX, 0)
   val target: Pos  = (0, 0)
-  val empty: Pos = nodes.find(_.element.isEmpty).map(_.pos).get
+  val empty: Pos = nodes.findFirst(_.element.isEmpty).pos
   val massive: Vector[Pos] = nodes.filter(_.element.isMassive).map(_.pos).toVector
 
   /**

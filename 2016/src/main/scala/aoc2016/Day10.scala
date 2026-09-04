@@ -1,6 +1,7 @@
 package aoc2016
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.collection.mutable
 
@@ -26,15 +27,15 @@ object Day10 extends AoC:
 
   private def solve(instructions: Vector[Inst]) =
 
-    val targets: mutable.Map[Target,Set[Int]] =
-      mutable.Map[Target,Set[Int]]().withDefaultValue(Set.empty)
+    val targets: mutable.Map[Target, Set[Int]] =
+      mutable.Map[Target, Set[Int]]().withDefaultValue(Set.empty)
 
     instructions.foreach:
       case Init(bot, value) => targets += bot -> (targets(bot) + value)
       case _                =>
 
-    val sorts: mutable.Map[Target,Set[Set[Int]]] =
-      mutable.Map[Target,Set[Set[Int]]]().withDefaultValue(Set.empty)
+    val sorts: mutable.Map[Target, Set[Set[Int]]] =
+      mutable.Map[Target, Set[Set[Int]]]().withDefaultValue(Set.empty)
 
     var changed: Boolean = true
 
@@ -60,7 +61,7 @@ object Day10 extends AoC:
 
   def solve1(instructions: Vector[Inst], values: Set[Int]): Int =
     val (_, targets) = solve(instructions)
-    targets.find(_.values.contains(values)).get.target.index
+    targets.findFirst(_.values.contains(values)).target.index
 
   def solve2(instructions: Vector[Inst]): Int =
     val (targets, _) = solve(instructions)

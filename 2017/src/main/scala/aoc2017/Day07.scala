@@ -26,7 +26,7 @@ object Day07 extends AoC:
 
   extension (nodes: Nodes)
     def root: String =
-      nodes.keys.find(child => !nodes.parents.contains(child)).getOrElse(sys.error("no root"))
+      nodes.keys.findFirst(child => !nodes.parents.contains(child))
 
   def sequence[K, A, B](map: Map[K, Either[A, B]]): Either[A, Map[K, B]] =
     map.foldLeft(Right(Map.empty): Either[A, Map[K, B]]):
@@ -40,7 +40,7 @@ object Day07 extends AoC:
   extension (nodes: Nodes) def correctBalanceWeight: Int =
 
     def eitherDiffOrTotalWeight(node: Node): Either[Int, Int] =
-      val childResults: Map[String,Either[Int,Int]] =
+      val childResults: Map[String, Either[Int, Int]] =
         node.children.map(nodes).map(child => child.name -> eitherDiffOrTotalWeight(child)).toMap
 
       sequence(childResults).flatMap(childTotalWeights =>
@@ -48,10 +48,10 @@ object Day07 extends AoC:
         if totalWeightChildren.size <= 1 then
           Right(node.weight + childTotalWeights.values.sum)
         else
-          val badChild = totalWeightChildren.find(_.right.size == 1).get.right.head
-          val badChildWeight = nodes(badChild).weight
+          val badChild            = totalWeightChildren.findFirst(_.right.size == 1).right.head
+          val badChildWeight      = nodes(badChild).weight
           val badChildTotalWeight = childTotalWeights(badChild)
-          val goodTotalWeight = totalWeightChildren.find(_.right.size > 1).get.left
+          val goodTotalWeight     = totalWeightChildren.findFirst(_.right.size > 1).left
           Left(goodTotalWeight - (badChildTotalWeight - badChildWeight)))
 
     val root = nodes.root

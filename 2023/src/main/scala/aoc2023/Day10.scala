@@ -2,6 +2,7 @@ package aoc2023
 
 import nmcb.*
 import nmcb.pos.*
+import nmcb.predef.*
 
 import scala.annotation.tailrec
 
@@ -74,7 +75,7 @@ object Day10 extends AoC:
 
 
   lazy val start: Pos =
-    tiles.find((_,t) => t == Start).map((p,_) => p).getOrElse(sys.error("no start tile"))
+    tiles.findFirst((_,t) => t == Start).left
 
   /** trial and error on direction - seems we need to go west */
   lazy val path: Vector[(Pos, Dir)] =

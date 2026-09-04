@@ -1,6 +1,7 @@
 package aoc2020
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.annotation.tailrec
 import scala.util.matching.Regex
@@ -15,7 +16,7 @@ object Day21 extends AoC:
 
   val regex: Regex = "(.+) \\(contains (.+)\\)".r
 
-  def partition(input: Input): (Map[Ingredient,Allergens], Map[Allergen,Ingredients]) =
+  def partition(input: Input): (Map[Ingredient, Allergens], Map[Allergen, Ingredients]) =
 
     val candidates =
       input.foldLeft(Map.empty[Ingredient,Allergens]):
@@ -33,18 +34,18 @@ object Day21 extends AoC:
 
     reduced.partition((_, possible) => possible.isEmpty)
 
-  def findIngredient(risky: Map[Ingredient,Allergens]): Ingredient =
+  def findIngredient(risky: Map[Ingredient, Allergens]): Ingredient =
 
     extension (t: (String,String))
       def ingredient: String = t._1
       def allergen: String   = t._2
 
     @tailrec
-    def go(remaining: Map[Ingredient,Allergens], known: Vector[(Ingredient,Allergen)]): Vector[(Ingredient,Allergen)] =
+    def go(remaining: Map[Ingredient, Allergens], known: Vector[(Ingredient, Allergen)]): Vector[(Ingredient, Allergen)] =
       if remaining.isEmpty then
         known
       else
-        val (ingredient, allergen) = remaining.find((_, allergens) => allergens.size == 1).get
+        val (ingredient, allergen) = remaining.findFirst(_.right.size == 1)
         val todo  = remaining.removed(ingredient).view.mapValues(_ - allergen.head).toMap
         val found = (ingredient, allergen.head)
         go(todo, found +: known)

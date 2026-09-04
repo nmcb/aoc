@@ -62,4 +62,4 @@ object Day04 extends AoC:
   val rooms: Vector[Room] = lines.map(Room.fromLine)
 
   override lazy val answer1: Int = rooms.filter(_.isValid).map(_.id).sum
-  override lazy val answer2: Int = rooms.find(_.decrypt.trim == "northpole object storage").get.id
+  override lazy val answer2: Int = rooms.findFirst(_.decrypt.trim == "northpole object storage").id

@@ -1,6 +1,7 @@
 package aoc2015
 
 import nmcb.*
+import nmcb.predef.*
 
 object Day09 extends AoC:
 
@@ -13,10 +14,7 @@ object Day09 extends AoC:
         Vector((source, target, distance.toInt), (target, source, distance.toInt))
 
   def distance(edges: Vector[Edge], source: Node, target: Node): Int =
-    edges
-      .find(e => e.source == source && e.target == target)
-      .map(_.distance)
-      .getOrElse(sys.error(s"no route from $source to $target"))
+    edges.findFirst(e => e.source == source && e.target == target).distance
 
   def solve(edges: Vector[Edge]): Vector[Int] =
     edges

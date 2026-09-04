@@ -1,6 +1,7 @@
 package aoc2019
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.annotation.tailrec
 
@@ -17,7 +18,7 @@ object Day13 extends AoC:
 
   object Tile:
     def fromId(id: Long): Tile =
-      Tile.values.find(_.id == id).get
+      Tile.values.findFirst(_.id == id)
 
   import Tile.*
 

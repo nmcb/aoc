@@ -1,6 +1,7 @@
 package aoc2017
 
 import nmcb.*
+import nmcb.predef.*
 
 object Day13 extends AoC:
 
@@ -22,7 +23,7 @@ object Day13 extends AoC:
       rangesCaught(delay = 0).map(depth => depth * layers(depth)).sum
 
     def uncaughtDelay: Int =
-      Iterator.from(0).find(delay => layers.rangesCaught(delay).isEmpty).get
+      Iterator.from(0).findFirst(delay => layers.rangesCaught(delay).isEmpty)
 
 
   override lazy val answer1: Int = layers.tripSeverity
