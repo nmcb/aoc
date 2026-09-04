@@ -2,6 +2,7 @@ package aoc2017
 
 import nmcb.*
 import nmcb.pos.*
+import nmcb.predef.*
 
 object Day19 extends AoC:
 
@@ -17,7 +18,7 @@ object Day19 extends AoC:
       grid.peekOrElse(pos + dir, ' ') match
         case '+' =>
           val turns = Pos.offset4 - dir - (-dir)
-          val turn  = turns.find(turn => grid.peekOrElse(pos + dir + turn, ' ') != ' ').get
+          val turn  = turns.findFirst(turn => grid.peekOrElse(pos + dir + turn, ' ') != ' ')
           copy(pos = pos + dir, dir = turn)
         case _ =>
           copy(pos = pos + dir, dir = dir)

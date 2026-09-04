@@ -1,6 +1,7 @@
 package aoc2024
 
 import nmcb.*
+import nmcb.predef.*
 
 import scala.annotation.*
 
@@ -92,7 +93,7 @@ object Day09 extends AoC:
         chunks
       else
         val chunksWithIndex = chunks.zipWithIndex
-        val (file, fileIdx) = chunksWithIndex.find((c,_) => c.id == id).head
+        val (file, fileIdx) = chunksWithIndex.findFirst(_.left.id == id)
         chunksWithIndex
           .find((chunk, idx) => idx <= fileIdx & chunk.isFreeChunk & chunk.size >= file.size) match
             case None =>

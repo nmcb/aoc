@@ -1,5 +1,7 @@
 package examples
 
+import nmcb.predef.*
+
 import scala.annotation.*
 import scala.io.*
 import scala.util.*
@@ -32,8 +34,8 @@ object SecurityExercise:
         (clusters, routes)
       else
         val (a: Node, b: Node) = routes.head
-        val va: Cluster = clusters.find(_.contains(a)).get
-        val vb: Cluster = clusters.find(_.contains(b)).get
+        val va: Cluster = clusters.findFirst(_.contains(a))
+        val vb: Cluster = clusters.findFirst(_.contains(b))
         val vc: Cluster = va ++ vb
         val nextClusters: Set[Cluster] = clusters - va - vb + vc
         val nextRoutes: Vector[Route] = routes.filterNot(r => vc.contains(r.a) && vc.contains(r.b))

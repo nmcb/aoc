@@ -1,6 +1,7 @@
 package aoc2017
 
 import nmcb.*
+import nmcb.predef.*
 
 object Day02 extends AoC:
 
@@ -8,7 +9,7 @@ object Day02 extends AoC:
     lines.map(_.trim.split("\\s+").map(_.toInt).toVector)
 
   def process(numbers: Vector[Int]): Int =
-    val Vector(denominator, nominator) = numbers.combinations(2).map(_.sorted).find(n => n(1) % n(0) == 0).get
+    val Vector(denominator, nominator) = numbers.combinations(2).map(_.sorted).findFirst(n => n(1) % n(0) == 0)
     nominator / denominator
     
   override lazy val answer1: Int = numberLines.map(numbers => numbers.max - numbers.min).sum

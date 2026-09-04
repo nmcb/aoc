@@ -19,14 +19,14 @@ object Day06 extends AoC:
         if (p.center == "COM")
           p.name +: acc
         else
-          val next = planets.find(_.name == p.center).get
+          val next = planets.findFirst(_.name == p.center)
           loop(next, next.name +: acc)
       planets.map(p => p.name -> loop(p)).toMap
 
     def pathToCom(n: Name): Vector[Name] =
       @tailrec
       def loop(n: Name, acc: Vector[Name] = Vector.empty): Vector[Name] =
-        val c = planets.find(_.name == n).get.center
+        val c = planets.findFirst(_.name == n).center
         if (c == "COM")
           acc
         else

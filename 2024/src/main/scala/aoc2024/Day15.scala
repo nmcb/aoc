@@ -2,6 +2,7 @@ package aoc2024
 
 import nmcb.*
 import nmcb.pos.*
+import nmcb.predef.*
 
 import scala.annotation.*
 
@@ -30,12 +31,12 @@ object Day15 extends AoC:
   case class Grid(grid: Map[Pos, Char]):
     lazy val sizeX: Int = grid.keys.maxBy(_.x).x + 1
     lazy val sizeY: Int = grid.keys.maxBy(_.y).y + 1
-    lazy val robotPosition: Pos     = grid.find((_, c) => c == '@').map(_.pos).head
-    lazy val boxPositions: Set[Pos] = grid.filter((_, c) => c == 'O' | c == '[').keySet
+    lazy val robotPosition: Pos     = grid.findFirst(_.element == '@').pos
+    lazy val boxPositions: Set[Pos] = grid.filter((_, c) => c == 'O' || c == '[').keySet
 
     def isFree(p: Pos): Boolean = grid(p) == '.'
     def isWall(p: Pos): Boolean = grid(p) == '#'
-    def isBox(p: Pos): Boolean  = grid(p) == 'O' | grid(p) == ']' | grid(p) == '['
+    def isBox(p: Pos): Boolean  = grid(p) == 'O' || grid(p) == ']' || grid(p) == '['
 
     def moves(p: Pos, d: Command): Set[Move] =
       @tailrec

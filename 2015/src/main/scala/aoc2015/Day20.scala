@@ -13,7 +13,7 @@ object Day20 extends AoC:
       house <- Range.inclusive(elf, elfCount, elf)
     do
       presentCount(house) = presentCount(house) + elf * 10
-    presentCount.zipWithIndex.find(count => count.element >= atLeastPresents).get.index
+    presentCount.zipWithIndex.findFirst(count => count.element >= atLeastPresents).index
 
   def solve2(atLeastPresents: Int): Int =
     val elfCount = atLeastPresents / 10 + 1
@@ -24,7 +24,7 @@ object Day20 extends AoC:
       if house < elfCount
     yield
       presentCount(house) = presentCount(house) + elf * 11
-    presentCount.zipWithIndex.find(count => count.element >= atLeastPresents).get.index
+    presentCount.zipWithIndex.findFirst(count => count.element >= atLeastPresents).index
 
   override lazy val answer1: Int = solve1(atLeastPresents = 36_000_000)
   override lazy val answer2: Int = solve2(atLeastPresents = 36_000_000)

@@ -1,6 +1,7 @@
 package aoc2015
 
 import nmcb.*
+import nmcb.predef.*
 
 object Day16 extends AoC:
 
@@ -37,5 +38,5 @@ object Day16 extends AoC:
 
   val sues: Vector[Sue] = lines.map(Sue.fromString)
 
-  override lazy val answer1: Int = sues.find(_.matches1(compounds)).getOrElse(sys.error("not found")).nr
-  override lazy val answer2: Int = sues.find(_.matches2(compounds)).getOrElse(sys.error("not found")).nr
+  override lazy val answer1: Int = sues.findFirst(_.matches1(compounds)).nr
+  override lazy val answer2: Int = sues.findFirst(_.matches2(compounds)).nr
