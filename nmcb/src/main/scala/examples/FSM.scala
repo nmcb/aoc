@@ -2,38 +2,46 @@ package examples
 
 object FSM:
 
-  sealed trait OrderState
-  trait Placed    extends OrderState
-  trait Paid      extends OrderState
-  trait Shipped   extends OrderState
-  trait Delivered extends OrderState
-
-  case class Order[State <: OrderState](item: String, price: Double, state: String):
-
-    def pay(using ev: State =:= Placed): Order[Paid] =
-      copy[Paid](state = "paid")
-
-    def ship(using ev: State =:= Paid): Order[Shipped] =
-      copy[Shipped](state = "shipped")
-
-    def deliver(using ev: State =:= Shipped): Order[Delivered] =
-      copy[Delivered](state = "delivered")
+  import Order.*
+  import Order.StateValue.*
 
 
   object Order:
 
-    def make[State <: OrderState](item: String, price: Double, state: String = "placed"): Order[State] =
-      state match
-        case "placed"    => Order[State](item = item, price = price, state = state)
-        case "paid"      => Order[State](item = item, price = price, state = state)
-        case "shipped"   => Order[State](item = item, price = price, state = state)
-        case "delivered" => Order[State](item = item, price = price, state = state)
-        case unknown     => sys.error(s"unknow order state: $unknown")
+    sealed trait StateType
+    trait Placed    extends StateType
+    trait Paid      extends StateType
+    trait Shipped   extends StateType
+    trait Delivered extends StateType
+
+    enum StateValue derives CanEqual:
+      case PLACED
+      case PAID
+      case SHIPPED
+      case DELIVERED
+
+    import StateValue.*
+
+    def make(item: String, price: Double): Order[Placed] =
+      Order[Placed](item = item, price = price, state = PLACED)
+
+
+  case class Order[State <: StateType](item: String, price: Double, state: StateValue):
+
+    def pay(using ev: State =:= Placed): Order[Paid] =
+      copy[Paid](state = PAID)
+
+    def ship(using ev: State =:= Paid): Order[Shipped] =
+      copy[Shipped](state = SHIPPED)
+
+    def deliver(using ev: State =:= Shipped): Order[Delivered] =
+      copy[Delivered](state = DELIVERED)
+
 
   object Client:
 
-    val order1: Order[Placed]    = Order.make(item = "chair", price = 666.00)
-    val order2: Order[Paid]      = order1.pay
-    val order3: Order[Shipped]   = order2.ship
-    val order4: Order[Delivered] = order3.deliver
+    private val order1 = Order.make(item = "chair", price = 666.00)
+    private val order2 = order1.pay
+    private val order3 = order2.ship
+    private val order4 = order3.deliver
 
