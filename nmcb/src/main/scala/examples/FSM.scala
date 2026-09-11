@@ -36,12 +36,3 @@ object FSM:
 
     def deliver(using ev: State =:= Shipped): Order[Delivered] =
       copy[Delivered](state = DELIVERED)
-
-
-  object Client:
-
-    private val order1 = Order.make(item = "chair", price = 666.00)
-    private val order2 = order1.pay
-    private val order3 = order2.ship
-    private val order4 = order3.deliver
-
