@@ -53,7 +53,7 @@ object Day20 extends AoC:
 
   def remaining(blacklist: Vector[Range]): Set[Range] =
     blacklist
-      .foldLeft(Ranges.all): (result,blocked) =>
+      .foldLeft(Ranges.all): (result, blocked) =>
         result.flatMap: open =>
           open - blocked
 
