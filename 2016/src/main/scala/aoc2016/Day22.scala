@@ -17,7 +17,7 @@ object Day22 extends AoC:
       else if isMassive then '#'
       else                   '.'
 
-  val nodes: Map[Pos,Node] =
+  val nodes: Map[Pos, Node] =
     lines
       .filter(_.startsWith("/dev/grid/node"))
       .map: line =>
@@ -27,11 +27,11 @@ object Day22 extends AoC:
 
   def viable(nodes: Map[Pos, Node]): Vector[(Node, Node)] =
     for
-      (_,a) <- nodes.toVector
-      (_,b) <- nodes.toVector
+      (_, a) <- nodes.toVector
+      (_, b) <- nodes.toVector
       if a != b && a.nonEmpty && a.fitsOn(b)
     yield
-      (a,b)
+      (a, b)
 
   extension (nodes: Map[Pos, Node])
     def maxX: Int = nodes.maxBy(_.pos.x).pos.x
@@ -39,16 +39,18 @@ object Day22 extends AoC:
 
     def asString: String =
       val sb = StringBuilder(maxX * maxY)
+      
       for
         y <- 0 to maxY
         x <- 0 to maxX
       do
         val pos = (x, y)
         val node = nodes(pos)
-        if pos == (0, 0) then sb.append('T')
+        if      pos == (0, 0)    then sb.append('T')
         else if pos == (maxX, 0) then sb.append('S')
-        else sb.append(node.toChar)
+        else                          sb.append(node.toChar)
         if x == maxX then sb.append('\n')
+        
       sb.append('\n').toString
 
   /**
