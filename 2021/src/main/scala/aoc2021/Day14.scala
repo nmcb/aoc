@@ -5,9 +5,9 @@ import nmcb.predef.*
 
 object Day14 extends AoC:
 
-  type Rules  = Map[(Char,Char),Char]
-  type Pairs  = Map[(Char,Char),Long]
-  type Counts = Map[Char,Long]
+  type Rules              = Map[(Char, Char), Char]
+  type MoleculePairCount  = Map[(Char, Char), Long]
+  type MoleculeCount      = Map[Char, Long]
 
   val template: String =
     lines.head
@@ -19,39 +19,39 @@ object Day14 extends AoC:
       .toMap
 
   /** maintain a count for sequences of pairs as well as individual molecules */
-  case class Polymer(rules: Rules, pairs: Pairs, counts: Counts):
+  case class PolymerCount(rules: Rules, moleculePairCount: MoleculePairCount, moleculeCount: MoleculeCount):
 
-    def step: Polymer =
+    def step: PolymerCount =
 
-      val nextPairs: Pairs =
-        pairs
+      val nextMoleculePairCount: MoleculePairCount =
+        moleculePairCount
           .toVector
-          .flatMap: (pair,count) =>
+          .flatMap: (pair, count) =>
             val char = rules(pair)
             Vector((pair.left,char) -> count, (char, pair.right) -> count)
           .groupMapReduce(_.left)(_.right)(_ + _)
 
-      val nextCounts: Counts =
-        pairs
-          .foldLeft(counts): (result,count) =>
+      val nextMoleculeCount: MoleculeCount =
+        moleculePairCount
+          .foldLeft(moleculeCount): (result, count) =>
             val char = rules(count.left)
             result.updated(char, result(char) + count.right)
           .groupMapReduce(_.left)(_.right)(_ + _)
 
-      copy(pairs = nextPairs, counts = nextCounts)
+      copy(moleculePairCount = nextMoleculePairCount, moleculeCount = nextMoleculeCount)
 
-  object Polymer:
+  object PolymerCount:
 
-    def make(rules: Rules, template: String): Polymer =
+    def make(rules: Rules, template: String): PolymerCount =
       val pairs  = template.zip(template.tail).groupMapReduce(identity)(_ => 1L)(_+_)
       val counts = template.groupMapReduce(identity)(_ => 1L)(_ + _)
-      Polymer(rules, pairs, counts)
+      PolymerCount(rules, pairs, counts)
 
-  def solve(polymer: Polymer, iterations: Int): Long =
-    val counts = Iterator.iterate(polymer)(_.step).nth(iterations).counts
+  def solve(polymerCount: PolymerCount, iterations: Int): Long =
+    val counts = Iterator.iterate(polymerCount)(_.step).nth(iterations).moleculeCount
     counts.values.max - counts.values.min
 
-  val polymer: Polymer = Polymer.make(rules, template)
+  val polymerCount: PolymerCount = PolymerCount.make(rules, template)
 
-  override lazy val answer1: Long = solve(polymer, 10)
-  override lazy val answer2: Long = solve(polymer, 40)
+  override lazy val answer1: Long = solve(polymerCount, 10)
+  override lazy val answer2: Long = solve(polymerCount, 40)
