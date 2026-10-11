@@ -94,7 +94,7 @@ object Day13 extends AoC:
   def solve1(value: Grid[Char], carts: Vector[Cart]): Pos =
     @tailrec
     def loop(todo: Vector[Cart], done: Vector[Cart] = Vector.empty): Pos =
-      val counts = (todo ++ done).map(_.pos).countElements
+      val counts = (todo ++ done).map(_.pos).countElements[Int]
       if counts.exists(_.count > 1) then
         counts.maxBy(_.count).pos
       else if todo.isEmpty then
@@ -114,7 +114,7 @@ object Day13 extends AoC:
         loop(todo = done.sortBy(_.pos))
       else
         val moved = todo.head.move(grid)
-        val counts = (moved +: (todo.tail ++ done)).map(_.pos).countElements
+        val counts = (moved +: (todo.tail ++ done)).map(_.pos).countElements[Int]
         counts.find(_.count > 1) match
           case Some(pos, _) => loop(todo = todo.tail.filterNot(_.pos == pos), done = done.filterNot(_.pos == pos))
           case None         => loop(todo = todo.tail, done = moved +: done)

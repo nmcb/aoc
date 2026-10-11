@@ -8,7 +8,7 @@ object Day06 extends AoC:
   def solve(input: Vector[String], selector: Vector[(Char, Int)] => Char): String =
     input
       .transpose
-      .map(_.elementCount)
+      .map(_.elementCount[Int])
       .map(selector)
       .mkString
 

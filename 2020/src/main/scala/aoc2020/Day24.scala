@@ -40,7 +40,7 @@ object Day24 extends AoC:
                 case 'e' => go(point.se, remaining.drop(2))
                 case 'w' => go(point.sw, remaining.drop(2))
         go(Tile(0, 0), directions)
-      .countElements
+      .countElements[Int]
       .filter(_.count % 2 == 1)
       .keySet
 

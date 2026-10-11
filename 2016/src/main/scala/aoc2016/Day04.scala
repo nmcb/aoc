@@ -36,7 +36,7 @@ object Day04 extends AoC:
       val common: Vector[Char] =
         name
           .filterNot(_ == '-')
-          .elementCount
+          .elementCount[Int]
           .sorted
           .map(_.char)
           .take(5)
