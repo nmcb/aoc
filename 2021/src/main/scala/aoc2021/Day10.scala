@@ -2,10 +2,13 @@ package aoc2021
 
 import nmcb.*
 
+import scala.annotation.tailrec
+
 object Day10 extends AoC:
 
 
   def incomplete(s: String): Option[Char] =
+    @tailrec
     def loop(todo: List[Char], stack: List[Char] = List.empty): Option[Char] =
       if todo.isEmpty && stack.isEmpty then
         None
@@ -24,6 +27,7 @@ object Day10 extends AoC:
     loop(s.toList)
 
   def incompletes(s: String): List[Char] =
+    @tailrec
     def loop(todo: List[Char], stack: List[Char] = List.empty[Char]): List[Char] =
       if todo.isEmpty && stack.isEmpty then
         Nil
@@ -53,7 +57,7 @@ object Day10 extends AoC:
       .values
       .sum
 
-  override lazy val answer2 =
+  override lazy val answer2: Long =
     val scores =
       lines
         .map(incompletes)
