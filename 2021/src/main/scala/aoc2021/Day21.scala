@@ -53,7 +53,7 @@ object Day21 extends AoC:
           t2 <- 1L to 3L
           t3 <- 1L to 3L
         yield t1 + t2 + t3
-      throws.groupMapReduce(identity)(_ => 1L)(_ + _).toVector
+      throws.elementCount
 
     case class Player(pos: Long, score: Long = 0):
 

@@ -67,7 +67,7 @@ object Day04 extends AoC:
   def solve2(records: Vector[Record]): Int =
     val shifts              = Shift.fromRecords(records)
     val guardSleeps         = shifts.groupMapReduce(_.guard)(_.sleep.toVector)(_ ++ _)
-    val guardMinuteCount    = guardSleeps.view.mapValues(_.countElements).toMap
+    val guardMinuteCount    = guardSleeps.view.mapValues(_.countElements[Int]).toMap
     val minuteMaxGuardCount = (0 until 60).map(minute => minute -> guardMinuteCount.view.mapValues(_.getOrElse(minute, 0)).maxBy((_, count) => count)).toMap
 
     type GuardCount      = (Int, Int)

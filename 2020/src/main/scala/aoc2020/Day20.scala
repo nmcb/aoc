@@ -68,7 +68,7 @@ object Day20 extends AoC:
       image.permutations.map(Tile(id, _))
 
   def corners(tiles: Vector[Tile]): Vector[Tile] =
-    val occurrences = tiles.flatMap(_.edges).countElements
+    val occurrences = tiles.flatMap(_.edges).countElements[Int]
     val categories  = tiles.groupBy(tile => tile.edges.count(edge => occurrences(edge) == 1))
     categories(4)
 
@@ -90,7 +90,7 @@ object Day20 extends AoC:
     val size = math.sqrt(tiles.size).toInt
     val positions = for x <- 0 until size; y <- 0 until size yield (x, y)
     val corner = corners(tiles).head.permutations
-    val occurrences = tiles.flatMap(_.edges).countElements
+    val occurrences = tiles.flatMap(_.edges).countElements[Int]
 
     @tailrec
     def go(remaining: Vector[Tile], positions: Vector[Pos], ordered: Map[Pos, Tile]): Map[Pos, Tile] =

@@ -46,7 +46,7 @@ object Day23 extends AoC:
       elves.map(e => if neighbourCountOf(e) == 0 then e -> None else e -> propose(e, dirs)).toMap
 
     val moves: Set[Pos] =
-      val counts = proposals.view.values.flatten.countElements
+      val counts = proposals.view.values.flatten.countElements[Int]
       proposals.map((e, maybe) => maybe.map(move => if counts(move) == 1 then move else e).getOrElse(e)).toSet
 
     def next: Mat =

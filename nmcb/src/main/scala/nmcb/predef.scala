@@ -51,10 +51,10 @@ object predef:
     def findMap[B](f: A => Option[B]): B =
       i.iterator.flatMap(f).next()
 
-    def countElements: Map[A, Int] =
-      i.groupMapReduce(identity)(_ => 1)(_ + _)
+    def countElements[N](using numeric: Numeric[N]): Map[A, N] =
+      i.groupMapReduce(identity)(_ => numeric.one)(numeric.plus)
 
-    def elementCount: Vector[(A, Int)] =
+    def elementCount[N](using numeric: Numeric[N]): Vector[(A, N)] =
       countElements.toVector
 
   

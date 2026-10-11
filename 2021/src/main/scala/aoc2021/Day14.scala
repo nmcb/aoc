@@ -18,7 +18,7 @@ object Day14 extends AoC:
         case s"$pair -> $insert" => (pair.charAt(0), pair.charAt(1)) -> insert.charAt(0)
       .toMap
 
-  /** maintain a count for sequences of pairs as well as individual molecules */
+  /** maintain a count for molecule pairs as well as individual molecules */
   case class PolymerCount(rules: Rules, moleculePairCount: MoleculePairCount, moleculeCount: MoleculeCount):
 
     def step: PolymerCount =
@@ -28,7 +28,7 @@ object Day14 extends AoC:
           .toVector
           .flatMap: (pair, count) =>
             val char = rules(pair)
-            Vector((pair.left,char) -> count, (char, pair.right) -> count)
+            Vector((pair.left, char) -> count, (char, pair.right) -> count)
           .groupMapReduce(_.left)(_.right)(_ + _)
 
       val nextMoleculeCount: MoleculeCount =
@@ -43,8 +43,8 @@ object Day14 extends AoC:
   object PolymerCount:
 
     def make(rules: Rules, template: String): PolymerCount =
-      val pairs  = template.zip(template.tail).groupMapReduce(identity)(_ => 1L)(_+_)
-      val counts = template.groupMapReduce(identity)(_ => 1L)(_ + _)
+      val pairs  = template.zip(template.tail).countElements[Long]
+      val counts = template.countElements[Long]
       PolymerCount(rules, pairs, counts)
 
   def solve(polymerCount: PolymerCount, iterations: Int): Long =

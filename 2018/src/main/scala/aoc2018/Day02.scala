@@ -8,7 +8,7 @@ object Day02 extends AoC:
   extension (box: String)
 
     private def sameLetterCount(nr: Int): Int =
-      box.countElements.count(_.right == nr)
+      box.countElements[Int].count(_.right == nr)
 
     def hasTwoChars: Boolean =
       sameLetterCount(nr = 2) >= 1
