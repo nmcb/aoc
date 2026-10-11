@@ -27,13 +27,23 @@ ThisBuild / scalacOptions ++= Seq(
 )
 
 ThisBuild / Compile / run / fork         := true
-ThisBuild / Compile / run / javaOptions ++= Seq("-Xmx4G", "-Xss1G", "-XX:+UseG1GC")
+ThisBuild / Compile / run / javaOptions ++= Seq(
+  "-Xmx4G",
+  "-Xss1G",
+  "-XX:+UseG1GC",
+  "--sun-misc-unsafe-memory-access=allow"
+)
 
 ThisBuild / Test / fork         := true
-ThisBuild / Test / javaOptions ++= Seq("-Xmx4G", "-Xss1G", "-XX:+UseG1GC")
 ThisBuild / Test / testOptions  += Tests.Argument("-oD")
+ThisBuild / Test / javaOptions ++= Seq(
+  "-Xmx4G",
+  "-Xss1G",
+  "-XX:+UseG1GC",
+  "--sun-misc-unsafe-memory-access=allow"
+)
 
-Global / onChangedBuildSource   := ReloadOnSourceChanges
+Global / onChangedBuildSource  := ReloadOnSourceChanges
 
 
 lazy val input   = project.in(file("input"))
