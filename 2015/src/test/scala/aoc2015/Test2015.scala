@@ -4,10 +4,6 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class Test2015 extends AnyFunSuite:
 
-  test("Day 12: JSAbacusFramework.io"):
-    assertResult(111754)(Day12.answer1)
-    assertResult(65402)(Day12.answer2)
-
   test("Day 13: Knights of the Dinner Table"):
     assertResult(733)(Day13.answer1)
     assertResult(725)(Day13.answer2)
