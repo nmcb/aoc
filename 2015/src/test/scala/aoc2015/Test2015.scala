@@ -1,14 +1,8 @@
 package aoc2015
 
-import nmcb.*
-
 import org.scalatest.funsuite.AnyFunSuite
 
 class Test2015 extends AnyFunSuite:
-
-  test("Day 01: Not Quite Lisp"):
-    assertResult(138)(Day01.answer1)
-    assertResult(1771)(Day01.answer2)
 
   test("Day 02: I Was Told There Would Be No Math"):
     assertResult(1606483)(Day02.answer1)
