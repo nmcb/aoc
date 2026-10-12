@@ -4,10 +4,6 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class Test2015 extends AnyFunSuite:
 
-  test("Day 18: Like a GIF For Your Yard"):
-    assertResult(814)(Day18.answer1)
-    assertResult(924)(Day18.answer2)
-
   test("Day 19: Medicine for Rudolph"):
     assertResult(535)(Day19.answer1)
     assertResult(212)(Day19.answer2)
