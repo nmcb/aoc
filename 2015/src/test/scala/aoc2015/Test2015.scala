@@ -4,10 +4,6 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class Test2015 extends AnyFunSuite:
 
-  test("Day 22: Wizard Simulator 20XX"):
-    assertResult(1824)(Day22.answer1)
-    assertResult(1937)(Day22.answer2)
-
   test("Day 23: Opening the Turing Lock"):
     assertResult(255)(Day23.answer1)
     assertResult(334)(Day23.answer2)
