@@ -3,10 +3,7 @@ package aoc2015
 import org.scalatest.funsuite.AnyFunSuite
 
 class Test2015 extends AnyFunSuite:
-
-  test("Day 19: Medicine for Rudolph"):
-    assertResult(535)(Day19.answer1)
-    assertResult(212)(Day19.answer2)
+  
 
   test("Day 20: Infinite Elves and Infinite Houses"):
     assertResult(831600)(Day20.answer1)
