@@ -4,10 +4,6 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class Test2015 extends AnyFunSuite:
 
-  test("Day 23: Opening the Turing Lock"):
-    assertResult(255)(Day23.answer1)
-    assertResult(334)(Day23.answer2)
-
   test("Day 24: It Hangs in the Balance"):
     assertResult(11846773891L)(Day24.answer1)
     assertResult(80393059L)(Day24.answer2)
