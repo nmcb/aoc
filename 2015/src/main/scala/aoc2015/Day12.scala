@@ -13,7 +13,7 @@ object Day12 extends AoC:
     def number: P[Long] =
       (for _ <- char('-') ; i <- digits yield -i) | digits
 
-    def member: P[(String,Json)] =
+    def member: P[(String, Json)] =
       for k <- string ; _ <- char(':') ; v <- json yield (k,v)
 
     def obj: P[Json] =
@@ -53,5 +53,5 @@ object Day12 extends AoC:
 
   lazy val puzzle: Json = Json.parse(input)
 
-  override lazy val answer1: Long = solve(puzzle, _ => true)
+  override lazy val answer1: Long = solve(puzzle)
   override lazy val answer2: Long = solve(puzzle, _ != Str("red"))
