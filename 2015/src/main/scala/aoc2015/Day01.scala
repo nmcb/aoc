@@ -8,7 +8,7 @@ object Day01 extends AoC:
   def countOpenOrClose(counter: Int, char: Char): Int =
       if      char == '(' then counter + 1
       else if char == ')' then counter - 1
-      else                     sys.error(s"unknown command: '$char'")
+      else                     sys.error(s"unknown command: $char")
 
 
   val commands: Vector[Char] = input.toVector
