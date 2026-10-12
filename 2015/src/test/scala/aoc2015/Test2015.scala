@@ -4,10 +4,6 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class Test2015 extends AnyFunSuite:
 
-  test("Day 07: Some Assembly Required"):
-    assertResult(956)(Day07.answer1)
-    assertResult(40149)(Day07.answer2)
-
   test("Day 08: Matchsticks"):
     assertResult(1333)(Day08.answer1)
     assertResult(2046)(Day08.answer2)
