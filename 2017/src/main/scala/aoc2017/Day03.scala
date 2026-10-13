@@ -5,21 +5,22 @@ import nmcb.pos.*
 import nmcb.predef.*
 
 import scala.annotation.tailrec
+import scala.collection.Iterator.iterate
 
 object Day03 extends AoC:
 
   def position(input: Int): Pos =
-    val n    = Iterator.iterate(1)(_ + 2).findFirst(n => n * n >= input)
-    val base = input - (n - 2) * (n - 2) - 1
-    val size = n - 1
-    val half = size / 2
+    val n        = iterate(1)(_ + 2).findFirst(n => n * n >= input)
+    val base     = input - (n - 2) * (n - 2) - 1
+    val size     = n - 1
+    val half     = size / 2
     val quadrant = base / size
-    val offset = base % size
+    val offset   = base % size
     quadrant match
-      case 0 => (half, offset + 1 - half)
-      case 1 => (half - 1 - offset, half)
-      case 2 => (-half, half - 1 - offset)
-      case 3 => (offset + 1 - half, -half)
+      case 0 => (x = half, y = offset + 1 - half)
+      case 1 => (x = half - 1 - offset, y = half)
+      case 2 => (x = -half, y = half - 1 - offset)
+      case 3 => (x = offset + 1 - half, y = -half)
 
   def spiralSquares(to: Int):Int =
 
@@ -32,7 +33,7 @@ object Day03 extends AoC:
         (x, y)
 
     @tailrec
-    def loop(n: Int, squares: Map[Pos,Int] = Map((0, 0) -> 1)): Int =
+    def loop(n: Int, squares: Map[Pos, Int] = Map((0, 0) -> 1)): Int =
       val point  = position(n)
       val result = spiralScan.map(_ + point).flatMap(squares.get).sum
       if result > to then
