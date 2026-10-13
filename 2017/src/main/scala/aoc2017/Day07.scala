@@ -8,12 +8,13 @@ object Day07 extends AoC:
 
   type Nodes = Map[String, Node]
 
-  extension (nodes: Nodes) def parents: Map[String, String] =
-    for
-      parent -> node <- nodes
-      child          <- node.children
-    yield
-      child -> parent
+  extension (nodes: Nodes)
+    def parents: Map[String, String] =
+      for
+        parent -> node <- nodes
+        child          <- node.children
+      yield
+        child -> parent
 
   val nodes: Nodes =
     lines
