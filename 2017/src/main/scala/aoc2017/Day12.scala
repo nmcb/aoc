@@ -18,14 +18,15 @@ object Day12 extends AoC:
 
     def groups: Int =
       @tailrec
-      def loop(todo: Graph[N] = graph, result: Int = 0): Int =
+      def loop(todo: Graph[N], result: Int = 0): Int =
         if todo.isEmpty then
           result
         else
           val node      = todo.keys.head
           val reachable = Dijkstra.reachable(node, todo)
-          loop(todo.removedAll(reachable), result + 1)
-      loop()
+          val next      = todo.removedAll(reachable)
+          loop(next, result + 1)
+      loop(graph)
 
   override lazy val answer1: Int = Dijkstra.reachable(0, graph).size
   override lazy val answer2: Int = graph.groups
