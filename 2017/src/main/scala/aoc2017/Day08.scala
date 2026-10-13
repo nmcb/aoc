@@ -16,27 +16,22 @@ object Day08 extends AoC:
         case Nil =>
           this
         case inst :: rest =>
-          CPU( instructions =
-                 rest
-             , registers =
-                 if inst.condition(registers) then
-                   registers.updatedWith(inst.target):
-                     case None    => Some(inst.operation(0))
-                     case Some(v) => Some(inst.operation(v))
-                 else
-                   registers
-             , largestHeld =
-                 if largestValue > largestHeld then
-                   largestValue
-                 else
-                   largestHeld
+          copy(
+            instructions = rest,
+            registers    = if inst.condition(registers) then
+                             registers.updatedWith(inst.target):
+                               case None    => Some(inst.operation(0))
+                               case Some(v) => Some(inst.operation(v))
+                           else
+                             registers,
+             largestHeld = if largestValue > largestHeld then
+                             largestValue
+                           else
+                             largestHeld
           ).run
 
     def largestValue: Int =
       if registers.isEmpty then 0 else registers.valuesIterator.max
-
-    def largestHeldValue: Int =
-      largestHeld
 
   val cpu: CPU =
     val instructions: List[Inst] =
