@@ -5,14 +5,15 @@ import nmcb.predef.*
 
 object Day04 extends AoC:
 
-  val memo: Memo[String, Map[Char, Int]] = Memo.empty
+  val cache: Memo[String, Map[Char, Int]] = Memo.empty
   extension (self: String)
     def charCount: Map[Char, Int] =
-      memo.memoize(self):
+      cache.memoize(self):
         self.countElements
 
-  extension (l: String) infix def anagram(r: String): Boolean =
-    l.charCount == r.charCount
+  extension (l: String)
+    infix def anagram(r: String): Boolean =
+      l.charCount == r.charCount
 
   case class Passphrase(words: Vector[String]):
 
