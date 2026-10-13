@@ -13,17 +13,19 @@ object Day06 extends AoC:
       def next: Int =
         if index + 1 >= banks.size then 0 else index + 1
 
-    @tailrec
-    final def distribute(amount: Int, index: Int, accumulator: Vector[Int]): Vector[Int] =
-      if amount <= 0 then
-        accumulator
-      else
-        val update = accumulator(index) + 1
-        distribute(
-          accumulator = accumulator.updated(index, update),
-          index       = index.next,
-          amount      = amount - 1
-        )
+    def distribute(amount: Int, index: Int, accumulator: Vector[Int]): Vector[Int] =
+      @tailrec
+      def loop(amount: Int, index: Int, accumulator: Vector[Int]): Vector[Int] =
+        if amount <= 0 then
+          accumulator
+        else
+          val update = accumulator(index) + 1
+          loop(
+            accumulator = accumulator.updated(index, update),
+            index       = index.next,
+            amount      = amount - 1
+          )
+      loop(amount, index, accumulator)
 
     def redistribute: Vector[Area] =
       @tailrec
