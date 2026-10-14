@@ -2,6 +2,8 @@ package nmcb
 
 import predef.*
 
+import scala.collection.Iterator.iterate
+
 case class Cycle[A](
     stemSize: Int,
     cycleSize: Int,
@@ -12,7 +14,7 @@ case class Cycle[A](
 
   def simulate(n: Long): A =
     val iterations = (n - stemSize) % cycleSize
-    Iterator.iterate(cycleHeadRepeat)(next).nth(iterations.toInt)
+    iterate(cycleHeadRepeat)(next).nth(iterations.toInt)
 
 
 object Cycle:
@@ -40,8 +42,7 @@ object Cycle:
 
     val trace: mutable.Map[B, (A, Int)] = mutable.Map[B, (A, Int)]()
 
-    Iterator.iterate(a)(next)
-      .iterator
+    iterate(a)(next)
       .zipWithPrevious
       .zipWithIndex
       .map:
