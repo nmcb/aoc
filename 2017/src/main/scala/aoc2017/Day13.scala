@@ -3,9 +3,11 @@ package aoc2017
 import nmcb.*
 import nmcb.predef.*
 
+import scala.collection.Iterator.from
+
 object Day13 extends AoC:
 
-  type Layers = Map[Int,Int]
+  type Layers = Map[Int, Int]
 
   val layers: Layers =
     lines
@@ -23,7 +25,7 @@ object Day13 extends AoC:
       rangesCaught(delay = 0).map(depth => depth * layers(depth)).sum
 
     def uncaughtDelay: Int =
-      Iterator.from(0).findFirst(delay => layers.rangesCaught(delay).isEmpty)
+      from(0).findFirst(delay => layers.rangesCaught(delay).isEmpty)
 
 
   override lazy val answer1: Int = layers.tripSeverity
