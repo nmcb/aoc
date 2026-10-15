@@ -39,33 +39,29 @@ object Day04 extends AoC:
 
   case class Shift(guard: Int, sleep: Set[Int])
 
-  object Shift:
-
-    def fromRecords(records: Vector[Record], shiftStarted: Option[Shift] = None, sleepStarted: Option[Int] = None): Vector[Shift] =
-      if records.isEmpty then
-        shiftStarted.toVector
-      else
-        val record = records.head
-        val rest   = records.tail
-        record.event match
-          case BeginShift(guard) =>
-            shiftStarted.toVector ++ fromRecords(rest, Some(Shift(guard, Set.empty)))
-          case FallAsleep =>
-            fromRecords(rest, shiftStarted, Some(record.minute))
-          case WakeUp =>
-            fromRecords(rest, shiftStarted.map(shift => shift.copy(sleep = shift.sleep ++ (sleepStarted.get until record.minute).toSet)))
+  def fromRecords(records: Vector[Record], shiftStarted: Option[Shift] = None, sleepStarted: Option[Int] = None): Vector[Shift] =
+    if records.isEmpty then
+      shiftStarted.toVector
+    else
+      val record = records.head
+      val rest   = records.tail
+      record.event match
+        case BeginShift(guard) =>
+          shiftStarted.toVector ++ fromRecords(rest, Some(Shift(guard, Set.empty)))
+        case FallAsleep =>
+          fromRecords(rest, shiftStarted, Some(record.minute))
+        case WakeUp =>
+          fromRecords(rest, shiftStarted.map(shift => shift.copy(sleep = shift.sleep ++ (sleepStarted.get until record.minute).toSet)))
 
   def solve1(records: Vector[Record]): Int =
-    val shifts          = Shift.fromRecords(Day04.records)
-    val guardSleeps     = shifts.groupMapReduce(_.guard)(_.sleep.toSeq)(_ ++ _)
+    val shifts          = fromRecords(records)
+    val guardSleeps     = shifts.groupMapReduce(_.guard)(_.sleep.toVector)(_ ++ _)
     val (guard, sleeps) = guardSleeps.maxBy((_, minutes) => minutes.length)
     val minute          = (0 until 60).maxBy(minute => sleeps.count(_ == minute))
     guard * minute
 
-  lazy val records: Vector[Record] = Record.fromLines(lines)
-
   def solve2(records: Vector[Record]): Int =
-    val shifts              = Shift.fromRecords(records)
+    val shifts              = fromRecords(records)
     val guardSleeps         = shifts.groupMapReduce(_.guard)(_.sleep.toVector)(_ ++ _)
     val guardMinuteCount    = guardSleeps.view.mapValues(_.countElements[Int]).toMap
     val minuteMaxGuardCount = (0 until 60).map(minute => minute -> guardMinuteCount.view.mapValues(_.getOrElse(minute, 0)).maxBy((_, count) => count)).toMap
@@ -83,6 +79,8 @@ object Day04 extends AoC:
 
     val result = minuteMaxGuardCount.maxBy(_.guardCount.count)
     result.guardCount.guard * result.minute
+
+  lazy val records: Vector[Record] = Record.fromLines(lines)
 
   override lazy val answer1: Int = solve1(records)
   override lazy val answer2: Int = solve2(records)
