@@ -16,7 +16,13 @@ object Day03 extends AoC:
         val x1 = w.toInt + x0
         val y0 = y.toInt
         val y1 = h.toInt + y0
-        (for x <- x0 until x1 ; y <- y0 until y1 yield (x = x, y = y)).toVector
+        val result =
+          for
+            x <- x0 until x1
+            y <- y0 until y1
+          yield
+            (x = x, y = y)
+        result.toVector
 
   val overlaps: Overlaps =
     claims.flatten.countElements
