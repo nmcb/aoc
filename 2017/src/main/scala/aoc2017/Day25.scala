@@ -129,7 +129,7 @@ object Day25 extends AoC:
   /**
    * Turing Machine Instance.
    */
-  def turing: Turing = Turing(transitions, beginState)
+  val turing: Turing = Turing(transitions, beginState)
 
   /**
    * Perform a diagnostic checksum after 12317297 steps.
