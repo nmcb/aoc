@@ -2,7 +2,6 @@ package aoc2017
 
 import nmcb.*
 import nmcb.predef.*
-import scala.util.Try
 
 object Day23 extends AoC:
 
@@ -17,19 +16,18 @@ object Day23 extends AoC:
   import Inst.*
 
   val instructions: Vector[Inst] =
-    def parse(s: String): Value = Try(s.toLong).getOrElse(s)
-    lines
-      .map:
-        case s"set $x $y" => SET(x, parse(y))
-        case s"sub $x $y" => SUB(x, parse(y))
-        case s"mul $x $y" => MUL(x, parse(y))
-        case s"jnz $x $y" => JNZ(parse(x), parse(y))
+    def parseValue(s: String): Value = s.toLongOption.getOrElse(s)
+    lines.collect:
+      case s"set $x $y" => SET(x, parseValue(y))
+      case s"sub $x $y" => SUB(x, parseValue(y))
+      case s"mul $x $y" => MUL(x, parseValue(y))
+      case s"jnz $x $y" => JNZ(parseValue(x), parseValue(y))
 
   case class CPU(prog: Vector[Inst], mem: Map[String, Long], pc: Int, countMUL: Long = 0):
 
     extension (v: Value)
 
-      private def get: Long =
+      private def deref: Long =
         v match
           case l: Long   => l
           case r: String => mem(r)
@@ -40,20 +38,16 @@ object Day23 extends AoC:
     def step: CPU =
       if running then
         prog(pc) match
-          case SET(x, y) => copy(mem = mem + (x -> y.get), pc = pc + 1)
-          case SUB(x, y) => copy(mem = mem + (x -> (x.get - y.get)), pc = pc + 1)
-          case MUL(x, y) => copy(mem = mem + (x -> (x.get * y.get)), pc = pc + 1, countMUL = countMUL + 1)
-          case JNZ(x, y) => copy(pc = if x.get != 0 then pc + y.get.toInt else pc + 1)
+          case SET(x, y) => copy(mem = mem.updated(x, y.deref), pc = pc + 1)
+          case SUB(x, y) => copy(mem = mem.updated(x, x.deref - y.deref), pc = pc + 1)
+          case MUL(x, y) => copy(mem = mem.updated(x, x.deref * y.deref), pc = pc + 1, countMUL = countMUL + 1)
+          case JNZ(x, y) => copy(pc = if x.deref != 0 then pc + y.deref.toInt else pc + 1)
       else
         this
 
   object CPU:
     def load(prog: Vector[Inst]): CPU =
-      CPU(
-        prog = prog,
-        mem  = Map.empty.withDefaultValue(0L),
-        pc   = 0
-      )
+      CPU(prog = prog, mem = Map.empty.withDefaultValue(0L), pc = 0)
 
   def solve(prog: Vector[Inst]): Long =
     Iterator.iterate(CPU.load(prog))(_.step).findFirstNot(_.running).countMUL
