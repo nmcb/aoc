@@ -2,6 +2,8 @@ package aoc2017
 
 import nmcb.*
 
+import scala.collection.Iterator.single
+
 object Day24 extends AoC:
 
   case class Component(portA: Int, portB: Int):
@@ -27,7 +29,7 @@ object Day24 extends AoC:
       for
         component <- components.filter(_.contains(port)).iterator
         other      = component.reverse(port)
-        bridge    <- Iterator.single(Vector.empty) ++ loop(components - component, other)
+        bridge    <- single(Vector.empty) ++ loop(components - component, other)
       yield
         component +: bridge
     loop(components, 0)
