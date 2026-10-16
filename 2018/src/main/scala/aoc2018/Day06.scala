@@ -2,9 +2,8 @@ package aoc2018
 
 import nmcb.*
 import nmcb.pos.{*, given}
+import nmcb.predef.*
 
-import scala.collection.+:
-import scala.collection.immutable.Vector
 import scala.math.*
 
 object Day06 extends AoC:
@@ -26,22 +25,21 @@ object Day06 extends AoC:
       def coordinate: Pos = unitDistance._1
       def distance: Long  = unitDistance._2
 
-    val closest: Vector[(Pos,Pos)] =
+    val closest: Vector[(Pos, Pos)] =
       positions.flatMap: p =>
         coordinates.map(c => (c, c.manhattanDistance(p)))
           .sortBy(_.distance).take(2).runtimeChecked match
             case a +: b +: _ if a.distance == b.distance => None
-            case      a +: _                             => Some(p,a.coordinate)
+            case      a +: _                             => Some(p, a.coordinate)
 
-    val areas: Map[Pos,Int] =
-      closest.groupMapReduce((_,c) => c)((_,_) => 1)(_+_)
+    val areas: Map[Pos, Int] =
+      closest.map(_.right).countElements
 
     def infinite(coordinate: Pos): Boolean =
-      closest.exists((p,c) => c == coordinate && (p.x == minX || p.x == maxX || p.y == minY || p.y == maxY))
+      closest.exists((p, c) => c == coordinate && (p.x == minX || p.x == maxX || p.y == minY || p.y == maxY))
 
-    def largestAreaSize: Long =
-      val (_, size) = areas.filterNot((p,_) => infinite(p)).maxBy((_,s) => s)
-      size
+    def largestAreaSize: Int =
+      areas.filterNot((p, _) => infinite(p)).maxBy((_, s) => s).right
 
     def manhattanSum(position: Pos): Long =
       coordinates.map(position.manhattanDistance).sum
@@ -50,8 +48,8 @@ object Day06 extends AoC:
       positions.filter(p => manhattanSum(p) < limit)
 
 
-  val coordinates: Vector[Pos] = lines.map:
-    case s"$x, $y" => (x.toInt, y.toInt)
+  val coordinates: Vector[Pos] = lines.collect:
+    case s"$x, $y" => (x = x.toInt, y = y.toInt)
 
   override lazy val answer1: Long = Grid(coordinates).largestAreaSize
   override lazy val answer2: Int  = Grid(coordinates).withinManhattanSumLimit(10000).size
