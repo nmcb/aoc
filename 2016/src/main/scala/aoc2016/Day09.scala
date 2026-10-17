@@ -2,6 +2,7 @@ package aoc2016
 
 import nmcb.*
 
+import scala.annotation.tailrec
 import scala.util.*
 import scala.util.matching.Regex
 
@@ -10,13 +11,16 @@ object Day09 extends AoC:
   val marker: Regex = """\((\d+)x(\d+)\)""".r
 
   def solve1(str: String): Long =
-    marker.findFirstMatchIn(str) match
-      case Some(m) =>
-        val length = m.group(1).toInt
-        val times  = m.group(2).toInt
-        m.start + times * length + solve1(m.after.toString.substring(length))
-      case None =>
-        str.length
+    @tailrec
+    def loop(result: Long, str: String): Long =
+      marker.findFirstMatchIn(str) match
+        case Some(m) =>
+          val length = m.group(1).toInt
+          val times  = m.group(2).toInt
+          loop(result + m.start + times * length, m.after.toString.substring(length))
+        case None =>
+          result + str.length
+    loop(0, str)
 
   def solve2(str: String): Long =
     marker.findFirstMatchIn(str) match
