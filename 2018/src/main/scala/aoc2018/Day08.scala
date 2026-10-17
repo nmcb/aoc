@@ -2,33 +2,56 @@ package aoc2018
 
 import nmcb.*
 
+import scala.annotation.tailrec
+
 object Day08 extends AoC:
 
   case class Node(children: Vector[Node], meta: Vector[Int]):
-    def nrOfChildren: Int     = children.size
-    def nrOfMeta: Int         = meta.size
-    def licenceNumber: Int    = meta.sum + children.map(_.licenceNumber).sum
-    def value: Int            = if children.isEmpty then meta.sum else meta.map(idx => children.lift(idx - 1).map(_.value).getOrElse(0)).sum
+    def nrOfChildren: Int  = children.size
+    def nrOfMeta: Int      = meta.size
+    def licenceNumber: Int = meta.sum + children.map(_.licenceNumber).sum
+    def value: Int         = if children.isEmpty then meta.sum else meta.map(idx => children.lift(idx - 1).map(_.value).getOrElse(0)).sum
 
   object Node:
 
     def parseTree(s: String): Node =
 
-      def loop(input: Vector[Int], todoChildren: Int, todoMeta: Int, children: Vector[Node] = Vector.empty): (node: Node, children: Vector[Int]) =
-        if todoChildren == 0 then
-          (node = Node(children, input.take(todoMeta)), children = input.drop(todoMeta))
-        else
-          // parse children
-          val todoChildChildren = input.head
-          val todoChildMeta     = input.drop(1).head
-          val (child, rest)     = loop(input.drop(2), todoChildChildren, todoChildMeta, Vector.empty)
-          loop(rest, todoChildren - 1, todoMeta, children :+ child)
+      case class State(todoChildren: Int, todoMeta: Int, children: Vector[Node])
+
+      @tailrec
+      def parse(input: Vector[Int], stack: List[State]): Node =
+        stack.runtimeChecked match
+
+          case State(0, todoMeta, children) :: parentStack =>
+            val metadata       = input.take(todoMeta)
+            val node           = Node(children, metadata)
+            val remainingInput = input.drop(todoMeta)
+
+            parentStack match
+              case Nil =>
+                node
+              case parentState :: grandParentStack =>
+                val updatedParent = parentState.copy(
+                  todoChildren = parentState.todoChildren - 1,
+                  children     = parentState.children :+ node
+                )
+                parse(remainingInput, updatedParent :: grandParentStack)
+
+          case State(todoChildren, todoMeta, children) :: parentStack =>
+            val childChildren = input(0)
+            val childMeta     = input(1)
+            val nextInput     = input.drop(2)
+
+            val childFrame = State(childChildren, childMeta, Vector.empty)
+            parse(nextInput, childFrame :: stack)
 
       val input        = s.trim.split(' ').map(_.toInt).toVector
       val todoChildren = input.head
       val todoMeta     = input.drop(1).head
-      val (root, rest) = loop(input.drop(2), todoChildren, todoMeta)
-      root
+      val initialInput = input.drop(2)
+
+      val rootState = State(todoChildren, todoMeta, Vector.empty)
+      parse(initialInput, List(rootState))
 
   override lazy val answer1: Int = Node.parseTree(input).licenceNumber
   override lazy val answer2: Int = Node.parseTree(input).value
