@@ -4,19 +4,23 @@ import nmcb.*
 import nmcb.predef.*
 
 import scala.annotation.tailrec
+import java.security.MessageDigest
 
 object Day04 extends AoC:
 
   val secret: String = "yzbqklnj"
 
   def hashMD5(s: String): String =
-    import java.security.MessageDigest
     MessageDigest.getInstance("MD5").digest(s.getBytes).toHexString
   
   def solve(secret: String, prefix: String): Int =
-    @tailrec def loop(i: Int = 1): Int =
-      if hashMD5(secret + i.toString).startsWith(prefix) then i else loop(i + 1)
-    loop()
+    @tailrec
+    def loop(i: Int): Int = 
+      if hashMD5(secret + i.toString).startsWith(prefix) then
+        i
+      else
+        loop(i + 1)
+    loop(1)
 
   override lazy val answer1: Int = solve(secret, "00000")
   override lazy val answer2: Int = solve(secret, "000000")
