@@ -3,6 +3,8 @@ package aoc2015
 import aoc2015.Day21.Player.boss
 import nmcb.*
 
+import scala.annotation.tailrec
+
 object Day21 extends AoC:
 
   case class Player(points: Int, damage: Int, armor: Int, gold: Int):
@@ -49,8 +51,8 @@ object Day21 extends AoC:
     
   case class Game(player: Player, boss: Player):
     import Outcome.*
-
-    def play: Outcome =
+    @tailrec
+    final def play: Outcome =
       val newPointsP = player.points - (if boss.damage - player.armor >= 1 then boss.damage - player.armor else 1)
       val newPointsB =   boss.points - (if player.damage - boss.armor >= 1 then player.damage - boss.armor else 1)
 

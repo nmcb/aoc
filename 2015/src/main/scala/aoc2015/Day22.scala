@@ -2,6 +2,8 @@ package aoc2015
 
 import nmcb.*
 
+import scala.annotation.tailrec
+
 object Day22 extends AoC:
 
   enum Spell(val cost: Int, val duration: Int) derives CanEqual:
@@ -62,25 +64,35 @@ object Day22 extends AoC:
 
     def play(hard: Boolean): Int =
 
-      var result = Int.MaxValue
+      case class GameState(game: Game, playersTurn: Boolean)
 
-      def loop(game: Game, playersTurn: Boolean): Unit =
-        val before = if hard && playersTurn then game.hardMode else game
-        val after = before.nextGame
+      @tailrec
+      def loop(result: Int, stack: List[GameState]): Int =
+        stack match
+          case Nil =>
+            result
+          case GameState(game, playersTurn) :: rest =>
 
-        if before.spent >= result || before.player <= 0 then ()
-        else if after.boss <= 0 then result = result min after.spent
-        else if !playersTurn    then loop(after.bossTurn, !playersTurn)
-        else
-          Spells
-            .diff(after.spells.keySet)
-            .filter(_.cost <= after.mana)
-            .foreach(spell => loop(after.playerTurn(spell), !playersTurn))
+            val before = if hard && playersTurn then game.hardMode else game
+            val after  = before.nextGame
 
-      loop(this, true)
+            if before.spent >= result || before.player <= 0 then
+              loop(result, rest)
+            else if after.boss <= 0 then
+              loop(result min after.spent, rest)
+            else if !playersTurn then
+              loop(result, GameState(after.bossTurn, !playersTurn) :: rest)
+            else
+              val gamePaths = Spells
+                .diff(after.spells.keySet)
+                .filter(_.cost <= after.mana)
+                .map(spell => GameState(after.playerTurn(spell), !playersTurn))
+                .toList
+              loop(result, gamePaths ::: rest)
 
-      result
-  
+
+      loop(Int.MaxValue, List(GameState(this, true)))
+
   val game: Game =
     Game(
       player = 50,
