@@ -18,7 +18,7 @@ object Day07 extends AoC:
       def tick(schedule: Vector[A]): (Vector[A], Work) =
         val work         = queue ++ schedule.map(a => a -> timer(a))
         val (add, left)  = work.splitAt(parallelization - workers.size)
-        val (done, todo) = (workers ++ add).map((c,t) => (c, t - 1)).partition((_,t) => t == 0)
+        val (done, todo) = (workers ++ add).map((c, t) => (c, t - 1)).partition((_, t) => t == 0)
         (done.keys.toVector, Work(queue = left, workers = todo))
 
     @tailrec
