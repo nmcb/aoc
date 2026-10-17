@@ -3,6 +3,8 @@ package aoc2015
 import nmcb.*
 import nmcb.parsing.*
 
+import scala.annotation.tailrec
+
 object Day12 extends AoC:
 
   object Json:
@@ -43,13 +45,25 @@ object Day12 extends AoC:
   import Json.*
 
   def solve(json: Json, objValueFilter: Json => Boolean = _ => true): Long =
-    def loop(count: Long, json: Json): Long =
-      json match
-        case Str(_)  => count
-        case Num(n)  => count + n
-        case Arr(js) => js.foldLeft(count)(loop)
-        case Obj(ms) => if ms.values.forall(objValueFilter) then ms.values.foldLeft(count)(loop) else count
-    loop(0, json)
+    @tailrec
+    def loop(count: Long, stack: List[Json]): Long =
+      stack match
+        case Nil =>
+          count
+        case json :: rest =>
+          json match
+            case Str(_) =>
+              loop(count, rest)
+            case Num(n) =>
+              loop(count + n, rest)
+            case Arr(js) =>
+              loop(count, js ::: rest)
+            case Obj(ms) =>
+              if ms.values.forall(objValueFilter) then
+                loop(count, ms.values.toList ::: rest)
+              else loop(count, rest)
+
+    loop(0, List(json))
 
   lazy val puzzle: Json = Json.parse(input)
 
