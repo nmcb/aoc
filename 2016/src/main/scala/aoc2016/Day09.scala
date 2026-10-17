@@ -17,9 +17,9 @@ object Day09 extends AoC:
         case Some(m) =>
           val length = m.group(1).toInt
           val times  = m.group(2).toInt
-          loop(m.start + times * length, m.after.toString.substring(length))
+          loop(result + m.start + times * length, m.after.toString.substring(length))
         case None =>
-          str.length
+          result + str.length
     loop(0, str)
 
   def solve2(str: String): Long =
