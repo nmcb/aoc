@@ -7,10 +7,21 @@ import scala.annotation.tailrec
 object Day08 extends AoC:
 
   case class Node(children: Vector[Node], meta: Vector[Int]):
-    def nrOfChildren: Int  = children.size
-    def nrOfMeta: Int      = meta.size
-    def licenceNumber: Int = meta.sum + children.map(_.licenceNumber).sum
-    def value: Int         = if children.isEmpty then meta.sum else meta.map(idx => children.lift(idx - 1).map(_.value).getOrElse(0)).sum
+
+    lazy val nrOfChildren: Int =
+      children.size
+
+    lazy val nrOfMeta: Int =
+      meta.size
+
+    lazy val licenceNumber: Int =
+      meta.sum + children.map(_.licenceNumber).sum
+
+    lazy val value: Int =
+      if children.isEmpty then
+        meta.sum
+      else
+        meta.map(idx => children.lift(idx - 1).map(_.value).getOrElse(0)).sum
 
   object Node:
 
