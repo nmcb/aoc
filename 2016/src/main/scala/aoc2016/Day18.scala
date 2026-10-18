@@ -9,7 +9,7 @@ object Day18 extends AoC:
       .sliding(3)
       .map:
         case Vector('^', '^', '.') | Vector('.', '^', '^') | Vector('^', '.', '.') | Vector('.', '.', '^') => '^'
-        case _                             => '.'
+        case _                                                                                             => '.'
       .toVector
 
   def safe(row: Vector[Char]): Int =
