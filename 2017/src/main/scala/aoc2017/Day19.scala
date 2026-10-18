@@ -34,8 +34,7 @@ object Day19 extends AoC:
         pos  = (x = grid.row(0).indexOf('|'), y = 0),
         dir  = (x = 0, y = 1)
       )
-
-
+  
   val grid: Grid[Char] = Grid.fromLines(lines)
 
   override lazy val answer1: String = Tracer.attachTo(grid).tracePath.filter(_.isLetter).mkString("")

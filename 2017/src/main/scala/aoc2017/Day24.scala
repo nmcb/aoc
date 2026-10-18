@@ -2,6 +2,7 @@ package aoc2017
 
 import nmcb.*
 
+import scala.annotation.tailrec
 import scala.collection.Iterator.single
 
 object Day24 extends AoC:
@@ -24,15 +25,22 @@ object Day24 extends AoC:
     def strength: Int =
       bridge.map(_.strength).sum
 
-  def bridges(components: Set[Component]): Iterator[Bridge] =
-    def loop(components: Set[Component], port: Int): Iterator[Bridge] =
-      for
-        component <- components.filter(_.contains(port)).iterator
-        other      = component.reverse(port)
-        bridge    <- single(Vector.empty) ++ loop(components - component, other)
-      yield
-        component +: bridge
-    loop(components, 0)
+  def bridges(components: Set[Component]): Vector[Bridge] =
+
+    case class State(remaining: Set[Component], port: Int, current: Bridge)
+
+    @tailrec
+    def loop(stack: List[State], result: Vector[Bridge] = Vector.empty): Vector[Bridge] =
+      stack match
+        case Nil =>
+          result
+        case State(remaining, port, current) :: rest =>
+          val choices = remaining.filter(_.contains(port)).toList
+          val next    = choices.map(component => State(remaining - component, component.reverse(port), current :+ component))
+          loop(next ::: rest, result :+ current)
+
+
+    loop(List(State(components, 0, Vector.empty)))
 
   val components: Set[Component] =
     lines
