@@ -3,6 +3,7 @@ package aoc2018
 import nmcb.*
 import nmcb.predef.*
 
+import scala.annotation.tailrec
 import scala.util.matching.*
 
 object Day04 extends AoC:
@@ -39,19 +40,25 @@ object Day04 extends AoC:
 
   case class Shift(guard: Int, sleep: Set[Int])
 
-  def fromRecords(records: Vector[Record], shiftStarted: Option[Shift] = None, sleepStarted: Option[Int] = None): Vector[Shift] =
-    if records.isEmpty then
-      shiftStarted.toVector
-    else
-      val record = records.head
-      val rest   = records.tail
-      record.event match
-        case BeginShift(guard) =>
-          shiftStarted.toVector ++ fromRecords(rest, Some(Shift(guard, Set.empty)))
-        case FallAsleep =>
-          fromRecords(rest, shiftStarted, Some(record.minute))
-        case WakeUp =>
-          fromRecords(rest, shiftStarted.map(shift => shift.copy(sleep = shift.sleep ++ (sleepStarted.get until record.minute).toSet)))
+  def fromRecords(records: Vector[Record]): Vector[Shift] =
+    @tailrec
+    def loop(remaining: Vector[Record], completed: Vector[Shift], current: Option[Shift], sleepStarted: Option[Int]): Vector[Shift] =
+      if remaining.isEmpty then
+        completed ++ current.toVector
+      else
+        val record = remaining.head
+        val rest   = remaining.tail
+
+        record.event match
+          case BeginShift(guard) =>
+            loop(rest, completed ++ current.toVector, Some(Shift(guard, Set.empty)), None)
+          case FallAsleep =>
+            loop(rest, completed, current, Some(record.minute))
+          case WakeUp =>
+            val nap = (sleepStarted.get until record.minute).toSet
+            loop(rest, completed, current.map(shift => shift.copy(sleep = shift.sleep ++ nap)), None)
+
+    loop(records, Vector.empty, None, None)
 
   def solve1(records: Vector[Record]): Int =
     val shifts          = fromRecords(records)
