@@ -1,6 +1,7 @@
 package aoc2024
 
 import nmcb.*
+import nmcb.BronKerbosch.maximumClique
 import nmcb.predef.*
 
 /** @see Credits - https://github.com/sim642 */
@@ -26,5 +27,5 @@ object Day23 extends AoC:
     yield
       Set(a, b, c)
 
-  override lazy val answer1: Long = solve1.size
-  override lazy val answer2: String = BronKerbosch.run(neighbours).toVector.sorted.mkString(",")
+  override lazy val answer1: Long   = solve1.size
+  override lazy val answer2: String = maximumClique(neighbours).toVector.sorted.mkString(",")
