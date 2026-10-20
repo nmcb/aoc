@@ -2,6 +2,9 @@ package aoc2018
 
 import nmcb.*
 import nmcb.pos.*
+import nmcb.predef.*
+
+import scala.util.control.TailCalls.TailRec
 
 object Day17 extends AoC:
 
@@ -20,35 +23,34 @@ object Day17 extends AoC:
   import Iterator.*
 
   /** return all flowing and stopped positions */
-  def stream(area: Area): (Int,Int) =
-    val stopped = collection.mutable.Set[Pos]()
-    val flowing = collection.mutable.Set[Pos]()
+  def stream(area: Area): (Int, Int) =
+    val stopped = collection.mutable.Set.empty[Pos]
+    val flowing = collection.mutable.Set.empty[Pos]
 
     def blocked(p: Pos) = stopped.contains(p) || area.clay.contains(p)
 
-    def go(p: Pos): Stream =
+    def loop(p: Pos): Stream =
       if blocked(p) then
         Stopped
       else if p.y > area.maxY || flowing.contains(p) then
         Flowing
-      else go(p.s) match
+      else loop(p.s) match
         case Flowing =>
           flowing += p
           Flowing
         case Stopped =>
-          val minX = iterate(p)(_.e).dropWhile(next => go(next.s) == Stopped && !blocked(next.e)).next()
-          val maxX = iterate(p)(_.w).dropWhile(next => go(next.s) == Stopped && !blocked(next.w)).next()
-          val surface = for x <- minX.x to maxX.x yield (x, p.y)
-          if blocked(minX.e) && blocked(maxX.w) then
+          val minPos  = iterate(p)(_.e).findFirst(next => loop(next.s) != Stopped || blocked(next.e))
+          val maxPos  = iterate(p)(_.w).findFirst(next => loop(next.s) != Stopped || blocked(next.w))
+          val surface = for x <- minPos.x to maxPos.x yield (x = x, y = p.y)
+          if blocked(minPos.e) && blocked(maxPos.w) then
             stopped ++= surface
             Stopped
           else
             flowing ++= surface
             Flowing
 
-    go(area.spring)
+    loop(area.spring)
     (flowing.count(p => p.y >= area.minY), stopped.size)
-
 
   val area: Area =
     val clay =
@@ -62,7 +64,7 @@ object Day17 extends AoC:
       clay   = clay,
       minY   = clay.map(_.y).min,
       maxY   = clay.map(_.y).max,
-      spring = (500,0)
+      spring = (500, 0)
     )
   
   def solve1(area: Area): Int =
@@ -75,3 +77,5 @@ object Day17 extends AoC:
 
   override lazy val answer1: Int = solve1(area)
   override lazy val answer2: Int = solve2(area)
+  assert(answer1 == 34379)
+  assert(answer2 == 28015)

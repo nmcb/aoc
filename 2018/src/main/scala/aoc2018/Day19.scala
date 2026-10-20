@@ -108,9 +108,9 @@ object Day19 extends AoC:
 
   def sumOfFactorsOf(n: Int): Int =
     @tailrec
-    def go(x: Int = 1, total: Int = 0): Int =
-      if n % x == 0 then if n / x < x then total else go(x + 1, total + x + n / x) else go(x + 1, total)
-    go()
+    def loop(x: Int, total: Int): Int =
+      if n % x == 0 then if n / x < x then total else loop(x + 1, total + x + n / x) else loop(x + 1, total)
+    loop(x = 1, total = 0)
 
   override lazy val answer1: Int = CPU.load(lines).run.mem.valueOf(0)
   override lazy val answer2: Int = sumOfFactorsOf(nPart2)
