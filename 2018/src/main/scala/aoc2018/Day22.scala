@@ -27,26 +27,28 @@ object Day22 extends AoC:
     val mouth: Region  = Region(0, 0)
     val target: Region = Region(x = 9, y = 751)
 
-    private val geologicalIndices = mutable.Map.empty[Region,Int]
+    private val geologicalIndices: Memo[Region, Int] = Memo.empty
     private def geologicalIndex(r: Region): Int =
-      geologicalIndices.getOrElseUpdate(r,
+      geologicalIndices.memoize(r):
         r match
           case Region.mouth  => 0
           case Region.target => 0
           case Region(x, 0)  => x * 16807
           case Region(0, y)  => y * 48271
           case _             => r.copy(x = r.x - 1).erosionLevel * r.copy(y = r.y - 1).erosionLevel
-      )
 
-    private val erosionLevels = mutable.Map.empty[Region,Int]
+    private val erosionLevels: Memo[Region, Int] = Memo.empty
     private def erosionLevel(r: Region): Int =
-      erosionLevels.getOrElseUpdate(r,
+      erosionLevels.memoize(r):
         (r.geologicalIndex + depth) % 20183
-      )
 
   def sumOfRiskLevels(min: Region, max: Region): Int =
     var result = 0
-    for y <- min.y to max.y ; x <- min.x to max.x do result = result + Region(x, y).regionType.riskLevel
+    for
+      y <- min.y to max.y
+      x <- min.x to max.x
+    do
+      result = result + Region(x, y).regionType.riskLevel
     result
 
   enum Tool derives CanEqual:
@@ -65,7 +67,7 @@ object Day22 extends AoC:
         case Wet    => Set(ClimbingGear, None)
         case Narrow => Set(Torch, None)
 
-  type State = (Region,Tool)
+  type State = (Region, Tool)
 
   object State:
     val initial: State = (Region.mouth, Torch)
@@ -76,7 +78,7 @@ object Day22 extends AoC:
     def region: Region = state._1
     def equipped: Tool = state._2
 
-    def actions: Map[State,Int] =
+    def actions: Map[State, Int] =
       val moves =
         region
           .neighbouring
@@ -97,7 +99,7 @@ object Day22 extends AoC:
   /** a-star with manhattan distance as heuristic */
   def travelTime(from: State, to: State): Int =
     val times = collection.mutable.Map(from -> 0)
-    val queue = collection.mutable.PriorityQueue(from -> 0)(using Ordering.by[(State,Int),Int](_.right).reverse)
+    val queue = collection.mutable.PriorityQueue(from -> 0)(using Ordering.by[(State, Int), Int](_.right).reverse)
 
     def heuristic(state: State) =
       state.region manhattan to.region
