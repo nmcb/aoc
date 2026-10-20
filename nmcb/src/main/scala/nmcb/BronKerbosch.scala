@@ -2,7 +2,7 @@ package nmcb
 
 object BronKerbosch:
 
-  /** Computes the maximum clique, i.e. the largest group of bots with overlapping radius's. */
+  /** Computes the maximum clique, i.e. the largest group of neighbouring nodes. */
   def maximumClique[A](graph: Map[A, Set[A]]): Set[A] =
     var maximum: Set[A] = Set.empty
 
