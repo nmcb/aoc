@@ -61,8 +61,6 @@ object Day23 extends AoC:
         // Part 2
         case s"mul $x $y $z" => MUL(x.toOperand, y.toOperand, z.toOperand)
 
-  var count = 0;
-
   case class CPU(instructions: Vector[Option[Instruction]], pc: Int = 0, registers: Registers = Map.empty):
 
     import Instruction.*

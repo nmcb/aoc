@@ -40,11 +40,11 @@ object Day24 extends AoC:
       val ImmuneLine = """immune to (.+?)[;|)]""".r.unanchored
       val WeakLine   = """weak to (.+?)[;|)]""".r.unanchored
 
-      val immune: Set[String] = line match
+      val immune: Set[AttackKind] = line match
         case ImmuneLine(items) => items.split(", ").toSet
         case _                 => Set.empty
 
-      val weak: Set[String] = line match
+      val weak: Set[AttackKind] = line match
         case WeakLine(items) => items.split(", ").toSet
         case _               => Set.empty
 
@@ -60,14 +60,10 @@ object Day24 extends AoC:
     val infection = chunks(1).tail.map(parseGroup(Infection, 0))
     immune ++ infection
 
-  type Outcome = (Army, Int)
-
-  extension (outcome: Outcome)
-    def winner: Army = outcome._1
-    def units: Int   = outcome._2
-
+  type Outcome = (winner: Army, units: Int)
 
   extension (groups: Vector[Group])
+    
     @tailrec
     def fight: Outcome =
 
@@ -77,8 +73,8 @@ object Day24 extends AoC:
       val targetSelection: Vector[Group] =
         groups.sortBy(group => (-group.effectivePower, -group.attribute.initiative))
 
-      val targets: Map[Group,Group] =
-        targetSelection.foldLeft(Map.empty[Group, Group]): (targets,next) =>
+      val targets: Map[Group, Group] =
+        targetSelection.foldLeft(Map.empty[Group, Group]): (targets, next) =>
           val candidate = groups
             .filterNot(targets.contains)
             .filter(_.army != next.army)
