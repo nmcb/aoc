@@ -115,6 +115,30 @@ object pos:
     def adjoint4: Set[Pos] = offset4.map(_ + p)
     def adjoint8: Set[Pos] = offset8.map(_ + p)
 
+    def n: Pos =
+      p + (0, -1)
+
+    def e: Pos =
+      p + (1, 0)
+
+    def s: Pos =
+      p + (0, 1)
+
+    def w: Pos =
+      p + (-1, 0)
+      
+    def ne: Pos =
+      p + (1, -1)
+      
+    def se: Pos =
+      p + (1, 1)
+      
+    def sw: Pos =
+      p + (-1, 1)
+      
+    def nw: Pos =
+      p + (-1, -1)
+
     infix inline def step(dir: Dir): Pos =
       dir match
         case N => (x = p.x, y = p.y - 1)
