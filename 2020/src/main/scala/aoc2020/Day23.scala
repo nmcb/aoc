@@ -18,7 +18,7 @@ object Day23 extends AoC:
     cups(digits.last).next = cups(digits.head)
 
     @tailrec
-    def go(cup: Cup, step: Int): Cup =
+    def loop(cup: Cup, step: Int): Cup =
       if step == max then
         cups(1)
       else
@@ -32,17 +32,17 @@ object Day23 extends AoC:
         cup.next = c.next
         c.next   = cups(target).next
         cups(target).next = a
-        go(cup.next, step + 1)
-    go(cups(digits.head), 0)
+        loop(cup.next, step + 1)
+    loop(cups(digits.head), 0)
 
   def solve1(digits: Vector[Int]): Long =
     val start = play(digits, 100)
 
     @tailrec
-    def go(cup: Cup, seq: Vector[Int]): Long =
-      if cup == start then seq.mkString.toLong else go(cup.next, seq :+ cup.value)
+    def loop(cup: Cup, seq: Vector[Int]): Long =
+      if cup == start then seq.mkString.toLong else loop(cup.next, seq :+ cup.value)
 
-    go(start.next, Vector.empty)
+    loop(start.next, Vector.empty)
 
   def solve2(digits: Vector[Int]): Long =
     val seq = digits ++ (10 to 1000000)

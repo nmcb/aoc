@@ -47,9 +47,11 @@ object Day11 extends AoC:
   val table: Map[Cell, Int] =
     cells.foldLeft(immutable.Map.empty[Cell,Int].withDefaultValue(0)): (result, cell) =>
       result + (cell -> (grid(cell) + result(cell + (-1, 0)) + result(cell + (0, -1)) - result(cell + (-1, -1))))
-  
+
+  type AreaState = (size: Int, cell: Cell, level: Int)
+
   /** the area sizes, cells and total power levels for named summed power level table and given area size */
-  def area(size: Int): Iterator[(size: Int, cell: Cell, level: Int)] =
+  def area(size: Int): Iterator[AreaState] =
     for
       y <- (size to 300).iterator
       x <- (size to 300).iterator
@@ -58,15 +60,15 @@ object Day11 extends AoC:
       val total = table(cell) + table(cell + (-size,-size)) - table(cell + (-size,0)) - table(cell + (0,-size))
       (size = size, cell = cell, level = total)
 
-  extension (result: (size: Int, cell: Cell, level: Int))
+  extension (result: AreaState)
     def total: Int = result.level
 
   def solve1(): String =
-    val (size, cell, total) = area(3).maxBy(_.total)
+    val (size, cell, _) = area(3).maxBy(_.total)
     cell.asIdString(size)
 
   def solve2(): String =
-    val (size, cell, total) = (for size <- (1 to 300).iterator yield area(size)).flatten.maxBy(_.total)
+    val (size, cell, _) = (for size <- (1 to 300).iterator yield area(size)).flatten.maxBy(_.total)
     s"${cell.asIdString(size)},${size.toString}"
 
   override lazy val answer1: String = solve1()
