@@ -27,13 +27,7 @@ ThisBuild / scalacOptions ++= Seq(
 )
 
 ThisBuild / Compile / run / fork         := true
-ThisBuild / Compile / run / javaOptions ++= Seq(
-  "-Xmx4G",
-  "-Xss1G",
-  "-XX:+UseG1GC",
-  "--sun-misc-unsafe-memory-access=allow",
-  "--enable-native-access=ALL-UNNAMED"
-)
+
 
 ThisBuild / Test / fork         := true
 ThisBuild / Test / testOptions  += Tests.Argument("-oD")

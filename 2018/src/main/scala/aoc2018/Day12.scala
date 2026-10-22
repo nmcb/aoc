@@ -23,10 +23,10 @@ object Day12 extends AoC:
     .collect:
       case s"$pattern => $output" if output == "#" => pattern
 
-  extension (plants: Set[Int])
+  extension (plants: Plants)
 
     /** returns the relevant surrounding pattern for given pot index */
-    def pattern(index: PotIndex): String =
+    def pattern(index: PotIndex): Pattern =
       (-2 to 2).map(i => if plants.contains(index + i) then '#' else '.').mkString
 
     /** returns the relevant range of plant containing pots */
@@ -34,7 +34,7 @@ object Day12 extends AoC:
       plants.min - 2 to plants.max + 2
 
     /** returns the next generation of plant containing pot indices from that range for given rules */
-    def next(rules: Rules): Set[Int] =
+    def next(rules: Rules): Plants =
       pots.flatMap(pot => Option.when(rules.contains(pattern(pot)))(pot)).toSet
 
   
@@ -43,14 +43,14 @@ object Day12 extends AoC:
     /** utilizes the observation that the problem converses linearly from generation 102 and on */
     if generations >= 102 then
       @tailrec
-      def go(plants: Plants, conversion: Int, generation: Int): Long =
+      def loop(plants: Plants, conversion: Int, generation: Int): Long =
         val next  = plants.next(rules)
         val delta = next.sum - plants.sum
         if delta == conversion then
           next.sum + delta * (generations - generation)
         else
-          go(next, delta, generation + 1)
-      go(plants, 0, 1)
+          loop(next, delta, generation + 1)
+      loop(plants, 0, 1)
     else
       Iterator.iterate(plants)(_.next(rules)).nth(generations.toInt).sum.toLong
 
