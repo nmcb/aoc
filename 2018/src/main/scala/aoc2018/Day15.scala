@@ -45,7 +45,7 @@ object Day15 extends AoC:
   /** breadth first search */
   def distancesTo(from: Pos, to: Set[Pos])(using Grid, List[Fighter]): Map[Pos, Int] =
     @tailrec
-    def go(visited: Map[Pos, Int], todo: Map[Pos, Int]): Map[Pos, Int] =
+    def loop(visited: Map[Pos, Int], todo: Map[Pos, Int]): Map[Pos, Int] =
       val found = visited ++ todo
       todo.find((pos, _) => to.contains(pos)) match
         case Some(_) =>
@@ -58,8 +58,8 @@ object Day15 extends AoC:
               if !visited.contains(neighbour)
             yield
               neighbour -> (dist + 1)
-          if next.isEmpty then found else go(found, next)
-    go(Map.empty, Map(from -> 0)).view.filterKeys(to).toMap
+          if next.isEmpty then found else loop(found, next)
+    loop(Map.empty, Map(from -> 0)).view.filterKeys(to).toMap
 
   def reachableBy(fighter: Fighter, inRange: Set[Pos])(using Grid, List[Fighter]): Map[Pos, Int] =
     distancesTo(fighter.pos, inRange)
