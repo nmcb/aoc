@@ -29,7 +29,7 @@ object Day15 extends AoC:
         .filter((next,_,_) => !steps.contains(next) || steps(from) + 1 < steps(next))
         .filter((_,_,status) => status > 0)
         .foreach: (next, cpu, status) =>
-          steps(next) = steps(from) + 1
+          steps.update(next, steps(from) + 1)
           todo.enqueue(next -> cpu)
           if status == 2 then target = Some(next -> cpu)
 
