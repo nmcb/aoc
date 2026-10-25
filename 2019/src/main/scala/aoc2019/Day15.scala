@@ -11,40 +11,42 @@ object Day15 extends AoC:
   import cpu.*
 
   type Command   = Int
-  type Neighbour = (delta: Pos, command: Command)
-  type Tile      = (pos: Pos, cpu: CPU)
-  type Output    = (pos: Pos, cpu: CPU, status: Value)
-  type Result    = (steps: Map[Pos, Command], target: Option[Tile])
+  type Movement  = (delta: Pos, command: Command)
+  type State     = (pos: Pos, cpu: CPU)
+  type Output    = (state: State, status: Value)
+  type Result    = (steps: Map[Pos, Command], target: Option[State])
 
-  val neighbours: Vector[(Pos, Command)] =
-    Vector(
-      ( 0, -1) -> 1,
-      ( 0,  1) -> 2,
-      (-1,  0) -> 3,
-      ( 1,  0) -> 4
-    )
-
-  def move(from: Tile, neighbour: Neighbour): Output =
-    val (next, status) = from.cpu.withInput(neighbour.command).outputStates.last
-    (pos = from.pos + neighbour.delta, cpu = next, status = status)
+  extension (state: State)
+    def move(movement: Movement): Output =
+      val (next, status) = state.cpu.withInput(movement.command).outputStates.last
+      (state = (pos = state.pos + movement.delta, cpu = next), status = status)
 
   /** Functional style Dijkstra with exercise specific filtering and result type */
   def shortestPath(cpu: CPU): Result =
-    val steps  = mutable.Map(Pos.origin -> 0)
-    val todo   = mutable.PriorityQueue[Tile]((0, 0) -> cpu)(using Ordering.by((point, _) => steps(point)))
-    var target = Option.empty[Tile]
+
+    val movements: Vector[Movement] =
+      Vector(
+        ( 0, -1) -> 1,
+        ( 0,  1) -> 2,
+        (-1,  0) -> 3,
+        ( 1,  0) -> 4
+      )
+
+    val steps             = mutable.Map(Pos.origin -> 0)
+    given Ordering[State] = Ordering.by(state => steps(state.pos))
+    val todo              = mutable.PriorityQueue[State]((0, 0) -> cpu)
+    var target            = Option.empty[State]
 
     while todo.nonEmpty do
       val from = todo.dequeue()
-      neighbours
-        .map(n => move(from, n))
-        .filter(output => !steps.contains(output.pos) || steps(from.pos) + 1 < steps(output.pos))
+      movements
+        .map(adjoint => from.move(adjoint))
+        .filter(output => !steps.contains(output.state.pos) || steps(from.pos) + 1 < steps(output.state.pos))
         .filter(output => output.status > 0)
         .foreach: output =>
-          steps.update(output.pos, steps(from.pos) + 1)
-          val next = output.pos -> output.cpu
-          todo.enqueue(next)
-          if output.status == 2 then target = Some(next)
+          steps.update(output.state.pos, steps(from.pos) + 1)
+          todo.enqueue(output.state)
+          if output.status == 2 then target = Some(output.state)
 
     (steps = steps.toMap, target = target)
 
