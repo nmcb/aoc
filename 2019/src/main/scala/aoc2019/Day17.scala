@@ -4,6 +4,8 @@ import nmcb.*
 import nmcb.predef.*
 import nmcb.pos.*
 
+import scala.annotation.tailrec
+
 object Day17 extends AoC:
 
   import cpu.*
@@ -11,8 +13,8 @@ object Day17 extends AoC:
   val program: Mem = Mem.load(input)
 
   extension (p: Pos)
-    def left: Pos  = (p.y, -p.x)
-    def right: Pos = (-p.y, p.x)
+    def left: Pos  = ( p.y, -p.x)
+    def right: Pos = (-p.y,  p.x)
 
   def solve1(memory: Mem): Int =
     val output = CPU(memory).outputs.map(_.toChar).mkString.split("\n")
@@ -39,14 +41,15 @@ object Day17 extends AoC:
     
   import Move.*   
 
-  type Path = List[Move]
-  type Grid = Vector[Vector[Char]]
+  type Path  = List[Move]
+  type Grid  = Vector[Vector[Char]]
+  type Robot = (pos: Pos, dir: Pos)
 
   def pathToString(path: Path): String = path.mkString(",")
 
   extension (grid: Grid)
 
-    def findRobot: (Pos, Pos) =
+    def findRobot: Robot =
       def parseRobotDir(tile: Char): Option[Pos] =
         tile match
           case '>' => Some((1,0))
@@ -61,7 +64,7 @@ object Day17 extends AoC:
           (tile, x) <- row.view.zipWithIndex
           direction <- parseRobotDir(tile)
         yield
-          ((x, y), direction)
+          (pos = (x, y), dir = direction)
 
       robots.head
 
@@ -73,20 +76,18 @@ object Day17 extends AoC:
         else
           '.'
 
-      def go(pos: Pos, direction: Pos): Path =
+      @tailrec
+      def loop(pos: Pos, direction: Pos, forwards: Int = 0, result: Path = Nil): Path =
         if getTile(pos + direction) == '#' then
-          go(pos + direction, direction) match
-            case Forward(n) :: tl => Forward(n + 1) :: tl
-            case tl => Forward(1) :: tl
-        else if getTile(pos + direction.left) == '#' then
-          Left :: go(pos, direction.left)
-        else if getTile(pos + direction.right) == '#' then
-          Right :: go(pos, direction.right)
+          loop(pos + direction, direction, forwards + 1, result)
         else
-          Nil
+          val update = if forwards > 0 then Forward(forwards) :: result else result
+          if      getTile(pos + direction.left)  == '#' then loop(pos, direction.left, 0, Left :: update)
+          else if getTile(pos + direction.right) == '#' then loop(pos, direction.right, 0, Right :: update)
+          else                                               update.reverse
 
-      val (pos, direction) = grid.findRobot
-      go(pos, direction)
+      val robot = grid.findRobot
+      loop(robot.pos, robot.dir)
 
 
   def split[A](seq: List[A], delimiter: List[A]): List[List[A]] =
