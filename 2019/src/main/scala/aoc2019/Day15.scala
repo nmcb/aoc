@@ -10,39 +10,53 @@ object Day15 extends AoC:
 
   import cpu.*
 
-  val neighbours: Vector[(Pos, Int)] =
-    Vector((0, -1) -> 1, (0, 1) -> 2, (-1, 0) -> 3, (1, 0) -> 4)
+  type Command   = Int
+  type Neighbour = (delta: Pos, command: Command)
+  type Tile      = (pos: Pos, cpu: CPU)
+  type Output    = (pos: Pos, cpu: CPU, status: Value)
+  type Result    = (steps: Map[Pos, Command], target: Option[Tile])
 
-  def move(pos: Pos, cpu: CPU)(delta: Pos, command: Int): (Pos, CPU, Long) =
-    val (next, status) = cpu.withInput(command).outputStates.last
-    (pos + delta, next, status)
+  val neighbours: Vector[(Pos, Command)] =
+    Vector(
+      ( 0, -1) -> 1,
+      ( 0,  1) -> 2,
+      (-1,  0) -> 3,
+      ( 1,  0) -> 4
+    )
 
-  def dijkstra(cpu: CPU): (Map[Pos, Int], Option[(Pos, CPU)]) =
-    val steps  = mutable.Map((0, 0) -> 0)
-    val todo   = mutable.PriorityQueue[(Pos, CPU)]((0, 0) -> cpu)(using Ordering.by((point, _) => steps(point)))
-    var target = Option.empty[(Pos, CPU)]
+  def move(from: Tile, neighbour: Neighbour): Output =
+    val (next, status) = from.cpu.withInput(neighbour.command).outputStates.last
+    (pos = from.pos + neighbour.delta, cpu = next, status = status)
+
+  /** Functional style Dijkstra with exercise specific filtering and result type */
+  def shortestPath(cpu: CPU): Result =
+    val steps  = mutable.Map(Pos.origin -> 0)
+    val todo   = mutable.PriorityQueue[Tile]((0, 0) -> cpu)(using Ordering.by((point, _) => steps(point)))
+    var target = Option.empty[Tile]
 
     while todo.nonEmpty do
-      val (from, cpu) = todo.dequeue()
+      val from = todo.dequeue()
       neighbours
-        .map(move(from, cpu))
-        .filter((next,_,_) => !steps.contains(next) || steps(from) + 1 < steps(next))
-        .filter((_,_,status) => status > 0)
-        .foreach: (next, cpu, status) =>
-          steps.update(next, steps(from) + 1)
-          todo.enqueue(next -> cpu)
-          if status == 2 then target = Some(next -> cpu)
+        .map(n => move(from, n))
+        .filter(output => !steps.contains(output.pos) || steps(from.pos) + 1 < steps(output.pos))
+        .filter(output => output.status > 0)
+        .foreach: output =>
+          steps.update(output.pos, steps(from.pos) + 1)
+          val next = output.pos -> output.cpu
+          todo.enqueue(next)
+          if output.status == 2 then target = Some(next)
 
-    (steps.toMap, target)
+    (steps = steps.toMap, target = target)
 
   def solve1(program: Mem): Int =
-    val (first, Some(target, _)) = dijkstra(CPU(program)): @unchecked
-    first(target)
+    val result = shortestPath(CPU(program))
+    val steps  = result.steps
+    steps(result.target.get.pos)
 
   def solve2(program: Mem): Int =
-    val (_, Some(_, computer)) = dijkstra(CPU(program)): @unchecked
-    val (second, _) = dijkstra(computer)
-    second.values.max
+    val first  = shortestPath(CPU(program))
+    val second = shortestPath(first.target.get.cpu)
+    second.steps.values.max
   
   val program: Mem = Mem.load(input)
 
