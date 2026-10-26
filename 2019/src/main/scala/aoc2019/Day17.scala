@@ -90,14 +90,20 @@ object Day17 extends AoC:
       loop(robot.pos, robot.dir)
 
 
-  def split[A](seq: List[A], delimiter: List[A]): List[List[A]] =
-    val i = seq.indexOfSlice(delimiter)
-    if i < 0 then
-      List(seq)
-    else
-      val prefix = seq.take(i)
-      val suffix = seq.drop(i + delimiter.size)
-      prefix +: split(suffix, delimiter)
+  def split[A](sequence: List[A], delimiter: List[A]): List[List[A]] =
+    if delimiter.isEmpty then return List(sequence)
+
+    @tailrec
+    def loop(todo: List[A], result: List[List[A]]): List[List[A]] =
+      val i = todo.indexOfSlice(delimiter)
+      if i < 0 then
+        (todo :: result).reverse
+      else
+        val prefix = todo.take(i)
+        val suffix = todo.drop(i + delimiter.size)
+        loop(suffix, prefix :: result)
+
+    loop(sequence, Nil)
 
   val pathStringMaxLength: Int = 20
   val pathMaxLength: Int = (20 + 1) / 2
