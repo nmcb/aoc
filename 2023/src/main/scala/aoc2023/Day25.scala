@@ -102,7 +102,7 @@ object Day25 extends AoC:
         fileWriter.write(dot)
         fileWriter.close()
       catch
-        case e: Exception => println(s"unable to write dot file [ignoring]\n${e.getMessage}")
+        case e: Exception => println(s"Unable to write dot file [ignoring]\n${e.getMessage}")
 
 
     def showDOT(connections: Set[Connection]): Unit =
@@ -111,7 +111,7 @@ object Day25 extends AoC:
         Runtime.getRuntime.exec(Array("neato", "-Tpdf", s"/tmp/$prefix.dot", "-o", s"/tmp/$prefix.pdf")).waitFor()
         Runtime.getRuntime.exec(Array("open", s"/tmp/$prefix.pdf")).waitFor()
       catch
-        case e: Exception => println(s"unable to show visualisation [ignoring]\n${e.getMessage}")
+        case e: Exception => println(s"Unable to show visualisation [ignoring]\n${e.getMessage}")
 
 
   override lazy val answer1: Int    = group0.size * group1.size
