@@ -13,10 +13,12 @@ object Day18 extends AoC:
     def isKey: Boolean   = 'a' <= c && c <= 'z'
     def isDoor: Boolean  = 'A' <= c && c <= 'Z'
 
-  def dijkstra(tunnels: Map[Pos, Char], start: Pos): Vector[Move] =
-    val cost = collection.mutable.Map(start -> 0)
-    val keys = collection.mutable.Map(start -> Set.empty[Char])
-    val todo = collection.mutable.PriorityQueue(start)(using Ordering.by(cost))
+  /** Functional style Dijkstra with exercise specific filtering and result type */
+  def shortestPath(tunnels: Map[Pos, Char], start: Pos): Vector[Move] =
+    val cost            = collection.mutable.Map(start -> 0)
+    val keys            = collection.mutable.Map(start -> Set.empty[Char])
+    given Ordering[Pos] = Ordering.by[Pos, Int](p => cost(p))
+    val todo            = collection.mutable.PriorityQueue(start)
 
     while todo.nonEmpty do
       val pos = todo.dequeue()
@@ -24,8 +26,8 @@ object Day18 extends AoC:
         .filter(next => !tunnels(next).isWall)
         .filter(next => !cost.contains(next) || cost(pos) + 1 < cost(next))
         .foreach: next =>
-          cost(next) = cost(pos) + 1
-          keys(next) = if tunnels(next).isDoor then keys(pos) + tunnels(next).toLower else keys(pos)
+          cost.update(next, cost(pos) + 1)
+          keys.update(next, if tunnels(next).isDoor then keys(pos) + tunnels(next).toLower else keys(pos))
           todo.enqueue(next)
 
     cost.keys.map(pos => Move(start, pos, cost(pos), keys(pos))).toVector
@@ -39,18 +41,18 @@ object Day18 extends AoC:
   def explore(tunnels: Map[Pos, Char], keys: Set[Pos], robots: Set[Pos]): Int =
 
     val routes = (keys ++ robots)
-      .flatMap(pos => dijkstra(tunnels, pos))
+      .flatMap(pos => shortestPath(tunnels, pos))
       .map(move => (move.from, move.to) -> move)
       .toMap
 
     val cache = collection.mutable.Map.empty[(Set[Pos], Set[Char]), Int]
-    def go(todo: Set[Pos], robots: Set[Pos], found: Set[Char], total: Int, result: Int): Int =
+    def loop(todo: Set[Pos], robots: Set[Pos], found: Set[Char], total: Int, result: Int): Int =
       if total >= result || total >= cache.getOrElse((robots,found), Int.MaxValue) then
         result
       else if todo.isEmpty then
         total
       else
-        cache((robots,found)) = total
+        cache((robots, found)) = total
         val candidates = for from <- robots; to <- todo yield routes.get((from,to))
         candidates
           .toVector
@@ -59,7 +61,7 @@ object Day18 extends AoC:
           .sortBy(_.cost)
           .foldLeft(result):
             case (result, Move(from, to, cost, _)) =>
-              go(
+              loop(
                 todo   = todo - to,
                 robots = robots - from + to,
                 found  = found + tunnels(to),
@@ -67,7 +69,7 @@ object Day18 extends AoC:
                 result = result
               )
 
-    go(
+    loop(
       todo   = keys,
       robots = robots,
       found  = Set.empty,
@@ -75,7 +77,9 @@ object Day18 extends AoC:
       result = Int.MaxValue
     )
 
-  def parse(lines: Vector[String]): (tunnels: Map[Pos, Char], keys: Set[Pos], robots: Set[Pos]) =
+  type Result = (tunnels: Map[Pos, Char], keys: Set[Pos], robots: Set[Pos])
+
+  def parse(lines: Vector[String]): Result =
     val tunnels = for y <- lines.indices; x <- lines(0).indices yield (x, y) -> lines(y)(x)
     val keys    = tunnels.filter(_.symbol.isKey).map(_.pos)
     val robots  = tunnels.filter(_.symbol.isRobot).map(_.pos)
@@ -90,7 +94,7 @@ object Day18 extends AoC:
     val (tunnels, keys, robots) = parse(patched)
     explore(tunnels, keys, robots)
 
-  val (tunnels, keys, robots) = parse(lines)
+  val result: Result = parse(lines)
 
-  override lazy val answer1: Int = explore(tunnels, keys, robots)
+  override lazy val answer1: Int = explore(result.tunnels, result.keys, result.robots)
   override lazy val answer2: Int = solve2(lines)

@@ -33,7 +33,7 @@ object Day15 extends AoC:
       )
 
     val steps             = mutable.Map(Pos.origin -> 0)
-    given Ordering[State] = Ordering.by(state => steps(state.pos))
+    given Ordering[State] = Ordering.by[State, Int](state => steps(state.pos)).reverse
     val todo              = mutable.PriorityQueue[State]((0, 0) -> cpu)
     var target            = Option.empty[State]
 
