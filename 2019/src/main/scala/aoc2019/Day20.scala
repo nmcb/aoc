@@ -68,15 +68,13 @@ object Day20 extends AoC:
     val cost = collection.mutable.Map(start -> 0)
     val todo = collection.mutable.Queue(start)
     while todo.nonEmpty do
-      val point = todo.dequeue()
+      val current = todo.dequeue()
       Pos.offset4
-        .map(point + _)
-        .filter(next => maze(next) == '.')
-        .filter(next => cost(point) + 1 < cost.getOrElse(next, Int.MaxValue))
+        .map(current + _)
+        .filter(next => maze(next) == '.' && cost(current) + 1 < cost.getOrElse(next, Int.MaxValue))
         .foreach: next =>
-          cost(next) = cost(point) + 1
+          cost.update(next, cost(current) + 1)
           todo.enqueue(next)
-
     cost.toMap
 
   def explore(lines: Seq[String], recursive: Boolean): Int =
