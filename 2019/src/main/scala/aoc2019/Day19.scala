@@ -20,18 +20,15 @@ object Day19 extends AoC:
       CPU(program).withInput(x, y).outputs.head == 1
 
     @tailrec
-    def go(x: Value, y: Value): Value =
+    def loop(x: Value, y: Value): Value =
       val ne = isPulled(x, y - maxY)
       val sw = isPulled(x - maxX, y)
 
-      if ne && sw then
-        10000 * (x - maxX) + (y - maxY)
-      else if ne then
-        go(x + 1, y)
-      else
-        go(x, y + 1)
+      if ne && sw then 10000 * (x - maxX) + (y - maxY)
+      else if ne  then loop(x + 1, y)
+      else             loop(x, y + 1)
 
-    go(maxX, maxY)
+    loop(maxX, maxY)
 
   val program: Mem = Mem.load(input)
 
