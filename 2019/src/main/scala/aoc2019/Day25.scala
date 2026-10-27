@@ -160,4 +160,4 @@ object Day25 extends AoC:
 
   val program: Mem = Mem.load(input)
 
-  override lazy val answer1: Int    = findPassword(program)
+  override lazy val answer1: Int = findPassword(program)
