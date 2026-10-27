@@ -4,6 +4,7 @@ import nmcb.*
 import nmcb.predef.*
 
 import scala.annotation.tailrec
+import scala.collection.Iterator.*
 
 object Day24 extends AoC:
 
@@ -41,19 +42,17 @@ object Day24 extends AoC:
 
   def solve1(eris: Set[Area]): Int =
     @tailrec
-    def go(eris: Set[Area], previous: Set[Set[Area]]): Int =
+    def loop(eris: Set[Area], previous: Set[Set[Area]]): Int =
       val next = step(eris, neighbouring2D)
       if previous.contains(next) then
         next.map(area => 1 << (area.x + 5 * area.y)).sum
       else
-        go(next, previous + next)
+        loop(next, previous + next)
 
-    go(eris, Set())
+    loop(eris, Set())
 
   val eris: Set[Area] =
     Set.tabulate(5, 5)((x, y) => Option.when(lines(y)(x) == '#')(Area(x, y, 0))).flatten.flatten
-
-  import Iterator.*
 
   override lazy val answer1: Int = solve1(eris)
   override lazy val answer2: Int = iterate(eris)(step(_, neighbouring3D)).nth(200).size
