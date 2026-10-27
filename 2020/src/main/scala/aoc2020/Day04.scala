@@ -19,26 +19,26 @@ object Day04 extends AoC:
           val update = line.map(_.split(':')).map(kv => kv(0) -> kv(1)).toMap
           (update ++ result.head) +: result.tail
 
-  def valYear(key: String, min: Int, max: Int)(p: Passport): Boolean =
+  def validYear(key: String, min: Int, max: Int)(p: Passport): Boolean =
     p.get(key).exists(year => year.toInt >= min && year.toInt <= max)
 
-  def valHeight(p: Passport): Boolean =
+  def validHeight(p: Passport): Boolean =
     p.get("hgt").exists: height =>
       val value = height.takeWhile(_.isDigit).toInt
       if      height.endsWith("cm") then value >= 150 && value <= 193
       else if height.endsWith("in") then value >=  59 && value <=  76
       else false
 
-  def valHairColor(p: Passport): Boolean =
+  def validHairColor(p: Passport): Boolean =
     val chars = "0123456789abcdef"
     p.get("hcl").exists: hairColor =>
       hairColor.startsWith("#") && hairColor.drop(1).count(chars.contains) == 6
 
-  def valEyeColor(p: Passport): Boolean =
+  def validEyeColor(p: Passport): Boolean =
     val colors = List("amb", "blu", "brn", "gry", "grn", "hzl", "oth")
     p.get("ecl").exists(colors.contains)
 
-  def valPID(p: Passport): Boolean =
+  def validPID(p: Passport): Boolean =
     val digits = "0123456789"
     p.get("pid").exists(_.count(digits.contains) == 9)
 
@@ -48,13 +48,13 @@ object Day04 extends AoC:
 
   def solve2(passports: Vector[Passport]): Vector[Passport] =
     solve1(passports)
-      .filter(valYear("byr", 1920, 2020))
-      .filter(valYear("iyr", 2010, 2020))
-      .filter(valYear("eyr", 2020, 2030))
-      .filter(valHeight)
-      .filter(valHairColor)
-      .filter(valEyeColor)
-      .filter(valPID)
+      .filter(validYear("byr", 1920, 2020))
+      .filter(validYear("iyr", 2010, 2020))
+      .filter(validYear("eyr", 2020, 2030))
+      .filter(validHeight)
+      .filter(validHairColor)
+      .filter(validEyeColor)
+      .filter(validPID)
 
   override lazy val answer1: Int = solve1(passports).size
   override lazy val answer2: Int = solve2(passports).size
