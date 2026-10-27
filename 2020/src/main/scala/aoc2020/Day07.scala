@@ -25,21 +25,32 @@ object Day07 extends AoC:
       bags.filter(b => b.to.contains(to)).map(_.from)
 
     @tailrec
-    def solve1(ps: Vector[Color], result: Vector[Color] = Vector.empty): Vector[Color] =
-      if ps.isEmpty then
+    def solve1(parents: Vector[Color], result: Vector[Color] = Vector.empty): Vector[Color] =
+      if parents.isEmpty then
         result
       else
-        val end = ps.filter(p => parentsOf(p).isEmpty)
-        val rec = ps.filter(p => parentsOf(p).nonEmpty)
+        val end = parents.filter(p => parentsOf(p).isEmpty)
+        val rec = parents.filter(p => parentsOf(p).nonEmpty)
         solve1(rec.flatMap(p => parentsOf(p)).distinct, result ++ rec ++ end)
 
-    def childrenOf(from: Color): Vector[(Color,Int)] =
+    def childrenOf(from: Color): Vector[(Color, Int)] =
       bags.filter(b => b.from == from && b.to.isDefined).map(b => b.to.get -> b.count)
 
-    def solve2(inner: Vector[(Color,Int)], result: Int = 0): Int =
-        inner.runtimeChecked match
-          case Vector()            => result
-          case (child,count) +: cs => solve2(cs, result + count + count * solve2(childrenOf(child)))
+    def solve2(children: Vector[(Color, Int)]): Int =
+      @tailrec
+      def loop(todo: List[Vector[(Color, Int)]], multipliers: List[Int] = List(1), result: Int = 0): Int =
+        todo.runtimeChecked match
+          case Nil              => result
+          case Vector() :: rest => loop(rest, multipliers.tail, result)
+          case ((child, count) +: next) :: rest =>
+            val multiplier = multipliers.head
+            val addition   = count * multiplier
+            val children   = childrenOf(child)
+            if children.isEmpty then
+              loop(next :: rest, multipliers, result + addition)
+            else
+              loop(children :: next :: rest, (multiplier * count) :: multipliers, result + addition)
+      loop(List(children))
 
 
   override lazy val answer1: Int = bags.solve1(bags.parentsOf("shinygold")).distinct.size
