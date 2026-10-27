@@ -8,31 +8,29 @@ import scala.annotation.tailrec
 
 object Day03 extends AoC:
 
-  case class Forest(tile: Vector[Vector[Char]]):
-    val sizeX: Int = tile(0).size
-    val sizeY: Int = tile.size
+  extension (grid: Grid[Char])
 
-    def sample(x: Int, y: Int): Option[Char] =
-      when(y < sizeY)(tile(y)(x % sizeX))
+    def horizontalStretchedPeek(x: Int, y: Int): Option[Char] =
+      when(y < grid.sizeY)(grid.peek(x % grid.sizeX, y))
 
     def walk(dx: Int, dy: Int): Long =
       @tailrec
-      def step(x: Int, y: Int, acc: Long = 0): Long =
-        sample(x, y).runtimeChecked match
-          case None      => acc
-          case Some('.') => step(x + dx, y + dy, acc)
-          case Some('#') => step(x + dx, y + dy, acc + 1)
+      def step(x: Int, y: Int, result: Long = 0): Long =
+        horizontalStretchedPeek(x, y).runtimeChecked match
+          case None      => result
+          case Some('.') => step(x + dx, y + dy, result)
+          case Some('#') => step(x + dx, y + dy, result + 1)
       step(dx,dy)
 
-  val forest: Forest = Forest(lines.map(_.toVector))
+  val forest: Grid[Char] = Grid.fromLines(lines)
 
   val walks: List[Long] =
     List(
-      forest.walk(1,1),
-      forest.walk(3,1),
-      forest.walk(5,1),
-      forest.walk(7,1),
-      forest.walk(1,2)
+      forest.walk(1, 1),
+      forest.walk(3, 1),
+      forest.walk(5, 1),
+      forest.walk(7, 1),
+      forest.walk(1, 2)
     )
 
 

@@ -4,7 +4,7 @@ import nmcb.*
 
 object Day01 extends AoC:
 
-  def answer(numberOfArgs: Int, sumEquals: Int): Int =
+  def solve(numberOfArgs: Int, sumEquals: Int): Int =
     lines
       .map(_.toInt)
       .combinations(numberOfArgs)
@@ -13,5 +13,5 @@ object Day01 extends AoC:
       .next()
 
 
-  override lazy val answer1: Int = answer(numberOfArgs = 2, sumEquals = 2020)
-  override lazy val answer2: Int = answer(numberOfArgs = 3, sumEquals = 2020)
+  override lazy val answer1: Int = solve(numberOfArgs = 2, sumEquals = 2020)
+  override lazy val answer2: Int = solve(numberOfArgs = 3, sumEquals = 2020)
