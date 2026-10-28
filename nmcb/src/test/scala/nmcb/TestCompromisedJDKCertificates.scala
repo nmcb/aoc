@@ -1,9 +1,13 @@
+package nmcb
+
+import org.scalatest.funsuite.AnyFunSuite
+
 import java.io.IOException
 import java.net.URI
-import java.security.Security
 import javax.net.ssl.{HttpsURLConnection, SSLException}
 
-object CheckCompromisedCa:
+class TestCompromisedJDKCertificates extends AnyFunSuite:
+
   private val testUrls = List(
     "https://dv-g3b-emudhra.we-have-a-problem.com/",
     "https://dv-g3c-emudhra.we-have-a-problem.com/",
@@ -19,48 +23,26 @@ object CheckCompromisedCa:
     "https://ev-g3c-aaa-emudhra.we-have-a-problem.com/",
   )
 
-  def main(args: Array[String]): Unit =
-    if args.toList.contains("--revocation") then
-      // Must be set before the first TLS context is created
-      Security.setProperty("ocsp.enable", "true")
-      sys.props("com.sun.net.ssl.checkRevocation") = "true"
-      sys.props("com.sun.security.enableCRLDP") = "true"
-    test()
-
-  def test(): Unit =
-    println(s"Java ${sys.props("java.version")} (${sys.props("java.home")})")
-    if !testUrls.forall(verifyTls) then
-      sys.error("compromised CAs are in use, or we encountered a network error")
-
-  def verifyTls(url: String): Boolean =
+  def verifyTls(url: String): Option[String] =
     val conn = URI.create(url).toURL.openConnection().asInstanceOf[HttpsURLConnection]
     conn.setConnectTimeout(10000)
     conn.setReadTimeout(15000)
     try
       val status = conn.getResponseCode
       // Handshake succeeded -> certificate chain was accepted
-      println(s"${red("VULNERABLE")} (HTTP $status) $url")
-      false
+      Some(s"${red("VULNERABLE")} (HTTP $status) $url")
     catch
       case e: IOException =>
         findSslException(e) match
           case Some(ssl) =>
-            // Handshake was rejected -> problem detected
-            println(s"${green("OK")} $url")
-            println(s"  ${ssl.getClass.getSimpleName}: ${ssl.getMessage}")
-            true
+            None
           case None =>
             // DNS, timeout, connection refused etc. -> says nothing about TLS
-            println(s"${yellow("ERROR")} $url")
-            println(s"  ${e.getClass.getSimpleName}: ${e.getMessage}")
-            false
+            Some(s"${yellow("ERROR")} $url")
     finally conn.disconnect()
 
   def red(s: String): String =
     Console.RED + s + Console.RESET
-
-  def green(s: String): String =
-    Console.GREEN + s + Console.RESET
 
   def yellow(s: String): String =
     Console.YELLOW + s + Console.RESET
@@ -71,4 +53,7 @@ object CheckCompromisedCa:
       .iterate(t)(_.getCause)
       .takeWhile(_ != null)
       .collectFirst { case ssl: SSLException => ssl }
-end CheckCompromisedCa
+
+  test(s"Against compromised CAs: ${sys.props("java.version")} (${sys.props("java.home")})"):
+    assertResult(expected = Nil):
+      testUrls.flatMap(verifyTls)
