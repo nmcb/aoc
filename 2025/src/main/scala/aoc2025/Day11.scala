@@ -1,6 +1,7 @@
 package aoc2025
 
 import nmcb.*
+import nmcb.predef.*
 import scala.collection.mutable
 
 
@@ -14,10 +15,10 @@ object Day11 extends AoC:
       .withDefaultValue(Vector.empty)
 
   def solve1(from: String, to: String, edges: Map[String, Vector[String]]): Long =
-    val cache = mutable.Map.empty[String, Long]
-    def loop(from: String): Long = cache.getOrElseUpdate(from,
-      if from == to then 1 else edges(from).map(loop).sum
-    )
+    val memo = Memo.empty[String, Long]
+    def loop(from: String): Long =
+      memo.memoize(from):
+        if from == to then 1 else edges(from).map(loop).sum
     loop(from)
 
   def solve2(edges: Map[String,Vector[String]]): Long =
