@@ -23,10 +23,10 @@ object Day05 extends AoC:
 
   extension (ranges: Vector[Range])
 
-    def merge: Vector[Range] =
+    def merged: Vector[Range] =
       ranges.sortBy(_.min).foldLeft(Vector.empty[Range]):
-        case (tail :+ last, test) if test.min <= last.max + 1 => tail :+ (last.min, last.max max test.max)
-        case (result, range)                                  => result :+ range
+        case (done :+ last, range) if range.min <= last.max + 1 => done :+ (last.min, last.max max range.max)
+        case (done, range)                                      => done :+ range
 
   override lazy val answer1: Int = ingredients.count(i => ranges.exists(_.contains(i)))
-  override lazy val answer2: Long = ranges.merge.map(_.size).sum
+  override lazy val answer2: Long = ranges.merged.map(_.size).sum
