@@ -2,6 +2,8 @@ package aoc2023
 
 import nmcb.*
 
+import scala.annotation.tailrec
+
 object Day01 extends AoC:
 
   val digits: Map[String, Char] =
@@ -9,19 +11,27 @@ object Day01 extends AoC:
 
   def recover(replacements: Map[String, Char])(line: String): Int =
 
-    def firstLeftDigit(side: String): (String, Char) =
-      replacements
-        .find((p,_) => side.startsWith(p))
-        .getOrElse(firstLeftDigit(side.tail))
+    @tailrec
+    def firstLeftDigit(side: String): Option[(String, Char)] =
+      if side.isEmpty then
+        None
+      else
+        replacements.find((p, _) => side.startsWith(p)) match
+          case Some(found) => Some(found)
+          case None        => firstLeftDigit(side.tail)
 
 
-    def firstRightDigit(side: String): (String, Char) =
-      replacements
-        .find((p,_) => side.endsWith(p))
-        .getOrElse(firstRightDigit(side.init))
+    @tailrec
+    def firstRightDigit(side: String): Option[(String, Char)] =
+      if side.isEmpty then
+        None
+      else
+        replacements.find((p, _) => side.endsWith(p)) match
+          case Some(found) => Some(found)
+          case None        => firstRightDigit(side.init)
 
-    val (_,l) = firstLeftDigit(line)
-    val (_,r) = firstRightDigit(line)
+    val (_, l) = firstLeftDigit(line).getOrElse(sys.error(s"no replacement found in: $line"))
+    val (_, r) = firstRightDigit(line).getOrElse(sys.error(s"no replacement found in: $line"))
     s"$l$r".toInt
 
   val names: Map[String, Char] =
