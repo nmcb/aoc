@@ -9,14 +9,14 @@ import scala.annotation.tailrec
 object Day10 extends AoC:
 
   enum Tile(val directions: Set[Dir]) derives CanEqual:
-    case Vertical   extends Tile(Set(N,S))
-    case Horizontal extends Tile(Set(E,W))
-    case BendNE     extends Tile(Set(N,E))
-    case BendNW     extends Tile(Set(N,W))
-    case BendSW     extends Tile(Set(S,W))
-    case BendSE     extends Tile(Set(S,E))
-    case Ground     extends Tile(Set())
-    case Start      extends Tile(Set()) // handle as special case
+    case Vertical   extends Tile(Set(N, S))
+    case Horizontal extends Tile(Set(E, W))
+    case BendNE     extends Tile(Set(N, E))
+    case BendNW     extends Tile(Set(N, W))
+    case BendSW     extends Tile(Set(S, W))
+    case BendSE     extends Tile(Set(S, E))
+    case Ground     extends Tile(Set.empty)
+    case Start      extends Tile(Set.empty) // handle as special case
     def opposite(d: Dir): Option[Dir] =
       if directions.contains(d.opposite) then directions.find(_ != d.opposite) else None
 
@@ -70,7 +70,7 @@ object Day10 extends AoC:
         case Some(n) =>
           tiles(n).opposite(d) match
             case None    => a
-            case Some(o) => loop(n, o, a :+ (n,o))
+            case Some(o) => loop(n, o, a :+ (n, o))
     loop(from, dir, Vector((from, dir)))
 
 
