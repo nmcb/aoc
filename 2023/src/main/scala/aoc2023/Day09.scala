@@ -10,9 +10,9 @@ object Day09 extends AoC:
 
   def extrapolate(line: Vector[Int]): Int =
     @tailrec
-    def loop(current: Vector[Int], acc: Int): Int =
+    def loop(current: Vector[Int], result: Int): Int =
       val diffs = current.tail.zip(current).map(_ - _)
-      if diffs.forall(_ == 0) then acc + current.last else loop(diffs, acc + current.last)
+      if diffs.forall(_ == 0) then result + current.last else loop(diffs, result + current.last)
     loop(line, 0)
 
   override lazy val answer1: Int = matrix.map(extrapolate).sum
