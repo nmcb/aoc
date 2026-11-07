@@ -32,10 +32,10 @@ object Day14 extends AoC:
         string = underlying
                    .zip(value.toBinaryString)
                    .foldRight(""):
-                     case (('X',b), lsb) => "" +  b  + lsb
-                     case (('1',_), lsb) => "" + '1' + lsb
-                     case (('0',_), lsb) => "" + '0' + lsb
-                     case err            => sys.error(s"boom: $err"),
+                     case (('X', b), lsb) => "" +  b  + lsb
+                     case (('1', _), lsb) => "" + '1' + lsb
+                     case (('0', _), lsb) => "" + '0' + lsb
+                     case err             => sys.error(s"boom: $err"),
         radix = 2
       )
 
@@ -43,15 +43,15 @@ object Day14 extends AoC:
       underlying
         .zip(address.toBinaryString)
         .foldRight(""):
-          case (('X',_),lsb) => "" + 'X' + lsb
-          case (('1',_),lsb) => "" + '1' + lsb
-          case (('0',b),lsb) => "" +  b  + lsb
-          case err           => sys.error(s"boom: $err")
+          case (('X', _), lsb) => "" + 'X' + lsb
+          case (('1', _), lsb) => "" + '1' + lsb
+          case (('0', b), lsb) => "" +  b  + lsb
+          case err             => sys.error(s"boom: $err")
         .foldRight(List.empty[String]):
-          case ('X',acc) => if acc.nonEmpty then acc.flatMap(n => List("0" + n, "1" + n)) else List("0", "1")
-          case ('1',acc) => if acc.nonEmpty then acc.map(n => "1" + n) else List("1")
-          case ('0',acc) => if acc.nonEmpty then acc.map(n => "0" + n) else List("0")
-          case err       => sys.error(s"boom: $err")
+          case ('X', acc) => if acc.nonEmpty then acc.flatMap(n => List("0" + n, "1" + n)) else List("0", "1")
+          case ('1', acc) => if acc.nonEmpty then acc.map(n => "1" + n) else List("1")
+          case ('0', acc) => if acc.nonEmpty then acc.map(n => "0" + n) else List("0")
+          case err        => sys.error(s"boom: $err")
         .map(string => new UInt36(string, 2))
 
     override def toString: String =
@@ -60,27 +60,33 @@ object Day14 extends AoC:
   object Mask:
     def fill(c: Char): Mask = Mask(List.fill(36)(c).mkString)
 
-  case class Update(addres: UInt36, value: UInt36) extends Inst
+  case class Update(address: UInt36, value: UInt36) extends Inst
 
-  type Memory  = Map[UInt36,UInt36]
+  type Memory  = Map[UInt36, UInt36]
   type Program = List[Inst]
+  type Codec   = UInt36 => UInt36 => Mask => Memory => Memory
 
-  val program: Program = lines.toList.map:
-    case UpdateExpr(address,value) => Update(new UInt36(address, 10), new UInt36(value, 10))
-    case MaskExpr(mask)            => Mask(mask)
+  val program: Program = lines.toList.collect:
+    case UpdateExpr(address, value) => Update(new UInt36(address, 10), new UInt36(value, 10))
+    case MaskExpr(mask)             => Mask(mask)
 
-  def run(program: Program)(codec: UInt36 => UInt36 => Mask => Memory => Memory): Long =
+  def run(program: Program)(codec: Codec): Long =
 
     @tailrec
     def loop(program: Program, memory: Memory = Map.empty, mask: Mask = Mask.fill('X')) : Memory =
       program match
         case Nil          => memory
         case inst :: rest => inst match
-            case Update(address,value) => loop(rest, codec(address)(value)(mask)(memory), mask)
-            case mask: Mask            => loop(rest, memory , mask)
+            case Update(address, value) => loop(rest, codec(address)(value)(mask)(memory), mask)
+            case mask: Mask             => loop(rest, memory , mask)
 
     loop(program).values.map(_.underlying).sum
 
+  def codec1(address: UInt36)(value: UInt36)(mask: Mask)(memory: Memory): Memory =
+    memory ++ Map(address -> mask.mask(value))
 
-  override lazy val answer1: Long = run(program)(address => value => mask => memory => memory ++ Map(address -> mask.mask(value)))
-  override lazy val answer2: Long = run(program)(address => value => mask => memory => memory ++ mask.float(address).map(a => a -> value))
+  def codec2(address: UInt36)(value: UInt36)(mask: Mask)(memory: Memory): Memory =
+    memory ++ mask.float(address).map(a => a -> value)
+
+  override lazy val answer1: Long = run(program)(codec1)
+  override lazy val answer2: Long = run(program)(codec2)
