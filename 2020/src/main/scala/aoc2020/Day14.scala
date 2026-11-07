@@ -60,7 +60,7 @@ object Day14 extends AoC:
   object Mask:
     def fill(c: Char): Mask = Mask(List.fill(36)(c).mkString)
 
-  case class Update(addres: UInt36, value: UInt36) extends Inst
+  case class Update(address: UInt36, value: UInt36) extends Inst
 
   type Memory  = Map[UInt36,UInt36]
   type Program = List[Inst]
