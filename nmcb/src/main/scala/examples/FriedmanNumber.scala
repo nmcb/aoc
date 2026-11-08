@@ -4,6 +4,7 @@ import nmcb.predef.*
 
 import java.lang.System.*
 import scala.Option.when
+import scala.annotation.tailrec
 import scala.collection.*
 import scala.util.*
 
@@ -52,10 +53,14 @@ object FriedmanNumber:
   sealed trait ComputationOrder derives CanEqual:
 
     def isConcat: Boolean =
-      this match
-        case BinaryOperation(l, r, Concatenation) => l.isConcat && r.isConcat
-        case Value(v)                             => true
-        case _                                    => false
+      @tailrec
+      def loop(nodes: List[ComputationOrder]): Boolean =
+        nodes match
+          case Nil                                          => true
+          case BinaryOperation(l, r, Concatenation) :: rest => loop(l :: r :: rest)
+          case Value(_) :: rest                             => loop(rest)
+          case _                                            => false
+      loop(List(this))
 
     def compute: Option[Int] =
       this.runtimeChecked match
