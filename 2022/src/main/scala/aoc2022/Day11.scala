@@ -12,7 +12,7 @@ object Day11 extends AoC:
     chunks.map(Monkey.fromStrings)
 
   object Monkey:
-    def fromStrings(ss: Vector[String]): Monkey =
+    def fromStrings(chunk: Vector[String]): Monkey =
 
       def parseMonkey(s: String): Int =
         s match
@@ -38,25 +38,26 @@ object Day11 extends AoC:
         s match
           case s"    If false: throw to monkey $m" => m.toInt
 
-      val nr        = parseMonkey(ss(0))
-      val items     = parseItems(ss(1))
-      val (op,rhs)  = parseOperation(ss(2))
-      val divisible = parseTest(ss(3))
-      val tit       = parseToIfTrue(ss(4))
-      val tif       = parseToIfFalse(ss(5))
+      val nr        = parseMonkey(chunk(0))
+      val items     = parseItems(chunk(1))
+      val (op,rhs)  = parseOperation(chunk(2))
+      val divisible = parseTest(chunk(3))
+      val tit       = parseToIfTrue(chunk(4))
+      val tif       = parseToIfFalse(chunk(5))
 
       Monkey(nr, items, op, Try(rhs.toLong).toOption, divisible, tit, tif)
 
 
-  case class Monkey(nr: Int
-                    , items: Vector[Long]
-                    , operation: String
-                    , rhs: Option[Long]
-                    , divisible: Long
-                    , throwToIfTrue: Int
-                    , throwToIfFalse: Int
-                    , lowerWorryBy: Long => Long = identity
-                    , worries: Long = 0
+  case class Monkey(
+    nr: Int,
+    items: Vector[Long],
+    operation: String,
+    rhs: Option[Long],
+    divisible: Long,
+    throwToIfTrue: Int,
+    throwToIfFalse: Int,
+    lowerWorryBy: Long => Long = identity,
+    worries: Long = 0
   ):
 
     def operation(i: Long): Long =
