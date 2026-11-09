@@ -38,9 +38,9 @@ object Day17 extends AoC:
   case class Chamber(rocks: LazyList[Rock], pattern: LazyList[Move], stopped: Set[Pos], height: Int):
     import Chamber.*
 
-    def isWall(p: Pos): Boolean     = p.x < origin.x | p.x >= origin.x + width
+    def isWall(p: Pos): Boolean     = p.x < origin.x || p.x >= origin.x + width
     def isFloor(p: Pos): Boolean    = p.y < origin.y
-    def isOccupied(p: Pos): Boolean = isWall(p) | isFloor(p) | stopped.contains(p)
+    def isOccupied(p: Pos): Boolean = isWall(p) || isFloor(p) || stopped.contains(p)
 
     def next: Chamber =
 
@@ -54,9 +54,9 @@ object Day17 extends AoC:
         val rest = moves.tail
 
         val moved = move match
-          case L => pos.translate(dx = -1, dy =  0)
-          case R => pos.translate(dx =  1, dy =  0)
-          case D => pos.translate(dx =  0, dy = -1)
+          case L => pos.translate(dx = -1)
+          case R => pos.translate(dx =  1)
+          case D => pos.translate(dy = -1)
 
         if rocks.head.withOrigin(moved).forall(p => !isOccupied(p)) then
           if move == L || move == R then
