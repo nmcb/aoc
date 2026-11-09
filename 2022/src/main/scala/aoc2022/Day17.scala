@@ -38,9 +38,9 @@ object Day17 extends AoC:
   case class Chamber(rocks: LazyList[Rock], pattern: LazyList[Move], stopped: Set[Pos], height: Int):
     import Chamber.*
 
-    def isWall(p: Pos): Boolean     = p.x < origin.x | p.x >= origin.x + width
+    def isWall(p: Pos): Boolean     = p.x < origin.x || p.x >= origin.x + width
     def isFloor(p: Pos): Boolean    = p.y < origin.y
-    def isOccupied(p: Pos): Boolean = isWall(p) | isFloor(p) | stopped.contains(p)
+    def isOccupied(p: Pos): Boolean = isWall(p) || isFloor(p) || stopped.contains(p)
 
     def next: Chamber =
 
