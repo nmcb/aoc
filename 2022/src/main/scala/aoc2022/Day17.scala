@@ -54,9 +54,9 @@ object Day17 extends AoC:
         val rest = moves.tail
 
         val moved = move match
-          case L => pos.translate(dx = -1, dy =  0)
-          case R => pos.translate(dx =  1, dy =  0)
-          case D => pos.translate(dx =  0, dy = -1)
+          case L => pos.translate(dx = -1)
+          case R => pos.translate(dx =  1)
+          case D => pos.translate(dy = -1)
 
         if rocks.head.withOrigin(moved).forall(p => !isOccupied(p)) then
           if move == L || move == R then
