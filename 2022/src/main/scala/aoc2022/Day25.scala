@@ -24,8 +24,6 @@ object Day25 extends AoC:
 
 
   object Digit:
-    val Powers: Long = 5
-
     def fromChar(c: Char): Digit =
       c.runtimeChecked match
         case '2' | '1' | '0' | '-' | '=' => Digit(c)
