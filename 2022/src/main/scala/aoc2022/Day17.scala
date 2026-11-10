@@ -115,6 +115,5 @@ object Day17 extends AoC:
     stemHeight + cycleNr * cycleHeight + tailHeight
 
 
-
   override lazy val answer1: Int  = solve1(nr = 2022)
   override lazy val answer2: Long = solve2(nr = 1000_000_000_000L)
