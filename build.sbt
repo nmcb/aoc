@@ -35,7 +35,8 @@ ThisBuild / Test / javaOptions ++= Seq(
   "-Xmx4G",
   "-Xss1G",
   "-XX:+UseG1GC",
-  "--sun-misc-unsafe-memory-access=allow"
+  "--sun-misc-unsafe-memory-access=allow",
+  "--enable-native-access=ALL-UNNAMED"
 )
 
 Global / onChangedBuildSource  := ReloadOnSourceChanges
