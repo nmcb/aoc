@@ -5,7 +5,7 @@ ThisBuild / libraryDependencies ++= Seq(
   "org.scalatest"  %% "scalatest"  % "3.2.20" % "test",
 
   // 2025
-  "tools.aqua" % "z3-turnkey" % "4.14.1",
+  "tools.aqua" % "z3-turnkey" % "5.3.3",
 
   // 2023
   ("org.scala-graph" %  "graph-core" % "2.0.3").cross(CrossVersion.for3Use2_13),
