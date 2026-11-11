@@ -7,8 +7,8 @@ object Day20 extends AoC:
   type IP = Long
 
   object IP:
-    val MinValue: IP = 0x00000000
-    val MaxValue: IP = 0xffffffff
+    val MinValue: IP = 0L
+    val MaxValue: IP = 4294967295L
 
   case class Range(min: IP, max: IP):
 
@@ -58,4 +58,4 @@ object Day20 extends AoC:
           open - blocked
 
   override lazy val answer1: IP   = remaining(blacklist).minBy(_.min).min
-  override lazy val answer2: Long = remaining(blacklist).foldLeft(0L)(_ + _.size)
+   override lazy val answer2: Long = remaining(blacklist).foldLeft(0L)(_ + _.size)
