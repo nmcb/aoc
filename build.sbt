@@ -1,11 +1,11 @@
-ThisBuild / scalaVersion := "3.10.0"
+ThisBuild / scalaVersion := "3.10.1"
 ThisBuild / version      := "0.1.0"
 
 ThisBuild / libraryDependencies ++= Seq(
   "org.scalatest"  %% "scalatest"  % "3.2.20" % "test",
 
   // 2025
-  "tools.aqua" % "z3-turnkey" % "4.14.1",
+  "tools.aqua" % "z3-turnkey" % "5.3.3",
 
   // 2023
   ("org.scala-graph" %  "graph-core" % "2.0.3").cross(CrossVersion.for3Use2_13),
