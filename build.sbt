@@ -26,8 +26,7 @@ ThisBuild / scalacOptions ++= Seq(
   "-deprecation"
 )
 
-ThisBuild / Compile / run / fork         := true
-
+ThisBuild / Compile / run / fork := true
 
 ThisBuild / Test / fork         := true
 ThisBuild / Test / testOptions  += Tests.Argument("-oD")
