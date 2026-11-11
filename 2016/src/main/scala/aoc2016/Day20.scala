@@ -58,4 +58,4 @@ object Day20 extends AoC:
           open - blocked
 
   override lazy val answer1: IP   = remaining(blacklist).minBy(_.min).min
-   override lazy val answer2: Long = remaining(blacklist).foldLeft(0L)(_ + _.size)
+  override lazy val answer2: Long = remaining(blacklist).foldLeft(0L)(_ + _.size)
