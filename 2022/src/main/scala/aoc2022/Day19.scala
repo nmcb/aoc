@@ -3,7 +3,7 @@ package aoc2022
 import nmcb.*
 
 import scala.annotation.tailrec
-import scala.collection.parallel.CollectionConverters._
+import scala.collection.parallel.CollectionConverters.*
 
 object Day19 extends AoC:
 
@@ -23,10 +23,19 @@ object Day19 extends AoC:
       Vector(oreRobotCost, clayRobotCost, obsidianRobotCostOre, geodeRobotCostOre).max
 
   object Blueprint:
+
     def fromString(s: String): Blueprint =
       s match
         case s"""Blueprint ${nr}: Each ore robot costs ${c1} ore. Each clay robot costs ${c2} ore. Each obsidian robot costs ${c3} ore and ${c4} clay. Each geode robot costs ${c5} ore and ${c6} obsidian.""" =>
-          Blueprint(nr.toInt, c1.toInt, c2.toInt, c3.toInt, c4.toInt, c5.toInt, c6.toInt)
+          Blueprint(
+            index                  = nr.toInt,
+            oreRobotCost           = c1.toInt,
+            clayRobotCost          = c2.toInt,
+            obsidianRobotCostOre   = c3.toInt,
+            obsidianRobotCostClay  = c4.toInt,
+            geodeRobotCostOre      = c5.toInt,
+            geodeRobotCostObsidian = c6.toInt
+          )
 
   enum Material derives CanEqual:
     case Ore
@@ -50,18 +59,19 @@ object Day19 extends AoC:
   import Build.*
   
   def buildActions(print: Blueprint, material: MaterialStash, robots: Vector[Robot]): Vector[Build] =
+
     import material.*
     import print.*
 
-    def robotCount(material: Material): Int =
+    def robotsCreating(material: Material): Int =
       robots.count(_ == Robot(material))
 
     import Option.*
 
-    val buildOre      = when(ore >= oreRobotCost         && robotCount(Ore)  <= maxRobotCostOre)(OreRobot)
-    val buildClay     = when(ore >= clayRobotCost        && robotCount(Clay) <= obsidianRobotCostClay)(ClayRobot)
-    val buildObsidian = when(ore >= obsidianRobotCostOre && clay             >= obsidianRobotCostClay)(ObsidianRobot)
-    val buildGeode    = when(ore >= geodeRobotCostOre    && obsidian         >= geodeRobotCostObsidian)(GeodeRobot)
+    val buildOre      = when(ore >= oreRobotCost         && robotsCreating(Ore)  <= maxRobotCostOre)(OreRobot)
+    val buildClay     = when(ore >= clayRobotCost        && robotsCreating(Clay) <= obsidianRobotCostClay)(ClayRobot)
+    val buildObsidian = when(ore >= obsidianRobotCostOre && clay     >= obsidianRobotCostClay)(ObsidianRobot)
+    val buildGeode    = when(ore >= geodeRobotCostOre    && obsidian >= geodeRobotCostObsidian)(GeodeRobot)
 
     val actions: Vector[Option[Build]] =
       if      obsidian >= geodeRobotCostObsidian then Vector(buildGeode, Some(Nothing))
@@ -81,7 +91,7 @@ object Day19 extends AoC:
   @tailrec
   def produce(robots: Vector[Robot], stash: MaterialStash): MaterialStash =
     import stash.*
-    robots match
+    robots.runtimeChecked match
       case h +: t =>
         h match
           case Robot(Ore)      => produce(t, stash.copy(ore = ore + 1))
@@ -90,8 +100,6 @@ object Day19 extends AoC:
           case Robot(Geode)    => produce(t, stash.copy(geode = geode + 1))
       case Vector() =>
         stash
-      case _ =>
-        sys.error(s"invalid state robots=$robots")
 
   def consume(build: Build, print: Blueprint, stash: MaterialStash): MaterialStash =
     import print.*
