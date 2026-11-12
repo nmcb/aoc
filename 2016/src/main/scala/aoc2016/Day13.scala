@@ -13,7 +13,7 @@ object Day13 extends AoC:
   extension (p: Pos)
   
     def isOpen: Boolean =
-      val number = p.x*p.x + 3*p.x + 2*p.x*p.y + p.y + p.y*p.y + favorite
+      val number = p.x * p.x + 3 * p.x + 2 * p.x * p.y + p.y + p.y * p.y + favorite
       val binary = number.toBinaryString
       binary.count(_ == '1') % 2 == 0
 
@@ -38,7 +38,7 @@ object Day13 extends AoC:
     cache(target)
 
   /** breadth first search */
-  def solve2(start: Pos): Map[Pos,Int] =
+  def solve2(start: Pos): Map[Pos, Int] =
     val todo = mutable.Queue(start)
     val cache = mutable.Map(start -> 0)
 
