@@ -58,7 +58,7 @@ object Day24 extends AoC:
       nodes.transform: (_, end) =>
         distance(grid, start, end)
 
-  /** brute force traveling salesman */
+  /** brute force travelling salesman */
   def shortestPath(distances: Distances, routes: Routes): Int =
     routes
       .map: route =>
