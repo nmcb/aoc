@@ -4,6 +4,7 @@ import nmcb.*
 import nmcb.predef.*
 
 import java.security.MessageDigest
+import scala.collection.Iterator.{from, iterate}
 import scala.util.matching.UnanchoredRegex
 
 object Day14 extends AoC:
@@ -25,13 +26,13 @@ object Day14 extends AoC:
             case _                      => false
         case _                          => false
 
-    val (_, index) = Iterator.from(0).map(hash).zipWithIndex.sliding(1 + 1000).filter(check).nth(63).head
+    val (_, index) = from(0).map(hash).zipWithIndex.sliding(1 + 1000).filter(check).nth(63).head
     index
 
   val puzzle = "zpqevtbw"
 
   def stretched(string: String): String =
-    Iterator.iterate(string)(hash).nth(2016 + 1)
+    iterate(string)(hash).nth(2016 + 1)
 
   override lazy val answer1: Int = solve(index => hash(s"$puzzle$index"))
   override lazy val answer2: Int = solve(index => stretched(s"$puzzle$index"))
