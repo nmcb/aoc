@@ -17,7 +17,8 @@ object Day14 extends AoC:
   def hash(string: String): String =
     md5.digest(string.getBytes).toHexString
 
-  def solve(hash: Int => String): Int =
+  def solve(saltedHash: Int => String): Int =
+
     def check(window: Seq[(String, Int)]): Boolean =
       window.head match
         case (Three(t), _) =>
@@ -26,8 +27,14 @@ object Day14 extends AoC:
             case _                      => false
         case _                          => false
 
-    val (_, index) = from(0).map(hash).zipWithIndex.sliding(1 + 1000).filter(check).nth(63).head
-    index
+    from(0)
+      .map(saltedHash)
+      .zipWithIndex
+      .sliding(1 + 1000)
+      .filter(check)
+      .nth(63)
+      .head
+      .index
 
   val puzzle = "zpqevtbw"
 
