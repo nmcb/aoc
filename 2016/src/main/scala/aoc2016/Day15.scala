@@ -3,6 +3,8 @@ package aoc2016
 import nmcb.*
 import nmcb.predef.*
 
+import scala.collection.Iterator.from
+
 object Day15 extends AoC:
 
   case class Disc(nr: Int, positions: Int, position: Int):
@@ -18,5 +20,5 @@ object Day15 extends AoC:
   def validDrop(discs: Discs)(time: Int): Boolean =
     discs.forall(_.passWhenDroppedAt(time))
 
-  override lazy val answer1: Int = Iterator.from(0).findFirst(validDrop(discs))
-  override lazy val answer2: Int = Iterator.from(0).findFirst(validDrop(discs :+ Disc(nr = 7, positions = 11, position = 0)))
+  override lazy val answer1: Int = from(0).findFirst(validDrop(discs))
+  override lazy val answer2: Int = from(0).findFirst(validDrop(discs :+ Disc(nr = 7, positions = 11, position = 0)))
