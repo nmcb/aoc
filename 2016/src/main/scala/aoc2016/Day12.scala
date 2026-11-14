@@ -11,18 +11,6 @@ object Day12 extends AoC:
   type Operand   = Value | Register
   type Registers = Map[Register, Value]
 
-  extension (registers: Registers)
-
-    def valueOf(operand: Operand): Value =
-      operand match
-        case r: Register => registers.getOrElse(r, 0)
-        case i: Int      => i
-
-    def update(register: Register, operand: Operand, f: Value => Value = identity): Registers =
-      val value = (f compose registers.valueOf)(operand)
-      registers.updated(register, value)
-
-
   enum Instruction:
     case CPY(operand: Operand, register: Register)
     case INC(register: Register)
@@ -49,8 +37,17 @@ object Day12 extends AoC:
 
     import Instruction.*
 
-    def halted: Boolean =
+    private def halted: Boolean =
       pc >= instructions.size
+
+    def valueOf(operand: Operand): Value =
+      operand match
+        case r: Register => registers.getOrElse(r, 0)
+        case i: Value => i
+
+    private def update(register: Register, operand: Operand, f: Value => Value = identity): CPU =
+      val value = (f compose valueOf)(operand)
+      copy(registers = registers.updated(register, value))
 
     @tailrec
     final def run: CPU =
@@ -58,12 +55,15 @@ object Day12 extends AoC:
         this
       else
         instructions(pc) match
-          case CPY(o, r) => copy(pc = pc + 1, registers = registers.update(r, o)).run
-          case INC(r)    => copy(pc = pc + 1, registers = registers.update(r, r, _ + 1)).run
-          case DEC(r)    => copy(pc = pc + 1, registers = registers.update(r, r, _ - 1)).run
-          case JNZ(o, v) => if registers.valueOf(o) != 0 then copy(pc = pc + v).run else copy(pc = pc + 1).run
+          case CPY(o, r)                    => copy(pc = pc + 1).update(r, o).run
+          case INC(r)                       => copy(pc = pc + 1).update(r, r, _ + 1).run
+          case DEC(r)                       => copy(pc = pc + 1).update(r, r, _ - 1).run
+          case JNZ(o, v) if valueOf(o) != 0 => copy(pc = pc + v).run
+          case _                            => copy(pc = pc + 1).run
 
-  lazy val instructions: Vector[Instruction] = lines.map(Instruction.fromString)
+  val instructions: Vector[Instruction] = lines.map(Instruction.fromString)
 
-  override lazy val answer1: Value = CPU(instructions).run.registers.valueOf("a")
-  override lazy val answer2: Value = CPU(instructions = instructions, registers = Map("c" -> 1)).run.registers.valueOf("a")
+  val init: Registers = Map("c" -> 1)
+
+  override lazy val answer1: Value = CPU(instructions = instructions).run.valueOf("a")
+  override lazy val answer2: Value = CPU(instructions = instructions, registers = init).run.valueOf("a")
