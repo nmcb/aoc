@@ -58,12 +58,6 @@ object Day11 extends AoC:
       )
 
 
-  lazy val init: Area =
-    val microchip = "microchip".r
-    val generator = "generator".r
-    Area(0, lines.map(line => Floor(microchip.findAllIn(line).size, generator.findAllIn(line).size)))
-
-
   /** breadth first search */
   def solve(start: Area): Int =
     val todo  = mutable.Queue(start)
@@ -79,6 +73,10 @@ object Day11 extends AoC:
 
     steps(steps.keys.filter(_.finished).head)
 
+  lazy val init: Area =
+    val microchip = "microchip".r
+    val generator = "generator".r
+    Area(0, lines.map(line => Floor(microchip.findAllIn(line).size, generator.findAllIn(line).size)))
 
   val expanded: Area =
     val floor0 = init.floors(0) + Floor(generators = 2, microchips = 2)
