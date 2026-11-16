@@ -2,6 +2,7 @@ package aoc2016
 
 import nmcb.*
 
+import scala.Option.when
 import scala.annotation.tailrec
 
 object Day07 extends AoC:
@@ -17,9 +18,9 @@ object Day07 extends AoC:
     private def isAba(s: String, containing: Option[(Char, Char)] = None): Option[(Char, Char)] =
       containing match
         case None =>
-          Option.when(s.length == 3 && s(0) != s(1) && s == s.reverse)((s(0), s(1)))
+          when(s.length == 3 && s(0) != s(1) && s == s.reverse)((s(0), s(1)))
         case Some((outer, inner)) =>
-          Option.when(s.length == 3 && s(0) != s(1) && s == s.reverse && s(0) == outer && s(1) == inner)((s(0), s(1)))
+          when(s.length == 3 && s(0) != s(1) && s == s.reverse && s(0) == outer && s(1) == inner)((s(0), s(1)))
 
     def hasSSL: Boolean =
       val abas = supernets.flatMap(_.sliding(3).flatMap(isAba(_)))
