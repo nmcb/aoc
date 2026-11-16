@@ -62,9 +62,11 @@ object Day24 extends AoC:
   def shortestPath(distances: Distances, routes: Routes): Int =
     routes
       .map: route =>
-        route.sliding(2).map: step =>
-          distances(step.head)(step.last)
-        .sum
+        route
+          .sliding(2)
+          .map: step =>
+            distances(step.head)(step.last)
+          .sum
       .min
 
   def solve1(grid: Grid, nodes: Nodes): Int =
