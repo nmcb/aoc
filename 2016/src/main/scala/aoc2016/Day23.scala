@@ -12,11 +12,6 @@ object Day23 extends AoC:
   type Operand   = Value | Register
   type Registers = Map[Register, Value]
 
-  extension (operand: Operand)
-    // Shut up! I know what I'm doing.
-    def isRegister: Boolean  = operand.isInstanceOf[Register]
-    def toRegister: Register = operand.asInstanceOf[Register]
-
   extension (registers: Registers)
 
     def valueOf(operand: Operand): Value =
@@ -25,16 +20,15 @@ object Day23 extends AoC:
         case v: Value    => v
 
     def update(target: Operand, source: Operand, f: Value => Value = identity): Registers =
-      if target.isRegister then
-        val value = (f compose registers.valueOf)(source)
-        registers.updated(target.toRegister, value)
-      else
-        registers
+      target match
+        case v: Value    => registers
+        case r: Register => registers.updated(r, (f compose registers.valueOf)(source))
 
     // Part 2
     def multiply(x: Operand, y: Operand, z: Operand): Registers =
-      val value = registers.valueOf(x) * registers.valueOf(y) + registers.valueOf(z)
-      registers.updated(z.toRegister, value)
+      z match
+        case v: Value    => registers
+        case r: Register => registers.updated(z.asInstanceOf[Register], registers.valueOf(x) * registers.valueOf(y) + registers.valueOf(z))
 
 
   enum Instruction:
