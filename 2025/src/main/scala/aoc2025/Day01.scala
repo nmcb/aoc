@@ -16,10 +16,10 @@ object Day01 extends AoC:
       .count(cyclesHundred)
 
   def solve2(input: Vector[String]): Int =
-    input.flatMap:
-          case s"R$count" => Vector.fill(count.toInt)(1)
-          case s"L$count" => Vector.fill(count.toInt)(-1)
-          case code       => sys.error(s"invalid code: $code")
+    input
+      .flatMap:
+        case s"R$count" => Vector.fill(count.toInt)(1)
+        case s"L$count" => Vector.fill(count.toInt)(-1)
       .scanLeft(50)(_ + _)
       .count(cyclesHundred)
 
